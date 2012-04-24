@@ -22,6 +22,7 @@ import org.andengine.util.color.Color;
 import android.content.Context;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 import eu.nazgee.game.utils.scene.SceneLoader;
+import eu.nazgee.game.utils.scene.SceneLoader.ISceneLoaderListener;
 import eu.nazgee.game.utils.scene.SceneLoader.eLoadingSceneHandling;
 import eu.nazgee.game.utils.scene.SceneLoading;
 
@@ -73,7 +74,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 		SceneLoading loadingScene = new SceneLoading(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, mResources.FONT_MENU, "Loading...", getVertexBufferObjectManager());
 
 		mLoader = new SceneLoader(loadingScene);
-		mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_SET_ACTIVE).setLoadingSceneUnload(false);
+		mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_DONT_TOUCH).setLoadingSceneUnload(false);
 	}
 
 	@Override
@@ -85,7 +86,17 @@ public class MainActivity extends SimpleBaseGameActivity {
 		 * At first, engine will show "Loading..." scene. mSceneMain will be
 		 * set as active scene right after it will be fully loaded (loading takes plac in background). 
 		 */
-		mLoader.loadScene(mSceneMain, getEngine(), this, null);
+		mLoader.loadScene(mSceneMain, getEngine(), this, new ISceneLoaderListener() {
+			@Override
+			public void onSceneLoaded(Scene pScene) {
+				/*
+				 * Only first scene has to be loaded with SCENE_DONT_TOUCH. 
+				 * Other scenes should be loaded with SCENE_SET_ACTIVE or SCENE_SET_CHILD
+				 * to make "Loading..." scene visible
+				 */
+				mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_SET_ACTIVE);
+			}
+		});
 		return mLoader.getLoadingScene();
 	}
 
