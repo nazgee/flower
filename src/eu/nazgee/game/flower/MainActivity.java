@@ -1,4 +1,4 @@
-package eu.nazgee.simple;
+package eu.nazgee.game.flower;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
@@ -17,7 +17,7 @@ import org.andengine.util.progress.IProgressListener;
 
 import android.util.Log;
 
-public class SimpleActivity extends SimpleAsyncGameActivity {
+public class MainActivity extends SimpleAsyncGameActivity {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -46,8 +46,8 @@ public class SimpleActivity extends SimpleAsyncGameActivity {
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-		final Camera camera = new Camera(0, 0, SimpleActivity.CAMERA_WIDTH, SimpleActivity.CAMERA_HEIGHT);
-		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new RatioResolutionPolicy(SimpleActivity.CAMERA_WIDTH, SimpleActivity.CAMERA_HEIGHT), camera);
+		final Camera camera = new Camera(0, 0, MainActivity.CAMERA_WIDTH, MainActivity.CAMERA_HEIGHT);
+		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new RatioResolutionPolicy(MainActivity.CAMERA_WIDTH, MainActivity.CAMERA_HEIGHT), camera);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class SimpleActivity extends SimpleAsyncGameActivity {
 		this.mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 32, 32, TextureOptions.BILINEAR);
 		pProgressListener.onProgressChanged(40);
 		Thread.sleep(1000);
-		this.mFaceTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(SimpleActivity.this.mBitmapTextureAtlas, SimpleActivity.this, "face_box.png", 0, 0);
+		this.mFaceTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(MainActivity.this.mBitmapTextureAtlas, MainActivity.this, "face_box.png", 0, 0);
 		pProgressListener.onProgressChanged(60);
 		Thread.sleep(1000);
 		this.mBitmapTextureAtlas.load();
@@ -83,8 +83,8 @@ public class SimpleActivity extends SimpleAsyncGameActivity {
 	@Override
 	public void onPopulateSceneAsync(final Scene pScene, final IProgressListener pProgressListener) throws Exception {
 		/* Calculate the coordinates for the face, so its centered on the camera. */
-		final float centerX = (SimpleActivity.CAMERA_WIDTH - this.mFaceTextureRegion.getWidth()) / 2;
-		final float centerY = (SimpleActivity.CAMERA_HEIGHT - this.mFaceTextureRegion.getHeight()) / 2;
+		final float centerX = (MainActivity.CAMERA_WIDTH - this.mFaceTextureRegion.getWidth()) / 2;
+		final float centerY = (MainActivity.CAMERA_HEIGHT - this.mFaceTextureRegion.getHeight()) / 2;
 
 		/* Create the face and add it to the scene. */
 		final Sprite face = new Sprite(centerX, centerY, this.mFaceTextureRegion, this.getVertexBufferObjectManager());
