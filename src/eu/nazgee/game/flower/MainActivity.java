@@ -74,12 +74,6 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 		mLoader = new SceneLoader(loadingScene);
 		mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_SET_ACTIVE).setLoadingSceneUnload(false);
-
-		// loadResources() and load() are usually called from a "loader" whic shows "loading..." scene.
-		// Let's call it manually for the sake of simplicity
-		// UPDATE: do not load it manually - mLoader will do it from onCreateScene()
-//		mSceneMain.loadResources(getEngine(), this);
-//		mSceneMain.load(getEngine(), this);
 	}
 
 	@Override
