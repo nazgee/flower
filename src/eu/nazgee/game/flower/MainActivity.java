@@ -5,32 +5,22 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.Background;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.util.FPSLogger;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.ui.activity.SimpleAsyncGameActivity;
 import org.andengine.util.progress.IProgressListener;
-
-import android.util.Log;
 
 public class MainActivity extends SimpleAsyncGameActivity {
 	// ===========================================================
 	// Constants
 	// ===========================================================
 
-	private static final int CAMERA_WIDTH = 720;
-	private static final int CAMERA_HEIGHT = 480;
-
 	// ===========================================================
 	// Fields
 	// ===========================================================
 
-	private BitmapTextureAtlas mBitmapTextureAtlas;
-	private ITextureRegion mFaceTextureRegion;
+	private SceneMain mSceneMain;
 
 	// ===========================================================
 	// Constructors
@@ -46,49 +36,45 @@ public class MainActivity extends SimpleAsyncGameActivity {
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-		final Camera camera = new Camera(0, 0, MainActivity.CAMERA_WIDTH, MainActivity.CAMERA_HEIGHT);
-		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new RatioResolutionPolicy(MainActivity.CAMERA_WIDTH, MainActivity.CAMERA_HEIGHT), camera);
+		final Camera camera = new Camera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT);
+		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_SENSOR, new RatioResolutionPolicy(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT), camera);
 	}
 
 	@Override
 	public void onCreateResourcesAsync(final IProgressListener pProgressListener) throws Exception {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		FontFactory.setAssetBasePath("font/");
+
 		/* Comfortably load the resources asynchronously, adding artificial pauses between each step. */
 		pProgressListener.onProgressChanged(0);
 		Thread.sleep(1000);
 		pProgressListener.onProgressChanged(20);
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		Thread.sleep(1000);
-		this.mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 32, 32, TextureOptions.BILINEAR);
 		pProgressListener.onProgressChanged(40);
 		Thread.sleep(1000);
-		this.mFaceTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(MainActivity.this.mBitmapTextureAtlas, MainActivity.this, "face_box.png", 0, 0);
 		pProgressListener.onProgressChanged(60);
 		Thread.sleep(1000);
-		this.mBitmapTextureAtlas.load();
 		pProgressListener.onProgressChanged(80);
 		Thread.sleep(1000);
 		pProgressListener.onProgressChanged(100);
+		
+		mSceneMain = new SceneMain(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager());
+		
+		// loadResources() and load() are usually called from a "loader" whic shows "loading..." scene.
+		// Let's call it manually for the sake of simplicity
+		mSceneMain.loadResources(getEngine(), this);
+		mSceneMain.load(getEngine(), this);
 	}
 
 	@Override
 	public Scene onCreateSceneAsync(final IProgressListener pProgressListener) throws Exception {
 		this.mEngine.registerUpdateHandler(new FPSLogger());
-
-		final Scene scene = new Scene();
-		scene.setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
-
-		return scene;
+		return mSceneMain;
 	}
 
 	@Override
 	public void onPopulateSceneAsync(final Scene pScene, final IProgressListener pProgressListener) throws Exception {
-		/* Calculate the coordinates for the face, so its centered on the camera. */
-		final float centerX = (MainActivity.CAMERA_WIDTH - this.mFaceTextureRegion.getWidth()) / 2;
-		final float centerY = (MainActivity.CAMERA_HEIGHT - this.mFaceTextureRegion.getHeight()) / 2;
-
-		/* Create the face and add it to the scene. */
-		final Sprite face = new Sprite(centerX, centerY, this.mFaceTextureRegion, this.getVertexBufferObjectManager());
-		pScene.attachChild(face);
+		/* nothing to do, scene already is populated */
 	}
 
 	// ===========================================================
