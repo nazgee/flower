@@ -30,6 +30,7 @@ public class SceneMain extends SceneLoadable {
 	// Fields
 	// ===========================================================
 	MyResources mResources = new MyResources();
+	MainHUD mHud;
 	
 	// ===========================================================
 	// Constructors
@@ -37,7 +38,10 @@ public class SceneMain extends SceneLoadable {
 	public SceneMain(float W, float H,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, pVertexBufferObjectManager);
+		
+		mHud = new MainHUD(W, H, pVertexBufferObjectManager);
 		getLoader().install(mResources);
+		getLoader().install(mHud);
 	}
 	// ===========================================================
 	// Getter & Setter
@@ -58,6 +62,9 @@ public class SceneMain extends SceneLoadable {
 
 	@Override
 	public void onLoad(Engine e, Context c) {
+		// Attach HUD to this scene (it should be loaded already)
+		e.getCamera().setHUD(mHud);
+		
 		Random r = new Random();
 		for (int i = 0; i < 100; i++) {
 			/*
@@ -103,6 +110,13 @@ public class SceneMain extends SceneLoadable {
 		detachChildren();
 		clearEntityModifiers();
 		clearUpdateHandlers();
+
+		/*
+		 * Detach HUD from the camera it was connected to - it is not a children
+		 * to parent relationship, so detachChildren()/detachSelf() won't work.
+		 * Hud will be unloaded automatically by the loader
+		 */
+		mHud.getCamera().setHUD(null);
 	}
 	// ===========================================================
 	// Methods
