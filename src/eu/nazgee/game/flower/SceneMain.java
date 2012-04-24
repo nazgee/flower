@@ -64,6 +64,13 @@ public class SceneMain extends SceneLoadable {
 		@Override
 		public void onLoad(Engine e, Context c) {
 			AtlasLoader.buildAndLoad(mAtlas);
+
+			// Pretend it takes some time, so we can see "Loading..." scene
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 		}
 
 		@Override
