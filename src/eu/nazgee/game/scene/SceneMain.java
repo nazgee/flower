@@ -1,16 +1,19 @@
-package eu.nazgee.game.flower;
+package eu.nazgee.game.scene;
 
-import java.util.Iterator;
 import java.util.Random;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.camera.Camera;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.RotationByModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
-import org.andengine.entity.scene.background.AutoParallaxBackground;
+import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -19,12 +22,15 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.modifier.ease.EaseBounceOut;
 
 import android.content.Context;
+import android.view.MotionEvent;
+import eu.nazgee.game.flower.Consts;
+import eu.nazgee.game.flower.MainHUD;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 import eu.nazgee.game.utils.scene.SceneLoadable;
 
-public class SceneMain extends SceneLoadable {
+public class SceneMain extends SceneLoadable{
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -32,9 +38,10 @@ public class SceneMain extends SceneLoadable {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	MyResources mResources = new MyResources();
-	MainHUD mHud;
-	
+	private MyResources mResources = new MyResources();
+	private MainHUD mHud;
+
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -65,24 +72,32 @@ public class SceneMain extends SceneLoadable {
 
 	@Override
 	public void onLoad(Engine e, Context c) {
-		// Attach HUD to this scene (it should be loaded already)
-		e.getCamera().setHUD(mHud);
+		/*
+		 * Register our HUD
+		 */
+		final Camera camera = e.getCamera();
+		camera.setHUD(mHud);
 		
-		// Create bacground and ground
-		final AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5);
+		/*
+		 * Prepare fancy background		
+		 */
 		final VertexBufferObjectManager vertexBufferObjectManager = this.getVertexBufferObjectManager();
-//		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0.0f, new Sprite(0, getH() - this.mParallaxLayerBack.getHeight(), this.mParallaxLayerBack, vertexBufferObjectManager)));
-//		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-5.0f, new Sprite(0, 80, this.mParallaxLayerMid, vertexBufferObjectManager)));
-//		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-10.0f, new Sprite(0, getH() - this.mParallaxLayerFront.getHeight(), this.mParallaxLayerFront, vertexBufferObjectManager)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0, 
-				new Sprite(0, 0, mResources.TEX_SKY, vertexBufferObjectManager)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.5f, 
-				new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_FAR.getHeight(), mResources.TEX_BG_FAR, vertexBufferObjectManager)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-5.0f, 
-				new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_CLOSE.getHeight(), mResources.TEX_BG_CLOSE, vertexBufferObjectManager)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-10.0f, 
-				new Sprite(0, getH() - mResources.TEX_GROUND.getHeight(), mResources.TEX_GROUND, vertexBufferObjectManager)));
-		setBackground(autoParallaxBackground);
+		final Sprite bgSky = new Sprite(0, 0, mResources.TEX_SKY, vertexBufferObjectManager);
+		final Sprite bgFar = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_FAR.getHeight(), mResources.TEX_BG_FAR, vertexBufferObjectManager);
+		final Sprite bgClose = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_CLOSE.getHeight(), mResources.TEX_BG_CLOSE, vertexBufferObjectManager);
+		final Sprite bgGround = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight(), mResources.TEX_GROUND, vertexBufferObjectManager);
+		final ParallaxBackground paralaxBG = new ParallaxBackground(0, 0, 0);
+		paralaxBG.attachParallaxEntity(new ParallaxEntity(0, bgSky));
+		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.25f, bgFar));
+		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.5f, bgClose));
+		paralaxBG.attachParallaxEntity(new ParallaxEntity(-1f, bgGround));
+		setBackground(paralaxBG);
+		
+		/*
+		 * Register a touch listener, which will move the camera when scene is
+		 * touched and apply the paralaxValue to the background
+		 */
+		setOnSceneTouchListener(new MyTouchListener(camera, paralaxBG));
 		
 		Random r = new Random();
 		for (int i = 0; i < 10; i++) {
@@ -129,6 +144,8 @@ public class SceneMain extends SceneLoadable {
 		detachChildren();
 		clearEntityModifiers();
 		clearUpdateHandlers();
+		clearTouchAreas();
+		setOnAreaTouchListener(null);
 
 		/*
 		 * Detach HUD from the camera it was connected to - it is not a children
@@ -137,6 +154,10 @@ public class SceneMain extends SceneLoadable {
 		 */
 		mHud.getCamera().setHUD(null);
 	}
+
+
+
+
 	// ===========================================================
 	// Methods
 	// ===========================================================
@@ -144,6 +165,40 @@ public class SceneMain extends SceneLoadable {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	/**
+	 * Listens to touch events and applies appropriate parallax value to the
+	 * background
+	 * @author nazgee
+	 */
+    private static class MyTouchListener implements IOnSceneTouchListener {
+        private float mTouchX = 0, mTouchOffsetX = 0;
+    	private Camera mCamera;
+    	private ParallaxBackground mParallaxBackground;
+
+    	public MyTouchListener(Camera pCamera, ParallaxBackground pParallaxBackground) {
+			mCamera = pCamera;
+			mParallaxBackground = pParallaxBackground;
+    	}
+
+        @Override
+        public boolean onSceneTouchEvent(Scene pScene, TouchEvent pTouchEvent) {
+
+                if (pTouchEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                        mTouchX = pTouchEvent.getMotionEvent().getX();
+                } else if (pTouchEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                        float newX = pTouchEvent.getMotionEvent().getX();
+
+                        mTouchOffsetX = (newX - mTouchX);
+                        float newScrollX = mCamera.getCenterX() - mTouchOffsetX;
+                        
+                        mParallaxBackground.setParallaxValue(newScrollX);
+                        mCamera.setCenter(newScrollX, mCamera.getCenterY());
+                        mTouchX = newX;
+                }
+                return true;
+        }
+    }
+
 	private static class MyResources extends SimpleLoadableResource {
 		public ITiledTextureRegion TEXS_FLOWERS;
 		public ITextureRegion TEX_FACE;
