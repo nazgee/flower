@@ -8,6 +8,8 @@ import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.RotationByModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
+import org.andengine.entity.scene.background.AutoParallaxBackground;
+import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
@@ -66,8 +68,24 @@ public class SceneMain extends SceneLoadable {
 		// Attach HUD to this scene (it should be loaded already)
 		e.getCamera().setHUD(mHud);
 		
+		// Create bacground and ground
+		final AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5);
+		final VertexBufferObjectManager vertexBufferObjectManager = this.getVertexBufferObjectManager();
+//		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0.0f, new Sprite(0, getH() - this.mParallaxLayerBack.getHeight(), this.mParallaxLayerBack, vertexBufferObjectManager)));
+//		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-5.0f, new Sprite(0, 80, this.mParallaxLayerMid, vertexBufferObjectManager)));
+//		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-10.0f, new Sprite(0, getH() - this.mParallaxLayerFront.getHeight(), this.mParallaxLayerFront, vertexBufferObjectManager)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0, 
+				new Sprite(0, 0, mResources.TEX_SKY, vertexBufferObjectManager)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.5f, 
+				new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_FAR.getHeight(), mResources.TEX_BG_FAR, vertexBufferObjectManager)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-5.0f, 
+				new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_CLOSE.getHeight(), mResources.TEX_BG_CLOSE, vertexBufferObjectManager)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-10.0f, 
+				new Sprite(0, getH() - mResources.TEX_GROUND.getHeight(), mResources.TEX_GROUND, vertexBufferObjectManager)));
+		setBackground(autoParallaxBackground);
+		
 		Random r = new Random();
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			/*
 			 * Choose random texture
 			 */
@@ -132,6 +150,7 @@ public class SceneMain extends SceneLoadable {
 		public ITextureRegion TEX_BG_FAR;
 		public ITextureRegion TEX_BG_CLOSE;
 		public ITextureRegion TEX_GROUND;
+		private ITextureRegion TEX_SKY;
 		private BuildableBitmapTextureAtlas[] mAtlases;
 
 		@Override
@@ -152,11 +171,13 @@ public class SceneMain extends SceneLoadable {
 			TEX_FACE = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "face_box.png");
 			TEX_BG_FAR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasScene, c, "scene/bg-close.png");
-			TEX_BG_CLOSE = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "scene/bg-far.png");
+			TEX_BG_CLOSE = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					atlasScene, c, "scene/bg-close.png");
 			TEX_GROUND = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "scene/ground.png");
+			TEX_SKY = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					atlasScene, c, "scene/sky.png");
 			/*
 			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
 			 */
