@@ -1,5 +1,6 @@
 package eu.nazgee.game.flower;
 
+import java.util.Iterator;
 import java.util.Random;
 
 import org.andengine.engine.Engine;
@@ -128,40 +129,53 @@ public class SceneMain extends SceneLoadable {
 	private static class MyResources extends SimpleLoadableResource {
 		public ITiledTextureRegion TEXS_FLOWERS;
 		public ITextureRegion TEX_FACE;
-		private BuildableBitmapTextureAtlas mAtlas;
+		public ITextureRegion TEX_BG_FAR;
+		public ITextureRegion TEX_BG_CLOSE;
+		public ITextureRegion TEX_GROUND;
+		private BuildableBitmapTextureAtlas[] mAtlases;
 
 		@Override
 		public void onLoadResources(Engine e, Context c) {
+			mAtlases = new BuildableBitmapTextureAtlas[2];
+			for (int i = 0; i < mAtlases.length; i++) {
+				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 1024, 1024);
+			}
 			/*
-			 * Create our texture atlas- single (1k x 1k) texture is enough for now
+			 * Create nicely named shortcuts to our atlases (textures)
 			 */
-			mAtlas = new BuildableBitmapTextureAtlas(e.getTextureManager(),
-					1024, 1024);
+			BuildableBitmapTextureAtlas atlasFlower = mAtlases[0];
+			BuildableBitmapTextureAtlas atlasScene = mAtlases[1];
 
 			/*
 			 * Fill our texture with regions that we would like to use
 			 */
 			TEX_FACE = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					mAtlas, c, "face_box.png");
+					atlasScene, c, "face_box.png");
+			TEX_BG_FAR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					atlasScene, c, "scene/bg-close.png");
+			TEX_BG_CLOSE = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					atlasScene, c, "scene/bg-far.png");
+			TEX_GROUND = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					atlasScene, c, "scene/ground.png");
 			/*
 			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
 			 */
 			TEXS_FLOWERS = TiledTextureRegionFactory.loadTilesSVG(c, "gfx/", "flowers",
-					mAtlas, Consts.FLOWER_TEX_WIDTH, Consts.FLOWER_TEX_HEIGHT);
+					atlasFlower, Consts.FLOWER_TEX_WIDTH, Consts.FLOWER_TEX_HEIGHT);
 		}
 
 		@Override
 		public void onLoad(Engine e, Context c) {
 			/*
-			 *  build and load atlas (places regions on texture and sends it to MCU)
+			 *  build and load all our atlases (places regions on texture and sends it to MCU)
 			 */
-			AtlasLoader.buildAndLoad(mAtlas);
+			AtlasLoader.buildAndLoad(mAtlases);
 
 			/*
 			 *  Pretend it takes some time, so we can see "Loading..." scene
 			 */
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
@@ -169,7 +183,9 @@ public class SceneMain extends SceneLoadable {
 
 		@Override
 		public void onUnload() {
-			mAtlas.unload();
+			for (BuildableBitmapTextureAtlas atlas : mAtlases) {
+				atlas.unload();
+			}
 		}
 	}
 }
