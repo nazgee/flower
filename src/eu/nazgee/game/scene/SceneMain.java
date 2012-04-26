@@ -27,7 +27,9 @@ import android.view.MotionEvent;
 import eu.nazgee.game.flower.Consts;
 import eu.nazgee.game.flower.MainHUD;
 import eu.nazgee.game.flower.Sun;
+import eu.nazgee.game.flower.Sun.TravelListener;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
+import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 import eu.nazgee.game.utils.scene.SceneLoadable;
@@ -106,7 +108,7 @@ public class SceneMain extends SceneLoadable{
 		 */
 		Sun mSun = new Sun(0, 0, mResources.TEX_SUN, vertexBufferObjectManager);
 		attachChild(mSun);
-		mSun.travel(0, getH()/2, getW() * 3, getH()/2, 30);
+		mSun.travel(0, getH()/2, getW() * 3, getH()/2, 10, new SunTravelListener());
 		
 		Random r = new Random();
 		for (int i = 0; i < 10; i++) {
@@ -174,8 +176,22 @@ public class SceneMain extends SceneLoadable{
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	private class SunTravelListener implements TravelListener {
+		@Override
+		public void onStarted(Sun pSun) {
+			Sprite s = new Sprite(0, 0, mResources.TEXS_FLOWERS.getTextureRegion(0), getVertexBufferObjectManager());
+			Positioner.setCentered(s, pSun);
+			SceneMain.this.attachChild(s);
+		}
+		@Override
+		public void onFinished(Sun pSun) {
+			Sprite s = new Sprite(0, 0, mResources.TEXS_FLOWERS.getTextureRegion(0), getVertexBufferObjectManager());
+			Positioner.setCentered(s, pSun);
+			SceneMain.this.attachChild(s);
+		}
+	}
 	/**
-	 * Listens to touch events and applies appropriate parallax value to the
+	 * Listens to scene touch events and moves the camera
 	 * background
 	 * @author nazgee
 	 */

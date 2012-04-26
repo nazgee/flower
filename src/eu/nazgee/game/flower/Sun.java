@@ -1,5 +1,6 @@
 package eu.nazgee.game.flower;
 
+import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveByModifier;
 import org.andengine.entity.modifier.MoveYModifier;
@@ -11,6 +12,8 @@ import org.andengine.opengl.shader.ShaderProgram;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.DrawType;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.modifier.IModifier;
+import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseQuadIn;
 import org.andengine.util.modifier.ease.EaseQuadOut;
 
@@ -26,6 +29,7 @@ public class Sun extends Sprite {
 	// Fields
 	// ===========================================================
 	private IEntityModifier mTravelModifier;
+	private TravelListener mTravelListener;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -115,11 +119,15 @@ public class Sun extends Sprite {
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
-	
+	public interface TravelListener {
+		void onStarted(Sun pSun);
+		void onFinished(Sun pSun);
+	}
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	public void travel(final float pX, final float pY, final float W, final float H, final float time) {
+	synchronized public void travel(final float pX, final float pY, final float W, final float H, final float time, TravelListener pTravelListener) {
+		mTravelListener = pTravelListener;
 		Positioner.setCentered(this, pX, pY);
 		unregisterEntityModifier(mTravelModifier);
 		mTravelModifier = new ParallelEntityModifier(
@@ -131,9 +139,28 @@ public class Sun extends Sprite {
 						new MoveYModifier(time/2, getY() - H, getY(), EaseQuadIn.getInstance())
 						)
 				);
+		mTravelModifier.addModifierListener(new MyModifierListener());
 		registerEntityModifier(mTravelModifier);
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	private class MyModifierListener implements IModifierListener<IEntity> {
+		@Override
+		public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+			synchronized (Sun.this) {
+				if (mTravelListener != null) {
+					mTravelListener.onStarted(Sun.this);
+				}
+			}
+		}
+		@Override
+		public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+			synchronized (Sun.this) {
+				if (mTravelListener != null) {
+					mTravelListener.onFinished(Sun.this);
+				}
+			}
+		}
+	}
 }
