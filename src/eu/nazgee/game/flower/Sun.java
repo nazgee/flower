@@ -30,6 +30,7 @@ public class Sun extends Sprite {
 	// ===========================================================
 	private IEntityModifier mTravelModifier;
 	private TravelListener mTravelListener;
+	private MyModifierListener mMyModifierListener = new MyModifierListener();
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -139,7 +140,8 @@ public class Sun extends Sprite {
 						new MoveYModifier(time/2, getY() - H, getY(), EaseQuadIn.getInstance())
 						)
 				);
-		mTravelModifier.addModifierListener(new MyModifierListener());
+		mTravelModifier.setAutoUnregisterWhenFinished(false);
+		mTravelModifier.addModifierListener(mMyModifierListener);
 		registerEntityModifier(mTravelModifier);
 	}
 	// ===========================================================

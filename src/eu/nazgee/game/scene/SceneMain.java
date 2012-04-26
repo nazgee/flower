@@ -1,25 +1,31 @@
 package eu.nazgee.game.scene;
 
+import java.util.LinkedList;
 import java.util.Random;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.Entity;
+import org.andengine.entity.modifier.ColorModifier;
+import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.RotationByModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
+import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.color.Color;
 import org.andengine.util.modifier.ease.EaseBounceOut;
 
 import android.content.Context;
@@ -44,6 +50,7 @@ public class SceneMain extends SceneLoadable{
 	// ===========================================================
 	private MyResources mResources = new MyResources();
 	private MainHUD mHud;
+	LinkedList<Entity> mDragables = new LinkedList<Entity>();
 
 
 	// ===========================================================
@@ -102,16 +109,23 @@ public class SceneMain extends SceneLoadable{
 		 * touched and apply the paralaxValue to the background
 		 */
 		setOnSceneTouchListener(new MyTouchListener(camera, paralaxBG));
-		
+		setOnSceneTouchListenerBindingOnActionDownEnabled(true);
+		/*
+		 * Register touch area listener, which will listen for the touches of
+		 * registered objects
+		 */
+		setOnAreaTouchListener(new MyAreaTouchListener());
+		setTouchAreaBindingOnActionDownEnabled(true);
+		setTouchAreaBindingOnActionMoveEnabled(true);
 		/*
 		 * Create sun, that will travel through the sky
 		 */
 		Sun mSun = new Sun(0, 0, mResources.TEX_SUN, vertexBufferObjectManager);
 		attachChild(mSun);
-		mSun.travel(0, getH()/2, getW() * 3, getH()/2, 10, new SunTravelListener());
+		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 10, new SunTravelListener());
 		
 		Random r = new Random();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 20; i++) {
 			/*
 			 * Choose random texture
 			 */
@@ -121,7 +135,7 @@ public class SceneMain extends SceneLoadable{
 			/*
 			 *  Create a sprite
 			 */
-			Sprite s = new Sprite(getW() * r.nextFloat(), getH() * r.nextFloat(),
+			Sprite s = new Sprite(0, 0,
 					tex, getVertexBufferObjectManager());
 			
 			/*
@@ -138,11 +152,16 @@ public class SceneMain extends SceneLoadable{
 					)
 				);
 			s.setColor(r.nextFloat(), r.nextFloat(), r.nextFloat(), r.nextFloat() + 0.25f);
-
+			Positioner.setCentered(s, getW() * r.nextFloat(), getH() * r.nextFloat());
 			/*
-			 * Attach it to the scene, so it gets drawn
+			 * Attach it to the scene, so it gets drawn and updated
 			 */
 			attachChild(s);
+			/*
+			 * Attach it to the list of dragable items
+			 */
+			mDragables.add(s);
+			registerTouchArea(s);
 		}
 	}
 
@@ -157,6 +176,7 @@ public class SceneMain extends SceneLoadable{
 		clearUpdateHandlers();
 		clearTouchAreas();
 		setOnAreaTouchListener(null);
+		mDragables.clear();
 
 		/*
 		 * Detach HUD from the camera it was connected to - it is not a children
@@ -179,15 +199,45 @@ public class SceneMain extends SceneLoadable{
 	private class SunTravelListener implements TravelListener {
 		@Override
 		public void onStarted(Sun pSun) {
-			Sprite s = new Sprite(0, 0, mResources.TEXS_FLOWERS.getTextureRegion(0), getVertexBufferObjectManager());
-			Positioner.setCentered(s, pSun);
-			SceneMain.this.attachChild(s);
+//			Sprite s = new Sprite(0, 0, mResources.TEXS_FLOWERS.getTextureRegion(0), getVertexBufferObjectManager());
+//			Positioner.setCentered(s, pSun);
+//			SceneMain.this.attachChild(s);
 		}
 		@Override
 		public void onFinished(Sun pSun) {
-			Sprite s = new Sprite(0, 0, mResources.TEXS_FLOWERS.getTextureRegion(0), getVertexBufferObjectManager());
-			Positioner.setCentered(s, pSun);
-			SceneMain.this.attachChild(s);
+//			Sprite s = new Sprite(0, 0, mResources.TEXS_FLOWERS.getTextureRegion(0), getVertexBufferObjectManager());
+//			Positioner.setCentered(s, pSun);
+//			SceneMain.this.attachChild(s);
+			pSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 10, this);
+		}
+	}
+
+	private class MyAreaTouchListener implements IOnAreaTouchListener {
+		@Override
+		public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
+				ITouchArea pTouchArea, float pTouchAreaLocalX,
+				float pTouchAreaLocalY) {
+			if (mDragables.contains(pTouchArea)) {
+				if (pSceneTouchEvent.isActionDown() && (pTouchArea instanceof Sprite)) {
+					SceneMain.this.postRunnable(new TouchHandler((Sprite) pTouchArea));
+				}
+				return true;
+			}
+			return false;
+		}
+
+		private class TouchHandler implements Runnable {
+			private final Sprite mSprite;
+			public TouchHandler(Sprite pSprite) {
+				mSprite = pSprite;
+			}
+			@Override
+			public void run() {
+				Random r = new Random();
+				IEntityModifier mod = new ColorModifier(1, mSprite.getColor(), new Color(r.nextFloat(), r.nextFloat(), r.nextFloat(), r.nextFloat() + 0.25f));
+				mod.setAutoUnregisterWhenFinished(true);
+				mSprite.registerEntityModifier(mod);
+			}
 		}
 	}
 	/**
