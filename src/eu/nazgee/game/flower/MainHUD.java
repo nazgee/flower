@@ -97,7 +97,7 @@ public class MainHUD extends HUDLoadable {
 			final FontManager fontManager = e.getFontManager();
 
 			final ITexture font_texture = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
-			FONT_MENU = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.05f, true, Color.WHITE.getARGBPackedInt());
+			FONT_MENU = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
 		}
 
 		@Override

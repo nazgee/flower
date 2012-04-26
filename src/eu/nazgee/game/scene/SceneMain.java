@@ -13,6 +13,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
@@ -25,6 +26,7 @@ import android.content.Context;
 import android.view.MotionEvent;
 import eu.nazgee.game.flower.Consts;
 import eu.nazgee.game.flower.MainHUD;
+import eu.nazgee.game.flower.Sun;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
@@ -98,6 +100,13 @@ public class SceneMain extends SceneLoadable{
 		 * touched and apply the paralaxValue to the background
 		 */
 		setOnSceneTouchListener(new MyTouchListener(camera, paralaxBG));
+		
+		/*
+		 * Create sun, that will travel through the sky
+		 */
+		Sun mSun = new Sun(0, 0, mResources.TEX_SUN, vertexBufferObjectManager);
+		attachChild(mSun);
+		mSun.travel(0, getH()/2, getW() * 3, getH()/2, 30);
 		
 		Random r = new Random();
 		for (int i = 0; i < 10; i++) {
@@ -206,6 +215,7 @@ public class SceneMain extends SceneLoadable{
 		public ITextureRegion TEX_BG_CLOSE;
 		public ITextureRegion TEX_GROUND;
 		private ITextureRegion TEX_SKY;
+		private ITextureRegion TEX_SUN;
 		private BuildableBitmapTextureAtlas[] mAtlases;
 
 		@Override
@@ -233,6 +243,8 @@ public class SceneMain extends SceneLoadable{
 					atlasScene, c, "scene/ground.png");
 			TEX_SKY = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "scene/sky.png");
+			TEX_SUN = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					atlasScene, c, "sun.svg", 100, 100);
 			/*
 			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
 			 */
