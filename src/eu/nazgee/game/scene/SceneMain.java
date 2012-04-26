@@ -243,8 +243,8 @@ public class SceneMain extends SceneLoadable{
 					atlasScene, c, "scene/ground.png");
 			TEX_SKY = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "scene/sky.png");
-			TEX_SUN = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasScene, c, "sun.svg", 100, 100);
+			TEX_SUN = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					atlasScene, c, "sun.png");
 			/*
 			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
 			 */
