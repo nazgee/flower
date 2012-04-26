@@ -88,7 +88,7 @@ public class SceneMain extends SceneLoadable{
 		final Sprite bgFar = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_FAR.getHeight(), mResources.TEX_BG_FAR, vertexBufferObjectManager);
 		final Sprite bgClose = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_CLOSE.getHeight(), mResources.TEX_BG_CLOSE, vertexBufferObjectManager);
 		final Sprite bgGround = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight(), mResources.TEX_GROUND, vertexBufferObjectManager);
-		final ParallaxBackground paralaxBG = new ParallaxBackground(0, 0, 0);
+		final ParallaxBackground paralaxBG = new CameraParallaxBackground(0, 0, 0, camera);
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(0, bgSky));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.25f, bgFar));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.5f, bgClose));
@@ -199,8 +199,7 @@ public class SceneMain extends SceneLoadable{
 
                         mTouchOffsetX = (newX - mTouchX);
                         float newScrollX = mCamera.getCenterX() - mTouchOffsetX;
-                        
-                        mParallaxBackground.setParallaxValue(newScrollX);
+
                         mCamera.setCenter(newScrollX, mCamera.getCenterY());
                         mTouchX = newX;
                 }
