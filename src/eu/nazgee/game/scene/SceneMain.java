@@ -218,8 +218,12 @@ public class SceneMain extends SceneLoadable{
 				ITouchArea pTouchArea, float pTouchAreaLocalX,
 				float pTouchAreaLocalY) {
 			if (mDragables.contains(pTouchArea)) {
-				if (pSceneTouchEvent.isActionDown() && (pTouchArea instanceof Sprite)) {
-					SceneMain.this.postRunnable(new TouchHandler((Sprite) pTouchArea));
+				if ((pTouchArea instanceof Sprite)) {
+					Sprite s = (Sprite) pTouchArea;
+					Positioner.setCentered(s, pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
+					if (pSceneTouchEvent.isActionUp()) {
+						SceneMain.this.postRunnable(new TouchHandler(s));
+					}
 				}
 				return true;
 			}
