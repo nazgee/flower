@@ -98,11 +98,13 @@ public class SceneMain extends SceneLoadable{
 		final Sprite bgFar = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_FAR.getHeight(), mResources.TEX_BG_FAR, vertexBufferObjectManager);
 		final Sprite bgClose = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_CLOSE.getHeight(), mResources.TEX_BG_CLOSE, vertexBufferObjectManager);
 		final Sprite bgGround = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight(), mResources.TEX_GROUND, vertexBufferObjectManager);
+		final Sprite bgGrass = new Sprite(0, getH() - mResources.TEX_GRASS.getHeight()*0.7f, mResources.TEX_GRASS, vertexBufferObjectManager);
 		final ParallaxBackground paralaxBG = new CameraParallaxBackground(0, 0, 0, camera);
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.1f, bgSky));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.25f, bgFar));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.5f, bgClose));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-1f, bgGround));
+		paralaxBG.attachParallaxEntity(new ParallaxEntity(-1.5f, bgGrass));
 		setBackground(paralaxBG);
 		
 		/*
@@ -280,9 +282,11 @@ public class SceneMain extends SceneLoadable{
 
 	private static class MyResources extends SimpleLoadableResource {
 		public ITiledTextureRegion TEXS_FLOWERS;
+		public ITiledTextureRegion TEXS_CLOUDS;
 		public ITextureRegion TEX_FACE;
 		public ITextureRegion TEX_BG_FAR;
 		public ITextureRegion TEX_BG_CLOSE;
+		public ITextureRegion TEX_GRASS;
 		public ITextureRegion TEX_GROUND;
 		private ITextureRegion TEX_SKY;
 		private ITextureRegion TEX_SUN;
@@ -290,19 +294,24 @@ public class SceneMain extends SceneLoadable{
 
 		@Override
 		public void onLoadResources(Engine e, Context c) {
-			mAtlases = new BuildableBitmapTextureAtlas[2];
-			for (int i = 0; i < mAtlases.length; i++) {
+			mAtlases = new BuildableBitmapTextureAtlas[3];
+			mAtlases[0] =  new BuildableBitmapTextureAtlas(e.getTextureManager(), 962, 482, TextureOptions.REPEATING_BILINEAR);
+			for (int i = 1; i < mAtlases.length; i++) {
 				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 1024, 1024, TextureOptions.REPEATING_BILINEAR);
 			}
 			/*
 			 * Create nicely named shortcuts to our atlases (textures)
 			 */
-			BuildableBitmapTextureAtlas atlasFlower = mAtlases[0];
-			BuildableBitmapTextureAtlas atlasScene = mAtlases[1];
+			BuildableBitmapTextureAtlas atlasFlower = mAtlases[1];
+			BuildableBitmapTextureAtlas atlasClouds = mAtlases[1];
+			BuildableBitmapTextureAtlas atlasScene = mAtlases[2];
+			BuildableBitmapTextureAtlas atlasSky = mAtlases[0];
 
 			/*
 			 * Fill our texture with regions that we would like to use
 			 */
+			TEX_SKY = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					atlasSky, c, "scene/skies/azure.jpeg");
 			TEX_FACE = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "face_box.png");
 			TEX_BG_FAR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
@@ -311,10 +320,15 @@ public class SceneMain extends SceneLoadable{
 					atlasScene, c, "scene/bg-close.png");
 			TEX_GROUND = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "scene/ground.png");
-			TEX_SKY = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasScene, c, "scene/skies/azure.jpeg");
+			TEX_GRASS = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					atlasScene, c, "scene/grass.png");
 			TEX_SUN = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "sun.png");
+			/*
+			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
+			 */
+			TEXS_CLOUDS = TiledTextureRegionFactory.loadTiles(c, "gfx/", "scene/clouds",
+					atlasClouds);
 			/*
 			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
 			 */
