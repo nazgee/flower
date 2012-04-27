@@ -20,6 +20,7 @@ import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -98,7 +99,7 @@ public class SceneMain extends SceneLoadable{
 		final Sprite bgClose = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_CLOSE.getHeight(), mResources.TEX_BG_CLOSE, vertexBufferObjectManager);
 		final Sprite bgGround = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight(), mResources.TEX_GROUND, vertexBufferObjectManager);
 		final ParallaxBackground paralaxBG = new CameraParallaxBackground(0, 0, 0, camera);
-		paralaxBG.attachParallaxEntity(new ParallaxEntity(0, bgSky));
+		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.1f, bgSky));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.25f, bgFar));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.5f, bgClose));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-1f, bgGround));
@@ -291,7 +292,7 @@ public class SceneMain extends SceneLoadable{
 		public void onLoadResources(Engine e, Context c) {
 			mAtlases = new BuildableBitmapTextureAtlas[2];
 			for (int i = 0; i < mAtlases.length; i++) {
-				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 1024, 1024);
+				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 1024, 1024, TextureOptions.REPEATING_BILINEAR);
 			}
 			/*
 			 * Create nicely named shortcuts to our atlases (textures)
@@ -311,7 +312,7 @@ public class SceneMain extends SceneLoadable{
 			TEX_GROUND = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "scene/ground.png");
 			TEX_SKY = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasScene, c, "scene/sky.png");
+					atlasScene, c, "scene/skies/azure.jpeg");
 			TEX_SUN = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "sun.png");
 			/*
