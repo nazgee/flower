@@ -35,6 +35,7 @@ import eu.nazgee.game.flower.Consts;
 import eu.nazgee.game.flower.MainHUD;
 import eu.nazgee.game.flower.Sun;
 import eu.nazgee.game.flower.Sun.TravelListener;
+import eu.nazgee.game.flower.cloud.Cloud;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;
@@ -84,6 +85,7 @@ public class SceneMain extends SceneLoadable{
 
 	@Override
 	public void onLoad(Engine e, Context c) {
+		Random r = new Random();
 		/*
 		 * Register our HUD
 		 */
@@ -126,8 +128,31 @@ public class SceneMain extends SceneLoadable{
 		Sun mSun = new Sun(0, 0, mResources.TEX_SUN, vertexBufferObjectManager);
 		attachChild(mSun);
 		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 10, new SunTravelListener());
-		
-		Random r = new Random();
+
+		/*
+		 * Create some clouds
+		 */
+		for (int i = 0; i < 10; i++) {
+			/*
+			 * Choose random texture
+			 */
+			ITextureRegion tex = mResources.TEXS_CLOUDS.getTextureRegion(
+					r.nextInt(mResources.TEXS_CLOUDS.getTileCount()));
+
+			Cloud cloud = new Cloud(0, 0, tex, vertexBufferObjectManager);
+			attachChild(cloud);
+			cloud.travel(r.nextFloat()*getW(), r.nextFloat() * getH()/2, getW() + getW() * r.nextFloat() * 2, r.nextFloat() * 10 + 10, new Cloud.TravelListener() {
+				@Override
+				public void onStarted(Cloud pCloud) {
+				}
+				@Override
+				public void onFinished(Cloud pCloud) {
+					Random r = new Random();
+					pCloud.travel(r.nextFloat()*getW(), r.nextFloat() * getH()/2, getW() + getW() * r.nextFloat() * 2, r.nextFloat() * 10 + 10, this);
+				}
+			});
+		}
+
 		for (int i = 0; i < 20; i++) {
 			/*
 			 * Choose random texture
@@ -327,7 +352,7 @@ public class SceneMain extends SceneLoadable{
 			/*
 			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
 			 */
-			TEXS_CLOUDS = TiledTextureRegionFactory.loadTiles(c, "gfx/", "scene/clouds",
+			TEXS_CLOUDS = TiledTextureRegionFactory.loadTiles(c, "gfx/", "clouds",
 					atlasClouds);
 			/*
 			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
