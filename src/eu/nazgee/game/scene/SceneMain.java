@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.Entity;
 import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.IEntityModifier;
@@ -54,6 +55,7 @@ public class SceneMain extends SceneLoadable{
 	private MyResources mResources = new MyResources();
 	private MainHUD mHud;
 	LinkedList<Entity> mDragables = new LinkedList<Entity>();
+	private Camera mCamera;
 
 
 	// ===========================================================
@@ -87,12 +89,22 @@ public class SceneMain extends SceneLoadable{
 	@Override
 	public void onLoad(Engine e, Context c) {
 		Random r = new Random();
+		mCamera = e.getCamera();
+		mCamera.setHUD(mHud);
+
 		/*
-		 * Register our HUD
+		 * Move the camera very slowly
 		 */
-		final Camera camera = e.getCamera();
-		camera.setHUD(mHud);
-		
+		this.registerUpdateHandler(new IUpdateHandler() {
+			@Override
+			public void onUpdate(float pSecondsElapsed) {
+				mCamera.setCenter(mCamera.getCenterX() + getW() * pSecondsElapsed *0.04f, mCamera.getCenterY());
+			}
+			@Override
+			public void reset() {
+			}
+		});
+
 		/*
 		 * Prepare fancy background		
 		 */
@@ -102,7 +114,7 @@ public class SceneMain extends SceneLoadable{
 		final Sprite bgClose = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_CLOSE.getHeight(), mResources.TEX_BG_CLOSE, vertexBufferObjectManager);
 		final Sprite bgGround = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight(), mResources.TEX_GROUND, vertexBufferObjectManager);
 		final Sprite bgGrass = new Sprite(0, getH() - mResources.TEX_GRASS.getHeight()*0.7f, mResources.TEX_GRASS, vertexBufferObjectManager);
-		final ParallaxBackground paralaxBG = new CameraParallaxBackground(0, 0, 0, camera);
+		final ParallaxBackground paralaxBG = new CameraParallaxBackground(0, 0, 0, mCamera);
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.1f, bgSky));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.25f, bgFar));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.5f, bgClose));
@@ -114,7 +126,7 @@ public class SceneMain extends SceneLoadable{
 		 * Register a touch listener, which will move the camera when scene is
 		 * touched and apply the paralaxValue to the background
 		 */
-		setOnSceneTouchListener(new MyTouchListener(camera, paralaxBG));
+		setOnSceneTouchListener(new MyTouchListener(mCamera, paralaxBG));
 		setOnSceneTouchListenerBindingOnActionDownEnabled(true);
 		/*
 		 * Register touch area listener, which will listen for the touches of
@@ -137,6 +149,9 @@ public class SceneMain extends SceneLoadable{
 				getW() * 0.2f, 6, 0.1f, 0.1f, 6, mResources.TEXS_CLOUDS, vertexBufferObjectManager);
 		attachChild(cloudLayer);
 
+		/*
+		 * Create some flowers
+		 */
 		for (int i = 0; i < 20; i++) {
 			/*
 			 * Choose random texture
