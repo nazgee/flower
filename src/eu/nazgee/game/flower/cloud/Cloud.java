@@ -116,7 +116,9 @@ public class Cloud extends Sprite {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-
+	public TravelListener getTravelListener() {
+		return mTravelListener;
+	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
@@ -136,9 +138,9 @@ public class Cloud extends Sprite {
 						new MoveByModifier(time, W, 0)
 						),
 				new SequenceEntityModifier(
-						new FadeInModifier(time*0.05f),
-						new DelayModifier(time * 0.9f),
-						new FadeOutModifier(time*0.05f)
+						new FadeInModifier(time*0.1f),
+						new DelayModifier(time * 0.8f),
+						new FadeOutModifier(time*0.1f)
 						)
 				);
 		mTravelModifier.setAutoUnregisterWhenFinished(false);

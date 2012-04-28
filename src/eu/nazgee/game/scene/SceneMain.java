@@ -36,6 +36,7 @@ import eu.nazgee.game.flower.MainHUD;
 import eu.nazgee.game.flower.Sun;
 import eu.nazgee.game.flower.Sun.TravelListener;
 import eu.nazgee.game.flower.cloud.Cloud;
+import eu.nazgee.game.flower.cloud.CloudLayer;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;
@@ -132,26 +133,9 @@ public class SceneMain extends SceneLoadable{
 		/*
 		 * Create some clouds
 		 */
-		for (int i = 0; i < 10; i++) {
-			/*
-			 * Choose random texture
-			 */
-			ITextureRegion tex = mResources.TEXS_CLOUDS.getTextureRegion(
-					r.nextInt(mResources.TEXS_CLOUDS.getTileCount()));
-
-			Cloud cloud = new Cloud(0, 0, tex, vertexBufferObjectManager);
-			attachChild(cloud);
-			cloud.travel(r.nextFloat()*getW(), r.nextFloat() * getH()/2, getW() + getW() * r.nextFloat() * 2, r.nextFloat() * 10 + 10, new Cloud.TravelListener() {
-				@Override
-				public void onStarted(Cloud pCloud) {
-				}
-				@Override
-				public void onFinished(Cloud pCloud) {
-					Random r = new Random();
-					pCloud.travel(r.nextFloat()*getW(), r.nextFloat() * getH()/2, getW() + getW() * r.nextFloat() * 2, r.nextFloat() * 10 + 10, this);
-				}
-			});
-		}
+		CloudLayer cloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/2,
+				getW() * 0.2f, 6, 0.1f, 0.1f, 6, mResources.TEXS_CLOUDS, vertexBufferObjectManager);
+		attachChild(cloudLayer);
 
 		for (int i = 0; i < 20; i++) {
 			/*
@@ -287,23 +271,23 @@ public class SceneMain extends SceneLoadable{
 			mParallaxBackground = pParallaxBackground;
     	}
 
-        @Override
-        public boolean onSceneTouchEvent(Scene pScene, TouchEvent pTouchEvent) {
+		@Override
+		public boolean onSceneTouchEvent(Scene pScene, TouchEvent pTouchEvent) {
 
-                if (pTouchEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                        mTouchX = pTouchEvent.getMotionEvent().getX();
-                } else if (pTouchEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                        float newX = pTouchEvent.getMotionEvent().getX();
+			if (pTouchEvent.getAction() == MotionEvent.ACTION_DOWN) {
+				mTouchX = pTouchEvent.getMotionEvent().getX();
+			} else if (pTouchEvent.getAction() == MotionEvent.ACTION_MOVE) {
+				float newX = pTouchEvent.getMotionEvent().getX();
 
-                        mTouchOffsetX = (newX - mTouchX);
-                        float newScrollX = mCamera.getCenterX() - mTouchOffsetX;
+				mTouchOffsetX = (newX - mTouchX);
+				float newScrollX = mCamera.getCenterX() - mTouchOffsetX;
 
-                        mCamera.setCenter(newScrollX, mCamera.getCenterY());
-                        mTouchX = newX;
-                }
-                return true;
-        }
-    }
+				mCamera.setCenter(newScrollX, mCamera.getCenterY());
+				mTouchX = newX;
+			}
+			return true;
+		}
+	}
 
 	private static class MyResources extends SimpleLoadableResource {
 		public ITiledTextureRegion TEXS_FLOWERS;
