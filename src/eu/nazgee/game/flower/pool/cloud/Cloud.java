@@ -1,4 +1,4 @@
-package eu.nazgee.game.flower.cloud;
+package eu.nazgee.game.flower.pool.cloud;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
@@ -15,8 +15,8 @@ import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
 
 import eu.nazgee.game.flower.Consts;
-import eu.nazgee.game.flower.water.drop.WaterDrop;
-import eu.nazgee.game.flower.water.drop.WaterDrop.IWaterDropListener;
+import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
+import eu.nazgee.game.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 
@@ -29,7 +29,6 @@ public class Cloud extends Sprite {
 	// Fields
 	// ===========================================================
 	final private WaterDrop mWaterDrop;
-	private float mTravelSpeed;
 	private IEntityModifier mTravelModifier;
 	private CloudListener mCloudListener;
 	private CloudModifierListener mCloudModifierListener = new CloudModifierListener();
@@ -69,7 +68,7 @@ public class Cloud extends Sprite {
 	// ===========================================================
 	synchronized public void travel(final float pX, final float pY,
 			final float W, final float time, CloudListener pTravelListener) {
-		mTravelSpeed = W/time;
+
 		mCloudListener = pTravelListener;
 		Positioner.setCentered(this, pX, pY);
 		unregisterEntityModifier(mTravelModifier);
@@ -88,7 +87,7 @@ public class Cloud extends Sprite {
 		registerEntityModifier(mTravelModifier);
 	}
 
-	synchronized void drop(IWaterDropListener pWaterDropListener) {
+	public synchronized void drop(IWaterDropListener pWaterDropListener) {
 		final float y = Positioner.getCenteredY(this);
 		attachChild(mWaterDrop);
 		mWaterDrop.fall(getWidth()/2, getHeight()/2, LAND_LEVEL - y, pWaterDropListener);

@@ -1,4 +1,4 @@
-package eu.nazgee.game.scene;
+package eu.nazgee.game.flower.scene;
 
 import java.util.LinkedList;
 import java.util.Random;
@@ -37,7 +37,6 @@ import eu.nazgee.game.flower.Consts;
 import eu.nazgee.game.flower.MainHUD;
 import eu.nazgee.game.flower.Sun;
 import eu.nazgee.game.flower.Sun.TravelListener;
-import eu.nazgee.game.flower.cloud.CloudLayer;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;

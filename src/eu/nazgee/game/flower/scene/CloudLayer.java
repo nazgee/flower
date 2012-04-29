@@ -1,4 +1,4 @@
-package eu.nazgee.game.flower.cloud;
+package eu.nazgee.game.flower.scene;
 
 import java.util.Random;
 
@@ -9,16 +9,15 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
-import org.andengine.util.ThreadUtils;
-import org.andengine.util.adt.pool.EntityDetachRunnablePoolItem;
-
-import android.util.Log;
 
 import eu.nazgee.game.flower.Statics;
-import eu.nazgee.game.flower.water.drop.WaterDrop;
-import eu.nazgee.game.flower.water.drop.WaterDrop.IWaterDropListener;
-import eu.nazgee.game.flower.water.splash.WaterSplash;
-import eu.nazgee.game.flower.water.splash.WaterSplash.IWaterSplashListener;
+import eu.nazgee.game.flower.pool.cloud.Cloud;
+import eu.nazgee.game.flower.pool.cloud.CloudItem;
+import eu.nazgee.game.flower.pool.cloud.CloudPool;
+import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
+import eu.nazgee.game.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
+import eu.nazgee.game.flower.pool.watersplash.WaterSplash;
+import eu.nazgee.game.flower.pool.watersplash.WaterSplash.IWaterSplashListener;
 
 public class CloudLayer extends Entity{
 	// ===========================================================
@@ -66,7 +65,7 @@ public class CloudLayer extends Entity{
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
 				CloudItem item = mCloudPool.obtainPoolItem();
-				Cloud cloud = item.getCloud();
+				Cloud cloud = item.getEntity();
 				attachChild(cloud);
 				lunchCloudItem(item);
 				started++;
@@ -101,7 +100,7 @@ public class CloudLayer extends Entity{
 		final float time = randomize(mAvgTime, mVariationTime);
 		final float speed = randomize(mAvgSpeed, mVariationSpeed);
 
-		final Cloud cloud = pCloudItem.getCloud();
+		final Cloud cloud = pCloudItem.getEntity();
 		Cloud.CloudListener listener = cloud.getTravelListener();
 		if (listener == null) {
 			listener = new CloudListener(pCloudItem);

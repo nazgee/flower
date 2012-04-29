@@ -1,9 +1,8 @@
-package eu.nazgee.game.flower.water.splash;
+package eu.nazgee.game.flower.pool.watersplash;
 
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.ThreadUtils;
 
 import eu.nazgee.game.flower.Statics;
 import eu.nazgee.game.utils.helpers.Positioner;

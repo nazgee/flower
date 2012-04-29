@@ -1,4 +1,4 @@
-package eu.nazgee.game.scene;
+package eu.nazgee.game.flower.scene;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.background.ParallaxBackground;
