@@ -10,12 +10,14 @@ import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.ThreadUtils;
 import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseQuadIn;
 
 import android.util.Log;
 import eu.nazgee.game.flower.Kinematics;
+import eu.nazgee.game.flower.Statics;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 
@@ -86,16 +88,15 @@ public class WaterDrop extends Sprite {
 		@Override
 		public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
 			synchronized (WaterDrop.this) {
-
 			}
 		}
 		@Override
 		public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
 			synchronized (WaterDrop.this) {
-				detachSelf();
 				if (mWaterDropListener != null) {
 					mWaterDropListener.onHitTheGround(WaterDrop.this);
 				}
+				Statics.ENTITY_DETACH_HANDLER.scheduleDetach(pItem);
 			}
 		}
 	}

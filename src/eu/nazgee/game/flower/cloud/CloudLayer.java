@@ -8,6 +8,15 @@ import org.andengine.entity.Entity;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.Constants;
+import org.andengine.util.ThreadUtils;
+import org.andengine.util.adt.pool.EntityDetachRunnablePoolItem;
+
+import android.util.Log;
+
+import eu.nazgee.game.flower.Statics;
+import eu.nazgee.game.flower.cloud.WaterDrop.IWaterDropListener;
+import eu.nazgee.game.flower.cloud.WaterSplash.IWaterSplashListener;
 
 public class CloudLayer extends Entity{
 	// ===========================================================
@@ -26,6 +35,7 @@ public class CloudLayer extends Entity{
 	private final float mAvgDistance;
 	private final float mVariationSpeed;
 	private final float mVariationTime;
+	private final ITiledTextureRegion mWaterSplashTexture;
 
 	// ===========================================================
 	// Constructors
@@ -34,12 +44,13 @@ public class CloudLayer extends Entity{
 	public CloudLayer(float pX, float pY, final float W, final float H, 
 			float pAvgSpeed, float pAvgTime,
 			float pVariationSpeed, float pVariationTime, final int pCloudsNumber,
-			ITiledTextureRegion pCloudTexture, ITextureRegion pWaterDropTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
+			ITiledTextureRegion pCloudTexture, ITextureRegion pWaterDropTexture, ITiledTextureRegion pWaterSplashTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY);
 		mW = W;
 		mH = H;
 		mAvgSpeed = pAvgSpeed;
 		mAvgTime = pAvgTime;
+		mWaterSplashTexture = pWaterSplashTexture;
 		mAvgDistance = pAvgSpeed * pAvgTime;
 		mVariationSpeed = pVariationSpeed;
 		mVariationTime = pVariationTime;
@@ -105,13 +116,30 @@ public class CloudLayer extends Entity{
 	// ===========================================================
 	class RainMain implements ITimerCallback {
 		private final Cloud mCloud;
+		float mPos[];
 		public RainMain(Cloud mCloud) {
 			this.mCloud = mCloud;
 		}
 		@Override
 		public void onTimePassed(TimerHandler pTimerHandler) {
 			mCloud.unregisterUpdateHandler(pTimerHandler);
-			mCloud.drop(null);
+			mCloud.drop(new IWaterDropListener() {
+				@Override
+				public void onHitTheGround(WaterDrop pWaterDrop) {
+					final WaterSplash splash = new WaterSplash(0, 0, mWaterSplashTexture, mCloud.getVertexBufferObjectManager());
+					CloudLayer.this.attachChild(splash);
+
+					mPos = pWaterDrop.getSceneCenterCoordinates();
+
+					splash.splat(mPos[Constants.VERTEX_INDEX_X], mPos[Constants.VERTEX_INDEX_Y],
+							new IWaterSplashListener() {
+						@Override
+						public void onHitTheGround(WaterSplash pWaterSplash) {
+							Statics.ENTITY_DETACH_HANDLER.scheduleDetach(pWaterSplash);
+						}
+					});
+				}
+			});
 		}
 	}
 	class CloudListener implements Cloud.CloudListener {

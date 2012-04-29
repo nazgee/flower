@@ -68,6 +68,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 		// Load all our resources- these are the only resources
 		// that have to be loaded manually (mResources.FONT_MENU will be ready to use)
+		mResources.getLoader().install(new Statics());
 		mResources.loadResources(getEngine(), this);
 		mResources.load(getEngine(), this);
 

@@ -27,6 +27,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.ThreadUtils;
 import org.andengine.util.color.Color;
 import org.andengine.util.modifier.ease.EaseBounceOut;
 
@@ -145,7 +146,9 @@ public class SceneMain extends SceneLoadable{
 		 * Create some clouds
 		 */
 		CloudLayer cloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/2,
-				getW() * 0.2f, 6, 0.1f, 0.1f, 6, mResources.TEXS_CLOUDS, mResources.TEX_WATERDROP, vertexBufferObjectManager);
+				getW() * 0.2f, 6, 0.1f, 0.1f, 6, 
+				mResources.TEXS_CLOUDS, mResources.TEX_WATERDROP, 
+				mResources.TEXS_SPLASH, vertexBufferObjectManager);
 		attachChild(cloudLayer);
 
 		/*
@@ -275,19 +278,19 @@ public class SceneMain extends SceneLoadable{
 	 * background
 	 * @author nazgee
 	 */
-    private static class MyTouchListener implements IOnSceneTouchListener {
-        private float mTouchX = 0, mTouchOffsetX = 0;
-    	private Camera mCamera;
-    	private ParallaxBackground mParallaxBackground;
+	private static class MyTouchListener implements IOnSceneTouchListener {
+		private float mTouchX = 0, mTouchOffsetX = 0;
+		private Camera mCamera;
+		private ParallaxBackground mParallaxBackground;
 
-    	public MyTouchListener(Camera pCamera, ParallaxBackground pParallaxBackground) {
+		public MyTouchListener(Camera pCamera,
+				ParallaxBackground pParallaxBackground) {
 			mCamera = pCamera;
 			mParallaxBackground = pParallaxBackground;
-    	}
+		}
 
 		@Override
 		public boolean onSceneTouchEvent(Scene pScene, TouchEvent pTouchEvent) {
-
 			if (pTouchEvent.getAction() == MotionEvent.ACTION_DOWN) {
 				mTouchX = pTouchEvent.getMotionEvent().getX();
 			} else if (pTouchEvent.getAction() == MotionEvent.ACTION_MOVE) {
@@ -306,6 +309,7 @@ public class SceneMain extends SceneLoadable{
 	private static class MyResources extends SimpleLoadableResource {
 		public ITiledTextureRegion TEXS_FLOWERS;
 		public ITiledTextureRegion TEXS_CLOUDS;
+		public ITiledTextureRegion TEXS_SPLASH;
 		public ITextureRegion TEX_FACE;
 		public ITextureRegion TEX_BG_FAR;
 		public ITextureRegion TEX_BG_CLOSE;
@@ -326,10 +330,11 @@ public class SceneMain extends SceneLoadable{
 			/*
 			 * Create nicely named shortcuts to our atlases (textures)
 			 */
+			BuildableBitmapTextureAtlas atlasSky = mAtlases[0];
 			BuildableBitmapTextureAtlas atlasFlower = mAtlases[1];
+			BuildableBitmapTextureAtlas atlasSplash = mAtlases[1];
 			BuildableBitmapTextureAtlas atlasClouds = mAtlases[1];
 			BuildableBitmapTextureAtlas atlasScene = mAtlases[2];
-			BuildableBitmapTextureAtlas atlasSky = mAtlases[0];
 
 			/*
 			 * Fill our texture with regions that we would like to use
@@ -350,11 +355,10 @@ public class SceneMain extends SceneLoadable{
 					atlasScene, c, "sun.png");
 			TEX_WATERDROP = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "drop.png");
-			/*
-			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
-			 */
 			TEXS_CLOUDS = TiledTextureRegionFactory.loadTiles(c, "gfx/", "clouds",
 					atlasClouds);
+			TEXS_SPLASH = TiledTextureRegionFactory.loadTiles(c, "gfx/", "splash",
+					atlasSplash);
 			/*
 			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
 			 */
