@@ -12,19 +12,17 @@ public class CloudPool extends Pool<CloudItem> {
 	private final Random rand = new Random();
 	private final ITiledTextureRegion mCloudTextureRegions;
 	private final VertexBufferObjectManager mVertexBufferObjectManager;
-	private final ITextureRegion mWaterDropTexture;
 
-	public CloudPool(ITiledTextureRegion pCloudTextureRegions, ITextureRegion pWaterDropTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
+	public CloudPool(ITiledTextureRegion pCloudTextureRegions, VertexBufferObjectManager pVertexBufferObjectManager) {
 		super();
 		mCloudTextureRegions = pCloudTextureRegions;
-		mWaterDropTexture = pWaterDropTexture;
 		mVertexBufferObjectManager = pVertexBufferObjectManager;
 	}
 
 	@Override
 	protected CloudItem onAllocatePoolItem() {
 		ITextureRegion cloudtex = mCloudTextureRegions.getTextureRegion(rand.nextInt(mCloudTextureRegions.getTileCount()));
-		return new CloudItem(cloudtex, mWaterDropTexture, mVertexBufferObjectManager);
+		return new CloudItem(cloudtex, mVertexBufferObjectManager);
 	}
 
 }

@@ -36,19 +36,20 @@ public class WaterSplash extends AnimatedSprite {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public IWaterSplashListener getTravelListener() {
+	public IWaterSplashListener getSplashListener() {
 		return mWaterSplashListener;
 	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	public interface IWaterSplashListener {
-		void onHitTheGround(WaterSplash pWaterSplash);
+		void onSplashFinished(WaterSplash pWaterSplash);
 	}
 	// ===========================================================
 	// Methods
 	// ===========================================================
 	public synchronized void splat(final float pX, final float pY, IWaterSplashListener pWaterSplashListener) {
+		mWaterSplashListener = pWaterSplashListener;
 		Positioner.setCentered(this, pX, pY);
 		this.animate(100, false, mWaterSplashAnimationListener);
 	}
@@ -72,7 +73,7 @@ public class WaterSplash extends AnimatedSprite {
 		public void onAnimationFinished(AnimatedSprite pAnimatedSprite) {
 			synchronized (WaterSplash.this) {
 				if (mWaterSplashListener != null) {
-					mWaterSplashListener.onHitTheGround(WaterSplash.this);
+					mWaterSplashListener.onSplashFinished(WaterSplash.this);
 				}
 				Statics.ENTITY_DETACH_HANDLER.scheduleDetach(pAnimatedSprite);
 			}

@@ -28,7 +28,6 @@ public class Cloud extends Sprite {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	final private WaterDrop mWaterDrop;
 	private IEntityModifier mTravelModifier;
 	private CloudListener mCloudListener;
 	private CloudModifierListener mCloudModifierListener = new CloudModifierListener();
@@ -38,17 +37,14 @@ public class Cloud extends Sprite {
 	// ===========================================================
 
 	public Cloud(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureRegion, ITextureRegion pWaterDropTextureRegion,
+			ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager);
-		mWaterDrop = new WaterDrop(0, 0, pWaterDropTextureRegion, pVertexBufferObjectManager);
 	}
 
 	public Cloud(float pX, float pY, ITextureRegion pTextureRegion,
-			ITextureRegion pWaterDropTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		mWaterDrop = new WaterDrop(0, 0, pWaterDropTextureRegion, pVertexBufferObjectManager);
 	}
 	// ===========================================================
 	// Getter & Setter
@@ -87,10 +83,10 @@ public class Cloud extends Sprite {
 		registerEntityModifier(mTravelModifier);
 	}
 
-	public synchronized void drop(IWaterDropListener pWaterDropListener) {
+	public synchronized void drop(WaterDrop pWaterDrop, IWaterDropListener pWaterDropListener) {
 		final float y = Positioner.getCenteredY(this);
-		attachChild(mWaterDrop);
-		mWaterDrop.fall(getWidth()/2, getHeight()/2, LAND_LEVEL - y, pWaterDropListener);
+		attachChild(pWaterDrop);
+		pWaterDrop.fall(getWidth()/2, getHeight()/2, LAND_LEVEL - y, pWaterDropListener);
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes

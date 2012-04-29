@@ -49,7 +49,7 @@ public class WaterDrop extends Sprite {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public IWaterDropListener getTravelListener() {
+	public IWaterDropListener getDropListener() {
 		return mWaterDropListener;
 	}
 	// ===========================================================

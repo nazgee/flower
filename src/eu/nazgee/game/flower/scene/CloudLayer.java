@@ -5,19 +5,25 @@ import java.util.Random;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.Entity;
+import org.andengine.entity.IEntity;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
+import org.andengine.util.call.Callback;
 
 import eu.nazgee.game.flower.Statics;
 import eu.nazgee.game.flower.pool.cloud.Cloud;
 import eu.nazgee.game.flower.pool.cloud.CloudItem;
 import eu.nazgee.game.flower.pool.cloud.CloudPool;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
+import eu.nazgee.game.flower.pool.waterdrop.WaterDropItem;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
+import eu.nazgee.game.flower.pool.waterdrop.WaterDropPool;
 import eu.nazgee.game.flower.pool.watersplash.WaterSplash;
 import eu.nazgee.game.flower.pool.watersplash.WaterSplash.IWaterSplashListener;
+import eu.nazgee.game.flower.pool.watersplash.WaterSplashItem;
+import eu.nazgee.game.flower.pool.watersplash.WaterSplashPool;
 
 public class CloudLayer extends Entity{
 	// ===========================================================
@@ -29,6 +35,8 @@ public class CloudLayer extends Entity{
 	// ===========================================================
 	final Random rand = new Random();
 	final CloudPool mCloudPool;
+	final WaterDropPool mDropPool;
+	final WaterSplashPool mSplashPool;
 	private final float mW;
 	private final float mH;
 	private final float mAvgSpeed;
@@ -55,7 +63,9 @@ public class CloudLayer extends Entity{
 		mAvgDistance = pAvgSpeed * pAvgTime;
 		mVariationSpeed = pVariationSpeed;
 		mVariationTime = pVariationTime;
-		mCloudPool = new CloudPool(pCloudTexture, pWaterDropTexture, pVertexBufferObjectManager);
+		mCloudPool = new CloudPool(pCloudTexture, pVertexBufferObjectManager);
+		mDropPool = new WaterDropPool(pWaterDropTexture, pVertexBufferObjectManager);
+		mSplashPool = new WaterSplashPool(pWaterSplashTexture, pVertexBufferObjectManager);
 
 		/*
 		 * Smoothly ramp up number of clouds on layer
@@ -124,23 +134,36 @@ public class CloudLayer extends Entity{
 		@Override
 		public void onTimePassed(TimerHandler pTimerHandler) {
 			mCloud.unregisterUpdateHandler(pTimerHandler);
-			mCloud.drop(new IWaterDropListener() {
-				@Override
-				public void onHitTheGround(WaterDrop pWaterDrop) {
-					final WaterSplash splash = new WaterSplash(0, 0, mWaterSplashTexture, mCloud.getVertexBufferObjectManager());
-					CloudLayer.this.attachChild(splash);
+			WaterDropItem dropitem = mDropPool.obtainPoolItem();
+			mCloud.drop(dropitem.getEntity(), new WaterDropListener(dropitem));
+		}
 
-					mPos = pWaterDrop.getSceneCenterCoordinates();
+		private class WaterDropListener implements IWaterDropListener {
+			private final WaterDropItem mWaterDropItem;
+			public WaterDropListener(WaterDropItem mWaterDropItem) {
+				this.mWaterDropItem = mWaterDropItem;
+			}
+			@Override
+			public void onHitTheGround(WaterDrop pWaterDrop) {
+				mWaterDropItem.scheduleDetachAndRecycle();
 
-					splash.splat(mPos[Constants.VERTEX_INDEX_X], mPos[Constants.VERTEX_INDEX_Y],
-							new IWaterSplashListener() {
-						@Override
-						public void onHitTheGround(WaterSplash pWaterSplash) {
-							Statics.ENTITY_DETACH_HANDLER.scheduleDetach(pWaterSplash);
-						}
-					});
-				}
-			});
+				final WaterSplashItem splashitem = mSplashPool.obtainPoolItem();
+				CloudLayer.this.attachChild(splashitem.getEntity());
+				mPos = pWaterDrop.getSceneCenterCoordinates();
+				splashitem.getEntity().splat(mPos[Constants.VERTEX_INDEX_X], mPos[Constants.VERTEX_INDEX_Y],
+						new WaterSplashListener(splashitem));
+			}
+		}
+
+		private class WaterSplashListener implements IWaterSplashListener {
+			private final WaterSplashItem mWaterSplashItem;
+			public WaterSplashListener(WaterSplashItem mWaterSplashItem) {
+				this.mWaterSplashItem = mWaterSplashItem;
+			}
+			@Override
+			public void onSplashFinished(WaterSplash pWaterSplash) {
+				mWaterSplashItem.scheduleDetachAndRecycle();
+			}
 		}
 	}
 	class CloudListener implements Cloud.CloudListener {
