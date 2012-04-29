@@ -1,12 +1,10 @@
 package eu.nazgee.game.flower.cloud;
 
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.FadeInModifier;
-import org.andengine.entity.modifier.FadeOutModifier;
 import org.andengine.entity.modifier.IEntityModifier;
-import org.andengine.entity.modifier.MoveByModifier;
+import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
@@ -14,103 +12,89 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
+import org.andengine.util.modifier.ease.EaseQuadIn;
 
-import eu.nazgee.game.flower.Consts;
-import eu.nazgee.game.flower.cloud.WaterDrop.IWaterDropListener;
+import android.util.Log;
+import eu.nazgee.game.flower.Kinematics;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 
-public class Cloud extends Sprite {
+public class WaterDrop extends Sprite {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-	static private float LAND_LEVEL = Consts.CAMERA_HEIGHT * 0.9f;
+	static float GRAVITY_ACCEL = 250;
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	final private WaterDrop mWaterDrop;
-	private float mTravelSpeed;
-	private IEntityModifier mTravelModifier;
-	private CloudListener mCloudListener;
-	private CloudModifierListener mCloudModifierListener = new CloudModifierListener();
+	private IEntityModifier mDropModifier;
+	private IWaterDropListener mWaterDropListener;
+	private WaterDropModifierListener mWaterDropModifierListener = new WaterDropModifierListener();
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public Cloud(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureRegion, ITextureRegion pWaterDropTextureRegion,
+	public WaterDrop(float pX, float pY, float pWidth, float pHeight,
+			ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager);
-		mWaterDrop = new WaterDrop(0, 0, pWaterDropTextureRegion, pVertexBufferObjectManager);
 	}
 
-	public Cloud(float pX, float pY, ITextureRegion pTextureRegion,
-			ITextureRegion pWaterDropTextureRegion,
+	public WaterDrop(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		mWaterDrop = new WaterDrop(0, 0, pWaterDropTextureRegion, pVertexBufferObjectManager);
 	}
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public CloudListener getTravelListener() {
-		return mCloudListener;
+	public IWaterDropListener getTravelListener() {
+		return mWaterDropListener;
 	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
-	public interface CloudListener {
-		void onStarted(Cloud pCloud);
-		void onFinished(Cloud pCloud);
+	public interface IWaterDropListener {
+		void onHitTheGround(WaterDrop pWaterDrop);
 	}
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	synchronized public void travel(final float pX, final float pY,
-			final float W, final float time, CloudListener pTravelListener) {
-		mTravelSpeed = W/time;
-		mCloudListener = pTravelListener;
+	synchronized void fall(final float pX, final float pY, final float H, IWaterDropListener pWaterDropListener) {
+		final float time = Kinematics.time(GRAVITY_ACCEL, H);
+		mWaterDropListener = pWaterDropListener;
 		Positioner.setCentered(this, pX, pY);
-		unregisterEntityModifier(mTravelModifier);
-		mTravelModifier = new ParallelEntityModifier(
+		unregisterEntityModifier(mDropModifier);
+		mDropModifier = new ParallelEntityModifier(
 				new SequenceEntityModifier(
-						new MoveByModifier(time, W, 0)
+						new MoveYModifier(time, getY(), getY() + H, EaseQuadIn.getInstance())
 						),
 				new SequenceEntityModifier(
-						new FadeInModifier(time*0.1f),
-						new DelayModifier(time * 0.8f),
-						new FadeOutModifier(time*0.1f)
+						new FadeInModifier(time*0.2f),
+						new DelayModifier(time * 0.8f)
 						)
 				);
-		mTravelModifier.setAutoUnregisterWhenFinished(false);
-		mTravelModifier.addModifierListener(mCloudModifierListener);
-		registerEntityModifier(mTravelModifier);
-	}
-
-	synchronized void drop(IWaterDropListener pWaterDropListener) {
-		final float y = Positioner.getCenteredY(this);
-		attachChild(mWaterDrop);
-		mWaterDrop.fall(getWidth()/2, getHeight()/2, LAND_LEVEL - y, pWaterDropListener);
+		mDropModifier.setAutoUnregisterWhenFinished(false);
+		mDropModifier.addModifierListener(mWaterDropModifierListener);
+		registerEntityModifier(mDropModifier);
+		Log.d(getClass().getSimpleName(), "fall(); time=" + time);
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-
-	private class CloudModifierListener implements IModifierListener<IEntity> {
+	private class WaterDropModifierListener implements IModifierListener<IEntity> {
 		@Override
 		public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-			synchronized (Cloud.this) {
-				if (mCloudListener != null) {
-					mCloudListener.onStarted(Cloud.this);
-				}
+			synchronized (WaterDrop.this) {
+
 			}
 		}
 		@Override
 		public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-			synchronized (Cloud.this) {
-				if (mCloudListener != null) {
-					mCloudListener.onFinished(Cloud.this);
+			synchronized (WaterDrop.this) {
+				detachSelf();
+				if (mWaterDropListener != null) {
+					mWaterDropListener.onHitTheGround(WaterDrop.this);
 				}
 			}
 		}

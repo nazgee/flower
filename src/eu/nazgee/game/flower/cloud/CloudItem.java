@@ -6,8 +6,8 @@ import org.andengine.util.adt.pool.PoolItem;
 
 public class CloudItem extends PoolItem {
 	private final Cloud mCloud;
-	public CloudItem(ITextureRegion pTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
-		mCloud = new Cloud(0, 0, pTexture, pVertexBufferObjectManager);
+	public CloudItem(ITextureRegion pTextureCloud, ITextureRegion pTextureWaterDrop, VertexBufferObjectManager pVertexBufferObjectManager) {
+		mCloud = new Cloud(0, 0, pTextureCloud, pTextureWaterDrop, pVertexBufferObjectManager);
 	}
 
 	public Cloud getCloud() {

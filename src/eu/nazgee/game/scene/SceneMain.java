@@ -36,7 +36,6 @@ import eu.nazgee.game.flower.Consts;
 import eu.nazgee.game.flower.MainHUD;
 import eu.nazgee.game.flower.Sun;
 import eu.nazgee.game.flower.Sun.TravelListener;
-import eu.nazgee.game.flower.cloud.Cloud;
 import eu.nazgee.game.flower.cloud.CloudLayer;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
@@ -146,7 +145,7 @@ public class SceneMain extends SceneLoadable{
 		 * Create some clouds
 		 */
 		CloudLayer cloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/2,
-				getW() * 0.2f, 6, 0.1f, 0.1f, 6, mResources.TEXS_CLOUDS, vertexBufferObjectManager);
+				getW() * 0.2f, 6, 0.1f, 0.1f, 6, mResources.TEXS_CLOUDS, mResources.TEX_WATERDROP, vertexBufferObjectManager);
 		attachChild(cloudLayer);
 
 		/*
@@ -314,6 +313,7 @@ public class SceneMain extends SceneLoadable{
 		public ITextureRegion TEX_GROUND;
 		private ITextureRegion TEX_SKY;
 		private ITextureRegion TEX_SUN;
+		private ITextureRegion TEX_WATERDROP;
 		private BuildableBitmapTextureAtlas[] mAtlases;
 
 		@Override
@@ -348,6 +348,8 @@ public class SceneMain extends SceneLoadable{
 					atlasScene, c, "scene/grass.png");
 			TEX_SUN = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "sun.png");
+			TEX_WATERDROP = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					atlasScene, c, "drop.png");
 			/*
 			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
 			 */

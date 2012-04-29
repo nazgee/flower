@@ -5,10 +5,9 @@ import java.util.Random;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.Entity;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-
-import eu.nazgee.game.flower.cloud.Cloud.TravelListener;
 
 public class CloudLayer extends Entity{
 	// ===========================================================
@@ -35,7 +34,7 @@ public class CloudLayer extends Entity{
 	public CloudLayer(float pX, float pY, final float W, final float H, 
 			float pAvgSpeed, float pAvgTime,
 			float pVariationSpeed, float pVariationTime, final int pCloudsNumber,
-			ITiledTextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager) {
+			ITiledTextureRegion pCloudTexture, ITextureRegion pWaterDropTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY);
 		mW = W;
 		mH = H;
@@ -44,7 +43,7 @@ public class CloudLayer extends Entity{
 		mAvgDistance = pAvgSpeed * pAvgTime;
 		mVariationSpeed = pVariationSpeed;
 		mVariationTime = pVariationTime;
-		mCloudPool = new CloudPool(pTextureRegion, pVertexBufferObjectManager);
+		mCloudPool = new CloudPool(pCloudTexture, pWaterDropTexture, pVertexBufferObjectManager);
 
 		/*
 		 * Smoothly ramp up number of clouds on layer
@@ -89,19 +88,33 @@ public class CloudLayer extends Entity{
 		final float time = randomize(mAvgTime, mVariationTime);
 		final float speed = randomize(mAvgSpeed, mVariationSpeed);
 
-		Cloud cloud = pCloudItem.getCloud();
-		TravelListener listener = cloud.getTravelListener();
+		final Cloud cloud = pCloudItem.getCloud();
+		Cloud.CloudListener listener = cloud.getTravelListener();
 		if (listener == null) {
 			listener = new CloudListener(pCloudItem);
 		}
 
 		cloud.travel(x, y, speed*time, time, listener);
+
+		TimerHandler rainman = new TimerHandler(time/2, new RainMain(cloud));
+		cloud.registerUpdateHandler(rainman);
 	}
 
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	class CloudListener implements Cloud.TravelListener {
+	class RainMain implements ITimerCallback {
+		private final Cloud mCloud;
+		public RainMain(Cloud mCloud) {
+			this.mCloud = mCloud;
+		}
+		@Override
+		public void onTimePassed(TimerHandler pTimerHandler) {
+			mCloud.unregisterUpdateHandler(pTimerHandler);
+			mCloud.drop(null);
+		}
+	}
+	class CloudListener implements Cloud.CloudListener {
 		CloudItem mItem;
 
 		public CloudListener(CloudItem mItem) {

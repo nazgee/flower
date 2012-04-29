@@ -10,19 +10,21 @@ import org.andengine.util.adt.pool.Pool;
 public class CloudPool extends Pool<CloudItem> {
 
 	private final Random rand = new Random();
-	private final ITiledTextureRegion mTextureRegions;
+	private final ITiledTextureRegion mCloudTextureRegions;
 	private final VertexBufferObjectManager mVertexBufferObjectManager;
+	private final ITextureRegion mWaterDropTexture;
 
-	public CloudPool(ITiledTextureRegion pTextureRegion, VertexBufferObjectManager pVertexBufferObjectManager) {
+	public CloudPool(ITiledTextureRegion pCloudTextureRegions, ITextureRegion pWaterDropTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
 		super();
-		mTextureRegions = pTextureRegion;
+		mCloudTextureRegions = pCloudTextureRegions;
+		mWaterDropTexture = pWaterDropTexture;
 		mVertexBufferObjectManager = pVertexBufferObjectManager;
 	}
 
 	@Override
 	protected CloudItem onAllocatePoolItem() {
-		ITextureRegion tex = mTextureRegions.getTextureRegion(rand.nextInt(mTextureRegions.getTileCount()));
-		return new CloudItem(tex, mVertexBufferObjectManager);
+		ITextureRegion cloudtex = mCloudTextureRegions.getTextureRegion(rand.nextInt(mCloudTextureRegions.getTileCount()));
+		return new CloudItem(cloudtex, mWaterDropTexture, mVertexBufferObjectManager);
 	}
 
 }
