@@ -1,4 +1,4 @@
-package eu.nazgee.game.flower.cloud;
+package eu.nazgee.game.flower.water.splash;
 
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
@@ -49,7 +49,7 @@ public class WaterSplash extends AnimatedSprite {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	synchronized void splat(final float pX, final float pY, IWaterSplashListener pWaterSplashListener) {
+	public synchronized void splat(final float pX, final float pY, IWaterSplashListener pWaterSplashListener) {
 		Positioner.setCentered(this, pX, pY);
 		this.animate(100, false, mWaterSplashAnimationListener);
 	}

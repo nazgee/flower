@@ -15,8 +15,10 @@ import org.andengine.util.adt.pool.EntityDetachRunnablePoolItem;
 import android.util.Log;
 
 import eu.nazgee.game.flower.Statics;
-import eu.nazgee.game.flower.cloud.WaterDrop.IWaterDropListener;
-import eu.nazgee.game.flower.cloud.WaterSplash.IWaterSplashListener;
+import eu.nazgee.game.flower.water.drop.WaterDrop;
+import eu.nazgee.game.flower.water.drop.WaterDrop.IWaterDropListener;
+import eu.nazgee.game.flower.water.splash.WaterSplash;
+import eu.nazgee.game.flower.water.splash.WaterSplash.IWaterSplashListener;
 
 public class CloudLayer extends Entity{
 	// ===========================================================

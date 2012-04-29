@@ -1,4 +1,4 @@
-package eu.nazgee.game.flower.cloud;
+package eu.nazgee.game.flower.water.drop;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
@@ -62,7 +62,7 @@ public class WaterDrop extends Sprite {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	synchronized void fall(final float pX, final float pY, final float H, IWaterDropListener pWaterDropListener) {
+	public synchronized void fall(final float pX, final float pY, final float H, IWaterDropListener pWaterDropListener) {
 		final float time = Kinematics.time(GRAVITY_ACCEL, H);
 		mWaterDropListener = pWaterDropListener;
 		Positioner.setCentered(this, pX, pY);
