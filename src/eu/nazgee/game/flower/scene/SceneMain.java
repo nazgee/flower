@@ -36,6 +36,7 @@ import android.view.MotionEvent;
 import eu.nazgee.game.flower.Consts;
 import eu.nazgee.game.flower.MainHUD;
 import eu.nazgee.game.flower.Sun;
+import eu.nazgee.game.flower.Sunshine;
 import eu.nazgee.game.flower.Sun.TravelListener;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
@@ -140,6 +141,10 @@ public class SceneMain extends SceneLoadable{
 		Sun mSun = new Sun(0, 0, mResources.TEX_SUN, vertexBufferObjectManager);
 		attachChild(mSun);
 		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 10, new SunTravelListener());
+
+		Sunshine mSunshine = new Sunshine(mResources.TEXS_SUNSHINE, getVertexBufferObjectManager());
+		mSun.attachChild(mSunshine);
+		mSunshine.setPosition(mSun.getWidth()/2, mSun.getHeight()/2);
 
 		/*
 		 * Create some clouds
@@ -309,6 +314,7 @@ public class SceneMain extends SceneLoadable{
 		public ITiledTextureRegion TEXS_FLOWERS;
 		public ITiledTextureRegion TEXS_CLOUDS;
 		public ITiledTextureRegion TEXS_SPLASH;
+		public ITiledTextureRegion TEXS_SUNSHINE;
 		public ITextureRegion TEX_FACE;
 		public ITextureRegion TEX_BG_FAR;
 		public ITextureRegion TEX_BG_CLOSE;
@@ -332,6 +338,7 @@ public class SceneMain extends SceneLoadable{
 			BuildableBitmapTextureAtlas atlasSky = mAtlases[0];
 			BuildableBitmapTextureAtlas atlasFlower = mAtlases[1];
 			BuildableBitmapTextureAtlas atlasSplash = mAtlases[1];
+			BuildableBitmapTextureAtlas atlasSunshine = mAtlases[1];
 			BuildableBitmapTextureAtlas atlasClouds = mAtlases[1];
 			BuildableBitmapTextureAtlas atlasScene = mAtlases[2];
 
@@ -358,6 +365,8 @@ public class SceneMain extends SceneLoadable{
 					atlasClouds);
 			TEXS_SPLASH = TiledTextureRegionFactory.loadTiles(c, "gfx/", "splash",
 					atlasSplash);
+			TEXS_SUNSHINE = TiledTextureRegionFactory.loadTiles(c, "gfx/", "shine",
+					atlasSunshine);
 			/*
 			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
 			 */
