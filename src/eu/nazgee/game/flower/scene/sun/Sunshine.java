@@ -1,17 +1,17 @@
-package eu.nazgee.game.flower;
+package eu.nazgee.game.flower.scene.sun;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.SingleValueSpanEntityModifier;
+import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.modifier.ease.EaseElasticOut;
-import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
 import android.util.Log;
-
+import eu.nazgee.game.flower.scene.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 public class Sunshine extends Entity {
@@ -33,7 +33,7 @@ public class Sunshine extends Entity {
 		attachChild(mSpriteMiddle);
 		attachChild(mSpriteBottom);
 
-		Positioner.setCentered(mSpriteTop, 0, 0);
+		Positioner.setCenteredX(mSpriteTop, 0);
 		Positioner.setCenteredX(mSpriteMiddle, 0);
 		Positioner.setCenteredX(mSpriteBottom, 0);
 
@@ -57,7 +57,25 @@ public class Sunshine extends Entity {
 		return (EASING_RESET_THRESHOLD < Math.abs(mSunshineLengthModifier.getTarget() - pNewRaysValue));
 	}
 
-	public void setRaysTarget(final float pTargetRays) {
+	public void setRaysTargetTop(IAreaShape pTarget, Sky pSky) {
+		float target = pSky.getHeightOnSkyTop(pTarget);
+		setRaysTargetSky(target, pSky);
+	}
+
+	public void setRaysTargetCenter(Entity pTarget, Sky pSky) {
+		float target = pSky.getHeightOnSky(pTarget);
+		setRaysTargetSky(target, pSky);
+	}
+
+	private void setRaysTargetSky(float pSkyHeight, Sky pSky) {
+		float me = pSky.getHeightOnSky(this);
+		if (me < pSkyHeight) {
+			pSkyHeight = pSky.getHeightOnScene(0);
+		}
+		setRaysTarget(Math.max(0, me - pSkyHeight - mSpriteTop.getHeight()));
+	}
+
+	private void setRaysTarget(final float pTargetRays) {
 		if (isChangeBig(pTargetRays) || mSunshineLengthModifier.isFinished()) {
 			Log.w(getClass().getSimpleName(), "reset=" + pTargetRays);
 			mSunshineLengthModifier.reset(EASING_DURATION, getRaysCurrent(), pTargetRays);

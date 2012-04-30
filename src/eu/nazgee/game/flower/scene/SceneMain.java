@@ -37,10 +37,10 @@ import android.content.Context;
 import android.view.MotionEvent;
 import eu.nazgee.game.flower.Consts;
 import eu.nazgee.game.flower.MainHUD;
-import eu.nazgee.game.flower.Sun;
-import eu.nazgee.game.flower.Sun.TravelListener;
-import eu.nazgee.game.flower.Sunshine;
 import eu.nazgee.game.flower.pool.cloud.Cloud;
+import eu.nazgee.game.flower.scene.sun.Sun;
+import eu.nazgee.game.flower.scene.sun.Sunshine;
+import eu.nazgee.game.flower.scene.sun.Sun.TravelListener;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
@@ -64,6 +64,8 @@ public class SceneMain extends SceneLoadable{
 	private Sun mSun;
 	private Sunshine mSunshine;
 	private CloudLayer mCloudLayer;
+	private Sky mSky;
+	private Sprite mGround;
 
 
 	// ===========================================================
@@ -107,22 +109,25 @@ public class SceneMain extends SceneLoadable{
 		final Sprite bgSky = new Sprite(0, 0, mResources.TEX_SKY, vertexBufferObjectManager);
 		final Sprite bgFar = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_FAR.getHeight(), mResources.TEX_BG_FAR, vertexBufferObjectManager);
 		final Sprite bgClose = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_CLOSE.getHeight(), mResources.TEX_BG_CLOSE, vertexBufferObjectManager);
-		final Sprite bgGround = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight(), mResources.TEX_GROUND, vertexBufferObjectManager);
+		mGround = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight(), mResources.TEX_GROUND, vertexBufferObjectManager);
 		final Sprite bgGrass = new Sprite(0, getH() - mResources.TEX_GRASS.getHeight()*0.7f, mResources.TEX_GRASS, vertexBufferObjectManager);
 		final ParallaxBackground paralaxBG = new CameraParallaxBackground(0, 0, 0, mCamera);
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.1f, bgSky));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.25f, bgFar));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.5f, bgClose));
-		paralaxBG.attachParallaxEntity(new ParallaxEntity(-1f, bgGround));
+		paralaxBG.attachParallaxEntity(new ParallaxEntity(-1f, mGround));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-1.5f, bgGrass));
 		setBackground(paralaxBG);
-		
+
+		mSky = new Sky(mGround.getY());
+
 //		/*
 //		 * Register a touch listener, which will move the camera when scene is
 //		 * touched and apply the paralaxValue to the background
 //		 */
 //		setOnSceneTouchListener(new MyTouchListener(mCamera, paralaxBG));
 //		setOnSceneTouchListenerBindingOnActionDownEnabled(true);
+
 		/*
 		 * Register touch area listener, which will listen for the touches of
 		 * registered objects
@@ -141,7 +146,7 @@ public class SceneMain extends SceneLoadable{
 		mSunshine.setPosition(mSun.getWidth()/2, mSun.getHeight()/2);
 
 		mCloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/3,
-				getW() * 0.1f, 10, 0.2f, 0.2f, 6, 
+				getW() * 0.1f, 10, 0.2f, 0.2f, 6, mSky,
 				mResources.TEXS_CLOUDS, mResources.TEX_WATERDROP, 
 				mResources.TEXS_SPLASH, vertexBufferObjectManager);
 		attachChild(mCloudLayer);
@@ -198,10 +203,9 @@ public class SceneMain extends SceneLoadable{
 				float pos[] = mSun.getSceneCenterCoordinates();
 				Cloud cloud = mCloudLayer.getHighestCloudAtX(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
 				if (cloud != null) {
-					mSunshine.setRaysTarget(cloud.getY() - mSun.getY());
+					mSunshine.setRaysTargetCenter(cloud, mSky);
 				} else {
-					final float raylen = getH() - mSun.getY() - 100;
-					mSunshine.setRaysTarget(raylen);
+					mSunshine.setRaysTargetTop(mGround, mSky);
 				}
 			}
 			@Override

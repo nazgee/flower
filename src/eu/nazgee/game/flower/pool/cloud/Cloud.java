@@ -17,6 +17,7 @@ import org.andengine.util.modifier.IModifier.IModifierListener;
 import eu.nazgee.game.flower.Consts;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
+import eu.nazgee.game.flower.scene.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 
@@ -24,7 +25,7 @@ public class Cloud extends Sprite {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-	static private float LAND_LEVEL = Consts.CAMERA_HEIGHT * 0.9f;
+
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -83,10 +84,10 @@ public class Cloud extends Sprite {
 		registerEntityModifier(mTravelModifier);
 	}
 
-	public synchronized void drop(WaterDrop pWaterDrop, IWaterDropListener pWaterDropListener) {
-		final float y = Positioner.getCenteredY(this);
+	public synchronized void drop(WaterDrop pWaterDrop, Sky pSky, IWaterDropListener pWaterDropListener) {
+		final float height = pSky.getHeightOnSky(this);
 		attachChild(pWaterDrop);
-		pWaterDrop.fall(getWidth()/2, getHeight()/2, LAND_LEVEL - y, pWaterDropListener);
+		pWaterDrop.fall(getWidth()/2, getHeight()/2, height, pWaterDropListener);
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes

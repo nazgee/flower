@@ -49,7 +49,7 @@ public class CloudLayer extends Entity{
 	private final float mAvgDistance;
 	private final float mVariationSpeed;
 	private final float mVariationTime;
-	private final ITiledTextureRegion mWaterSplashTexture;
+	private final Sky mSky;
 
 	// ===========================================================
 	// Constructors
@@ -58,13 +58,14 @@ public class CloudLayer extends Entity{
 	public CloudLayer(float pX, float pY, final float W, final float H, 
 			float pAvgSpeed, float pAvgTime,
 			float pVariationSpeed, float pVariationTime, final int pCloudsNumber,
+			final Sky pSky,
 			ITiledTextureRegion pCloudTexture, ITextureRegion pWaterDropTexture, ITiledTextureRegion pWaterSplashTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY);
 		mW = W;
 		mH = H;
 		mAvgSpeed = pAvgSpeed;
 		mAvgTime = pAvgTime;
-		mWaterSplashTexture = pWaterSplashTexture;
+		mSky = pSky;
 		mAvgDistance = pAvgSpeed * pAvgTime;
 		mVariationSpeed = pVariationSpeed;
 		mVariationTime = pVariationTime;
@@ -180,7 +181,7 @@ public class CloudLayer extends Entity{
 		public void onTimePassed(TimerHandler pTimerHandler) {
 			mCloud.unregisterUpdateHandler(pTimerHandler);
 			WaterDropItem dropitem = mDropPool.obtainPoolItem();
-			mCloud.drop(dropitem.getEntity(), new WaterDropListener(dropitem));
+			mCloud.drop(dropitem.getEntity(), mSky, new WaterDropListener(dropitem));
 		}
 
 		private class WaterDropListener implements IWaterDropListener {

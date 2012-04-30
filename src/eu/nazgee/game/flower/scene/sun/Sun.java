@@ -1,4 +1,4 @@
-package eu.nazgee.game.flower;
+package eu.nazgee.game.flower.scene.sun;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier;
