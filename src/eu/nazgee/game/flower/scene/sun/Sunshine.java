@@ -77,17 +77,17 @@ public class Sunshine extends Entity {
 
 	private void setRaysTarget(final float pTargetRays) {
 		if (isChangeBig(pTargetRays) || mSunshineLengthModifier.isFinished()) {
-			Log.w(getClass().getSimpleName(), "reset=" + pTargetRays);
+//			Log.w(getClass().getSimpleName(), "reset=" + pTargetRays);
 			mSunshineLengthModifier.reset(EASING_DURATION, getRaysCurrent(), pTargetRays);
 		} else {
-			Log.d(getClass().getSimpleName(), "update=" + pTargetRays);
+//			Log.d(getClass().getSimpleName(), "update=" + pTargetRays);
 			mSunshineLengthModifier.updateTarget(pTargetRays);
 		}
 	}
 
 	float getRaysCurrent() {
 		final float current = mSpriteMiddle.getScaleY() * mSpriteMiddle.getHeight();
-		Log.w(getClass().getSimpleName(), "current=" + current);
+//		Log.w(getClass().getSimpleName(), "current=" + current);
 		return current;
 	}
 
