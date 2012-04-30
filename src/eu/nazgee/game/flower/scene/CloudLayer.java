@@ -51,6 +51,8 @@ public class CloudLayer extends Entity{
 	private final float mVariationTime;
 	private final Sky mSky;
 
+	private IRainDropListener mRainDropListener;
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -97,11 +99,19 @@ public class CloudLayer extends Entity{
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	public IRainDropListener getRainDropListener() {
+		return mRainDropListener;
+	}
 
+	public void setRainDropListener(IRainDropListener mRainDropListener) {
+		this.mRainDropListener = mRainDropListener;
+	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
-
+	public interface IRainDropListener {
+		public void onRainDrop(WaterDrop pWaterDrop);
+	}
 	// ===========================================================
 	// Methods
 	// ===========================================================
@@ -198,6 +208,9 @@ public class CloudLayer extends Entity{
 				mPos = pWaterDrop.getSceneCenterCoordinates();
 				splashitem.getEntity().splat(mPos[Constants.VERTEX_INDEX_X], mPos[Constants.VERTEX_INDEX_Y],
 						new WaterSplashListener(splashitem));
+				if (getRainDropListener() != null) {
+					getRainDropListener().onRainDrop(pWaterDrop);
+				}
 			}
 		}
 

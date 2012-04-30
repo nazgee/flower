@@ -90,7 +90,7 @@ public class Flower extends Sprite {
 						new ColorModifier(time, getColor(), Color.RED)
 						),
 				new SequenceEntityModifier(
-						new ScaleModifier(time, getScaleX(), 2)
+						new ScaleModifier(time, getScaleX(), 1.25f, EaseBounceOut.getInstance())
 						)
 				);
 		registerEntityModifier(bloomer);

@@ -40,6 +40,8 @@ import eu.nazgee.game.flower.Consts;
 import eu.nazgee.game.flower.Flower;
 import eu.nazgee.game.flower.MainHUD;
 import eu.nazgee.game.flower.pool.cloud.Cloud;
+import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
+import eu.nazgee.game.flower.scene.CloudLayer.IRainDropListener;
 import eu.nazgee.game.flower.scene.sun.Sun;
 import eu.nazgee.game.flower.scene.sun.Sun.TravelListener;
 import eu.nazgee.game.flower.scene.sun.Sunshine;
@@ -152,6 +154,17 @@ public class SceneMain extends SceneLoadable{
 				mResources.TEXS_CLOUDS, mResources.TEX_WATERDROP, 
 				mResources.TEXS_SPLASH, vertexBufferObjectManager);
 		attachChild(mCloudLayer);
+		mCloudLayer.setRainDropListener(new IRainDropListener() {
+			@Override
+			public void onRainDrop(WaterDrop pWaterDrop) {
+				float pos[] = pWaterDrop.getSceneCenterCoordinates();
+				for (Flower flower : mDragables) {
+					if (flower.contains(pos[0], pos[1])) {
+						flower.bloom();
+					}
+				}
+			}
+		});
 
 		/*
 		 * Create some flowers
@@ -167,6 +180,7 @@ public class SceneMain extends SceneLoadable{
 			 *  Create a sprite
 			 */
 			Flower flower = new Flower(0, 0, tex, getVertexBufferObjectManager());
+			flower.setZIndex(-1);
 
 			Positioner.setCentered(flower, getW() * r.nextFloat(), getH() * r.nextFloat());
 			/*
@@ -200,6 +214,8 @@ public class SceneMain extends SceneLoadable{
 			public void reset() {
 			}
 		});
+
+		sortChildren();
 	}
 
 	@Override
