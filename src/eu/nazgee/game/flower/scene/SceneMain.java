@@ -31,16 +31,18 @@ import org.andengine.util.Constants;
 import org.andengine.util.color.Color;
 import org.andengine.util.modifier.ease.EaseBounceOut;
 
-import com.badlogic.gdx.math.Vector2;
-
 import android.content.Context;
 import android.view.MotionEvent;
+
+import com.badlogic.gdx.math.Vector2;
+
 import eu.nazgee.game.flower.Consts;
+import eu.nazgee.game.flower.Flower;
 import eu.nazgee.game.flower.MainHUD;
 import eu.nazgee.game.flower.pool.cloud.Cloud;
 import eu.nazgee.game.flower.scene.sun.Sun;
-import eu.nazgee.game.flower.scene.sun.Sunshine;
 import eu.nazgee.game.flower.scene.sun.Sun.TravelListener;
+import eu.nazgee.game.flower.scene.sun.Sunshine;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
@@ -59,7 +61,7 @@ public class SceneMain extends SceneLoadable{
 	// ===========================================================
 	private MyResources mResources = new MyResources();
 	private MainHUD mHud;
-	LinkedList<Entity> mDragables = new LinkedList<Entity>();
+	LinkedList<Flower> mDragables = new LinkedList<Flower>();
 	private SmoothTrackingCamera mCamera;
 	private Sun mSun;
 	private Sunshine mSunshine;
@@ -110,13 +112,13 @@ public class SceneMain extends SceneLoadable{
 		final Sprite bgFar = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_FAR.getHeight(), mResources.TEX_BG_FAR, vertexBufferObjectManager);
 		final Sprite bgClose = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_CLOSE.getHeight(), mResources.TEX_BG_CLOSE, vertexBufferObjectManager);
 		mGround = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight(), mResources.TEX_GROUND, vertexBufferObjectManager);
-		final Sprite bgGrass = new Sprite(0, getH() - mResources.TEX_GRASS.getHeight()*0.7f, mResources.TEX_GRASS, vertexBufferObjectManager);
+//		final Sprite bgGrass = new Sprite(0, getH() - mResources.TEX_GRASS.getHeight()*0.7f, mResources.TEX_GRASS, vertexBufferObjectManager);
 		final ParallaxBackground paralaxBG = new CameraParallaxBackground(0, 0, 0, mCamera);
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.1f, bgSky));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.25f, bgFar));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.5f, bgClose));
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-1f, mGround));
-		paralaxBG.attachParallaxEntity(new ParallaxEntity(-1.5f, bgGrass));
+//		paralaxBG.attachParallaxEntity(new ParallaxEntity(-1.5f, bgGrass));
 		setBackground(paralaxBG);
 
 		mSky = new Sky(mGround.getY());
@@ -164,33 +166,19 @@ public class SceneMain extends SceneLoadable{
 			/*
 			 *  Create a sprite
 			 */
-			Sprite s = new Sprite(0, 0,
-					tex, getVertexBufferObjectManager());
-			
-			/*
-			 *  Add some fancy effects
-			 */
-			final float scale = 2 * r.nextFloat();
-			s.registerEntityModifier(
-					new LoopEntityModifier(
-						new SequenceEntityModifier(
-							new ScaleModifier(1, 1, scale),
-							new RotationByModifier(1, r.nextFloat() * 360),
-							new ScaleModifier(1, scale, 1, EaseBounceOut.getInstance())
-						)
-					)
-				);
-			s.setColor(r.nextFloat(), r.nextFloat(), r.nextFloat(), r.nextFloat() + 0.25f);
-			Positioner.setCentered(s, getW() * r.nextFloat(), getH() * r.nextFloat());
+			Flower flower = new Flower(0, 0, tex, getVertexBufferObjectManager());
+
+			Positioner.setCentered(flower, getW() * r.nextFloat(), getH() * r.nextFloat());
 			/*
 			 * Attach it to the scene, so it gets drawn and updated
 			 */
-			attachChild(s);
+			attachChild(flower);
 			/*
 			 * Attach it to the list of dragable items
 			 */
-			mDragables.add(s);
-			registerTouchArea(s);
+			mDragables.add(flower);
+			registerTouchArea(flower);
+			postRunnable(new TouchHandler(flower, true));
 		}
 
 		mCamera.setTracking(mSun, new TrackVector(new Vector2(Consts.CAMERA_WIDTH*0.25f, 0)), 0);
@@ -261,32 +249,35 @@ public class SceneMain extends SceneLoadable{
 				ITouchArea pTouchArea, float pTouchAreaLocalX,
 				float pTouchAreaLocalY) {
 			if (mDragables.contains(pTouchArea)) {
-				if ((pTouchArea instanceof Sprite)) {
-					Sprite s = (Sprite) pTouchArea;
-					Positioner.setCentered(s, pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
-					if (pSceneTouchEvent.isActionUp()) {
-						SceneMain.this.postRunnable(new TouchHandler(s));
+				if ((pTouchArea instanceof Flower)) {
+					Flower flower = (Flower) pTouchArea;
+					Positioner.setCentered(flower, pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
+					if (pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionDown()) {
+						SceneMain.this.postRunnable(new TouchHandler(flower, pSceneTouchEvent.isActionUp()));
 					}
 				}
 				return true;
 			}
 			return false;
 		}
+	}
 
-		private class TouchHandler implements Runnable {
-			private final Sprite mSprite;
-			public TouchHandler(Sprite pSprite) {
-				mSprite = pSprite;
-			}
-			@Override
-			public void run() {
-				Random r = new Random();
-				IEntityModifier mod = new ColorModifier(1, mSprite.getColor(), new Color(r.nextFloat(), r.nextFloat(), r.nextFloat(), r.nextFloat() + 0.25f));
-				mod.setAutoUnregisterWhenFinished(true);
-				mSprite.registerEntityModifier(mod);
+	private class TouchHandler implements Runnable {
+		private final Flower mFlower;
+		private final boolean mUp;
+		public TouchHandler(Flower pSprite, boolean pIsUp) {
+			mFlower = pSprite;
+			mUp = pIsUp;
+		}
+		@Override
+		public void run() {
+			if (mUp) {
+				float pos[] = mFlower.getSceneCenterCoordinates();
+				mFlower.travel(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y], mSky);
 			}
 		}
 	}
+
 	/**
 	 * Listens to scene touch events and moves the camera
 	 * background
