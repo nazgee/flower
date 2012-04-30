@@ -21,6 +21,9 @@ import org.andengine.util.color.Color;
 
 import android.content.Context;
 import eu.nazgee.game.flower.scene.SceneMain;
+import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
+import eu.nazgee.game.utils.engine.camera.SmootherEmpty;
+import eu.nazgee.game.utils.engine.camera.SmootherLinear;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 import eu.nazgee.game.utils.scene.SceneLoader;
 import eu.nazgee.game.utils.scene.SceneLoader.ISceneLoaderListener;
@@ -54,7 +57,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-		final Camera camera = new Camera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT);
+//		final Camera camera = new SmoothCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, Consts.CAMERA_WIDTH * 2.5f, Consts.CAMERA_HEIGHT * 2.5f, 0);
+		final SmoothTrackingCamera camera = new SmoothTrackingCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, 0, new SmootherLinear(5), new SmootherEmpty(), new SmootherLinear(5));
 		EngineOptions engopts = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT), camera);
 		engopts.getRenderOptions().setDithering(true);
 		return engopts;

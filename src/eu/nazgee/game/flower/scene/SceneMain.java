@@ -27,22 +27,25 @@ import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.ThreadUtils;
 import org.andengine.util.color.Color;
 import org.andengine.util.modifier.ease.EaseBounceOut;
+
+import com.badlogic.gdx.math.Vector2;
 
 import android.content.Context;
 import android.view.MotionEvent;
 import eu.nazgee.game.flower.Consts;
 import eu.nazgee.game.flower.MainHUD;
 import eu.nazgee.game.flower.Sun;
-import eu.nazgee.game.flower.Sunshine;
 import eu.nazgee.game.flower.Sun.TravelListener;
+import eu.nazgee.game.flower.Sunshine;
+import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 import eu.nazgee.game.utils.scene.SceneLoadable;
+import eu.nazgee.game.utils.track.TrackVector;
 
 public class SceneMain extends SceneLoadable{
 	// ===========================================================
@@ -55,7 +58,9 @@ public class SceneMain extends SceneLoadable{
 	private MyResources mResources = new MyResources();
 	private MainHUD mHud;
 	LinkedList<Entity> mDragables = new LinkedList<Entity>();
-	private Camera mCamera;
+	private SmoothTrackingCamera mCamera;
+	private Sun mSun;
+	private Sunshine mSunshine;
 
 
 	// ===========================================================
@@ -89,21 +94,8 @@ public class SceneMain extends SceneLoadable{
 	@Override
 	public void onLoad(Engine e, Context c) {
 		Random r = new Random();
-		mCamera = e.getCamera();
+		mCamera = (SmoothTrackingCamera) e.getCamera();
 		mCamera.setHUD(mHud);
-
-		/*
-		 * Move the camera very slowly
-		 */
-		this.registerUpdateHandler(new IUpdateHandler() {
-			@Override
-			public void onUpdate(float pSecondsElapsed) {
-				mCamera.setCenter(mCamera.getCenterX() + getW() * pSecondsElapsed *0.04f, mCamera.getCenterY());
-			}
-			@Override
-			public void reset() {
-			}
-		});
 
 		/*
 		 * Prepare fancy background		
@@ -122,12 +114,12 @@ public class SceneMain extends SceneLoadable{
 		paralaxBG.attachParallaxEntity(new ParallaxEntity(-1.5f, bgGrass));
 		setBackground(paralaxBG);
 		
-		/*
-		 * Register a touch listener, which will move the camera when scene is
-		 * touched and apply the paralaxValue to the background
-		 */
-		setOnSceneTouchListener(new MyTouchListener(mCamera, paralaxBG));
-		setOnSceneTouchListenerBindingOnActionDownEnabled(true);
+//		/*
+//		 * Register a touch listener, which will move the camera when scene is
+//		 * touched and apply the paralaxValue to the background
+//		 */
+//		setOnSceneTouchListener(new MyTouchListener(mCamera, paralaxBG));
+//		setOnSceneTouchListenerBindingOnActionDownEnabled(true);
 		/*
 		 * Register touch area listener, which will listen for the touches of
 		 * registered objects
@@ -135,22 +127,21 @@ public class SceneMain extends SceneLoadable{
 		setOnAreaTouchListener(new MyAreaTouchListener());
 		setTouchAreaBindingOnActionDownEnabled(true);
 		setTouchAreaBindingOnActionMoveEnabled(true);
-		/*
-		 * Create sun, that will travel through the sky
-		 */
-		Sun mSun = new Sun(0, 0, mResources.TEX_SUN, vertexBufferObjectManager);
+		mSun = new Sun(0, 0, mResources.TEX_SUN, vertexBufferObjectManager);
 		attachChild(mSun);
-		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 10, new SunTravelListener());
+		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 60, new SunTravelListener());
 
-		Sunshine mSunshine = new Sunshine(mResources.TEXS_SUNSHINE, getVertexBufferObjectManager());
+		mSunshine = new Sunshine(mResources.TEXS_SUNSHINE, getVertexBufferObjectManager());
 		mSun.attachChild(mSunshine);
+		mSunshine.setZIndex(-1);
+		mSun.sortChildren();
 		mSunshine.setPosition(mSun.getWidth()/2, mSun.getHeight()/2);
 
 		/*
 		 * Create some clouds
 		 */
-		CloudLayer cloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/2,
-				getW() * 0.2f, 6, 0.1f, 0.1f, 6, 
+		CloudLayer cloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/3,
+				getW() * 0.1f, 10, 0.2f, 0.2f, 6, 
 				mResources.TEXS_CLOUDS, mResources.TEX_WATERDROP, 
 				mResources.TEXS_SPLASH, vertexBufferObjectManager);
 		attachChild(cloudLayer);
@@ -196,6 +187,24 @@ public class SceneMain extends SceneLoadable{
 			mDragables.add(s);
 			registerTouchArea(s);
 		}
+
+		mCamera.setTracking(mSun, new TrackVector(new Vector2(Consts.CAMERA_WIDTH*0.25f, 0)), 0);
+		/*
+		 * update sun rays
+		 */
+		this.registerUpdateHandler(new IUpdateHandler() {
+			@Override
+			public void onUpdate(float pSecondsElapsed) {
+//				float x = mSun.getX();
+//				float cameraX = mCamera.getCenterX();
+//				mCamera.setCenter(, mCamera.getCenterY());
+				final float raylen = getH() - mSun.getY() - 100;
+				mSunshine.setRaysTarget(raylen);
+			}
+			@Override
+			public void reset() {
+			}
+		});
 	}
 
 	@Override
@@ -232,16 +241,10 @@ public class SceneMain extends SceneLoadable{
 	private class SunTravelListener implements TravelListener {
 		@Override
 		public void onStarted(Sun pSun) {
-//			Sprite s = new Sprite(0, 0, mResources.TEXS_FLOWERS.getTextureRegion(0), getVertexBufferObjectManager());
-//			Positioner.setCentered(s, pSun);
-//			SceneMain.this.attachChild(s);
 		}
 		@Override
 		public void onFinished(Sun pSun) {
-//			Sprite s = new Sprite(0, 0, mResources.TEXS_FLOWERS.getTextureRegion(0), getVertexBufferObjectManager());
-//			Positioner.setCentered(s, pSun);
-//			SceneMain.this.attachChild(s);
-			pSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 10, this);
+			pSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 40, this);
 		}
 	}
 
