@@ -1,5 +1,8 @@
 package eu.nazgee.game.flower.scene;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.Random;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -11,6 +14,7 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
 import org.andengine.util.call.Callback;
+import org.andengine.util.math.MathUtils;
 
 import eu.nazgee.game.flower.Statics;
 import eu.nazgee.game.flower.pool.cloud.Cloud;
@@ -34,6 +38,7 @@ public class CloudLayer extends Entity{
 	// Fields
 	// ===========================================================
 	final Random rand = new Random();
+	LinkedList<Cloud> mClouds = new LinkedList<Cloud>();
 	final CloudPool mCloudPool;
 	final WaterDropPool mDropPool;
 	final WaterSplashPool mSplashPool;
@@ -82,6 +87,7 @@ public class CloudLayer extends Entity{
 				if (started < pCloudsNumber) {
 					pTimerHandler.reset();
 				}
+				mClouds.add(cloud);
 			}
 		});
 		registerUpdateHandler(starter);
@@ -117,14 +123,53 @@ public class CloudLayer extends Entity{
 		}
 
 		cloud.travel(x, y, speed*time, time, listener);
+		sortCloudsByHeight();
 
 		TimerHandler rainman = new TimerHandler(time/2, new RainMain(cloud));
 		cloud.registerUpdateHandler(rainman);
 	}
 
+	public Cloud getHighestCloudAtX(final float pX, final float pLowestY) {
+		for (Cloud cloud : mClouds) {
+			final float pos[] = cloud.getSceneCenterCoordinates();
+			if (pos[Constants.VERTEX_INDEX_Y] > pLowestY &&
+					cloud.contains(pX, pos[Constants.VERTEX_INDEX_Y])) {
+				return cloud;
+			}
+		}
+		return null;
+	}
+
+	private void sortCloudsByHeight() {
+		synchronized (mClouds) {
+			Collections.sort(mClouds, new ComparatorHeight());
+		}
+	}
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	/**
+	 * Used to sort clouds by theirs height
+	 * @author nazgee
+	 *
+	 */
+	public static class ComparatorHeight implements Comparator<Cloud> {
+		@Override
+		public int compare(Cloud lhs, Cloud rhs) {
+			final float posL[] = lhs.getSceneCenterCoordinates();
+			final float posR[] = rhs.getSceneCenterCoordinates();
+			return (int) (posL[Constants.VERTEX_INDEX_Y] - posR[Constants.VERTEX_INDEX_Y]);
+		}
+
+	}
+
+	/**
+	 * This class is used to cause rain to fall. It starts a raind drop and
+	 * splash animation
+	 * @author nazgee
+	 *
+	 */
 	class RainMain implements ITimerCallback {
 		private final Cloud mCloud;
 		float mPos[];
@@ -166,6 +211,12 @@ public class CloudLayer extends Entity{
 			}
 		}
 	}
+
+	/**
+	 * This class is used to restart on a new position after it dies
+	 * @author nazgee
+	 *
+	 */
 	class CloudListener implements Cloud.CloudListener {
 		CloudItem mItem;
 

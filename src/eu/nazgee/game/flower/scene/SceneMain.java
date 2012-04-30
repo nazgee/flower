@@ -27,6 +27,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.Constants;
 import org.andengine.util.color.Color;
 import org.andengine.util.modifier.ease.EaseBounceOut;
 
@@ -39,6 +40,7 @@ import eu.nazgee.game.flower.MainHUD;
 import eu.nazgee.game.flower.Sun;
 import eu.nazgee.game.flower.Sun.TravelListener;
 import eu.nazgee.game.flower.Sunshine;
+import eu.nazgee.game.flower.pool.cloud.Cloud;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
@@ -61,6 +63,7 @@ public class SceneMain extends SceneLoadable{
 	private SmoothTrackingCamera mCamera;
 	private Sun mSun;
 	private Sunshine mSunshine;
+	private CloudLayer mCloudLayer;
 
 
 	// ===========================================================
@@ -137,14 +140,11 @@ public class SceneMain extends SceneLoadable{
 		mSun.sortChildren();
 		mSunshine.setPosition(mSun.getWidth()/2, mSun.getHeight()/2);
 
-		/*
-		 * Create some clouds
-		 */
-		CloudLayer cloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/3,
+		mCloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/3,
 				getW() * 0.1f, 10, 0.2f, 0.2f, 6, 
 				mResources.TEXS_CLOUDS, mResources.TEX_WATERDROP, 
 				mResources.TEXS_SPLASH, vertexBufferObjectManager);
-		attachChild(cloudLayer);
+		attachChild(mCloudLayer);
 
 		/*
 		 * Create some flowers
@@ -195,11 +195,14 @@ public class SceneMain extends SceneLoadable{
 		this.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-//				float x = mSun.getX();
-//				float cameraX = mCamera.getCenterX();
-//				mCamera.setCenter(, mCamera.getCenterY());
-				final float raylen = getH() - mSun.getY() - 100;
-				mSunshine.setRaysTarget(raylen);
+				float pos[] = mSun.getSceneCenterCoordinates();
+				Cloud cloud = mCloudLayer.getHighestCloudAtX(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
+				if (cloud != null) {
+					mSunshine.setRaysTarget(cloud.getY() - mSun.getY());
+				} else {
+					final float raylen = getH() - mSun.getY() - 100;
+					mSunshine.setRaysTarget(raylen);
+				}
 			}
 			@Override
 			public void reset() {
