@@ -24,7 +24,15 @@ public class Sunshine extends Entity {
 		Positioner.setCenteredX(mSpriteMiddle, 0);
 		Positioner.setCenteredX(mSpriteBottom, 0);
 
+		mSpriteMiddle.setScaleCenterY(0);
 		mSpriteMiddle.setY(mSpriteTop.getY() + mSpriteTop.getHeight());
-		mSpriteBottom.setY(mSpriteMiddle.getY() + mSpriteMiddle.getHeight());
+
+		setRaysLength(300);
+	}
+
+	public void setRaysLength(final float pLength) {
+		final float scale = pLength/mSpriteMiddle.getHeight();
+		mSpriteMiddle.setScaleY(scale);
+		mSpriteBottom.setY(mSpriteMiddle.getY() + pLength);
 	}
 }
