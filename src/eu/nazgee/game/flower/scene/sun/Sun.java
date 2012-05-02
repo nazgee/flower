@@ -1,15 +1,17 @@
 package eu.nazgee.game.flower.scene.sun;
 
+import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveByModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
+import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.sprite.vbo.ISpriteVertexBufferObject;
 import org.andengine.opengl.shader.ShaderProgram;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.DrawType;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.modifier.IModifier;
@@ -17,6 +19,7 @@ import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseQuadIn;
 import org.andengine.util.modifier.ease.EaseQuadOut;
 
+import eu.nazgee.game.flower.scene.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 
@@ -31,91 +34,73 @@ public class Sun extends Sprite {
 	private IEntityModifier mTravelModifier;
 	private TravelListener mTravelListener;
 	private MyModifierListener mMyModifierListener = new MyModifierListener();
+	private final Sunshine mSunshine;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-
 	public Sun(float pX, float pY, float pWidth, float pHeight,
 			ITextureRegion pTextureRegion,
-			ISpriteVertexBufferObject pSpriteVertexBufferObject,
-			ShaderProgram pShaderProgram) {
-		super(pX, pY, pWidth, pHeight, pTextureRegion, pSpriteVertexBufferObject,
-				pShaderProgram);
-	}
-
-	public Sun(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureRegion,
-			ISpriteVertexBufferObject pSpriteVertexBufferObject) {
-		super(pX, pY, pWidth, pHeight, pTextureRegion, pSpriteVertexBufferObject);
-	}
-
-	public Sun(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			DrawType pDrawType, ShaderProgram pShaderProgram) {
-		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager,
-				pDrawType, pShaderProgram);
-	}
-
-	public Sun(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			DrawType pDrawType) {
-		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager,
-				pDrawType);
-	}
-
-	public Sun(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			ShaderProgram pShaderProgram) {
-		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager,
-				pShaderProgram);
-	}
-
-	public Sun(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureRegion,
+			ITiledTextureRegion pSunshineTextures,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager);
+
+		mSunshine = initSunshine(this, pSunshineTextures, pVertexBufferObjectManager);
 	}
 
 	public Sun(float pX, float pY, ITextureRegion pTextureRegion,
-			ISpriteVertexBufferObject pVertexBufferObject,
-			ShaderProgram pShaderProgram) {
-		super(pX, pY, pTextureRegion, pVertexBufferObject, pShaderProgram);
-	}
-
-	public Sun(float pX, float pY, ITextureRegion pTextureRegion,
-			ISpriteVertexBufferObject pVertexBufferObject) {
-		super(pX, pY, pTextureRegion, pVertexBufferObject);
-	}
-
-	public Sun(float pX, float pY, ITextureRegion pTextureRegion,
+			ITiledTextureRegion pSunshineTextures,
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			DrawType pDrawType, ShaderProgram pShaderProgram) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager, pDrawType,
 				pShaderProgram);
+
+		mSunshine = initSunshine(this, pSunshineTextures, pVertexBufferObjectManager);
 	}
 
 	public Sun(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			DrawType pDrawType) {
-		super(pX, pY, pTextureRegion, pVertexBufferObjectManager, pDrawType);
-	}
-
-	public Sun(float pX, float pY, ITextureRegion pTextureRegion,
+			ITiledTextureRegion pSunshineTextures,
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			ShaderProgram pShaderProgram) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager, pShaderProgram);
+
+		mSunshine = initSunshine(this, pSunshineTextures, pVertexBufferObjectManager);
 	}
 
 	public Sun(float pX, float pY, ITextureRegion pTextureRegion,
+			ITiledTextureRegion pSunshineTextures,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+
+		mSunshine = initSunshine(this, pSunshineTextures, pVertexBufferObjectManager);
+	}
+
+	/**
+	 * Creates a Sunshine, and attach it to the Sun
+	 */
+	private static Sunshine initSunshine(final Sun pSun, ITiledTextureRegion pSunshineTextures, VertexBufferObjectManager pVertexBufferObjectManager) {
+		Sunshine sunshine = new Sunshine(pSunshineTextures, pVertexBufferObjectManager);
+		pSun.attachChild(sunshine);
+		sunshine.setZIndex(-1);
+		pSun.sortChildren();
+		sunshine.setPosition(pSun.getWidth()/2, pSun.getHeight()/2);
+
+		return sunshine;
 	}
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+
+	public void setRaysTargetTop(IAreaShape pTarget, Sky pSky) {
+		mSunshine.setTargetTop(pTarget, pSky);
+	}
+
+	public void setRaysTargetCenter(Entity pTarget, Sky pSky) {
+		mSunshine.setTargetCenter(pTarget, pSky);
+	}
+
+	public boolean isShiningAt(IEntity pTarget) {
+		return mSunshine.isShiningAt(pTarget);
+	}
 
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces

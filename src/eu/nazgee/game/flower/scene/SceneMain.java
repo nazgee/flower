@@ -36,10 +36,8 @@ import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.game.flower.scene.CloudLayer.IRainDropListener;
 import eu.nazgee.game.flower.scene.sun.Sun;
 import eu.nazgee.game.flower.scene.sun.Sun.TravelListener;
-import eu.nazgee.game.flower.scene.sun.Sunshine;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
-import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 import eu.nazgee.game.utils.scene.SceneLoadable;
@@ -58,7 +56,6 @@ public class SceneMain extends SceneLoadable{
 	LinkedList<Flower> mFlowers = new LinkedList<Flower>();
 	private SmoothTrackingCamera mCamera;
 	private Sun mSun;
-	private Sunshine mSunshine;
 	private CloudLayer mCloudLayer;
 	private Sky mSky;
 	private Sprite mGround;
@@ -128,18 +125,9 @@ public class SceneMain extends SceneLoadable{
 		/**
 		 * Create a Sun
 		 */
-		mSun = new Sun(0, 0, mResources.TEX_SUN, vertexBufferObjectManager);
+		mSun = new Sun(0, 0, mResources.TEX_SUN, mResources.TEXS_SUNSHINE, vertexBufferObjectManager);
 		attachChild(mSun);
 		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 60, new SunTravelListener());
-
-		/**
-		 * Create a Sunshine, and attach it to the Sun
-		 */
-		mSunshine = new Sunshine(mResources.TEXS_SUNSHINE, getVertexBufferObjectManager());
-		mSun.attachChild(mSunshine);
-		mSunshine.setZIndex(-1);
-		mSun.sortChildren();
-		mSunshine.setPosition(mSun.getWidth()/2, mSun.getHeight()/2);
 
 		/**
 		 * Create layer of Clouds
@@ -195,9 +183,9 @@ public class SceneMain extends SceneLoadable{
 				float pos[] = mSun.getSceneCenterCoordinates();
 				Cloud cloud = mCloudLayer.getHighestCloudAtX(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
 				if (cloud != null) {
-					mSunshine.setRaysTargetCenter(cloud, mSky);
+					mSun.setRaysTargetCenter(cloud, mSky);
 				} else {
-					mSunshine.setRaysTargetTop(mGround, mSky);
+					mSun.setRaysTargetTop(mGround, mSky);
 				}
 
 				handleFlowerSun();
@@ -240,7 +228,7 @@ public class SceneMain extends SceneLoadable{
 
 	private void handleFlowerSun() {
 		for (Flower flower : mFlowers) {
-			if (mSunshine.isShiningAt(flower)) {
+			if (mSun.isShiningAt(flower)) {
 				flower.sun();
 			}
 		}

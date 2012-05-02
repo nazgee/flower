@@ -2,7 +2,6 @@ package eu.nazgee.game.flower.scene;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.shape.IAreaShape;
-import org.andengine.entity.shape.IShape;
 import org.andengine.util.Constants;
 
 

@@ -4,7 +4,6 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.SingleValueSpanEntityModifier;
 import org.andengine.entity.shape.IAreaShape;
-import org.andengine.entity.shape.IShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -12,19 +11,30 @@ import org.andengine.util.Constants;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
-import android.util.Log;
 import eu.nazgee.game.flower.scene.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 public class Sunshine extends Entity {
+	// ===========================================================
+	// Constants
+	// ===========================================================
+
+	private float EASING_DURATION = 1;
+	private float EASING_RESET_THRESHOLD = 50;
+
+	// ===========================================================
+	// Fields
+	// ===========================================================
+
 	private final Sprite mSpriteTop;
 	private final Sprite mSpriteMiddle;
 	private final Sprite mSpriteBottom;
 
 	private SunshineLengthModifier mSunshineLengthModifier = new SunshineLengthModifier(0, 0, 0, EaseElasticOut.getInstance());
 
-	private float EASING_DURATION = 1;
-	private float EASING_RESET_THRESHOLD = 50;
+	// ===========================================================
+	// Constructors
+	// ===========================================================
 
 	public Sunshine (final ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVBO) {
 		mSpriteTop = new Sprite(0, 0, pTiledTextureRegion.getTextureRegion(0), pVBO);
@@ -42,39 +52,25 @@ public class Sunshine extends Entity {
 		mSpriteMiddle.setScaleCenterY(0);
 		mSpriteMiddle.setY(mSpriteTop.getY() + mSpriteTop.getHeight());
 
-		setRaysLength(0);
+		setCurrentRaysLength(0);
 		mSunshineLengthModifier.setAutoUnregisterWhenFinished(false);
 		registerEntityModifier(mSunshineLengthModifier);
 
-		setRaysTarget(100);
+		configureRaysLengthModifier(100);
 	}
 
-	private void setRaysLength(final float pNewRaysValue) {
-		final float scale = pNewRaysValue / mSpriteMiddle.getHeight();
-		mSpriteMiddle.setScaleY(scale);
-		mSpriteBottom.setY(mSpriteMiddle.getY() + pNewRaysValue);
-	}
+	// ===========================================================
+	// Getter & Setter
+	// ===========================================================
 
-	private boolean isChangeBig(final float pNewRaysValue) {
-		return (EASING_RESET_THRESHOLD < Math.abs(mSunshineLengthModifier.getTarget() - pNewRaysValue));
-	}
-
-	public void setRaysTargetTop(IAreaShape pTarget, Sky pSky) {
+	public void setTargetTop(IAreaShape pTarget, Sky pSky) {
 		float target = pSky.getHeightOnSkyTop(pTarget);
-		setRaysTargetSky(target, pSky);
+		setTarget(target, pSky);
 	}
 
-	public void setRaysTargetCenter(Entity pTarget, Sky pSky) {
+	public void setTargetCenter(Entity pTarget, Sky pSky) {
 		float target = pSky.getHeightOnSky(pTarget);
-		setRaysTargetSky(target, pSky);
-	}
-
-	private void setRaysTargetSky(float pSkyHeight, Sky pSky) {
-		float me = pSky.getHeightOnSky(this);
-		if (me < pSkyHeight) {
-			pSkyHeight = pSky.getHeightOnScene(0);
-		}
-		setRaysTarget(Math.max(0, me - pSkyHeight - mSpriteTop.getHeight()));
+		setTarget(target, pSky);
 	}
 
 	public boolean isShiningAt(IEntity pTarget) {
@@ -82,26 +78,50 @@ public class Sunshine extends Entity {
 		return mSpriteBottom.contains(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
 	}
 
-	private void setRaysTarget(final float pTargetRays) {
-		if (isChangeBig(pTargetRays) || mSunshineLengthModifier.isFinished()) {
-//			Log.w(getClass().getSimpleName(), "reset=" + pTargetRays);
-			mSunshineLengthModifier.reset(EASING_DURATION, getRaysCurrent(), pTargetRays);
-		} else {
-//			Log.d(getClass().getSimpleName(), "update=" + pTargetRays);
-			mSunshineLengthModifier.updateTarget(pTargetRays);
-		}
-	}
-
-	float getRaysCurrent() {
-		final float current = mSpriteMiddle.getScaleY() * mSpriteMiddle.getHeight();
-//		Log.w(getClass().getSimpleName(), "current=" + current);
-		return current;
-	}
-
+	// ===========================================================
+	// Methods for/from SuperClass/Interfaces
+	// ===========================================================
 	@Override
 	protected void onManagedUpdate(float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
 	}
+	// ===========================================================
+	// Methods
+	// ===========================================================
+	private void setTarget(float pSkyHeight, Sky pSky) {
+		float me = pSky.getHeightOnSky(this);
+		if (me < pSkyHeight) {
+			pSkyHeight = pSky.getHeightOnScene(0);
+		}
+		configureRaysLengthModifier(Math.max(0, me - pSkyHeight - mSpriteTop.getHeight()));
+	}
+
+	private void configureRaysLengthModifier(final float pTargetRays) {
+		if (isModifierResetNeeded(pTargetRays)) {
+			mSunshineLengthModifier.reset(EASING_DURATION, getCurrentRaysLength(), pTargetRays);
+		} else {
+			mSunshineLengthModifier.updateTarget(pTargetRays);
+		}
+	}
+
+	private boolean isModifierResetNeeded(final float pNewRaysValue) {
+		return mSunshineLengthModifier.isFinished() || (EASING_RESET_THRESHOLD < Math.abs(mSunshineLengthModifier.getTarget() - pNewRaysValue));
+	}
+
+	private float getCurrentRaysLength() {
+		final float current = mSpriteMiddle.getScaleY() * mSpriteMiddle.getHeight();
+		return current;
+	}
+
+	private void setCurrentRaysLength(final float pNewRaysValue) {
+		final float scale = pNewRaysValue / mSpriteMiddle.getHeight();
+		mSpriteMiddle.setScaleY(scale);
+		mSpriteBottom.setY(mSpriteMiddle.getY() + pNewRaysValue);
+	}
+
+	// ===========================================================
+	// Inner and Anonymous Classes
+	// ===========================================================
 
 	private class SunshineLengthModifier extends SingleValueSpanEntityModifier {
 		private float mRaysTarget;
@@ -140,7 +160,7 @@ public class Sunshine extends Entity {
 		@Override
 		protected void onSetInitialValue(IEntity pItem, float pValue) {
 			Sunshine s = (Sunshine) pItem;
-			s.setRaysLength(pValue);
+			s.setCurrentRaysLength(pValue);
 		}
 
 		@Override
@@ -150,7 +170,7 @@ public class Sunshine extends Entity {
 			float span = to - from;
 
 			Sunshine s = (Sunshine) pItem;
-			s.setRaysLength(from + span * pPercentageDone);
+			s.setCurrentRaysLength(from + span * pPercentageDone);
 		}
 
 		@Override
