@@ -4,9 +4,11 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.SingleValueSpanEntityModifier;
 import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.shape.IShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.Constants;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
@@ -73,6 +75,11 @@ public class Sunshine extends Entity {
 			pSkyHeight = pSky.getHeightOnScene(0);
 		}
 		setRaysTarget(Math.max(0, me - pSkyHeight - mSpriteTop.getHeight()));
+	}
+
+	public boolean isShiningAt(IEntity pTarget) {
+		float pos[] = pTarget.getSceneCenterCoordinates();
+		return mSpriteBottom.contains(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
 	}
 
 	private void setRaysTarget(final float pTargetRays) {

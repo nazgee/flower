@@ -6,13 +6,6 @@ import java.util.Random;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
-import org.andengine.entity.Entity;
-import org.andengine.entity.modifier.ColorModifier;
-import org.andengine.entity.modifier.IEntityModifier;
-import org.andengine.entity.modifier.LoopEntityModifier;
-import org.andengine.entity.modifier.RotationByModifier;
-import org.andengine.entity.modifier.ScaleModifier;
-import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.ITouchArea;
@@ -28,8 +21,6 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
-import org.andengine.util.color.Color;
-import org.andengine.util.modifier.ease.EaseBounceOut;
 
 import android.content.Context;
 import android.view.MotionEvent;
@@ -38,6 +29,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import eu.nazgee.game.flower.Consts;
 import eu.nazgee.game.flower.Flower;
+import eu.nazgee.game.flower.Flower.eLevel;
 import eu.nazgee.game.flower.MainHUD;
 import eu.nazgee.game.flower.pool.cloud.Cloud;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
@@ -159,8 +151,9 @@ public class SceneMain extends SceneLoadable{
 			public void onRainDrop(WaterDrop pWaterDrop) {
 				float pos[] = pWaterDrop.getSceneCenterCoordinates();
 				for (Flower flower : mDragables) {
-					if (flower.contains(pos[0], pos[1])) {
-						flower.bloom();
+					if (flower.contains(pos[0], pos[1]) && (flower.getLevelWater() == eLevel.LOW)) {
+						flower.water();
+						break; // only one flower gets watered
 					}
 				}
 			}
@@ -179,10 +172,10 @@ public class SceneMain extends SceneLoadable{
 			/*
 			 *  Create a sprite
 			 */
-			Flower flower = new Flower(0, 0, tex, getVertexBufferObjectManager());
+			Flower flower = new Flower(0, 0, tex, mResources.TEX_POT, mResources.TEXS_POT_WATER, getVertexBufferObjectManager());
 			flower.setZIndex(-1);
 
-			Positioner.setCentered(flower, getW() * r.nextFloat(), getH() * r.nextFloat());
+			flower.setPosition(getW() * r.nextFloat(), getH() * r.nextFloat());
 			/*
 			 * Attach it to the scene, so it gets drawn and updated
 			 */
@@ -208,6 +201,12 @@ public class SceneMain extends SceneLoadable{
 					mSunshine.setRaysTargetCenter(cloud, mSky);
 				} else {
 					mSunshine.setRaysTargetTop(mGround, mSky);
+				}
+
+				for (Flower flower : mDragables) {
+					if (mSunshine.isShiningAt(flower)) {
+						flower.sun();
+					}
 				}
 			}
 			@Override
@@ -267,7 +266,7 @@ public class SceneMain extends SceneLoadable{
 			if (mDragables.contains(pTouchArea)) {
 				if ((pTouchArea instanceof Flower)) {
 					Flower flower = (Flower) pTouchArea;
-					Positioner.setCentered(flower, pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
+					flower.setPosition(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
 					if (pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionDown()) {
 						SceneMain.this.postRunnable(new TouchHandler(flower, pSceneTouchEvent.isActionUp()));
 					}
@@ -289,7 +288,7 @@ public class SceneMain extends SceneLoadable{
 		public void run() {
 			if (mUp) {
 				float pos[] = mFlower.getSceneCenterCoordinates();
-				mFlower.travel(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y], mSky);
+				mFlower.put(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y], mSky);
 			}
 		}
 	}
@@ -332,7 +331,8 @@ public class SceneMain extends SceneLoadable{
 		public ITiledTextureRegion TEXS_CLOUDS;
 		public ITiledTextureRegion TEXS_SPLASH;
 		public ITiledTextureRegion TEXS_SUNSHINE;
-		public ITextureRegion TEX_FACE;
+		public ITiledTextureRegion TEXS_POT_WATER;
+		public ITextureRegion TEX_POT;
 		public ITextureRegion TEX_BG_FAR;
 		public ITextureRegion TEX_BG_CLOSE;
 		public ITextureRegion TEX_GRASS;
@@ -364,8 +364,6 @@ public class SceneMain extends SceneLoadable{
 			 */
 			TEX_SKY = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasSky, c, "scene/skies/azure.jpeg");
-			TEX_FACE = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasScene, c, "face_box.png");
 			TEX_BG_FAR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "scene/bg-far.png");
 			TEX_BG_CLOSE = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
@@ -376,6 +374,10 @@ public class SceneMain extends SceneLoadable{
 					atlasScene, c, "scene/grass.png");
 			TEX_SUN = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "sun.png");
+			TEXS_POT_WATER = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
+					atlasScene, c, "pot/water.png", 1, 5);
+			TEX_POT = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+					atlasScene, c, "pot/pot.png");
 			TEX_WATERDROP = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 					atlasScene, c, "drop.png");
 			TEXS_CLOUDS = TiledTextureRegionFactory.loadTiles(c, "gfx/", "clouds",
