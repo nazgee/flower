@@ -10,21 +10,17 @@ import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.ITouchArea;
-import org.andengine.entity.shape.IShape;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.shader.ShaderProgram;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
-import org.andengine.opengl.vbo.IVertexBufferObject;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.modifier.ease.EaseBounceOut;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 
 import android.util.Log;
-
 import eu.nazgee.game.flower.scene.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
 
@@ -47,12 +43,13 @@ public class Flower extends Entity implements ITouchArea{
 	// ===========================================================
 	private int mWaterLevel;
 	private int mSunLevel;
-	private IEntityModifier mDropModifier;
-//	private FlowerModifierListener mCloudModifierListener = new FlowerModifierListener();
+	private boolean isBloomed = false;
+
 	private final Sprite mSpriteBlossom;
 	private final Sprite mSpritePot;
 	private final AnimatedSprite mSpriteWater;
 
+	private IEntityModifier mDropModifier;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -61,25 +58,25 @@ public class Flower extends Entity implements ITouchArea{
 			ITextureRegion pPotTextureRegion,
 			ITiledTextureRegion pWaterTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
-//		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 
 		mSpriteBlossom = new Sprite(0, 0, pTextureRegion, pVertexBufferObjectManager);
 		mSpritePot = new Sprite(0, 0, pPotTextureRegion, pVertexBufferObjectManager);
 		mSpriteWater = new AnimatedSprite(0, 0, pWaterTextureRegion, pVertexBufferObjectManager);
 
 		/*
-		 * Do not attach it just yet- no need to do it this early
+		 * Do not attach it just yet- no need to do it this early. It will be
+		 * attached when flower will bloom
 		 */
-//		attachChild(mSpriteBlossom); 
+		// attachChild(mSpriteBlossom); 
 		attachChild(mSpritePot);
 		attachChild(mSpriteWater);
 		mSpriteBlossom.setZIndex(ZINDEX_BLOSSOM);
 		mSpritePot.setZIndex(ZINDEX_POT);
 		mSpriteWater.setZIndex(ZINDEX_WATER);
 
-		Positioner.setCentered(mSpriteBlossom, this);
 		Positioner.setCentered(mSpritePot, this);
 		Positioner.setCentered(mSpriteWater, this);
+		Positioner.setCenteredTop(mSpriteBlossom, mSpritePot);
 
 		Random rand = new Random();
 		Color col = new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
@@ -146,6 +143,10 @@ public class Flower extends Entity implements ITouchArea{
 		registerEntityModifier(mDropModifier);
 	}
 
+	/**
+	 * Increases the sunlight level to which the flower was exposed. Results
+	 * in blooming, if flower was watered well enough.
+	 */
 	public void sun() {
 		mSunLevel++;
 
@@ -158,13 +159,19 @@ public class Flower extends Entity implements ITouchArea{
 			case LOW:
 			case NORMAL:
 			case HIGH:
-				animateBloom();
+				if (!isBloomed) {
+					animateBloom();
+					isBloomed = true;
+				}
 			}
 		}
 		}
 
 	}
 
+	/**
+	 * Increases the water level of the flower
+	 */
 	public void water() {
 		mWaterLevel++;
 
@@ -178,23 +185,13 @@ public class Flower extends Entity implements ITouchArea{
 		}
 	}
 
-	public boolean isBloomed() {
-		return (mSpriteBlossom.hasParent());
-	}
-
-	public boolean isWatered() {
-		return (mSpriteBlossom.hasParent());
-	}
-
 	private void animateBloom() {
-		if (isBloomed()) {
-			Log.w(getClass().getSimpleName(), "animateBloom(); already bloomed!");
-			return;
+		if (!mSpriteBlossom.hasParent()) {
+			attachChild(mSpriteBlossom);
+			sortChildren();
 		}
-		Log.d(getClass().getSimpleName(), "animateBloom(); blooming");
 
-		attachChild(mSpriteBlossom);
-		sortChildren();
+		Log.d(getClass().getSimpleName(), "animateBloom();");
 
 		final float time = 1;
 		IEntityModifier bloomer = new ParallelEntityModifier(
@@ -209,76 +206,10 @@ public class Flower extends Entity implements ITouchArea{
 	}
 
 	private void animateWater() {
+		Log.d(getClass().getSimpleName(), "animateWater();");
 		mSpriteWater.animate(100, false);
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-//	@Override
-//	public boolean collidesWith(IShape pOtherShape) {
-//		return mSpritePot.collidesWith(pOtherShape);
-//	}
-//	@Override
-//	public boolean isBlendingEnabled() {
-//		return mSpritePot.isBlendingEnabled();
-//	}
-//	@Override
-//	public void setBlendingEnabled(boolean pBlendingEnabled) {
-//		mSpritePot.setBlendingEnabled(pBlendingEnabled);
-//	}
-//	@Override
-//	public int getBlendFunctionSource() {
-//		return mSpritePot.getBlendFunctionSource();
-//	}
-//	@Override
-//	public int getBlendFunctionDestination() {
-//		return mSpritePot.getBlendFunctionDestination();
-//	}
-//	@Override
-//	public void setBlendFunctionSource(int pBlendFunctionSource) {
-//		mSpritePot.setBlendFunctionSource(pBlendFunctionSource);
-//	}
-//	@Override
-//	public void setBlendFunctionDestination(int pBlendFunctionDestination) {
-//		mSpritePot.setBlendFunctionDestination(pBlendFunctionDestination);
-//	}
-//	@Override
-//	public void setBlendFunction(int pBlendFunctionSource,
-//			int pBlendFunctionDestination) {
-//		mSpritePot.setBlendFunction(pBlendFunctionSource, pBlendFunctionDestination);
-//	}
-//	@Override
-//	public VertexBufferObjectManager getVertexBufferObjectManager() {
-//		return mSpritePot.getVertexBufferObjectManager();
-//	}
-//	@Override
-//	public IVertexBufferObject getVertexBufferObject() {
-//		return mSpritePot.getVertexBufferObject();
-//	}
-//	@Override
-//	public ShaderProgram getShaderProgram() {
-//		return mSpritePot.getShaderProgram();
-//	}
-//	@Override
-//	public void setShaderProgram(ShaderProgram pShaderProgram) {
-//		mSpritePot.setShaderProgram(pShaderProgram);
-//	}
-
-
-//	private class FlowerModifierListener implements IModifierListener<IEntity> {
-//		@Override
-//		public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-//			synchronized (Flower.this) {
-//				if (mFlowerListener != null) {
-//				}
-//			}
-//		}
-//		@Override
-//		public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-//			synchronized (Flower.this) {
-//				if (mFlowerListener != null) {
-//				}
-//			}
-//		}
-//	}
 }

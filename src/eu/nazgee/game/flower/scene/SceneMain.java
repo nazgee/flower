@@ -55,7 +55,7 @@ public class SceneMain extends SceneLoadable{
 	// ===========================================================
 	private MyResources mResources = new MyResources();
 	private MainHUD mHud;
-	LinkedList<Flower> mDragables = new LinkedList<Flower>();
+	LinkedList<Flower> mFlowers = new LinkedList<Flower>();
 	private SmoothTrackingCamera mCamera;
 	private Sun mSun;
 	private Sunshine mSunshine;
@@ -117,13 +117,6 @@ public class SceneMain extends SceneLoadable{
 
 		mSky = new Sky(mGround.getY());
 
-//		/*
-//		 * Register a touch listener, which will move the camera when scene is
-//		 * touched and apply the paralaxValue to the background
-//		 */
-//		setOnSceneTouchListener(new MyTouchListener(mCamera, paralaxBG));
-//		setOnSceneTouchListenerBindingOnActionDownEnabled(true);
-
 		/*
 		 * Register touch area listener, which will listen for the touches of
 		 * registered objects
@@ -131,16 +124,26 @@ public class SceneMain extends SceneLoadable{
 		setOnAreaTouchListener(new MyAreaTouchListener());
 		setTouchAreaBindingOnActionDownEnabled(true);
 		setTouchAreaBindingOnActionMoveEnabled(true);
+
+		/**
+		 * Create a Sun
+		 */
 		mSun = new Sun(0, 0, mResources.TEX_SUN, vertexBufferObjectManager);
 		attachChild(mSun);
 		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 60, new SunTravelListener());
 
+		/**
+		 * Create a Sunshine, and attach it to the Sun
+		 */
 		mSunshine = new Sunshine(mResources.TEXS_SUNSHINE, getVertexBufferObjectManager());
 		mSun.attachChild(mSunshine);
 		mSunshine.setZIndex(-1);
 		mSun.sortChildren();
 		mSunshine.setPosition(mSun.getWidth()/2, mSun.getHeight()/2);
 
+		/**
+		 * Create layer of Clouds
+		 */
 		mCloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/3,
 				getW() * 0.1f, 10, 0.2f, 0.2f, 6, mSky,
 				mResources.TEXS_CLOUDS, mResources.TEX_WATERDROP, 
@@ -149,13 +152,7 @@ public class SceneMain extends SceneLoadable{
 		mCloudLayer.setRainDropListener(new IRainDropListener() {
 			@Override
 			public void onRainDrop(WaterDrop pWaterDrop) {
-				float pos[] = pWaterDrop.getSceneCenterCoordinates();
-				for (Flower flower : mDragables) {
-					if (flower.contains(pos[0], pos[1]) && (flower.getLevelWater() == eLevel.LOW)) {
-						flower.water();
-						break; // only one flower gets watered
-					}
-				}
+				handleFlowerRain(pWaterDrop);
 			}
 		});
 
@@ -183,7 +180,7 @@ public class SceneMain extends SceneLoadable{
 			/*
 			 * Attach it to the list of dragable items
 			 */
-			mDragables.add(flower);
+			mFlowers.add(flower);
 			registerTouchArea(flower);
 			postRunnable(new TouchHandler(flower, true));
 		}
@@ -203,11 +200,7 @@ public class SceneMain extends SceneLoadable{
 					mSunshine.setRaysTargetTop(mGround, mSky);
 				}
 
-				for (Flower flower : mDragables) {
-					if (mSunshine.isShiningAt(flower)) {
-						flower.sun();
-					}
-				}
+				handleFlowerSun();
 			}
 			@Override
 			public void reset() {
@@ -228,7 +221,7 @@ public class SceneMain extends SceneLoadable{
 		clearUpdateHandlers();
 		clearTouchAreas();
 		setOnAreaTouchListener(null);
-		mDragables.clear();
+		mFlowers.clear();
 
 		/*
 		 * Detach HUD from the camera it was connected to - it is not a children
@@ -244,6 +237,26 @@ public class SceneMain extends SceneLoadable{
 	// ===========================================================
 	// Methods
 	// ===========================================================
+
+	private void handleFlowerSun() {
+		for (Flower flower : mFlowers) {
+			if (mSunshine.isShiningAt(flower)) {
+				flower.sun();
+			}
+		}
+	}
+
+	private void handleFlowerRain(WaterDrop pWaterDrop) {
+		float pos[] = pWaterDrop.getSceneCenterCoordinates();
+		for (Flower flower : mFlowers) {
+			if (flower.contains(pos[0], pos[1]) && (flower.getLevelWater() == eLevel.LOW)) {
+				flower.water();
+				break; // only one flower gets watered
+			}
+		}
+	}
+
+
 
 	// ===========================================================
 	// Inner and Anonymous Classes
@@ -263,7 +276,7 @@ public class SceneMain extends SceneLoadable{
 		public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 				ITouchArea pTouchArea, float pTouchAreaLocalX,
 				float pTouchAreaLocalY) {
-			if (mDragables.contains(pTouchArea)) {
+			if (mFlowers.contains(pTouchArea)) {
 				if ((pTouchArea instanceof Flower)) {
 					Flower flower = (Flower) pTouchArea;
 					flower.setPosition(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
