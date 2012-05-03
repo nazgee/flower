@@ -3,6 +3,7 @@ package eu.nazgee.game.flower.scene;
 import java.util.LinkedList;
 import java.util.Random;
 
+import org.andengine.audio.sound.Sound;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
@@ -40,6 +41,7 @@ import eu.nazgee.game.flower.scene.sun.Sun;
 import eu.nazgee.game.flower.scene.sun.Sun.TravelListener;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
+import eu.nazgee.game.utils.helpers.SoundLoader;
 import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 import eu.nazgee.game.utils.scene.SceneLoadable;
@@ -64,6 +66,7 @@ public class SceneMain extends SceneLoadable{
 
 
 	private final FlowerListener mFlowerListener = new FlowerListener();
+	private final LoadableSFX mSFX;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -71,8 +74,10 @@ public class SceneMain extends SceneLoadable{
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, pVertexBufferObjectManager);
 		
+		mSFX = new LoadableSFX();
 		mHud = new MainHUD(W, H, pVertexBufferObjectManager);
 		getLoader().install(mResources);
+		getLoader().install(mSFX);
 		getLoader().install(mHud);
 	}
 	// ===========================================================
@@ -174,7 +179,7 @@ public class SceneMain extends SceneLoadable{
 			 */
 			mFlowers.add(flower);
 			registerTouchArea(flower);
-			postRunnable(new TouchHandler(flower, true));
+			postRunnable(new FlowerTouchRunnable(flower, true));
 		}
 
 		mCamera.setTracking(mSun, new TrackVector(new Vector2(Consts.CAMERA_WIDTH*0.25f, 0)), 0);
@@ -256,7 +261,7 @@ public class SceneMain extends SceneLoadable{
 	private class FlowerListener implements IFlowerStateHandler {
 		@Override
 		public void onBloomed(Flower pFlower) {
-			SceneMain.this.postRunnable(new FlowerIdleMaker(pFlower));
+			SceneMain.this.postRunnable(new FlowerBloomedRunnable(pFlower));
 		}
 
 		@Override
@@ -271,10 +276,10 @@ public class SceneMain extends SceneLoadable{
 		public void onSunLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew) {
 		}
 
-		class FlowerIdleMaker implements Runnable {
+		class FlowerBloomedRunnable implements Runnable {
 			private final Flower mFlower;
 
-			public FlowerIdleMaker(Flower mFlower) {
+			public FlowerBloomedRunnable(Flower mFlower) {
 				this.mFlower = mFlower;
 			}
 
@@ -282,6 +287,7 @@ public class SceneMain extends SceneLoadable{
 			public void run() {
 				mFlowers.remove(mFlower);
 				mFlower.stateDropTo(mFlower.getX(), getH());
+				mSFX.onFlowerBloom();
 			}
 		}
 	}
@@ -307,7 +313,7 @@ public class SceneMain extends SceneLoadable{
 					flower.setPosition(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
 
 					if (pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionDown()) {
-						SceneMain.this.postRunnable(new TouchHandler(flower, pSceneTouchEvent.isActionUp()));
+						SceneMain.this.postRunnable(new FlowerTouchRunnable(flower, pSceneTouchEvent.isActionUp()));
 					}
 				}
 				return true;
@@ -316,10 +322,10 @@ public class SceneMain extends SceneLoadable{
 		}
 	}
 
-	private class TouchHandler implements Runnable {
+	private class FlowerTouchRunnable implements Runnable {
 		private final Flower mFlower;
 		private final boolean mUp;
-		public TouchHandler(Flower pSprite, boolean pIsUp) {
+		public FlowerTouchRunnable(Flower pSprite, boolean pIsUp) {
 			mFlower = pSprite;
 			mUp = pIsUp;
 		}
@@ -331,53 +337,25 @@ public class SceneMain extends SceneLoadable{
 		}
 	}
 
-	/**
-	 * Listens to scene touch events and moves the camera
-	 * background
-	 * @author nazgee
-	 */
-	private static class MyTouchListener implements IOnSceneTouchListener {
-		private float mTouchX = 0, mTouchOffsetX = 0;
-		private Camera mCamera;
-		private ParallaxBackground mParallaxBackground;
-
-		public MyTouchListener(Camera pCamera,
-				ParallaxBackground pParallaxBackground) {
-			mCamera = pCamera;
-			mParallaxBackground = pParallaxBackground;
-		}
-
-		@Override
-		public boolean onSceneTouchEvent(Scene pScene, TouchEvent pTouchEvent) {
-			if (pTouchEvent.getAction() == MotionEvent.ACTION_DOWN) {
-				mTouchX = pTouchEvent.getMotionEvent().getX();
-			} else if (pTouchEvent.getAction() == MotionEvent.ACTION_MOVE) {
-				float newX = pTouchEvent.getMotionEvent().getX();
-
-				mTouchOffsetX = (newX - mTouchX);
-				float newScrollX = mCamera.getCenterX() - mTouchOffsetX;
-
-				mCamera.setCenter(newScrollX, mCamera.getCenterY());
-				mTouchX = newX;
-			}
-			return true;
-		}
-	}
-
 	private static class MyResources extends SimpleLoadableResource {
-		public ITiledTextureRegion TEXS_FLOWERS;
-		public ITiledTextureRegion TEXS_CLOUDS;
-		public ITiledTextureRegion TEXS_SPLASH;
+		public ITextureRegion TEX_SUN;
 		public ITiledTextureRegion TEXS_SUNSHINE;
-		public ITiledTextureRegion TEXS_POT_WATER;
+
+		public ITextureRegion TEX_WATERDROP;
+		public ITiledTextureRegion TEXS_SPLASH;
+
 		public ITextureRegion TEX_POT;
+		public ITiledTextureRegion TEXS_FLOWERS;
+		public ITiledTextureRegion TEXS_POT_WATER;
+
+		public ITiledTextureRegion TEXS_CLOUDS;
+
 		public ITextureRegion TEX_BG_FAR;
 		public ITextureRegion TEX_BG_CLOSE;
 		public ITextureRegion TEX_GRASS;
 		public ITextureRegion TEX_GROUND;
-		private ITextureRegion TEX_SKY;
-		private ITextureRegion TEX_SUN;
-		private ITextureRegion TEX_WATERDROP;
+		public ITextureRegion TEX_SKY;
+
 		private BuildableBitmapTextureAtlas[] mAtlases;
 
 		@Override
@@ -438,18 +416,9 @@ public class SceneMain extends SceneLoadable{
 		@Override
 		public void onLoad(Engine e, Context c) {
 			/*
-			 *  build and load all our atlases (places regions on texture and sends it to MCU)
+			 *  build and load all our atlases (places regions on texture and sends it to GPU)
 			 */
 			AtlasLoader.buildAndLoad(mAtlases);
-
-			/*
-			 *  Pretend it takes some time, so we can see "Loading..." scene
-			 */
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
 		}
 
 		@Override

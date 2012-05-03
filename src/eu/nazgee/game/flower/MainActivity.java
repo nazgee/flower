@@ -1,5 +1,6 @@
 package eu.nazgee.game.flower;
 
+import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
@@ -61,6 +62,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 		final SmoothTrackingCamera camera = new SmoothTrackingCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, 0, new SmootherLinear(5), new SmootherEmpty(), new SmootherLinear(5));
 		EngineOptions engopts = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT), camera);
 		engopts.getRenderOptions().setDithering(true);
+		engopts.getAudioOptions().setNeedsSound(true);
 		return engopts;
 	}
 
