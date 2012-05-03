@@ -34,6 +34,7 @@ import eu.nazgee.game.flower.pool.cloud.Cloud;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.game.flower.scene.CloudLayer.IRainDropListener;
 import eu.nazgee.game.flower.scene.flower.Flower;
+import eu.nazgee.game.flower.scene.flower.Flower.IFlowerStateHandler;
 import eu.nazgee.game.flower.scene.flower.Flower.eLevel;
 import eu.nazgee.game.flower.scene.sun.Sun;
 import eu.nazgee.game.flower.scene.sun.Sun.TravelListener;
@@ -62,6 +63,7 @@ public class SceneMain extends SceneLoadable{
 	private Sprite mGround;
 
 
+	private final FlowerListener mFlowerListener = new FlowerListener();
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -160,6 +162,7 @@ public class SceneMain extends SceneLoadable{
 			 */
 			Flower flower = new Flower(0, 0, tex, mResources.TEX_POT, mResources.TEXS_POT_WATER, getVertexBufferObjectManager());
 			flower.setZIndex(-1);
+			flower.setFlowerStateHandler(mFlowerListener);
 
 			flower.setPosition(getW() * r.nextFloat(), getH() * r.nextFloat());
 			/*
@@ -250,6 +253,39 @@ public class SceneMain extends SceneLoadable{
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	private class FlowerListener implements IFlowerStateHandler {
+		@Override
+		public void onBloomed(Flower pFlower) {
+			SceneMain.this.postRunnable(new FlowerIdleMaker(pFlower));
+		}
+
+		@Override
+		public void onFried(Flower pFlower) {
+		}
+
+		@Override
+		public void onWaterLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew) {
+		}
+
+		@Override
+		public void onSunLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew) {
+		}
+
+		class FlowerIdleMaker implements Runnable {
+			private final Flower mFlower;
+
+			public FlowerIdleMaker(Flower mFlower) {
+				this.mFlower = mFlower;
+			}
+
+			@Override
+			public void run() {
+				mFlowers.remove(mFlower);
+				mFlower.stateDropTo(mFlower.getX(), getH());
+			}
+		}
+	}
+
 	private class SunTravelListener implements TravelListener {
 		@Override
 		public void onStarted(Sun pSun) {
@@ -269,6 +305,7 @@ public class SceneMain extends SceneLoadable{
 				if ((pTouchArea instanceof Flower)) {
 					Flower flower = (Flower) pTouchArea;
 					flower.setPosition(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
+
 					if (pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionDown()) {
 						SceneMain.this.postRunnable(new TouchHandler(flower, pSceneTouchEvent.isActionUp()));
 					}
@@ -289,8 +326,7 @@ public class SceneMain extends SceneLoadable{
 		@Override
 		public void run() {
 			if (mUp) {
-				float pos[] = mFlower.getSceneCenterCoordinates();
-				mFlower.stateDrop(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y], mSky);
+				mFlower.stateDropToGround(mSky);
 			}
 		}
 	}

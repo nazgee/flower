@@ -52,6 +52,7 @@ public class Flower extends Entity implements ITouchArea{
 	private final AnimatedSprite mSpriteWater;
 
 	private IEntityModifier mDropModifier;
+	private IFlowerStateHandler mFlowerStateHandler;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -91,6 +92,14 @@ public class Flower extends Entity implements ITouchArea{
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	public IFlowerStateHandler getFlowerStateHandler() {
+		return mFlowerStateHandler;
+	}
+
+	public void setFlowerStateHandler(IFlowerStateHandler pFlowerStateHandler) {
+		mFlowerStateHandler = pFlowerStateHandler;
+	}
+
 	public eLevel getLevelSun() {
 		return getLevel(0, 2, mSunLevel);
 	}
@@ -107,6 +116,14 @@ public class Flower extends Entity implements ITouchArea{
 			return eLevel.HIGH;
 
 		return eLevel.NORMAL;
+	}
+
+	public boolean isBloomed() {
+		return isBloomed;
+	}
+
+	private void setBloomed(boolean isBloomed) {
+		this.isBloomed = isBloomed;
 	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
@@ -130,19 +147,29 @@ public class Flower extends Entity implements ITouchArea{
 	 * @param pY
 	 * @param pSky used to calculate ground level which will be used in the animation
 	 */
-	synchronized public void stateDrop(final float pX, final float pY, Sky pSky) {
-		stateMove(pX, pY, pX, pY + pSky.getHeightOnSky(pY));
+	synchronized public void stateDropFromToGround(final float pX, final float pY, Sky pSky) {
+		stateDropFromTo(pX, pY, pX, pY + pSky.getHeightOnSky(pY));
 	}
 
-	synchronized public void stateMove(final float pX_from, final float pY_from, final float pX_to, final float pY_to) {
+	synchronized public void stateDropToGround(Sky pSky) {
+		stateDropTo(getX(), getY() + pSky.getHeightOnSky(getY()));
+	}
+
+	synchronized public void stateDropTo(final float pX_to, final float pY_to) {
+		stateDropFromTo(getX(), getY(), pX_to, pY_to);
+	}
+
+	synchronized public void stateDropFromTo(final float pX_from, final float pY_from, final float pX_to, final float pY_to) {
 		animateMove(pX_from, pY_from, pX_to, pY_to);
 	}
+
 
 	/**
 	 * Increases the sunlight level to which the flower was exposed. Results
 	 * in blooming, if flower was watered well enough.
 	 */
 	public void stateSun() {
+		eLevel old = getLevelSun();
 		mSunLevel++;
 
 		switch (getLevelWater()) {
@@ -154,20 +181,27 @@ public class Flower extends Entity implements ITouchArea{
 			case LOW:
 			case NORMAL:
 			case HIGH:
-				if (!isBloomed) {
+				if (!isBloomed()) {
 					animateBloom();
-					isBloomed = true;
+					setBloomed(true);
+					if (mFlowerStateHandler != null) {
+						mFlowerStateHandler.onBloomed(this);
+					}
 				}
 			}
 		}
 		}
 
+		if (mFlowerStateHandler != null && old != getLevelSun()) {
+			mFlowerStateHandler.onSunLevelChanged(this, old, getLevelSun());
+		}
 	}
 
 	/**
 	 * Increases the water level of the flower
 	 */
 	public void stateWater() {
+		eLevel old = getLevelWater();
 		mWaterLevel++;
 
 		switch (getLevelWater()) {
@@ -177,6 +211,10 @@ public class Flower extends Entity implements ITouchArea{
 			animateWater();
 		break;
 		case HIGH:
+		}
+
+		if (mFlowerStateHandler != null && old != getLevelWater()) {
+			mFlowerStateHandler.onWaterLevelChanged(this, old, getLevelWater());
 		}
 	}
 
@@ -217,7 +255,15 @@ public class Flower extends Entity implements ITouchArea{
 		mDropModifier.setAutoUnregisterWhenFinished(false);
 		registerEntityModifier(mDropModifier);
 	}
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	public interface IFlowerStateHandler {
+		public void onBloomed(Flower pFlower);
+		public void onFried(Flower pFlower);
+		public void onWaterLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew);
+		public void onSunLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew);
+	}
+
 }
