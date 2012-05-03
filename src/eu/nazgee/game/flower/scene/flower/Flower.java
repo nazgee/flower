@@ -1,4 +1,4 @@
-package eu.nazgee.game.flower;
+package eu.nazgee.game.flower.scene.flower;
 
 import java.util.Random;
 
