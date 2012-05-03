@@ -13,6 +13,7 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.ParallaxBackground;
 import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -387,11 +388,15 @@ public class SceneMain extends SceneLoadable{
 					atlasSplash);
 			TEXS_SUNSHINE = TiledTextureRegionFactory.loadTiles(c, "gfx/", "shine",
 					atlasSunshine);
+//			TEXS_SUNSHINE = BitmapTextureAtlasTextureRegionFactory.createTiledFromAssetDirectory(
+//					atlasSunshine, c.getAssets(), "shine");
 			/*
 			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
 			 */
 			TEXS_FLOWERS = TiledTextureRegionFactory.loadTilesSVG(c, "gfx/", "flowers",
 					atlasFlower, Consts.FLOWER_TEX_WIDTH, Consts.FLOWER_TEX_HEIGHT);
+//			TEXS_FLOWERS = SVGBitmapTextureAtlasTextureRegionFactory.createTiledFromAssetDirectory(
+//					atlasFlower, c, "flowers", Consts.FLOWER_TEX_WIDTH, Consts.FLOWER_TEX_HEIGHT);
 		}
 
 		@Override
