@@ -5,6 +5,7 @@ import java.util.Random;
 import org.andengine.entity.Entity;
 import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.IEntityModifier;
+import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.modifier.ScaleModifier;
@@ -19,6 +20,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.modifier.ease.EaseBounceOut;
 import org.andengine.util.modifier.ease.EaseElasticOut;
+import org.andengine.util.modifier.ease.EaseLinear;
 
 import android.util.Log;
 import eu.nazgee.game.flower.scene.Sky;
@@ -128,15 +130,19 @@ public class Flower extends Entity implements ITouchArea{
 	 * @param pY
 	 * @param pSky used to calculate ground level which will be used in the animation
 	 */
-	synchronized public void put(final float pX, final float pY, Sky pSky) {
-		animateDrop(pX, pY, pY + pSky.getHeightOnSky(pY));
+	synchronized public void stateDrop(final float pX, final float pY, Sky pSky) {
+		stateMove(pX, pY, pX, pY + pSky.getHeightOnSky(pY));
+	}
+
+	synchronized public void stateMove(final float pX_from, final float pY_from, final float pX_to, final float pY_to) {
+		animateMove(pX_from, pY_from, pX_to, pY_to);
 	}
 
 	/**
 	 * Increases the sunlight level to which the flower was exposed. Results
 	 * in blooming, if flower was watered well enough.
 	 */
-	public void sun() {
+	public void stateSun() {
 		mSunLevel++;
 
 		switch (getLevelWater()) {
@@ -161,7 +167,7 @@ public class Flower extends Entity implements ITouchArea{
 	/**
 	 * Increases the water level of the flower
 	 */
-	public void water() {
+	public void stateWater() {
 		mWaterLevel++;
 
 		switch (getLevelWater()) {
@@ -199,15 +205,14 @@ public class Flower extends Entity implements ITouchArea{
 		mSpriteWater.animate(100, false);
 	}
 
-	private void animateDrop(final float pX_from, final float pY_from, final float pY_to) {
+	private void animateMove(final float pX_from, final float pY_from, final float pX_to, final float pY_to) {
 		final float time = 1;
 		setPosition(pX_from, pY_from);
 		unregisterEntityModifier(mDropModifier);
 
 		mDropModifier = new ParallelEntityModifier(
-				new SequenceEntityModifier(
-						new MoveYModifier(time, pY_from, pY_to, EaseBounceOut.getInstance())
-						)
+					new MoveXModifier(time, pX_from, pX_to, EaseLinear.getInstance()),
+					new MoveYModifier(time, pY_from, pY_to, EaseBounceOut.getInstance())
 				);
 		mDropModifier.setAutoUnregisterWhenFinished(false);
 		registerEntityModifier(mDropModifier);

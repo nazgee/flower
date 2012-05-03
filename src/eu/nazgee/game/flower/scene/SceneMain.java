@@ -230,7 +230,7 @@ public class SceneMain extends SceneLoadable{
 	private void handleFlowerSun() {
 		for (Flower flower : mFlowers) {
 			if (mSun.isShiningAt(flower)) {
-				flower.sun();
+				flower.stateSun();
 			}
 		}
 	}
@@ -239,7 +239,7 @@ public class SceneMain extends SceneLoadable{
 		float pos[] = pWaterDrop.getSceneCenterCoordinates();
 		for (Flower flower : mFlowers) {
 			if (flower.contains(pos[0], pos[1]) && (flower.getLevelWater() == eLevel.LOW)) {
-				flower.water();
+				flower.stateWater();
 				break; // only one flower gets watered
 			}
 		}
@@ -290,7 +290,7 @@ public class SceneMain extends SceneLoadable{
 		public void run() {
 			if (mUp) {
 				float pos[] = mFlower.getSceneCenterCoordinates();
-				mFlower.put(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y], mSky);
+				mFlower.stateDrop(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y], mSky);
 			}
 		}
 	}
