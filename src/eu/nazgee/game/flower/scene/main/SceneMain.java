@@ -1,4 +1,4 @@
-package eu.nazgee.game.flower.scene;
+package eu.nazgee.game.flower.scene.main;
 
 import java.util.LinkedList;
 import java.util.Random;
@@ -23,14 +23,14 @@ import com.badlogic.gdx.math.Vector2;
 
 import eu.nazgee.game.flower.Consts;
 import eu.nazgee.game.flower.MainHUD;
+import eu.nazgee.game.flower.flower.Flower;
+import eu.nazgee.game.flower.flower.Flower.IFlowerStateHandler;
+import eu.nazgee.game.flower.flower.Flower.eLevel;
 import eu.nazgee.game.flower.pool.cloud.Cloud;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
-import eu.nazgee.game.flower.scene.CloudLayer.IRainDropListener;
-import eu.nazgee.game.flower.scene.flower.Flower;
-import eu.nazgee.game.flower.scene.flower.Flower.IFlowerStateHandler;
-import eu.nazgee.game.flower.scene.flower.Flower.eLevel;
-import eu.nazgee.game.flower.scene.sun.Sun;
-import eu.nazgee.game.flower.scene.sun.Sun.TravelListener;
+import eu.nazgee.game.flower.scene.main.CloudLayer.IRainDropListener;
+import eu.nazgee.game.flower.sun.Sun;
+import eu.nazgee.game.flower.sun.Sun.TravelListener;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;

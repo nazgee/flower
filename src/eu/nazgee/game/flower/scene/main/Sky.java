@@ -1,9 +1,11 @@
-package eu.nazgee.game.flower.scene;
+package eu.nazgee.game.flower.scene.main;
 
-import org.andengine.engine.camera.Camera;
-import org.andengine.entity.scene.background.ParallaxBackground;
+import org.andengine.entity.Entity;
+import org.andengine.entity.shape.IAreaShape;
+import org.andengine.util.Constants;
 
-public class CameraParallaxBackground extends ParallaxBackground {
+
+public class Sky {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -11,39 +13,43 @@ public class CameraParallaxBackground extends ParallaxBackground {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private final Camera mCamera;
-	private final float mCameraFactor;
-
+	private final float mGroundLevel;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public CameraParallaxBackground(float pRed, float pGreen, float pBlue,
-			Camera pCamera) {
-		this(pRed, pGreen, pBlue, pCamera, 1);
+	public Sky(float mGroundLevel) {
+		this.mGroundLevel = mGroundLevel;
 	}
 
-	public CameraParallaxBackground(float pRed, float pGreen, float pBlue,
-			Camera pCamera, final float pCameraFactor) {
-		super(pRed, pGreen, pBlue);
-		mCamera = pCamera;
-		mCameraFactor = pCameraFactor;
-	}
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	
-	@Override
-	public void onUpdate(float pSecondsElapsed) {
-		final float camx = mCamera.getCenterX();
-		setParallaxValue(camx * mCameraFactor);
-
-		super.onUpdate(pSecondsElapsed);
+	public float getHeightOnSky(final Entity pEntity) {
+		final float pos[] = pEntity.getSceneCenterCoordinates();
+		return getHeightOnSky(pos[Constants.VERTEX_INDEX_Y]);
 	}
 
+	public float getHeightOnSkyTop(final IAreaShape pShape) {
+		final float pos[] = pShape.getSceneCenterCoordinates();
+		return getHeightOnSky(pos[Constants.VERTEX_INDEX_Y] - pShape.getHeight()/2);
+	}
+
+	public float getHeightOnSkyBottom(final IAreaShape pShape) {
+		final float pos[] = pShape.getSceneCenterCoordinates();
+		return getHeightOnSky(pos[Constants.VERTEX_INDEX_Y] + pShape.getHeight()/2);
+	}
+
+	public float getHeightOnSky(float pSceneY) {
+		return mGroundLevel - pSceneY; 
+	}
+
+	public float getHeightOnScene(float pSkyY) {
+		return mGroundLevel - pSkyY; 
+	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
-	
+
 	// ===========================================================
 	// Methods
 	// ===========================================================
@@ -51,4 +57,5 @@ public class CameraParallaxBackground extends ParallaxBackground {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+
 }

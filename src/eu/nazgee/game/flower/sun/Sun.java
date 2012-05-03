@@ -1,4 +1,4 @@
-package eu.nazgee.game.flower.scene.sun;
+package eu.nazgee.game.flower.sun;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
@@ -19,7 +19,7 @@ import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseQuadIn;
 import org.andengine.util.modifier.ease.EaseQuadOut;
 
-import eu.nazgee.game.flower.scene.Sky;
+import eu.nazgee.game.flower.scene.main.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 

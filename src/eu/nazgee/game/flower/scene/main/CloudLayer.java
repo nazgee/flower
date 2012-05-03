@@ -1,4 +1,4 @@
-package eu.nazgee.game.flower.scene;
+package eu.nazgee.game.flower.scene.main;
 
 import java.util.Collections;
 import java.util.Comparator;

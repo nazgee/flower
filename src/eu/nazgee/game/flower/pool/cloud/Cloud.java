@@ -16,7 +16,7 @@ import org.andengine.util.modifier.IModifier.IModifierListener;
 
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
-import eu.nazgee.game.flower.scene.Sky;
+import eu.nazgee.game.flower.scene.main.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 

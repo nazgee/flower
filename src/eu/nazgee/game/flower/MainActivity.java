@@ -21,7 +21,7 @@ import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
-import eu.nazgee.game.flower.scene.SceneMain;
+import eu.nazgee.game.flower.scene.main.SceneMain;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.engine.camera.SmootherEmpty;
 import eu.nazgee.game.utils.engine.camera.SmootherLinear;

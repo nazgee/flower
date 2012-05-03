@@ -1,4 +1,4 @@
-package eu.nazgee.game.flower.scene.flower;
+package eu.nazgee.game.flower.flower;
 
 import java.util.Random;
 
@@ -23,7 +23,7 @@ import org.andengine.util.modifier.ease.EaseElasticOut;
 import org.andengine.util.modifier.ease.EaseLinear;
 
 import android.util.Log;
-import eu.nazgee.game.flower.scene.Sky;
+import eu.nazgee.game.flower.scene.main.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 

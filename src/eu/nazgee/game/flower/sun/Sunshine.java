@@ -1,4 +1,4 @@
-package eu.nazgee.game.flower.scene.sun;
+package eu.nazgee.game.flower.sun;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
@@ -11,7 +11,7 @@ import org.andengine.util.Constants;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
-import eu.nazgee.game.flower.scene.Sky;
+import eu.nazgee.game.flower.scene.main.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 public class Sunshine extends Entity {
