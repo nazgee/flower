@@ -1,5 +1,7 @@
 package eu.nazgee.game.flower;
 
+import org.andengine.util.color.Color;
+
 public @interface Consts {
 	// ===========================================================
 	// Constants
@@ -11,4 +13,8 @@ public @interface Consts {
 	public static final int FLOWER_TEX_HEIGHT = 80;
 
 	public static final String MENU_FONT = "ELEKTRA.ttf";
+
+	public static final Color COLOR_TEXT_SELECTED = Color.RED;
+	public static final Color COLOR_TEXT_UNSELECTED = Color.WHITE;
+	public static final Color COLOR_TEXT_DESCRIPTION = Color.BLACK;
 }
