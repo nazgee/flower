@@ -3,18 +3,11 @@ package eu.nazgee.game.flower.scene;
 import java.util.LinkedList;
 import java.util.Random;
 
-import org.andengine.audio.sound.Sound;
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.scene.IOnAreaTouchListener;
-import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.ITouchArea;
-import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.ParallaxBackground;
-import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -25,7 +18,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
 
 import android.content.Context;
-import android.view.MotionEvent;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -41,7 +33,6 @@ import eu.nazgee.game.flower.scene.sun.Sun;
 import eu.nazgee.game.flower.scene.sun.Sun.TravelListener;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
-import eu.nazgee.game.utils.helpers.SoundLoader;
 import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 import eu.nazgee.game.utils.scene.SceneLoadable;
@@ -55,18 +46,19 @@ public class SceneMain extends SceneLoadable{
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private MyResources mResources = new MyResources();
-	private MainHUD mHud;
-	LinkedList<Flower> mFlowers = new LinkedList<Flower>();
-	private SmoothTrackingCamera mCamera;
-	private Sun mSun;
-	private CloudLayer mCloudLayer;
-	private Sky mSky;
-	private Sprite mGround;
-
-
-	private final FlowerListener mFlowerListener = new FlowerListener();
 	private final LoadableSFX mSFX;
+	private final MyResources mResources = new MyResources();
+	private final MainHUD mHud;
+	private final LoadableParallaxBackground mLoadableParallaxBackground;
+
+	private Sky mSky;
+	private CloudLayer mCloudLayer;
+	private Sprite mGround;
+	private Sun mSun;
+
+	private final LinkedList<Flower> mFlowers = new LinkedList<Flower>();
+	private final FlowerListener mFlowerListener = new FlowerListener();
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -76,7 +68,9 @@ public class SceneMain extends SceneLoadable{
 		
 		mSFX = new LoadableSFX();
 		mHud = new MainHUD(W, H, pVertexBufferObjectManager);
+		mLoadableParallaxBackground = new LoadableParallaxBackground(pVertexBufferObjectManager);
 		getLoader().install(mResources);
+		getLoader().install(mLoadableParallaxBackground);
 		getLoader().install(mSFX);
 		getLoader().install(mHud);
 	}
@@ -90,54 +84,49 @@ public class SceneMain extends SceneLoadable{
 	@Override
 	public void onLoadResources(Engine e, Context c) {
 		/*
-		 * No need to do anything special here. If this method is called, it means
-		 * that all our resources must have been loaded already.
-		 * i.e.: mResources were installed in SceneMain constructor, and were
-		 * loaded right before this method was called.
+		 * No need to do anything special here.
 		 */
 	}
 
 	@Override
 	public void onLoad(Engine e, Context c) {
 		Random r = new Random();
-		mCamera = (SmoothTrackingCamera) e.getCamera();
-		mCamera.setHUD(mHud);
+		SmoothTrackingCamera camera = (SmoothTrackingCamera) e.getCamera();
+		camera.setHUD(mHud);
+
+		final VertexBufferObjectManager vertexBufferObjectManager = this.getVertexBufferObjectManager();
 
 		/*
-		 * Prepare fancy background		
+		 * Prepare fancy background- everything was loaded by mLoadableBacground
+		 * so all we need to do call setBackground. We also save a shortcut
+		 * to the sprite representing ground level
 		 */
-		final VertexBufferObjectManager vertexBufferObjectManager = this.getVertexBufferObjectManager();
-		final Sprite bgSky = new Sprite(0, 0, mResources.TEX_SKY, vertexBufferObjectManager);
-		final Sprite bgFar = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_FAR.getHeight(), mResources.TEX_BG_FAR, vertexBufferObjectManager);
-		final Sprite bgClose = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight() - mResources.TEX_BG_CLOSE.getHeight(), mResources.TEX_BG_CLOSE, vertexBufferObjectManager);
-		mGround = new Sprite(0, getH() - mResources.TEX_GROUND.getHeight(), mResources.TEX_GROUND, vertexBufferObjectManager);
-//		final Sprite bgGrass = new Sprite(0, getH() - mResources.TEX_GRASS.getHeight()*0.7f, mResources.TEX_GRASS, vertexBufferObjectManager);
-		final ParallaxBackground paralaxBG = new CameraParallaxBackground(0, 0, 0, mCamera);
-		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.1f, bgSky));
-		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.25f, bgFar));
-		paralaxBG.attachParallaxEntity(new ParallaxEntity(-0.5f, bgClose));
-		paralaxBG.attachParallaxEntity(new ParallaxEntity(-1f, mGround));
-//		paralaxBG.attachParallaxEntity(new ParallaxEntity(-1.5f, bgGrass));
-		setBackground(paralaxBG);
+		setBackground(mLoadableParallaxBackground.getLoadedBacground());
+		mGround = mLoadableParallaxBackground.getLoadedGroundSprite();
 
+		/*
+		 * Create new virtual sky- this object is used to calculate how high
+		 * above ground level entities are placed
+		 */
 		mSky = new Sky(mGround.getY());
 
 		/*
 		 * Register touch area listener, which will listen for the touches of
-		 * registered objects
+		 * objects registered via registerTouchArea() method
 		 */
 		setOnAreaTouchListener(new MyAreaTouchListener());
 		setTouchAreaBindingOnActionDownEnabled(true);
 		setTouchAreaBindingOnActionMoveEnabled(true);
 
-		/**
-		 * Create a Sun
+		/*
+		 * Create a Sun and let the camera track it
 		 */
 		mSun = new Sun(0, 0, mResources.TEX_SUN, mResources.TEXS_SUNSHINE, vertexBufferObjectManager);
 		attachChild(mSun);
 		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 60, new SunTravelListener());
+		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.25f, 0)), 0);
 
-		/**
+		/*
 		 * Create layer of Clouds
 		 */
 		mCloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/3,
@@ -182,9 +171,9 @@ public class SceneMain extends SceneLoadable{
 			postRunnable(new FlowerTouchRunnable(flower, true));
 		}
 
-		mCamera.setTracking(mSun, new TrackVector(new Vector2(Consts.CAMERA_WIDTH*0.25f, 0)), 0);
 		/*
-		 * update sun rays
+		 * Register update update handler used to change sun's rays target, and
+		 * to tell flowers that they were exposed to sun
 		 */
 		this.registerUpdateHandler(new IUpdateHandler() {
 			@Override
@@ -210,7 +199,7 @@ public class SceneMain extends SceneLoadable{
 	@Override
 	public void onUnload() {
 		/*
-		 *  We do not need anything of theese anymore- kill all children and
+		 *  We do not need anything of these anymore- kill all children and
 		 *  get rid of anything else that might want to run without any reason 
 		 */
 		detachChildren();
@@ -350,56 +339,38 @@ public class SceneMain extends SceneLoadable{
 
 		public ITiledTextureRegion TEXS_CLOUDS;
 
-		public ITextureRegion TEX_BG_FAR;
-		public ITextureRegion TEX_BG_CLOSE;
-		public ITextureRegion TEX_GRASS;
-		public ITextureRegion TEX_GROUND;
-		public ITextureRegion TEX_SKY;
-
 		private BuildableBitmapTextureAtlas[] mAtlases;
 
 		@Override
 		public void onLoadResources(Engine e, Context c) {
-			mAtlases = new BuildableBitmapTextureAtlas[3];
-			mAtlases[0] =  new BuildableBitmapTextureAtlas(e.getTextureManager(), 962, 482, TextureOptions.REPEATING_BILINEAR);
-			for (int i = 1; i < mAtlases.length; i++) {
+			mAtlases = new BuildableBitmapTextureAtlas[1];
+			for (int i = 0; i < mAtlases.length; i++) {
 				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 1024, 1024, TextureOptions.REPEATING_BILINEAR);
 			}
 			/*
 			 * Create nicely named shortcuts to our atlases (textures)
 			 */
-			BuildableBitmapTextureAtlas atlasSky = mAtlases[0];
-			BuildableBitmapTextureAtlas atlasFlower = mAtlases[1];
-			BuildableBitmapTextureAtlas atlasSplash = mAtlases[1];
-			BuildableBitmapTextureAtlas atlasSunshine = mAtlases[1];
-			BuildableBitmapTextureAtlas atlasClouds = mAtlases[1];
-			BuildableBitmapTextureAtlas atlasScene = mAtlases[2];
+			BuildableBitmapTextureAtlas atlasFlower = mAtlases[0];
+			BuildableBitmapTextureAtlas atlasWaterdrop = mAtlases[0];
+			BuildableBitmapTextureAtlas atlasSunshine = mAtlases[0];
+			BuildableBitmapTextureAtlas atlasClouds = mAtlases[0];
+			BuildableBitmapTextureAtlas atlasPot = mAtlases[0];
 
 			/*
 			 * Fill our texture with regions that we would like to use
 			 */
-			TEX_SKY = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasSky, c, "scene/skies/azure.jpeg");
-			TEX_BG_FAR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasScene, c, "scene/bg-far.png");
-			TEX_BG_CLOSE = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasScene, c, "scene/bg-close.png");
-			TEX_GROUND = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasScene, c, "scene/ground.png");
-			TEX_GRASS = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasScene, c, "scene/grass.png");
 			TEX_SUN = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasScene, c, "sun.png");
+					atlasSunshine, c, "sun.png");
 			TEXS_POT_WATER = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
-					atlasScene, c, "pot/water.png", 1, 5);
+					atlasPot, c, "pot/water.png", 1, 5);
 			TEX_POT = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasScene, c, "pot/pot.png");
+					atlasPot, c, "pot/pot.png");
 			TEX_WATERDROP = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasScene, c, "drop.png");
+					atlasWaterdrop, c, "drop.png");
+			TEXS_SPLASH = TiledTextureRegionFactory.loadTiles(c, "gfx/", "splash",
+					atlasWaterdrop);
 			TEXS_CLOUDS = TiledTextureRegionFactory.loadTiles(c, "gfx/", "clouds",
 					atlasClouds);
-			TEXS_SPLASH = TiledTextureRegionFactory.loadTiles(c, "gfx/", "splash",
-					atlasSplash);
 			TEXS_SUNSHINE = TiledTextureRegionFactory.loadTiles(c, "gfx/", "shine",
 					atlasSunshine);
 //			TEXS_SUNSHINE = BitmapTextureAtlasTextureRegionFactory.createTiledFromAssetDirectory(
