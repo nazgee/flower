@@ -129,18 +129,7 @@ public class Flower extends Entity implements ITouchArea{
 	 * @param pSky used to calculate ground level which will be used in the animation
 	 */
 	synchronized public void put(final float pX, final float pY, Sky pSky) {
-		final float time = 1;
-		setPosition(pX, pY);
-		unregisterEntityModifier(mDropModifier);
-
-		final float height = pSky.getHeightOnSky(pY);
-		mDropModifier = new ParallelEntityModifier(
-				new SequenceEntityModifier(
-						new MoveYModifier(time, getY(), getY() + height, EaseBounceOut.getInstance())
-						)
-				);
-		mDropModifier.setAutoUnregisterWhenFinished(false);
-		registerEntityModifier(mDropModifier);
+		animateDrop(pX, pY, pY + pSky.getHeightOnSky(pY));
 	}
 
 	/**
@@ -208,6 +197,20 @@ public class Flower extends Entity implements ITouchArea{
 	private void animateWater() {
 		Log.d(getClass().getSimpleName(), "animateWater();");
 		mSpriteWater.animate(100, false);
+	}
+
+	private void animateDrop(final float pX_from, final float pY_from, final float pY_to) {
+		final float time = 1;
+		setPosition(pX_from, pY_from);
+		unregisterEntityModifier(mDropModifier);
+
+		mDropModifier = new ParallelEntityModifier(
+				new SequenceEntityModifier(
+						new MoveYModifier(time, pY_from, pY_to, EaseBounceOut.getInstance())
+						)
+				);
+		mDropModifier.setAutoUnregisterWhenFinished(false);
+		registerEntityModifier(mDropModifier);
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes
