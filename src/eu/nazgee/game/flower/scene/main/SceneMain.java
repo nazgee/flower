@@ -29,6 +29,7 @@ import eu.nazgee.game.flower.flower.Flower.eLevel;
 import eu.nazgee.game.flower.pool.cloud.Cloud;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.game.flower.scene.main.CloudLayer.IRainDropListener;
+import eu.nazgee.game.flower.score.Score;
 import eu.nazgee.game.flower.sun.Sun;
 import eu.nazgee.game.flower.sun.Sun.TravelListener;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
@@ -43,9 +44,11 @@ public class SceneMain extends SceneLoadable{
 	// Constants
 	// ===========================================================
 
+	private static final int SEEDS_COUNT = 20;
 	// ===========================================================
 	// Fields
 	// ===========================================================
+	private final Score mScore = new Score(null);
 	private final LoadableSFX mSFX;
 	private final MyResources mResources = new MyResources();
 	private final MainHUD mHud;
@@ -93,6 +96,8 @@ public class SceneMain extends SceneLoadable{
 		Random r = new Random();
 		SmoothTrackingCamera camera = (SmoothTrackingCamera) e.getCamera();
 		camera.setHUD(mHud);
+		mScore.setHUD(mHud);
+		mScore.set(0, SEEDS_COUNT, 0);
 
 		final VertexBufferObjectManager vertexBufferObjectManager = this.getVertexBufferObjectManager();
 
@@ -144,7 +149,7 @@ public class SceneMain extends SceneLoadable{
 		/*
 		 * Create some flowers
 		 */
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < SEEDS_COUNT; i++) {
 			/*
 			 * Choose random texture
 			 */
@@ -255,12 +260,16 @@ public class SceneMain extends SceneLoadable{
 		public void onBloomed(Flower pFlower) {
 			SceneMain.this.postRunnable(new FlowerDeactivateRunnable(pFlower));
 			mSFX.onFlowerBloom();
+			mScore.score.inc(100);
+			mScore.flowers.inc(1);
+			mScore.seeds.dec(1);
 		}
 
 		@Override
 		public void onFried(Flower pFlower) {
 			SceneMain.this.postRunnable(new FlowerDeactivateRunnable(pFlower));
 			mSFX.onFlowerFry();
+			mScore.seeds.dec(1);
 		}
 
 		@Override

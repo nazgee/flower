@@ -6,7 +6,9 @@ import org.andengine.engine.Engine;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.text.AutoWrap;
 import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
 import org.andengine.entity.util.FPSCounter;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -16,6 +18,7 @@ import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
@@ -27,13 +30,14 @@ public class MainHUD extends HUDLoadable {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-
+	private static final int SCORE_LINES = 3;
 	// ===========================================================
 	// Fields
 	// ===========================================================
 
 	MyResources mResource = new MyResources();
 	Text mTextFPS;
+	Text mTextScore[] = new Text[SCORE_LINES];
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -55,8 +59,17 @@ public class MainHUD extends HUDLoadable {
 
 	@Override
 	public void onLoad(Engine e, Context c) {
-		mTextFPS = new Text(0, 0, mResource.FONT_MENU, "This is a placeholder" , getVertexBufferObjectManager());
+		mTextFPS = new Text(0, 0, mResource.FONT_HUD, "", 20, getVertexBufferObjectManager());
 		attachChild(mTextFPS);
+
+		for (int i = 0; i < mTextScore.length; i++) {
+			mTextScore[i] = new Text(0, i * mResource.FONT_HUD.getLineHeight(), mResource.FONT_HUD, "0", 50,
+					new TextOptions(AutoWrap.LETTERS, getW() * 0.95f, HorizontalAlign.RIGHT, Text.LEADING_DEFAULT),
+					getVertexBufferObjectManager());
+			attachChild(mTextScore[i]);
+		}
+
+
 		// prepare FPS display
 		final FPSCounter fpsCounter = new FPSCounter();
 		registerUpdateHandler(fpsCounter);
@@ -85,12 +98,20 @@ public class MainHUD extends HUDLoadable {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-
+	public void setTextScore0(CharSequence pText) {
+		mTextScore[0].setText(pText);
+	}
+	public void setTextScore1(CharSequence pText) {
+		mTextScore[1].setText(pText);
+	}
+	public void setTextScore2(CharSequence pText) {
+		mTextScore[2].setText(pText);
+	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
 	private static class MyResources extends SimpleLoadableResource {
-		public volatile Font FONT_MENU;
+		public volatile Font FONT_HUD;
 
 		@Override
 		public void onLoadResources(Engine e, Context c) {
@@ -102,13 +123,13 @@ public class MainHUD extends HUDLoadable {
 			final FontManager fontManager = e.getFontManager();
 
 			final ITexture font_texture = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
-			FONT_MENU = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
-			FONT_MENU.load();
+			FONT_HUD = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.HUD_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
+			FONT_HUD.load();
 		}
 
 		@Override
 		public void onUnload() {
-			FONT_MENU.unload();
+			FONT_HUD.unload();
 		}
 	}
 }
