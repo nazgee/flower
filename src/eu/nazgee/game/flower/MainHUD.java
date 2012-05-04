@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import org.andengine.engine.Engine;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.util.FPSCounter;
 import org.andengine.opengl.font.Font;
@@ -18,6 +19,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
+import android.util.Log;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 import eu.nazgee.game.utils.scene.HUDLoadable;
 
@@ -55,7 +57,6 @@ public class MainHUD extends HUDLoadable {
 	public void onLoad(Engine e, Context c) {
 		mTextFPS = new Text(0, 0, mResource.FONT_MENU, "This is a placeholder" , getVertexBufferObjectManager());
 		attachChild(mTextFPS);
-		
 		// prepare FPS display
 		final FPSCounter fpsCounter = new FPSCounter();
 		registerUpdateHandler(fpsCounter);
@@ -74,7 +75,7 @@ public class MainHUD extends HUDLoadable {
 	@Override
 	public void onUnload() {
 		/*
-		 *  We do not need anything of theese anymore- kill all children and
+		 *  We do not need anything of these anymore- kill all children and
 		 *  get rid of anything else that might want to run without any reason 
 		 */
 		detachChildren();
@@ -89,19 +90,19 @@ public class MainHUD extends HUDLoadable {
 	// Inner and Anonymous Classes
 	// ===========================================================
 	private static class MyResources extends SimpleLoadableResource {
-		public Font FONT_MENU;
+		public volatile Font FONT_MENU;
 
 		@Override
 		public void onLoadResources(Engine e, Context c) {
+		}
+
+		@Override
+		public void onLoad(Engine e, Context c) {
 			final TextureManager textureManager = e.getTextureManager();
 			final FontManager fontManager = e.getFontManager();
 
 			final ITexture font_texture = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
 			FONT_MENU = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
-		}
-
-		@Override
-		public void onLoad(Engine e, Context c) {
 			FONT_MENU.load();
 		}
 
