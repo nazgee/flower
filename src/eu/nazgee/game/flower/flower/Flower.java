@@ -4,10 +4,12 @@ import java.util.Random;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.modifier.ColorModifier;
+import org.andengine.entity.modifier.FadeOutModifier;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
+import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.ITouchArea;
@@ -19,8 +21,10 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.modifier.ease.EaseBounceOut;
+import org.andengine.util.modifier.ease.EaseElasticIn;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 import org.andengine.util.modifier.ease.EaseLinear;
+import org.andengine.util.modifier.ease.EaseQuadIn;
 
 import android.util.Log;
 import eu.nazgee.game.flower.scene.main.Sky;
@@ -46,6 +50,7 @@ public class Flower extends Entity implements ITouchArea{
 	private int mWaterLevel;
 	private int mSunLevel;
 	private boolean isBloomed = false;
+	private boolean isFried = false;
 
 	private final Sprite mSpriteBlossom;
 	private final Sprite mSpritePot;
@@ -125,6 +130,14 @@ public class Flower extends Entity implements ITouchArea{
 	private void setBloomed(boolean isBloomed) {
 		this.isBloomed = isBloomed;
 	}
+
+	public boolean isFried() {
+		return isFried;
+	}
+
+	private void setFried(boolean isFried) {
+		this.isFried = isFried;
+	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
@@ -169,11 +182,20 @@ public class Flower extends Entity implements ITouchArea{
 	 * in blooming, if flower was watered well enough.
 	 */
 	public void stateSun() {
+		if (isBloomed() || isFried()) {
+			return;
+		}
+
 		eLevel old = getLevelSun();
 		mSunLevel++;
 
 		switch (getLevelWater()) {
 		case LOW:
+			animateFry();
+			setFried(true);
+			if (mFlowerStateHandler != null) {
+				mFlowerStateHandler.onFried(this);
+			}
 			break;
 		case NORMAL:
 		case HIGH: {
@@ -181,12 +203,10 @@ public class Flower extends Entity implements ITouchArea{
 			case LOW:
 			case NORMAL:
 			case HIGH:
-				if (!isBloomed()) {
-					animateBloom();
-					setBloomed(true);
-					if (mFlowerStateHandler != null) {
-						mFlowerStateHandler.onBloomed(this);
-					}
+				animateBloom();
+				setBloomed(true);
+				if (mFlowerStateHandler != null) {
+					mFlowerStateHandler.onBloomed(this);
 				}
 			}
 		}
@@ -201,6 +221,10 @@ public class Flower extends Entity implements ITouchArea{
 	 * Increases the water level of the flower
 	 */
 	public void stateWater() {
+		if (isBloomed() || isFried()) {
+			return;
+		}
+
 		eLevel old = getLevelWater();
 		mWaterLevel++;
 
@@ -236,6 +260,14 @@ public class Flower extends Entity implements ITouchArea{
 						)
 				);
 		mSpriteBlossom.registerEntityModifier(bloomer);
+	}
+
+	private void animateFry() {
+		Log.d(getClass().getSimpleName(), "animateFry();");
+
+		final float time = 0.4f;
+		registerEntityModifier(new RotationModifier(time, 0, 180, EaseQuadIn.getInstance()));
+		mSpriteWater.registerEntityModifier(new FadeOutModifier(time));
 	}
 
 	private void animateWater() {

@@ -17,6 +17,7 @@ public class LoadableSFX extends SimpleLoadableResource {
 	// Fields
 	// ===========================================================
 	private Sound SND_CASH;
+	private Sound SND_FRY;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -36,6 +37,7 @@ public class LoadableSFX extends SimpleLoadableResource {
 	@Override
 	public void onLoad(Engine e, Context c) {
 		SND_CASH = SoundLoader.load(e.getSoundManager(), c, "cash.ogg");
+		SND_FRY = SoundLoader.load(e.getSoundManager(), c, "fry.ogg");
 	}
 
 	@Override
@@ -46,6 +48,9 @@ public class LoadableSFX extends SimpleLoadableResource {
 	// ===========================================================
 	public void onFlowerBloom() {
 		SND_CASH.play();
+	}
+	public void onFlowerFry() {
+		SND_FRY.play();
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes

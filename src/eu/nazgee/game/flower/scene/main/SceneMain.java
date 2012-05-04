@@ -250,11 +250,14 @@ public class SceneMain extends SceneLoadable{
 	private class FlowerListener implements IFlowerStateHandler {
 		@Override
 		public void onBloomed(Flower pFlower) {
-			SceneMain.this.postRunnable(new FlowerBloomedRunnable(pFlower));
+			SceneMain.this.postRunnable(new FlowerDeactivateRunnable(pFlower));
+			mSFX.onFlowerBloom();
 		}
 
 		@Override
 		public void onFried(Flower pFlower) {
+			SceneMain.this.postRunnable(new FlowerDeactivateRunnable(pFlower));
+			mSFX.onFlowerFry();
 		}
 
 		@Override
@@ -265,10 +268,10 @@ public class SceneMain extends SceneLoadable{
 		public void onSunLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew) {
 		}
 
-		class FlowerBloomedRunnable implements Runnable {
+		class FlowerDeactivateRunnable implements Runnable {
 			private final Flower mFlower;
 
-			public FlowerBloomedRunnable(Flower mFlower) {
+			public FlowerDeactivateRunnable(Flower mFlower) {
 				this.mFlower = mFlower;
 			}
 
@@ -276,7 +279,6 @@ public class SceneMain extends SceneLoadable{
 			public void run() {
 				mFlowers.remove(mFlower);
 				mFlower.stateDropTo(mFlower.getX(), getH());
-				mSFX.onFlowerBloom();
 			}
 		}
 	}
