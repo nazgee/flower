@@ -226,7 +226,10 @@ public class SceneMain extends SceneLoadable{
 
 	private void handleFlowerSun() {
 		for (Flower flower : mFlowers) {
-			if (mSun.isShiningAt(flower)) {
+			/*
+			 * We are interested in shining only at flowers that are on the ground level 
+			 */
+			if (mSky.getHeightOnSky(flower) == 0 && mSun.isShiningAt(flower)) {
 				flower.stateSun();
 			}
 		}
