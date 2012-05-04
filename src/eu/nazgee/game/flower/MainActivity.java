@@ -218,15 +218,15 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 		@Override
 		public void onLoadResources(Engine e, Context c) {
+		}
+
+		@Override
+		public void onLoad(Engine e, Context c) {
 			final TextureManager textureManager = e.getTextureManager();
 			final FontManager fontManager = e.getFontManager();
 
 			final ITexture font_texture = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
 			FONT_MENU = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.10f, true, Color.WHITE.getARGBPackedInt());
-		}
-
-		@Override
-		public void onLoad(Engine e, Context c) {
 			FONT_MENU.load();
 		}
 
