@@ -419,12 +419,6 @@ public class SceneMain extends SceneLoadable{
 //			TEXS_FLOWERS = SVGBitmapTextureAtlasTextureRegionFactory.createTiledFromAssetDirectory(
 //					atlasFlower, c, "flowers", Consts.FLOWER_TEX_WIDTH, Consts.FLOWER_TEX_HEIGHT);
 
-			final TextureManager textureManager = e.getTextureManager();
-			final FontManager fontManager = e.getFontManager();
-
-			mFontAtlas = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
-			FONT_POPUP = FontFactory.createFromAsset(fontManager, mFontAtlas, c.getAssets(), Consts.HUD_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
-			FONT_POPUP.load();
 		}
 
 		@Override
@@ -433,6 +427,13 @@ public class SceneMain extends SceneLoadable{
 			 *  build and load all our atlases (places regions on texture and sends it to GPU)
 			 */
 			AtlasLoader.buildAndLoad(mAtlases);
+
+			final TextureManager textureManager = e.getTextureManager();
+			final FontManager fontManager = e.getFontManager();
+
+			mFontAtlas = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
+			FONT_POPUP = FontFactory.createFromAsset(fontManager, mFontAtlas, c.getAssets(), Consts.HUD_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
+			FONT_POPUP.load();
 		}
 
 		@Override
