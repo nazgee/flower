@@ -34,7 +34,6 @@ import eu.nazgee.game.flower.flower.Flower;
 import eu.nazgee.game.flower.flower.Flower.IFlowerStateHandler;
 import eu.nazgee.game.flower.flower.Flower.eLevel;
 import eu.nazgee.game.flower.pool.cloud.Cloud;
-import eu.nazgee.game.flower.pool.popup.Popup;
 import eu.nazgee.game.flower.pool.popup.PopupItem;
 import eu.nazgee.game.flower.pool.popup.PopupPool;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
@@ -331,13 +330,11 @@ public class SceneMain extends SceneLoadable{
 				float pTouchAreaLocalY) {
 
 			if (mFlowers.contains(pTouchArea)) {
-				if ((pTouchArea instanceof Flower)) {
-					Flower flower = (Flower) pTouchArea;
-					flower.setPosition(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
+				Flower flower = (Flower) pTouchArea;
+				flower.setPosition(pSceneTouchEvent.getX(), pSceneTouchEvent.getY() + Consts.TOUCH_OFFSET_Y);
 
-					if (pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionDown()) {
-						SceneMain.this.postRunnable(new FlowerTouchRunnable(flower, pSceneTouchEvent.isActionUp()));
-					}
+				if (pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionDown()) {
+					SceneMain.this.postRunnable(new FlowerTouchRunnable(flower, pSceneTouchEvent.isActionUp()));
 				}
 				return true;
 			}
