@@ -38,7 +38,7 @@ import eu.nazgee.game.flower.pool.popup.Popup;
 import eu.nazgee.game.flower.pool.popup.PopupItem;
 import eu.nazgee.game.flower.pool.popup.PopupPool;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
-import eu.nazgee.game.flower.scene.main.CloudLayer.IRainDropListener;
+import eu.nazgee.game.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
 import eu.nazgee.game.flower.score.Score;
 import eu.nazgee.game.flower.sun.Sun;
 import eu.nazgee.game.flower.sun.Sun.TravelListener;
@@ -152,9 +152,9 @@ public class SceneMain extends SceneLoadable{
 				mResources.TEXS_CLOUDS, mResources.TEX_WATERDROP, 
 				mResources.TEXS_SPLASH, vbom);
 		attachChild(mCloudLayer);
-		mCloudLayer.setRainDropListener(new IRainDropListener() {
+		mCloudLayer.setWaterDropListener(new IWaterDropListener() {
 			@Override
-			public void onRainDrop(WaterDrop pWaterDrop) {
+			public void onHitTheGround(WaterDrop pWaterDrop) {
 				handleFlowerRain(pWaterDrop);
 			}
 		});
@@ -331,7 +331,7 @@ public class SceneMain extends SceneLoadable{
 
 					PopupItem popitem = mPopupPool.obtainPoolItem();
 					Popup pop = popitem.getEntity();
-					pop.pop(pTouchAreaLocalX, pTouchAreaLocalY, "foo" + pTouchAreaLocalX);
+					pop.pop(pTouchAreaLocalX, pTouchAreaLocalY, "foo!", 0.5f);
 					flower.attachChild(pop);
 
 					if (pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionDown()) {

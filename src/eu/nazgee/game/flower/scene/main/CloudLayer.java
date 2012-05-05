@@ -20,8 +20,6 @@ import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDropItem;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDropPool;
-import eu.nazgee.game.flower.pool.watersplash.WaterSplash;
-import eu.nazgee.game.flower.pool.watersplash.WaterSplash.IWaterSplashListener;
 import eu.nazgee.game.flower.pool.watersplash.WaterSplashItem;
 import eu.nazgee.game.flower.pool.watersplash.WaterSplashPool;
 
@@ -47,7 +45,7 @@ public class CloudLayer extends Entity{
 	private final float mVariationTime;
 	private final Sky mSky;
 
-	private IRainDropListener mRainDropListener;
+	private IWaterDropListener mWaterDropListener;
 
 	// ===========================================================
 	// Constructors
@@ -78,15 +76,12 @@ public class CloudLayer extends Entity{
 			int started = 0;
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
-				CloudItem item = mCloudPool.obtainPoolItem();
-				Cloud cloud = item.getEntity();
-				attachChild(cloud);
-				lunchCloudItem(item);
+
+				launchNewCloud();
 				started++;
 				if (started < pCloudsNumber) {
 					pTimerHandler.reset();
 				}
-				mClouds.add(cloud);
 			}
 		});
 		registerUpdateHandler(starter);
@@ -95,12 +90,12 @@ public class CloudLayer extends Entity{
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public IRainDropListener getRainDropListener() {
-		return mRainDropListener;
+	public IWaterDropListener getWaterDropListener() {
+		return mWaterDropListener;
 	}
 
-	public void setRainDropListener(IRainDropListener mRainDropListener) {
-		this.mRainDropListener = mRainDropListener;
+	public void setWaterDropListener(IWaterDropListener pWaterDropListener) {
+		this.mWaterDropListener = pWaterDropListener;
 	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
@@ -116,24 +111,23 @@ public class CloudLayer extends Entity{
 		return avg - variation + rand.nextFloat() * 2 * variation; 
 	}
 
-	private void lunchCloudItem(CloudItem pCloudItem) {
+	private void launchNewCloud() {
+		final CloudItem item = mCloudPool.obtainPoolItem();
+		final Cloud cloud = item.getEntity();
+		registerCloudAndSortByHeights(cloud);
+
 		final float x = randomize(mW, mAvgDistance/2/mW) - mAvgDistance;
 		final float y = rand.nextFloat() * mH;
-
 		final float time = randomize(mAvgTime, mVariationTime);
 		final float speed = randomize(mAvgSpeed, mVariationSpeed);
 
-		final Cloud cloud = pCloudItem.getEntity();
 		Cloud.CloudListener listener = cloud.getTravelListener();
 		if (listener == null) {
-			listener = new CloudListener(pCloudItem);
+			listener = new CloudListener();
 		}
 
+		cloud.registerUpdateHandler(new TimerHandler(time/2, new RainMain(cloud)));
 		cloud.travel(x, y, speed*time, time, listener);
-		sortCloudsByHeight();
-
-		TimerHandler rainman = new TimerHandler(time/2, new RainMain(cloud));
-		cloud.registerUpdateHandler(rainman);
 	}
 
 	public Cloud getHighestCloudAtX(final float pX, final float pLowestY) {
@@ -147,9 +141,19 @@ public class CloudLayer extends Entity{
 		return null;
 	}
 
-	private void sortCloudsByHeight() {
+	private void registerCloudAndSortByHeights(Cloud cloud) {
 		synchronized (mClouds) {
+			mClouds.add(cloud);
 			Collections.sort(mClouds, new ComparatorHeight());
+		}
+
+		// XXX run it in a runnable?
+		attachChild(cloud);
+	}
+
+	private void unregiterCloud(Cloud cloud) {
+		synchronized (mClouds) {
+			mClouds.remove(cloud);
 		}
 	}
 
@@ -187,37 +191,20 @@ public class CloudLayer extends Entity{
 		public void onTimePassed(TimerHandler pTimerHandler) {
 			mCloud.unregisterUpdateHandler(pTimerHandler);
 			WaterDropItem dropitem = mDropPool.obtainPoolItem();
-			mCloud.drop(dropitem.getEntity(), mSky, new WaterDropListener(dropitem));
+			mCloud.drop(dropitem.getEntity(), mSky, new WaterDropListener());
 		}
 
 		private class WaterDropListener implements IWaterDropListener {
-			private final WaterDropItem mWaterDropItem;
-			public WaterDropListener(WaterDropItem mWaterDropItem) {
-				this.mWaterDropItem = mWaterDropItem;
-			}
 			@Override
 			public void onHitTheGround(WaterDrop pWaterDrop) {
-				mWaterDropItem.scheduleDetachAndRecycle();
-
 				final WaterSplashItem splashitem = mSplashPool.obtainPoolItem();
 				CloudLayer.this.attachChild(splashitem.getEntity());
 				mPos = pWaterDrop.getSceneCenterCoordinates();
-				splashitem.getEntity().splat(mPos[Constants.VERTEX_INDEX_X], mPos[Constants.VERTEX_INDEX_Y],
-						new WaterSplashListener(splashitem));
-				if (getRainDropListener() != null) {
-					getRainDropListener().onRainDrop(pWaterDrop);
-				}
-			}
-		}
+				splashitem.getEntity().splat(mPos[Constants.VERTEX_INDEX_X], mPos[Constants.VERTEX_INDEX_Y]);
 
-		private class WaterSplashListener implements IWaterSplashListener {
-			private final WaterSplashItem mWaterSplashItem;
-			public WaterSplashListener(WaterSplashItem mWaterSplashItem) {
-				this.mWaterSplashItem = mWaterSplashItem;
-			}
-			@Override
-			public void onSplashFinished(WaterSplash pWaterSplash) {
-				mWaterSplashItem.scheduleDetachAndRecycle();
+				if (getWaterDropListener() != null) {
+					getWaterDropListener().onHitTheGround(pWaterDrop);
+				}
 			}
 		}
 	}
@@ -228,19 +215,10 @@ public class CloudLayer extends Entity{
 	 *
 	 */
 	class CloudListener implements Cloud.CloudListener {
-		CloudItem mItem;
-
-		public CloudListener(CloudItem mItem) {
-			this.mItem = mItem;
-		}
-
-		@Override
-		public void onStarted(Cloud pCloud) {
-		}
-
 		@Override
 		public void onFinished(Cloud pCloud) {
-			lunchCloudItem(mItem);
+			unregiterCloud(pCloud);
+			launchNewCloud();
 		}
 	}
 }

@@ -4,7 +4,6 @@ import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import eu.nazgee.game.flower.Statics;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 
@@ -16,40 +15,39 @@ public class WaterSplash extends AnimatedSprite {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private IWaterSplashListener mWaterSplashListener;
 	private WaterSplashAnimationListener mWaterSplashAnimationListener = new WaterSplashAnimationListener();
+	private final WaterSplashItem mWaterSplashItem;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public WaterSplash(float pX, float pY, float pWidth, float pHeight,
-			ITiledTextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager);
-	}
-
 	public WaterSplash(float pX, float pY, ITiledTextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, WaterSplashItem waterSplashItem) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+		this.mWaterSplashItem = waterSplashItem;
 	}
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public IWaterSplashListener getSplashListener() {
-		return mWaterSplashListener;
-	}
+
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
-	public interface IWaterSplashListener {
-		void onSplashFinished(WaterSplash pWaterSplash);
-	}
+
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	public synchronized void splat(final float pX, final float pY, IWaterSplashListener pWaterSplashListener) {
-		mWaterSplashListener = pWaterSplashListener;
+	/**
+	 * Starts a splash animation in a given location
+	 * 
+	 * @note WaterSplashItem of this WaterSplash WILL be automagically recycled after
+	 * animation end. NO need to call scheduleDetachAndRecycle() manually on it
+	 * 
+	 * @param pX
+	 * @param pY
+	 */
+	public synchronized void splat(final float pX, final float pY) {
 		Positioner.setCentered(this, pX, pY);
 		this.animate(100, false, mWaterSplashAnimationListener);
 	}
@@ -72,10 +70,7 @@ public class WaterSplash extends AnimatedSprite {
 		@Override
 		public void onAnimationFinished(AnimatedSprite pAnimatedSprite) {
 			synchronized (WaterSplash.this) {
-				if (mWaterSplashListener != null) {
-					mWaterSplashListener.onSplashFinished(WaterSplash.this);
-				}
-				Statics.ENTITY_DETACH_HANDLER.scheduleDetach(pAnimatedSprite);
+				mWaterSplashItem.scheduleDetachAndRecycle();
 			}
 		}
 	}

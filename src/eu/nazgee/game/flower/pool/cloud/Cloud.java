@@ -31,20 +31,15 @@ public class Cloud extends Sprite {
 	private IEntityModifier mTravelModifier;
 	private CloudListener mCloudListener;
 	private CloudModifierListener mCloudModifierListener = new CloudModifierListener();
+	private final CloudItem mCloudItem;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-
-	public Cloud(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager);
-	}
-
 	public Cloud(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, CloudItem cloudItem) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+		mCloudItem = cloudItem;
 	}
 	// ===========================================================
 	// Getter & Setter
@@ -56,12 +51,23 @@ public class Cloud extends Sprite {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	public interface CloudListener {
-		void onStarted(Cloud pCloud);
 		void onFinished(Cloud pCloud);
 	}
 	// ===========================================================
 	// Methods
 	// ===========================================================
+	/**
+	 * Places a moving cloud in a given location.
+	 * 
+	 * @note CloudItem of this Cloud WILL be automagically recycled after
+	 * animation end. NO need to call scheduleDetachAndRecycle() manually on it
+	 * 
+	 * @param pX
+	 * @param pY
+	 * @param W
+	 * @param time
+	 * @param pTravelListener
+	 */
 	synchronized public void travel(final float pX, final float pY,
 			final float W, final float time, CloudListener pTravelListener) {
 
@@ -95,11 +101,6 @@ public class Cloud extends Sprite {
 	private class CloudModifierListener implements IModifierListener<IEntity> {
 		@Override
 		public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-			synchronized (Cloud.this) {
-				if (mCloudListener != null) {
-					mCloudListener.onStarted(Cloud.this);
-				}
-			}
 		}
 		@Override
 		public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
@@ -107,6 +108,7 @@ public class Cloud extends Sprite {
 				if (mCloudListener != null) {
 					mCloudListener.onFinished(Cloud.this);
 				}
+				mCloudItem.scheduleDetachAndRecycle();
 			}
 		}
 	}

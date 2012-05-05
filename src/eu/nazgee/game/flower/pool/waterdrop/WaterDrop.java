@@ -16,7 +16,6 @@ import org.andengine.util.modifier.ease.EaseQuadIn;
 
 import android.util.Log;
 import eu.nazgee.game.flower.Kinematics;
-import eu.nazgee.game.flower.Statics;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 
@@ -31,20 +30,15 @@ public class WaterDrop extends Sprite {
 	private IEntityModifier mDropModifier;
 	private IWaterDropListener mWaterDropListener;
 	private WaterDropModifierListener mWaterDropModifierListener = new WaterDropModifierListener();
+	private final WaterDropItem mWaterDropItem;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-
-	public WaterDrop(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager);
-	}
-
 	public WaterDrop(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, WaterDropItem waterDropItem) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+		this.mWaterDropItem = waterDropItem;
 	}
 	// ===========================================================
 	// Getter & Setter
@@ -61,6 +55,17 @@ public class WaterDrop extends Sprite {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+	/**
+	 * Starts a falling rain drop animation.
+	 * 
+	 * @note WaterDropItem of this WaterDrop WILL be automagically recycled after
+	 * animation end. NO need to call scheduleDetachAndRecycle() manually on it
+	 * 
+	 * @param pX
+	 * @param pY
+	 * @param H
+	 * @param pWaterDropListener
+	 */
 	public synchronized void fall(final float pX, final float pY, final float H, IWaterDropListener pWaterDropListener) {
 		final float time = Kinematics.time(GRAVITY_ACCEL, H);
 		mWaterDropListener = pWaterDropListener;
@@ -95,7 +100,7 @@ public class WaterDrop extends Sprite {
 				if (mWaterDropListener != null) {
 					mWaterDropListener.onHitTheGround(WaterDrop.this);
 				}
-				Statics.ENTITY_DETACH_HANDLER.scheduleDetach(pItem);
+				mWaterDropItem.scheduleDetachAndRecycle();
 			}
 		}
 	}

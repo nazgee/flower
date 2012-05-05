@@ -7,6 +7,6 @@ import eu.nazgee.game.flower.pool.PooledEntityItem;
 
 public class WaterSplashItem extends PooledEntityItem<WaterSplash> {
 	public WaterSplashItem(ITiledTextureRegion pTextureWaterDrop, VertexBufferObjectManager pVertexBufferObjectManager) {
-		mEntity = new WaterSplash(0, 0, pTextureWaterDrop, pVertexBufferObjectManager);
+		mEntity = new WaterSplash(0, 0, pTextureWaterDrop, pVertexBufferObjectManager, this);
 	}
 }

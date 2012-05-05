@@ -7,6 +7,6 @@ import eu.nazgee.game.flower.pool.PooledEntityItem;
 
 public class CloudItem extends PooledEntityItem<Cloud> {
 	public CloudItem(ITextureRegion pTextureCloud, VertexBufferObjectManager pVertexBufferObjectManager) {
-		mEntity = new Cloud(0, 0, pTextureCloud, pVertexBufferObjectManager);
+		mEntity = new Cloud(0, 0, pTextureCloud, pVertexBufferObjectManager, this);
 	}
 }
