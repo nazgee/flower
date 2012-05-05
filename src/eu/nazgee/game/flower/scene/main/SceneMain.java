@@ -263,8 +263,6 @@ public class SceneMain extends SceneLoadable{
 		}
 	}
 
-
-
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
@@ -276,6 +274,10 @@ public class SceneMain extends SceneLoadable{
 			mScore.score.inc(100);
 			mScore.flowers.inc(1);
 			mScore.seeds.dec(1);
+
+			PopupItem item = mPopupPool.obtainPoolItem();
+			item.getEntity().pop(pFlower, "+100$", 1.5f);
+			attachChild(item.getEntity());
 		}
 
 		@Override
@@ -283,6 +285,10 @@ public class SceneMain extends SceneLoadable{
 			SceneMain.this.postRunnable(new FlowerDeactivateRunnable(pFlower));
 			mSFX.onFlowerFry();
 			mScore.seeds.dec(1);
+
+			PopupItem item = mPopupPool.obtainPoolItem();
+			item.getEntity().pop(pFlower, "fried!", 1f);
+			attachChild(item.getEntity());
 		}
 
 		@Override
@@ -328,11 +334,6 @@ public class SceneMain extends SceneLoadable{
 				if ((pTouchArea instanceof Flower)) {
 					Flower flower = (Flower) pTouchArea;
 					flower.setPosition(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
-
-					PopupItem popitem = mPopupPool.obtainPoolItem();
-					Popup pop = popitem.getEntity();
-					pop.pop(pTouchAreaLocalX, pTouchAreaLocalY, "foo!", 0.5f);
-					flower.attachChild(pop);
 
 					if (pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionDown()) {
 						SceneMain.this.postRunnable(new FlowerTouchRunnable(flower, pSceneTouchEvent.isActionUp()));

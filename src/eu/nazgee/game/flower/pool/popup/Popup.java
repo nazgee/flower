@@ -12,13 +12,11 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.opengl.font.IFont;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.Constants;
 import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 
-import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
-import eu.nazgee.game.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
-import eu.nazgee.game.flower.scene.main.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 
@@ -89,11 +87,11 @@ public class Popup extends Text {
 		registerEntityModifier(mEffectModifier);
 	}
 
-	public synchronized void drop(WaterDrop pWaterDrop, Sky pSky, IWaterDropListener pWaterDropListener) {
-		final float height = pSky.getHeightOnSky(this);
-		attachChild(pWaterDrop);
-		pWaterDrop.fall(getWidth()/2, getHeight()/2, height, pWaterDropListener);
+	synchronized public void pop(IEntity pEntity, CharSequence pCharSequence, final float time) {
+		float pos[] = pEntity.getSceneCenterCoordinates();
+		pop(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y], pCharSequence, time);
 	}
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
