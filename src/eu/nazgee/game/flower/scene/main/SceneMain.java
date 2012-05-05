@@ -9,13 +9,20 @@ import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.font.FontManager;
+import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
+import org.andengine.util.color.Color;
 
 import android.content.Context;
 
@@ -27,6 +34,9 @@ import eu.nazgee.game.flower.flower.Flower;
 import eu.nazgee.game.flower.flower.Flower.IFlowerStateHandler;
 import eu.nazgee.game.flower.flower.Flower.eLevel;
 import eu.nazgee.game.flower.pool.cloud.Cloud;
+import eu.nazgee.game.flower.pool.popup.Popup;
+import eu.nazgee.game.flower.pool.popup.PopupItem;
+import eu.nazgee.game.flower.pool.popup.PopupPool;
 import eu.nazgee.game.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.game.flower.scene.main.CloudLayer.IRainDropListener;
 import eu.nazgee.game.flower.score.Score;
@@ -54,6 +64,7 @@ public class SceneMain extends SceneLoadable{
 	private final MainHUD mHud;
 	private final LoadableParallaxBackground mLoadableParallaxBackground;
 
+	private PopupPool mPopupPool;
 	private Sky mSky;
 	private CloudLayer mCloudLayer;
 	private Sprite mGround;
@@ -93,13 +104,15 @@ public class SceneMain extends SceneLoadable{
 
 	@Override
 	public void onLoad(Engine e, Context c) {
+		final VertexBufferObjectManager vbom = this.getVertexBufferObjectManager();
+
 		Random r = new Random();
 		SmoothTrackingCamera camera = (SmoothTrackingCamera) e.getCamera();
 		camera.setHUD(mHud);
 		mScore.setHUD(mHud);
 		mScore.set(0, SEEDS_COUNT, 0);
 
-		final VertexBufferObjectManager vertexBufferObjectManager = this.getVertexBufferObjectManager();
+		mPopupPool = new PopupPool(mResources.FONT_POPUP, vbom);
 
 		/*
 		 * Prepare fancy background- everything was loaded by mLoadableBacground
@@ -126,7 +139,7 @@ public class SceneMain extends SceneLoadable{
 		/*
 		 * Create a Sun and let the camera track it
 		 */
-		mSun = new Sun(0, 0, mResources.TEX_SUN, mResources.TEXS_SUNSHINE, vertexBufferObjectManager);
+		mSun = new Sun(0, 0, mResources.TEX_SUN, mResources.TEXS_SUNSHINE, vbom);
 		attachChild(mSun);
 		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 60, new SunTravelListener());
 		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.25f, 0)), 0);
@@ -137,7 +150,7 @@ public class SceneMain extends SceneLoadable{
 		mCloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/3,
 				getW() * 0.1f, 10, 0.2f, 0.2f, 6, mSky,
 				mResources.TEXS_CLOUDS, mResources.TEX_WATERDROP, 
-				mResources.TEXS_SPLASH, vertexBufferObjectManager);
+				mResources.TEXS_SPLASH, vbom);
 		attachChild(mCloudLayer);
 		mCloudLayer.setRainDropListener(new IRainDropListener() {
 			@Override
@@ -310,10 +323,16 @@ public class SceneMain extends SceneLoadable{
 		public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 				ITouchArea pTouchArea, float pTouchAreaLocalX,
 				float pTouchAreaLocalY) {
+
 			if (mFlowers.contains(pTouchArea)) {
 				if ((pTouchArea instanceof Flower)) {
 					Flower flower = (Flower) pTouchArea;
 					flower.setPosition(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
+
+					PopupItem popitem = mPopupPool.obtainPoolItem();
+					Popup pop = popitem.getEntity();
+					pop.pop(pTouchAreaLocalX, pTouchAreaLocalY, "foo" + pTouchAreaLocalX);
+					flower.attachChild(pop);
 
 					if (pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionDown()) {
 						SceneMain.this.postRunnable(new FlowerTouchRunnable(flower, pSceneTouchEvent.isActionUp()));
@@ -354,6 +373,8 @@ public class SceneMain extends SceneLoadable{
 		public ITiledTextureRegion TEXS_CLOUDS;
 
 		private BuildableBitmapTextureAtlas[] mAtlases;
+		public Font FONT_POPUP;
+		private ITexture mFontAtlas;
 
 		@Override
 		public void onLoadResources(Engine e, Context c) {
@@ -396,6 +417,13 @@ public class SceneMain extends SceneLoadable{
 					atlasFlower, Consts.FLOWER_TEX_WIDTH, Consts.FLOWER_TEX_HEIGHT);
 //			TEXS_FLOWERS = SVGBitmapTextureAtlasTextureRegionFactory.createTiledFromAssetDirectory(
 //					atlasFlower, c, "flowers", Consts.FLOWER_TEX_WIDTH, Consts.FLOWER_TEX_HEIGHT);
+
+			final TextureManager textureManager = e.getTextureManager();
+			final FontManager fontManager = e.getFontManager();
+
+			mFontAtlas = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
+			FONT_POPUP = FontFactory.createFromAsset(fontManager, mFontAtlas, c.getAssets(), Consts.HUD_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
+			FONT_POPUP.load();
 		}
 
 		@Override
@@ -411,6 +439,8 @@ public class SceneMain extends SceneLoadable{
 			for (BuildableBitmapTextureAtlas atlas : mAtlases) {
 				atlas.unload();
 			}
+			FONT_POPUP.unload();
+			mFontAtlas.unload();
 		}
 	}
 }
