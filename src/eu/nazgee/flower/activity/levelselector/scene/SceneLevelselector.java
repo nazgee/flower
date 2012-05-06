@@ -22,12 +22,11 @@ import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.pagerscene.ArrayLayout;
 import eu.nazgee.flower.pagerscene.ArrayLayout.eAnchorPointXY;
 import eu.nazgee.flower.pagerscene.IPage;
-import eu.nazgee.flower.pagerscene.PageRectangle;
 import eu.nazgee.flower.pagerscene.ScenePager;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 
-public class SceneLevelselector extends ScenePager{
+public class SceneLevelselector extends ScenePager<GameLevelItem>{
 
 	// ===========================================================
 	// Constants
@@ -68,15 +67,15 @@ public class SceneLevelselector extends ScenePager{
 	}
 
 	@Override
-	protected IEntity populateItem(int pItem, int pItemOnPage, int pPage) {
+	protected GameLevelItem populateItem(int pItem, int pItemOnPage, int pPage) {
 		GameLevel lvl = mLevelItemsLoader.levels.get(pItem);
 		GameLevelItem item = new GameLevelItem(lvl, mResources.FONT, mResources.TEX_FRAME, getVertexBufferObjectManager());
 		return item;
 	}
 
 	@Override
-	protected IPage populatePage(int pPageNumber) {
-		IPage page = new PageTransparent(0, 0, getW(), getH(), 
+	protected IPage<GameLevelItem> populatePage(int pPageNumber) {
+		IPage<GameLevelItem> page = new PageTransparent(0, 0, getW(), getH(), 
 				getVertexBufferObjectManager(),
 				new ArrayLayout(COLS, ROWS, getW(), getH(), eAnchorPointXY.CENTERED));
 		return page;

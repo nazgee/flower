@@ -6,7 +6,7 @@ import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-public class PageRectangle extends Rectangle implements IPage {
+public class PageRectangle<T extends IEntity> extends Rectangle implements IPage<T> {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -15,7 +15,7 @@ public class PageRectangle extends Rectangle implements IPage {
 	// Fields
 	// ===========================================================
 
-	private LinkedList<IEntity> mItems = new LinkedList<IEntity>();
+	private LinkedList<T> mItems = new LinkedList<T>();
 	private final ILayout mLayout;
 	// ===========================================================
 	// Constructors
@@ -31,17 +31,17 @@ public class PageRectangle extends Rectangle implements IPage {
 	// ===========================================================
 
 	@Override
-	public void setItems(IEntity... pItems) {
+	public void setItems(LinkedList<T> pItems) {
 		mItems.clear();
 		mLayout.layoutItems(pItems);
-		for (IEntity item : pItems) {
+		for (T item : pItems) {
 			attachChild(item);
 			mItems.add(item);
 		}
 	}
 
 	@Override
-	public LinkedList<IEntity> getItems() {
+	public LinkedList<T> getItems() {
 		return mItems;
 	}
 

@@ -22,12 +22,14 @@ public class GameLevelItem extends Entity implements ITouchArea{
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	final private Sprite mFrame;
+	private final Sprite mFrame;
+	private final GameLevel mLevel;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public GameLevelItem(GameLevel pLevel, Font pFont, ITextureRegion pFrameTexture, VertexBufferObjectManager pVBOM) {
 		mFrame = new Sprite(0, 0, pFrameTexture, pVBOM);
+		mLevel = pLevel;
 		final Text text = new Text(0, 0, pFont, "lev=" + pLevel.id, pVBOM);
 		attachChild(mFrame);
 		attachChild(text);
@@ -67,4 +69,8 @@ public class GameLevelItem extends Entity implements ITouchArea{
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+
+	public GameLevel getLevel() {
+		return mLevel;
+	}
 }

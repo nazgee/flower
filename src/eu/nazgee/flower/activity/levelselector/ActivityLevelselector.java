@@ -17,13 +17,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.activity.game.ActivityGame;
+import eu.nazgee.flower.activity.levelselector.scene.GameLevelItem;
 import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
 import eu.nazgee.flower.pagerscene.ScenePager;
 import eu.nazgee.flower.pagerscene.ScenePager.IItemClikedListener;
 
 public class ActivityLevelselector extends SimpleBaseGameActivity{
 	private Camera mCamera;
-	private ScenePager mScenePager;
+	private ScenePager<GameLevelItem> mScenePager;
 
 
 
@@ -34,7 +35,8 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-		mCamera = new SmoothCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, Consts.CAMERA_WIDTH * 3, Consts.CAMERA_HEIGHT * 3, 1);
+		mCamera = new SmoothCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT,
+				Consts.CAMERA_WIDTH * 3, Consts.CAMERA_HEIGHT * 3, 1);
 
 		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
 				new FillResolutionPolicy(), mCamera);
@@ -54,9 +56,9 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 		mScenePager = new SceneLevelselector(mCamera.getWidth(), mCamera.getHeight(), getVertexBufferObjectManager());
 		mScenePager.loadResources(getEngine(), this);
 		mScenePager.load(getEngine(), this);
-		mScenePager.setItemClikedListener(new IItemClikedListener() {
+		mScenePager.setItemClikedListener(new IItemClikedListener<GameLevelItem>() {
 			@Override
-			public void onItemClicked(IEntity pItem) {
+			public void onItemClicked(GameLevelItem pItem) {
 				// launch game activity
 				Intent i = new Intent(ActivityLevelselector.this, ActivityGame.class);
 				startActivityForResult(i, 0);

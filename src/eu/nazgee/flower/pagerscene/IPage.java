@@ -4,8 +4,8 @@ import java.util.LinkedList;
 
 import org.andengine.entity.IEntity;
 
-public interface IPage extends IEntity {
+public interface IPage<T extends IEntity> extends IEntity {
 	int getCapacity();
-	void setItems(IEntity... pItems);
-	LinkedList<IEntity> getItems();
+	void setItems(LinkedList<T> pItems);
+	LinkedList<T> getItems();
 }

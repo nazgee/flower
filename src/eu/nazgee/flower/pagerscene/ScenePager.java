@@ -21,7 +21,7 @@ import org.andengine.util.math.MathUtils;
 import android.content.Context;
 import eu.nazgee.game.utils.scene.SceneLoadable;
 
-abstract public class ScenePager extends SceneLoadable implements IOnSceneTouchListener, IScrollDetectorListener, IOnAreaTouchListener, IClickDetectorListener {
+abstract public class ScenePager<T extends IEntity> extends SceneLoadable implements IOnSceneTouchListener, IScrollDetectorListener, IOnAreaTouchListener, IClickDetectorListener {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -30,14 +30,15 @@ abstract public class ScenePager extends SceneLoadable implements IOnSceneTouchL
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private IItemClikedListener mItemClikedListener;
+	private IItemClikedListener<T> mItemClikedListener;
 	private final ClickDetector mClickDetector = new ClickDetector(100, this);
 	private final SurfaceScrollDetector mSurfaceScrollDetector = new SurfaceScrollDetector(this);
 	private int mScrollDistanceX;
-	private LinkedList<IPage> mPages;
+	private LinkedList<IPage<T>> mPages;
 	private IPageMover mPageMover;
 
 	private int mCurrentPage;
+	T mCurrentlyTouchedItem;
 
 	// ===========================================================
 	// Constructors
@@ -58,22 +59,22 @@ abstract public class ScenePager extends SceneLoadable implements IOnSceneTouchL
 	public void setPageMover(IPageMover mPageMover) {
 		this.mPageMover = mPageMover;
 	}
-	public IItemClikedListener getItemClikedListener() {
+	public IItemClikedListener<T> getItemClikedListener() {
 		return mItemClikedListener;
 	}
-	public void setItemClikedListener(IItemClikedListener mItemClikedListener) {
+	public void setItemClikedListener(IItemClikedListener<T> mItemClikedListener) {
 		this.mItemClikedListener = mItemClikedListener;
 	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
-	abstract protected IEntity populateItem(int pItem, int pItemOnPage, int pPage);
-	abstract protected IPage populatePage(int pPageNumber);
-	abstract protected void attachPage(final IPage pPage, int pPageNumber);
+	abstract protected T populateItem(int pItem, int pItemOnPage, int pPage);
+	abstract protected IPage<T> populatePage(int pPageNumber);
+	abstract protected void attachPage(final IPage<T> pPage, int pPageNumber);
 	abstract protected int getItemsNumber();
 
-	public interface IItemClikedListener {
-		void onItemClicked(IEntity pItem);
+	public interface IItemClikedListener<T> {
+		void onItemClicked(T pItem);
 	}
 
 	@Override
@@ -87,8 +88,8 @@ abstract public class ScenePager extends SceneLoadable implements IOnSceneTouchL
 		setOnSceneTouchListener(this);
 		setOnSceneTouchListenerBindingOnActionDownEnabled(true);
 		mPages = preparePages();
-		for (IPage page : mPages) {
-			for (IEntity item : page.getItems()) {
+		for (IPage<T> page : mPages) {
+			for (T item : page.getItems()) {
 				registerTouchArea((ITouchArea) item);
 			}
 		}
@@ -96,14 +97,13 @@ abstract public class ScenePager extends SceneLoadable implements IOnSceneTouchL
 
 	@Override
 	public void onUnload() {
-		for (IPage page : mPages) {
-			for (IEntity item : page.getItems()) {
+		for (IPage<T> page : mPages) {
+			for (T item : page.getItems()) {
 				unregisterTouchArea((ITouchArea) item);
 			}
 		}
 	}
 
-	IEntity mCurrentlyTouchedItem;
 	@Override
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 			ITouchArea pTouchArea, float pTouchAreaLocalX,
@@ -112,7 +112,7 @@ abstract public class ScenePager extends SceneLoadable implements IOnSceneTouchL
 		if (mPages.get(mCurrentPage).getItems().contains(pTouchArea)) {
 			boolean ret = false;
 
-			mCurrentlyTouchedItem = (IEntity) pTouchArea;
+			mCurrentlyTouchedItem = (T) pTouchArea;
 			ret = mClickDetector.onTouchEvent(pSceneTouchEvent);
 
 			return ret;
@@ -169,22 +169,22 @@ abstract public class ScenePager extends SceneLoadable implements IOnSceneTouchL
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	public IPage getPrev(final IPage pPage) {
+	public IPage<T> getPrev(final IPage<T> pPage) {
 		int idx = mPages.indexOf(pPage);
 		if (idx <= 0)
 			return null;
 		return mPages.get(idx - 1);
 	}
 
-	public IPage getNext(final IPage pPage) {
+	public IPage<T> getNext(final IPage<T> pPage) {
 		int idx = mPages.indexOf(pPage);
 		if (idx < 0 || idx+1 == mPages.size())
 			return null;
 		return mPages.get(idx + 1);
 	}
 
-	private LinkedList<IPage> populatePages(int pMinCapacity) {
-		LinkedList<IPage> pages = new LinkedList<IPage>();
+	private LinkedList<IPage<T>> populatePages(int pMinCapacity) {
+		LinkedList<IPage<T>> pages = new LinkedList<IPage<T>>();
 
 		int pages_capacity = 0;
 		do {
@@ -195,21 +195,21 @@ abstract public class ScenePager extends SceneLoadable implements IOnSceneTouchL
 		return pages;
 	}
 
-	private LinkedList<IPage> preparePages() {
-		LinkedList<IPage> pages = populatePages(getItemsNumber());
+	private LinkedList<IPage<T>> preparePages() {
+		LinkedList<IPage<T>> pages = populatePages(getItemsNumber());
 
 		final int total_to_load = getItemsNumber();
 		int total_loaded = 0;
 		int current_page = 0;
 
-		for (IPage page : pages) {
+		for (IPage<T> page : pages) {
 			final int left_to_load = total_to_load - total_loaded;
 			int this_page_to_load = Math.min(page.getCapacity(), left_to_load);
 
-			IEntity items[] = new IEntity[this_page_to_load];
+			LinkedList<T> items = new LinkedList<T>();
 	
 			for (int i = 0; i < this_page_to_load; i++) {
-				items[i] = populateItem(total_loaded, i, current_page);
+				items.add(populateItem(total_loaded, i, current_page));
 				total_loaded++;
 			}
 

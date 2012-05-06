@@ -1,5 +1,7 @@
 package eu.nazgee.flower.pagerscene;
 
+import java.util.LinkedList;
+
 import org.andengine.entity.IEntity;
 
 import android.util.Log;
@@ -40,8 +42,8 @@ public class ArrayLayout implements ILayout {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public void layoutItems(IEntity... pItems) {
-		final int items = pItems.length;
+	public void layoutItems(LinkedList<? extends IEntity> pItems) {
+		final int items = pItems.size();
 		int i = 0;
 
 		final float cw = mW/mCols;
@@ -56,7 +58,7 @@ public class ArrayLayout implements ILayout {
 				final float baseY = r * rh;
 				final float offX = mAnchorPoint.x.mul * cw / mAnchorPoint.x.div;
 				final float offY = mAnchorPoint.y.mul * rh / mAnchorPoint.y.div;
-				pItems[i].setPosition(baseX + offX, baseY + offY);
+				pItems.get(i).setPosition(baseX + offX, baseY + offY);
 			}
 		}
 
