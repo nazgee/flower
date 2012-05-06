@@ -2,6 +2,7 @@ package eu.nazgee.flower.activity.levelselector.scene;
 
 import org.andengine.engine.Engine;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.scene.background.Background;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -46,6 +47,8 @@ public class SceneLevelselector extends ScenePager{
 		super(W, H, pVertexBufferObjectManager, (int) (W * 0.3f));
 		getLoader().install(mResources);
 		getLoader().install(mLevelItemsLoader);
+		setBackgroundEnabled(true);
+		setBackground(new Background(Color.BLUE));
 	}
 	// ===========================================================
 	// Getter & Setter
@@ -69,16 +72,18 @@ public class SceneLevelselector extends ScenePager{
 
 	@Override
 	protected IPage populatePage(int pPageNumber) {
-		return new PageRectangle(0, 0, getW(), getH(), 
+		IPage page = new PageRectangle(0, 0, getW(), getH(), 
 				getVertexBufferObjectManager(),
 				new ArrayLayout(COLS, ROWS, getW(), getH(), eAnchorPointXY.CENTERED));
+		return page;
 	}
 
 	@Override
 	protected void attachPage(final IPage pPage, int pPageNumber) {
 		pPage.setPosition(pPageNumber * getW(), 0);
-		pPage.setColor(Color.GREEN);
 		attachChild(pPage);
+		pPage.setColor(Color.RED);
+		pPage.setAlpha(0);
 	}
 
 	@Override

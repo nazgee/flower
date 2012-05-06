@@ -8,18 +8,35 @@ import eu.nazgee.flower.pagerscene.PageMoverCamera;
 import eu.nazgee.flower.pagerscene.ScenePager;
 
 public class PageMover extends PageMoverCamera {
+	// ===========================================================
+	// Constants
+	// ===========================================================
+
+	// ===========================================================
+	// Fields
+	// ===========================================================
+
+	// ===========================================================
+	// Constructors
+	// ===========================================================
 	public PageMover(Camera mCamera, float pStepPerPage) {
 		super(mCamera, pStepPerPage);
 	}
+	// ===========================================================
+	// Getter & Setter
+	// ===========================================================
 
+	// ===========================================================
+	// Methods for/from SuperClass/Interfaces
+	// ===========================================================
 	@Override
 	public void onProgressSwipe(final ScenePager pScenePager, IPage pCurrentPage, float pSwipeDistanceTotal,
 			float pSwipeDistanceDelta) {
 		super.onProgressSwipe(pScenePager, pCurrentPage, pSwipeDistanceTotal, pSwipeDistanceDelta);
 
-		final float alpha = MathUtils.bringToBounds(0, 1, 1 - Math.abs(pSwipeDistanceTotal) / mStepPerPage);
+		final float value = MathUtils.bringToBounds(0, 1, 1 - Math.abs(pSwipeDistanceTotal) / mStepPerPage);
 
-		setPageState(pScenePager, pCurrentPage, alpha, pSwipeDistanceTotal);
+		setPageState(pScenePager, pCurrentPage, value, pSwipeDistanceTotal);
 	}
 
 	@Override
@@ -28,7 +45,9 @@ public class PageMover extends PageMoverCamera {
 		super.onCompletedSwipe(pScenePager, pCurrentPage, pNewPageIndex, pOldPageIndex);
 		setPageState(pScenePager, pCurrentPage, 1, 0);
 	}
-
+	// ===========================================================
+	// Methods
+	// ===========================================================
 	private void setPageState(final ScenePager pScenePager, IPage pPage, final float pValue, final float pDirection) {
 
 		setPageState(pPage, pValue, pDirection);
@@ -60,4 +79,7 @@ public class PageMover extends PageMoverCamera {
 //			pPage.setRotation(-90 + pValue * 90);
 //		}
 	}
+	// ===========================================================
+	// Inner and Anonymous Classes
+	// ===========================================================
 }
