@@ -34,6 +34,7 @@ abstract public class ScenePager extends SceneLoadable implements IOnSceneTouchL
 	// ===========================================================
 	// Fields
 	// ===========================================================
+	private IItemClikedListener mItemClikedListener;
 	private final ClickDetector mClickDetector = new ClickDetector(this);
 	private final SurfaceScrollDetector mSurfaceScrollDetector = new SurfaceScrollDetector(this);
 	private int mScrollDistanceX;
@@ -59,12 +60,18 @@ abstract public class ScenePager extends SceneLoadable implements IOnSceneTouchL
 	public void setPageMover(IPageMover mPageMover) {
 		this.mPageMover = mPageMover;
 	}
+	public IItemClikedListener getItemClikedListener() {
+		return mItemClikedListener;
+	}
+	public void setItemClikedListener(IItemClikedListener mItemClikedListener) {
+		this.mItemClikedListener = mItemClikedListener;
+	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	abstract protected LinkedList<IPage> populatePages();
-	public interface ILevelselectorListener {
-		void loadLevel(GameLevel pLevel);
+	public interface IItemClikedListener {
+		void onItemClicked(IEntity pItem);
 	}
 
 	@Override
@@ -110,6 +117,9 @@ abstract public class ScenePager extends SceneLoadable implements IOnSceneTouchL
 	public void onClick(ClickDetector pClickDetector, int pPointerID,
 			float pSceneX, float pSceneY) {
 		mCurrentlyTouchedItem.registerEntityModifier(new RotationByModifier(1, 180));
+		if (getItemClikedListener() != null) {
+			getItemClikedListener().onItemClicked(mCurrentlyTouchedItem);
+		}
 	}
 
 	@Override
@@ -158,4 +168,5 @@ abstract public class ScenePager extends SceneLoadable implements IOnSceneTouchL
 	// ===========================================================
 	// Methods
 	// ===========================================================
+
 }
