@@ -1,10 +1,11 @@
-package eu.nazgee.flower;
+package eu.nazgee.flower.level;
 
 import org.andengine.engine.Engine;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import eu.nazgee.flower.Consts;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 
 public enum GameLevel {
@@ -38,6 +39,8 @@ public enum GameLevel {
 	LEVEL22(22, 1000),
 	LEVEL23(23, 1000),
 	LEVEL24(24, 1000);
+
+	public static final int LEVELS_NUMBER = LEVEL24.id;
 
 	// ===========================================================
 	// Fields
@@ -87,33 +90,33 @@ public enum GameLevel {
 		case 10:
 			return LEVEL10;
 		case 11:
-			return LEVEL1;
+			return LEVEL11;
 		case 12:
-			return LEVEL2;
+			return LEVEL12;
 		case 13:
-			return LEVEL3;
+			return LEVEL13;
 		case 14:
-			return LEVEL4;
+			return LEVEL14;
 		case 15:
-			return LEVEL5;
+			return LEVEL15;
 		case 16:
-			return LEVEL6;
+			return LEVEL16;
 		case 17:
-			return LEVEL7;
+			return LEVEL17;
 		case 18:
-			return LEVEL8;
+			return LEVEL18;
 		case 19:
-			return LEVEL9;
+			return LEVEL19;
 		case 20:
-			return LEVEL10;
+			return LEVEL20;
 		case 21:
-			return LEVEL1;
+			return LEVEL21;
 		case 22:
-			return LEVEL2;
+			return LEVEL22;
 		case 23:
-			return LEVEL3;
+			return LEVEL23;
 		case 24:
-			return LEVEL4;
+			return LEVEL24;
 		default:
 			throw new RuntimeException("No such level as " + pID + "!");
 		}

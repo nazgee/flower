@@ -23,6 +23,7 @@ import eu.nazgee.flower.pagerscene.ScenePager.IItemClikedListener;
 
 public class ActivityLevelselector extends SimpleBaseGameActivity{
 	private Camera mCamera;
+	private ScenePager mScenePager;
 
 
 
@@ -50,10 +51,10 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 	protected Scene onCreateScene() {
 		mEngine.registerUpdateHandler(new FPSLogger());
 
-		ScenePager s = new SceneLevelselector(mCamera.getWidth(), mCamera.getHeight(), getVertexBufferObjectManager());
-		s.loadResources(getEngine(), this);
-		s.load(getEngine(), this);
-		s.setItemClikedListener(new IItemClikedListener() {
+		mScenePager = new SceneLevelselector(mCamera.getWidth(), mCamera.getHeight(), getVertexBufferObjectManager());
+		mScenePager.loadResources(getEngine(), this);
+		mScenePager.load(getEngine(), this);
+		mScenePager.setItemClikedListener(new IItemClikedListener() {
 			@Override
 			public void onItemClicked(IEntity pItem) {
 				// launch game activity
@@ -61,6 +62,13 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 				startActivityForResult(i, 0);
 			}
 		});
-		return s;
+		return mScenePager;
+	}
+
+	@Override
+	public void onDestroyResources() throws Exception {
+		super.onDestroyResources();
+		if (mScenePager != null)
+			mScenePager.unload();
 	}
 }

@@ -4,8 +4,8 @@ import org.andengine.engine.camera.Camera;
 
 
 public class PageMoverCamera implements IPageMover {
-	private final Camera mCamera;
-	private final float mStepPerPage;
+	protected final Camera mCamera;
+	protected final float mStepPerPage;
 
 	public PageMoverCamera(Camera mCamera, float pStepPerPage) {
 		super();
@@ -14,13 +14,13 @@ public class PageMoverCamera implements IPageMover {
 	}
 
 	@Override
-	public void onProgressSwipe(final IPage pCurrentPage, float pSwipeDistanceTotal,
+	public void onProgressSwipe(final ScenePager pScenePager, final IPage pCurrentPage, float pSwipeDistanceTotal,
 			float pSwipeDistanceDelta) {
 		mCamera.offsetCenter(-pSwipeDistanceDelta, 0);
 	}
 
 	@Override
-	public void onCompletedSwipe(final IPage pCurrentPage, int pNewPageIndex, int pOldPageIndex) {
+	public void onCompletedSwipe(final ScenePager pScenePager, final IPage pCurrentPage, int pNewPageIndex, int pOldPageIndex) {
 		mCamera.setCenter(pNewPageIndex * mStepPerPage + mStepPerPage/2, mCamera.getCenterY());
 	}
 

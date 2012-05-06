@@ -1,10 +1,8 @@
 package eu.nazgee.flower.activity.levelselector.scene;
 
-import java.util.LinkedList;
-
 import org.andengine.engine.Engine;
 import org.andengine.entity.IEntity;
-import org.andengine.entity.text.Text;
+import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
@@ -12,78 +10,115 @@ import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
-
 import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.pagerscene.ArrayLayout;
+import eu.nazgee.flower.pagerscene.ArrayLayout.eAnchorPointXY;
 import eu.nazgee.flower.pagerscene.IPage;
-import eu.nazgee.flower.pagerscene.PageMoverCamera;
 import eu.nazgee.flower.pagerscene.PageRectangle;
 import eu.nazgee.flower.pagerscene.ScenePager;
-import eu.nazgee.flower.pagerscene.ArrayLayout.eAnchorPointXY;
+import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 
 public class SceneLevelselector extends ScenePager{
 
+	// ===========================================================
+	// Constants
+	// ===========================================================
+	public static final int ROWS = 3;
+	public static final int COLS = 3;
+	// ===========================================================
+	// Fields
+	// ===========================================================
 	private final MyResources mResources = new MyResources();
-
+	private final GameLevelsLoader mLevelItemsLoader = new GameLevelsLoader();
+	// ===========================================================
+	// Constructors
+	// ===========================================================
 	public SceneLevelselector(float W, float H,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(W, H, pVertexBufferObjectManager);
+		super(W, H, pVertexBufferObjectManager, (int) (W * 0.3f));
 		getLoader().install(mResources);
+		getLoader().install(mLevelItemsLoader);
 	}
+	// ===========================================================
+	// Getter & Setter
+	// ===========================================================
 
-	
-
+	// ===========================================================
+	// Methods for/from SuperClass/Interfaces
+	// ===========================================================
 	@Override
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
-		setPageMover(new PageMoverCamera(e.getCamera(), getW()));
+		setPageMover(new PageMover(e.getCamera(), getW()));
 	}
 
 	@Override
-	protected LinkedList<IPage> populatePages() {
-		LinkedList<IPage> pages = new LinkedList<IPage>();
-		int mItemsCount = 60;
-		int mCapacity = 0;
-		do {
-			pages.add(new PageRectangle(0, 0, getW(), getH(), 
-					getVertexBufferObjectManager(),
-					new ArrayLayout(3, 3, getW(), getH(), eAnchorPointXY.CENTERED)));
-			mCapacity += pages.getLast().getCapacity();
-		} while (mCapacity < mItemsCount);
-
-		int itemsLeftToLoad = mItemsCount;
-		for (int i = 0; i < pages.size(); i++) {
-			IPage page = pages.get(i);
-			int itemsToLoad = Math.min(page.getCapacity(), itemsLeftToLoad);
-			IEntity items[] = new IEntity[itemsToLoad];
-			for (int j = 0; j < items.length; j++) {
-				items[j] = new Text(0, 0, mResources.FONT, "Lvl" + (i*page.getCapacity() + j), getVertexBufferObjectManager());
-				
-			}
-			itemsLeftToLoad -= itemsToLoad;
-			page.setItems(items);
-			page.setPosition(i * getW(), 0);
-			page.setColor(Color.GREEN);
-			attachChild(page);
-		}
-
-		return pages;
+	protected IEntity populateItem(int pItem, int pItemOnPage, int pPage) {
+		GameLevel lvl = mLevelItemsLoader.levels.get(pItem);
+		GameLevelItem item = new GameLevelItem(lvl, mResources.FONT, mResources.TEX_FRAME, getVertexBufferObjectManager());
+		return item;
 	}
 
-	private static class MyResources extends SimpleLoadableResource {
-		public volatile Font FONT;
+	@Override
+	protected IPage populatePage(int pPageNumber) {
+		return new PageRectangle(0, 0, getW(), getH(), 
+				getVertexBufferObjectManager(),
+				new ArrayLayout(COLS, ROWS, getW(), getH(), eAnchorPointXY.CENTERED));
+	}
+
+	@Override
+	protected void attachPage(final IPage pPage, int pPageNumber) {
+		pPage.setPosition(pPageNumber * getW(), 0);
+		pPage.setColor(Color.GREEN);
+		attachChild(pPage);
+	}
+
+	@Override
+	protected int getItemsNumber() {
+		return mLevelItemsLoader.levels.size();
+	}
+	// ===========================================================
+	// Methods
+	// ===========================================================
+	private int getFrameW() {
+		return (int) (getW()/COLS);
+	}
+	private int getFrameH() {
+		return (int) (getH()/ROWS);
+	}
+	// ===========================================================
+	// Inner and Anonymous Classes
+	// ===========================================================
+	private class MyResources extends SimpleLoadableResource {
+		private BuildableBitmapTextureAtlas[] mAtlases;
+		public Font FONT;
+		public ITextureRegion TEX_FRAME;
 
 		@Override
 		public void onLoadResources(Engine e, Context c) {
+
+			mAtlases = new BuildableBitmapTextureAtlas[1];
+			for (int i = 0; i < mAtlases.length; i++) {
+				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 1024, 1024, TextureOptions.REPEATING_BILINEAR);
+			}
+			BuildableBitmapTextureAtlas atlasMain = mAtlases[0];
+
+			TEX_FRAME = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(atlasMain, c, "hud/frame.svg", getFrameW(), getFrameH());
+
 		}
 
 		@Override
 		public void onLoad(Engine e, Context c) {
+			AtlasLoader.buildAndLoad(mAtlases);
+
 			final TextureManager textureManager = e.getTextureManager();
 			final FontManager fontManager = e.getFontManager();
 
@@ -94,6 +129,9 @@ public class SceneLevelselector extends ScenePager{
 
 		@Override
 		public void onUnload() {
+			for (BuildableBitmapTextureAtlas atlas : mAtlases) {
+				atlas.unload();
+			}
 			FONT.unload();
 		}
 	}

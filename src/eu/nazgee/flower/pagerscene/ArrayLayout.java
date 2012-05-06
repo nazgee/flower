@@ -60,7 +60,7 @@ public class ArrayLayout implements ILayout {
 			}
 		}
 
-		if (i < items) {
+		if ((i + 1) < items) {
 			Log.e(getClass().getSimpleName(), "Too many items given!");
 		}
 	}
