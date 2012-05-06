@@ -43,6 +43,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	// Constants
 	// ===========================================================
 
+	public static final String BUNDLE_LEVEL_ID = "levelid";
 	// ===========================================================
 	// Fields
 	// ===========================================================

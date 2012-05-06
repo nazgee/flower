@@ -1,13 +1,14 @@
 package eu.nazgee.flower.activity.levelselector.scene;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.IEntity;
 import org.andengine.util.math.MathUtils;
 
 import eu.nazgee.flower.pagerscene.IPage;
 import eu.nazgee.flower.pagerscene.PageMoverCamera;
 import eu.nazgee.flower.pagerscene.ScenePager;
 
-public class PageMover extends PageMoverCamera {
+public class PageMover<T extends IEntity> extends PageMoverCamera<T> {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -30,7 +31,7 @@ public class PageMover extends PageMoverCamera {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public void onProgressSwipe(final ScenePager pScenePager, IPage pCurrentPage, float pSwipeDistanceTotal,
+	public void onProgressSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, float pSwipeDistanceTotal,
 			float pSwipeDistanceDelta) {
 		super.onProgressSwipe(pScenePager, pCurrentPage, pSwipeDistanceTotal, pSwipeDistanceDelta);
 
@@ -40,7 +41,7 @@ public class PageMover extends PageMoverCamera {
 	}
 
 	@Override
-	public void onCompletedSwipe(final ScenePager pScenePager, IPage pCurrentPage, int pNewPageIndex,
+	public void onCompletedSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, int pNewPageIndex,
 			int pOldPageIndex) {
 		super.onCompletedSwipe(pScenePager, pCurrentPage, pNewPageIndex, pOldPageIndex);
 		setPageState(pScenePager, pCurrentPage, 1, 0);
@@ -48,12 +49,12 @@ public class PageMover extends PageMoverCamera {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	private void setPageState(final ScenePager pScenePager, IPage pPage, final float pValue, final float pDirection) {
+	private void setPageState(final ScenePager<T> pScenePager, final IPage<T> pPage, final float pValue, final float pDirection) {
 
 		setPageState(pPage, pValue, pDirection);
 
-		IPage pPrev = null;
-		IPage pNext = null;
+		IPage<T> pPrev = null;
+		IPage<T> pNext = null;
 		if (pDirection > 0) {
 			pPrev = pScenePager.getPrev(pPage);
 		} else if (pDirection < 0) {
@@ -67,7 +68,7 @@ public class PageMover extends PageMoverCamera {
 		setPageState(pNext, 1-pValue, pDirection);
 	}
 
-	private void setPageState(IPage pPage, final float pValue, final float pDirection) {
+	private void setPageState(final IPage<T> pPage, final float pValue, final float pDirection) {
 		if (pPage == null)
 			return;
 

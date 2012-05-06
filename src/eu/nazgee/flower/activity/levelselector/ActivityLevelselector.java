@@ -5,13 +5,20 @@ import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
-import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.IEntityModifier;
+import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.RotationByModifier;
+import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.modifier.ease.EaseStrongIn;
+import org.andengine.util.modifier.ease.EaseStrongInOut;
+import org.andengine.util.modifier.ease.EaseStrongOut;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,11 +30,27 @@ import eu.nazgee.flower.pagerscene.ScenePager;
 import eu.nazgee.flower.pagerscene.ScenePager.IItemClikedListener;
 
 public class ActivityLevelselector extends SimpleBaseGameActivity{
+
+	// ===========================================================
+	// Constants
+	// ===========================================================
+
+	// ===========================================================
+	// Fields
+	// ===========================================================
 	private Camera mCamera;
 	private ScenePager<GameLevelItem> mScenePager;
+	// ===========================================================
+	// Constructors
+	// ===========================================================
 
+	// ===========================================================
+	// Getter & Setter
+	// ===========================================================
 
-
+	// ===========================================================
+	// Methods for/from SuperClass/Interfaces
+	// ===========================================================
 	@Override
 	protected void onCreate(Bundle pSavedInstanceState) {
 		super.onCreate(pSavedInstanceState);
@@ -60,8 +83,13 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 			@Override
 			public void onItemClicked(GameLevelItem pItem) {
 				// launch game activity
-				Intent i = new Intent(ActivityLevelselector.this, ActivityGame.class);
-				startActivityForResult(i, 0);
+				if (!pItem.getLevel().resources.isLocked()) {
+					Intent i = new Intent(ActivityLevelselector.this, ActivityGame.class);
+					i.putExtra(ActivityGame.BUNDLE_LEVEL_ID, pItem.getLevel().id);
+					startActivityForResult(i, 0);
+				} else {
+					pItem.registerEntityModifier(nodYourHead(3, 0.1f, 20));
+				}
 			}
 		});
 		return mScenePager;
@@ -73,4 +101,26 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 		if (mScenePager != null)
 			mScenePager.unload();
 	}
+	// ===========================================================
+	// Methods
+	// ===========================================================
+	public IEntityModifier nodYourHead(int mNodsCount,
+			float mNodDuration,
+			float mNodAngle) {
+		IEntityModifier mod = new LoopEntityModifier(
+				new SequenceEntityModifier(
+						new RotationModifier(mNodDuration/4, 0,        -mNodAngle/2, EaseStrongOut.getInstance()),
+						new RotationModifier(mNodDuration/2, -mNodAngle/2, mNodAngle,    EaseStrongInOut.getInstance()),
+						new RotationModifier(mNodDuration/4, mNodAngle,    0,        EaseStrongIn.getInstance())
+						), mNodsCount);
+		return mod;
+	}
+	// ===========================================================
+	// Inner and Anonymous Classes
+	// ===========================================================
+
+
+
+
+
 }

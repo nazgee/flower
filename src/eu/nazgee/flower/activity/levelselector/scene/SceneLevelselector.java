@@ -1,7 +1,6 @@
 package eu.nazgee.flower.activity.levelselector.scene;
 
 import org.andengine.engine.Engine;
-import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.font.Font;
@@ -62,7 +61,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	@Override
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
-		setPageMover(new PageMover(e.getCamera(), getW()));
+		setPageMover(new PageMover<GameLevelItem>(e.getCamera(), getW()));
 		setBackground(mLoadableParallaxBackground.getLoadedBacground());
 	}
 
@@ -75,14 +74,14 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 
 	@Override
 	protected IPage<GameLevelItem> populatePage(int pPageNumber) {
-		IPage<GameLevelItem> page = new PageTransparent(0, 0, getW(), getH(), 
+		IPage<GameLevelItem> page = new PageTransparent<GameLevelItem>(0, 0, getW(), getH(), 
 				getVertexBufferObjectManager(),
 				new ArrayLayout(COLS, ROWS, getW(), getH(), eAnchorPointXY.CENTERED));
 		return page;
 	}
 
 	@Override
-	protected void attachPage(final IPage pPage, int pPageNumber) {
+	protected void attachPage(final IPage<GameLevelItem> pPage, int pPageNumber) {
 		pPage.setPosition(pPageNumber * getW(), 0);
 		attachChild(pPage);
 //		pPage.setColor(Color.RED);

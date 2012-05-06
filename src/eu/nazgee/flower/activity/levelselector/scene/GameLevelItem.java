@@ -10,6 +10,7 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.color.Color;
 
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.game.utils.helpers.Positioner;
@@ -22,19 +23,29 @@ public class GameLevelItem extends Entity implements ITouchArea{
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private final Sprite mFrame;
 	private final GameLevel mLevel;
+	private final Sprite mFrame;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public GameLevelItem(GameLevel pLevel, Font pFont, ITextureRegion pFrameTexture, VertexBufferObjectManager pVBOM) {
-		mFrame = new Sprite(0, 0, pFrameTexture, pVBOM);
 		mLevel = pLevel;
+		mFrame = new Sprite(0, 0, pFrameTexture, pVBOM) {
+			@Override
+			public 	void setAlpha(final float pAlpha) {
+				super.setAlpha(pAlpha * 0.5f);
+			}
+		};
+		if (mLevel.resources.isLocked()) {
+			mFrame.setColor(Color.RED);
+		}
 		final Text text = new Text(0, 0, pFont, "lev=" + pLevel.id, pVBOM);
+		text.setColor(Color.BLACK);
 		attachChild(mFrame);
 		attachChild(text);
 		Positioner.setCentered(mFrame, this);
 		Positioner.setCentered(text, this);
+		setAlpha(1);
 	}
 	// ===========================================================
 	// Getter & Setter

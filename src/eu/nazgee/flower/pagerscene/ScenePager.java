@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import org.andengine.engine.Engine;
 import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.RotationByModifier;
 import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.ITouchArea;
@@ -19,6 +18,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.math.MathUtils;
 
 import android.content.Context;
+import android.util.Log;
 import eu.nazgee.game.utils.scene.SceneLoadable;
 
 abstract public class ScenePager<T extends IEntity> extends SceneLoadable implements IOnSceneTouchListener, IScrollDetectorListener, IOnAreaTouchListener, IClickDetectorListener {
@@ -26,16 +26,18 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	// Constants
 	// ===========================================================
 
-	private final int mTurnPageThreshold;
+	private static final float SCROLL_MIN_SCREEN_WIDTH = 0.06f;
+	private static final int CLICK_TIME_MAX = 100; 
 	// ===========================================================
 	// Fields
 	// ===========================================================
 	private IItemClikedListener<T> mItemClikedListener;
-	private final ClickDetector mClickDetector = new ClickDetector(100, this);
-	private final SurfaceScrollDetector mSurfaceScrollDetector = new SurfaceScrollDetector(this);
+	private final ClickDetector mClickDetector = new ClickDetector(CLICK_TIME_MAX, this);
+	private final SurfaceScrollDetector mSurfaceScrollDetector;
 	private int mScrollDistanceX;
 	private LinkedList<IPage<T>> mPages;
-	private IPageMover mPageMover;
+	private IPageMover<T> mPageMover;
+	private final int mTurnPageThreshold;
 
 	private int mCurrentPage;
 	T mCurrentlyTouchedItem;
@@ -47,16 +49,17 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			final int pTurnPageThreshold) {
 		super(W, H, pVertexBufferObjectManager);
+		mSurfaceScrollDetector = new SurfaceScrollDetector(getW() * SCROLL_MIN_SCREEN_WIDTH, this);
 		mTurnPageThreshold = pTurnPageThreshold;
 	}
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public IPageMover getPageMover() {
+	public IPageMover<T> getPageMover() {
 		return mPageMover;
 	}
 
-	public void setPageMover(IPageMover mPageMover) {
+	public void setPageMover(IPageMover<T> mPageMover) {
 		this.mPageMover = mPageMover;
 	}
 	public IItemClikedListener<T> getItemClikedListener() {
@@ -123,11 +126,11 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	@Override
 	public void onClick(ClickDetector pClickDetector, int pPointerID,
 			float pSceneX, float pSceneY) {
-		mCurrentlyTouchedItem.registerEntityModifier(new RotationByModifier(1, 180));
-		if (getItemClikedListener() != null) {
-			getItemClikedListener().onItemClicked(mCurrentlyTouchedItem);
-		}
+		mSurfaceScrollDetector.reset();
+		callPageMoverOnCompleteSwipe(mCurrentPage);
+		callClickListener();
 	}
+
 
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
@@ -137,6 +140,7 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	@Override
 	public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID,
 			float pDistanceX, float pDistanceY) {
+		Log.d(getClass().getSimpleName(), "started!");
 		mScrollDistanceX = 0;
 	}
 
@@ -144,6 +148,7 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	public void onScroll(ScrollDetector pScollDetector, int pPointerID,
 			float pDistanceX, float pDistanceY) {
 		mScrollDistanceX += pDistanceX;
+		Log.d(getClass().getSimpleName(), "scrolling! " + pDistanceX + "/" + mScrollDistanceX);
 		if (mPageMover != null) {
 			mPageMover.onProgressSwipe(this, mPages.get(mCurrentPage), mScrollDistanceX, pDistanceX);
 		}
@@ -152,7 +157,8 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	@Override
 	public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID,
 			float pDistanceX, float pDistanceY) {
-
+		mScrollDistanceX += pDistanceX;
+		Log.d(getClass().getSimpleName(), "finished!" + mScrollDistanceX);
 		int oldPage = mCurrentPage;
 
 		if ((mScrollDistanceX > mTurnPageThreshold) && (mCurrentPage > 0)) {
@@ -162,10 +168,10 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 			mCurrentPage++;
 		}
 		mCurrentPage = MathUtils.bringToBounds(0, mPages.size(), mCurrentPage);
-		if (mPageMover != null) {
-			mPageMover.onCompletedSwipe(this, mPages.get(mCurrentPage), mCurrentPage, oldPage);
-		}
+		callPageMoverOnCompleteSwipe(oldPage);
 	}
+
+
 	// ===========================================================
 	// Methods
 	// ===========================================================
@@ -181,6 +187,18 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 		if (idx < 0 || idx+1 == mPages.size())
 			return null;
 		return mPages.get(idx + 1);
+	}
+
+	private void callPageMoverOnCompleteSwipe(int oldPage) {
+		if (mPageMover != null) {
+			mPageMover.onCompletedSwipe(this, mPages.get(mCurrentPage), mCurrentPage, oldPage);
+		}
+	}
+
+	private void callClickListener() {
+		if (getItemClikedListener() != null) {
+			getItemClikedListener().onItemClicked(mCurrentlyTouchedItem);
+		}
 	}
 
 	private LinkedList<IPage<T>> populatePages(int pMinCapacity) {

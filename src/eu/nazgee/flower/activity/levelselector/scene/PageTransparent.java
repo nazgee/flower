@@ -7,7 +7,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import eu.nazgee.flower.pagerscene.ILayout;
 import eu.nazgee.flower.pagerscene.PageRectangle;
 
-public class PageTransparent extends PageRectangle {
+public class PageTransparent<T extends IEntity> extends PageRectangle<T> {
 	public PageTransparent(float pX, float pY, float pWidth, float pHeight,
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			ILayout pLayout) {
