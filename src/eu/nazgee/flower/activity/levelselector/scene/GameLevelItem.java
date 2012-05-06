@@ -1,6 +1,8 @@
 package eu.nazgee.flower.activity.levelselector.scene;
 
 import org.andengine.entity.Entity;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.IEntityParameterCallable;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -52,7 +54,16 @@ public class GameLevelItem extends Entity implements ITouchArea{
 	// ===========================================================
 	// Methods
 	// ===========================================================
-
+	@Override
+	public void setAlpha(final float pAlpha) {
+		super.setAlpha(0);
+		super.callOnChildren(new IEntityParameterCallable() {
+			@Override
+			public void call(IEntity pEntity) {
+				pEntity.setAlpha(pAlpha);
+			}
+		});
+	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================

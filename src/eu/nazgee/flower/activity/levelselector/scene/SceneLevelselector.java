@@ -39,14 +39,17 @@ public class SceneLevelselector extends ScenePager{
 	// ===========================================================
 	private final MyResources mResources = new MyResources();
 	private final GameLevelsLoader mLevelItemsLoader = new GameLevelsLoader();
+	private final LoadableParallaxBackground mLoadableParallaxBackground;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public SceneLevelselector(float W, float H,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, pVertexBufferObjectManager, (int) (W * 0.3f));
+		mLoadableParallaxBackground = new LoadableParallaxBackground(pVertexBufferObjectManager);
 		getLoader().install(mResources);
 		getLoader().install(mLevelItemsLoader);
+		getLoader().install(mLoadableParallaxBackground);
 		setBackgroundEnabled(true);
 		setBackground(new Background(Color.BLUE));
 	}
@@ -61,6 +64,7 @@ public class SceneLevelselector extends ScenePager{
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
 		setPageMover(new PageMover(e.getCamera(), getW()));
+		setBackground(mLoadableParallaxBackground.getLoadedBacground());
 	}
 
 	@Override
@@ -72,7 +76,7 @@ public class SceneLevelselector extends ScenePager{
 
 	@Override
 	protected IPage populatePage(int pPageNumber) {
-		IPage page = new PageRectangle(0, 0, getW(), getH(), 
+		IPage page = new PageTransparent(0, 0, getW(), getH(), 
 				getVertexBufferObjectManager(),
 				new ArrayLayout(COLS, ROWS, getW(), getH(), eAnchorPointXY.CENTERED));
 		return page;
@@ -82,8 +86,8 @@ public class SceneLevelselector extends ScenePager{
 	protected void attachPage(final IPage pPage, int pPageNumber) {
 		pPage.setPosition(pPageNumber * getW(), 0);
 		attachChild(pPage);
-		pPage.setColor(Color.RED);
-		pPage.setAlpha(0);
+//		pPage.setColor(Color.RED);
+//		pPage.setAlpha(0);
 	}
 
 	@Override

@@ -71,7 +71,7 @@ public class PageMover extends PageMoverCamera {
 		if (pPage == null)
 			return;
 
-//		pPage.setAlpha(pValue);
+		pPage.setAlpha(MathUtils.bringToBounds(0.5f, 1, pValue));
 		pPage.setScaleY(1.5f - pValue * 0.5f);
 //		if (pDirection > 0) {
 //			pPage.setRotation(90 - pValue * 90);
