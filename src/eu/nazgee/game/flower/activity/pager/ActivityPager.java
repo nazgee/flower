@@ -46,7 +46,7 @@ public class ActivityPager extends SimpleBaseGameActivity{
 	public EngineOptions onCreateEngineOptions() {
 		mCamera = new SmoothCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, Consts.CAMERA_WIDTH * 3, Consts.CAMERA_HEIGHT * 3, 1);
 
-		return new EngineOptions(true, ScreenOrientation.PORTRAIT_FIXED,
+		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
 				new FillResolutionPolicy(), mCamera);
 	}
 
@@ -61,7 +61,7 @@ public class ActivityPager extends SimpleBaseGameActivity{
 	protected Scene onCreateScene() {
 		mEngine.registerUpdateHandler(new FPSLogger());
 
-		ScenePager s = new ScenePager(mCamera.getWidth(), mCamera.getHeight(), getVertexBufferObjectManager());
+		ScenePager s = new ScenePagerLevel(mCamera.getWidth(), mCamera.getHeight(), getVertexBufferObjectManager());
 		s.loadResources(getEngine(), this);
 		s.load(getEngine(), this);
 		return s;
