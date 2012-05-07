@@ -7,15 +7,18 @@ import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.LoopEntityModifier;
-import org.andengine.entity.modifier.RotationByModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.scene.menu.MenuScene;
+import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
+import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.HorizontalAlign;
 import org.andengine.util.modifier.ease.EaseStrongIn;
 import org.andengine.util.modifier.ease.EaseStrongInOut;
 import org.andengine.util.modifier.ease.EaseStrongOut;
@@ -28,6 +31,8 @@ import eu.nazgee.flower.activity.levelselector.scene.GameLevelItem;
 import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
 import eu.nazgee.flower.pagerscene.ScenePager;
 import eu.nazgee.flower.pagerscene.ScenePager.IItemClikedListener;
+import eu.nazgee.flower.pagerscene.SceneQuestion;
+import eu.nazgee.flower.pagerscene.SceneQuestion.ISceneQuestionListener;
 
 public class ActivityLevelselector extends SimpleBaseGameActivity{
 
@@ -40,6 +45,7 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 	// ===========================================================
 	private Camera mCamera;
 	private ScenePager<GameLevelItem> mScenePager;
+	private SceneQuestion mSceneQuestion;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -76,7 +82,21 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 	protected Scene onCreateScene() {
 		mEngine.registerUpdateHandler(new FPSLogger());
 
+		mSceneQuestion = new SceneQuestion(mCamera.getWidth(), mCamera.getHeight(), mCamera, getVertexBufferObjectManager(),
+				"this is very long placeholder which I will use for testing questions scene", HorizontalAlign.CENTER, "button");
+
+		mSceneQuestion.loadResources(getEngine(), ActivityLevelselector.this);
+		mSceneQuestion.setOnMenuItemClickListener(new IOnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
+					float pMenuItemLocalX, float pMenuItemLocalY) {
+				getEngine().getScene().back();
+				mSceneQuestion.unload();
+				return true;
+			}
+		});
 		mScenePager = new SceneLevelselector(mCamera.getWidth(), mCamera.getHeight(), getVertexBufferObjectManager());
+//		mScenePager.getLoader().install(mSceneQuestion);
 		mScenePager.loadResources(getEngine(), this);
 		mScenePager.load(getEngine(), this);
 		mScenePager.setItemClikedListener(new IItemClikedListener<GameLevelItem>() {
@@ -89,6 +109,8 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 					startActivityForResult(i, 0);
 				} else {
 					pItem.registerEntityModifier(nodYourHead(3, 0.1f, 20));
+					mSceneQuestion.load(getEngine(), ActivityLevelselector.this);
+					getEngine().getScene().setChildScene(mSceneQuestion, false, false, true);
 				}
 			}
 		});
