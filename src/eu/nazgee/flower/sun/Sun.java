@@ -1,5 +1,6 @@
 package eu.nazgee.flower.sun;
 
+import org.andengine.engine.camera.Camera;
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier;
@@ -12,18 +13,20 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.shader.ShaderProgram;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
-import org.andengine.opengl.vbo.DrawType;
+import org.andengine.opengl.util.GLState;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseQuadIn;
 import org.andengine.util.modifier.ease.EaseQuadOut;
 
+import android.opengl.GLES20;
+import eu.nazgee.flower.RadialBlurShaderProgram;
 import eu.nazgee.flower.activity.game.scene.main.Sky;
-import eu.nazgee.game.utils.helpers.Positioner;
+import eu.nazgee.game.utils.misc.UtilsMath;
 
 
-public class Sun extends Sprite {
+public class Sun extends Entity {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -35,43 +38,50 @@ public class Sun extends Sprite {
 	private TravelListener mTravelListener;
 	private MyModifierListener mMyModifierListener = new MyModifierListener();
 	private final Sunshine mSunshine;
+	private final Sprite mSun;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public Sun(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureRegion,
-			ITiledTextureRegion pSunshineTextures,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager);
-
-		mSunshine = initSunshine(this, pSunshineTextures, pVertexBufferObjectManager);
-	}
-
-	public Sun(float pX, float pY, ITextureRegion pTextureRegion,
-			ITiledTextureRegion pSunshineTextures,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			DrawType pDrawType, ShaderProgram pShaderProgram) {
-		super(pX, pY, pTextureRegion, pVertexBufferObjectManager, pDrawType,
-				pShaderProgram);
-
-		mSunshine = initSunshine(this, pSunshineTextures, pVertexBufferObjectManager);
-	}
-
-	public Sun(float pX, float pY, ITextureRegion pTextureRegion,
-			ITiledTextureRegion pSunshineTextures,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			ShaderProgram pShaderProgram) {
-		super(pX, pY, pTextureRegion, pVertexBufferObjectManager, pShaderProgram);
-
-		mSunshine = initSunshine(this, pSunshineTextures, pVertexBufferObjectManager);
-	}
-
 	public Sun(float pX, float pY, ITextureRegion pTextureRegion,
 			ITiledTextureRegion pSunshineTextures,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
+		super(pX, pY);
 
+		mSun = initSun(this, pTextureRegion.getWidth(), pTextureRegion.getHeight(), pTextureRegion, pVertexBufferObjectManager);
 		mSunshine = initSunshine(this, pSunshineTextures, pVertexBufferObjectManager);
+	}
+
+	/**
+	 * Creates a SunSprite, and attach it to the Sun
+	 */
+	private static Sprite initSun(final Sun pSun, final float w, final float h, ITextureRegion pSunTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
+		ShaderProgram shdr = new RadialBlurShaderProgram();
+		final float cx = pSunTexture.getU() + (pSunTexture.getU2() - pSunTexture.getU())/2;
+		final float cy = pSunTexture.getV() + (pSunTexture.getV2() - pSunTexture.getV())/2;
+
+		Sprite sun = new Sprite(-w/2, -h/2, w, h, pSunTexture, pVertexBufferObjectManager, shdr) {
+			private float bloorstrength = 0;
+			@Override
+			protected void preDraw(final GLState pGLState, final Camera pCamera) {
+				super.preDraw(pGLState, pCamera);
+
+				// srodek
+				GLES20.glUniform2f(RadialBlurShaderProgram.sUniformRadialBlurCenterLocation, cx, cy);
+
+				// sila
+				bloorstrength += 0.07f;
+				UtilsMath.normalizeAngleRad(bloorstrength);
+
+				final float val = 2f;
+				GLES20.glUniform1f(RadialBlurShaderProgram.sUniformRadialBlurStrength, (float) (Math.sin(bloorstrength)*val/2 + val/2));
+			}
+		};
+
+		pSun.attachChild(sun);
+		sun.setZIndex(0);
+		pSun.sortChildren();
+
+		return sun;
 	}
 
 	/**
@@ -82,7 +92,7 @@ public class Sun extends Sprite {
 		pSun.attachChild(sunshine);
 		sunshine.setZIndex(-1);
 		pSun.sortChildren();
-		sunshine.setPosition(pSun.getWidth()/2, pSun.getHeight()/2);
+//		sunshine.setPosition(pSun.mSun.getWidth()/2, pSun.mSun.getHeight()/2);
 
 		return sunshine;
 	}
@@ -114,7 +124,7 @@ public class Sun extends Sprite {
 	// ===========================================================
 	synchronized public void travel(final float pX, final float pY, final float W, final float H, final float time, TravelListener pTravelListener) {
 		mTravelListener = pTravelListener;
-		Positioner.setCentered(this, pX, pY);
+		setPosition(pX, pY);
 		unregisterEntityModifier(mTravelModifier);
 		mTravelModifier = new ParallelEntityModifier(
 				new SequenceEntityModifier(
