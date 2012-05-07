@@ -8,7 +8,7 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
-import org.andengine.util.modifier.ease.EaseElasticOut;
+import org.andengine.util.modifier.ease.EaseBounceOut;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
 import eu.nazgee.flower.activity.game.scene.main.Sky;
@@ -19,38 +19,33 @@ public class Sunshine extends Entity {
 	// Constants
 	// ===========================================================
 
-	private float EASING_DURATION = 1;
+	private float EASING_DURATION = 0.8f;
 	private float EASING_RESET_THRESHOLD = 50;
 
 	// ===========================================================
 	// Fields
 	// ===========================================================
 
-	private final Sprite mSpriteTop;
-	private final Sprite mSpriteMiddle;
-	private final Sprite mSpriteBottom;
+	private final Sprite mSpriteRayBody;
+	private final Sprite mSpriteRayTail;
 
-	private SunshineLengthModifier mSunshineLengthModifier = new SunshineLengthModifier(0, 0, 0, EaseElasticOut.getInstance());
+	private SunshineLengthModifier mSunshineLengthModifier = new SunshineLengthModifier(0, 0, 0, EaseBounceOut.getInstance());
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
 	public Sunshine (final ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVBO) {
-		mSpriteTop = new Sprite(0, 0, pTiledTextureRegion.getTextureRegion(0), pVBO);
-		mSpriteMiddle = new Sprite(0, 0, pTiledTextureRegion.getTextureRegion(1), pVBO);
-		mSpriteBottom = new Sprite(0, 0, pTiledTextureRegion.getTextureRegion(2), pVBO);
+		mSpriteRayBody = new Sprite(0, 0, pTiledTextureRegion.getTextureRegion(0), pVBO);
+		mSpriteRayTail = new Sprite(0, 0, pTiledTextureRegion.getTextureRegion(1), pVBO);
 
-		attachChild(mSpriteTop);
-		attachChild(mSpriteMiddle);
-		attachChild(mSpriteBottom);
+		attachChild(mSpriteRayBody);
+		attachChild(mSpriteRayTail);
 
-		Positioner.setCenteredX(mSpriteTop, 0);
-		Positioner.setCenteredX(mSpriteMiddle, 0);
-		Positioner.setCenteredX(mSpriteBottom, 0);
+		Positioner.setCenteredX(mSpriteRayBody, 0);
+		Positioner.setCenteredX(mSpriteRayTail, 0);
 
-		mSpriteMiddle.setScaleCenterY(0);
-		mSpriteMiddle.setY(mSpriteTop.getY() + mSpriteTop.getHeight());
+		mSpriteRayBody.setScaleCenterY(0);
 
 		setCurrentRaysLength(0);
 		mSunshineLengthModifier.setAutoUnregisterWhenFinished(false);
@@ -75,7 +70,7 @@ public class Sunshine extends Entity {
 
 	public boolean isShiningAt(IEntity pTarget) {
 		float pos[] = pTarget.getSceneCenterCoordinates();
-		return mSpriteBottom.contains(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
+		return mSpriteRayTail.contains(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
 	}
 
 	// ===========================================================
@@ -93,7 +88,7 @@ public class Sunshine extends Entity {
 		if (me < pSkyHeight) {
 			pSkyHeight = pSky.getHeightOnScene(0);
 		}
-		configureRaysLengthModifier(Math.max(0, me - pSkyHeight - mSpriteTop.getHeight()));
+		configureRaysLengthModifier(Math.max(0, me - pSkyHeight));
 	}
 
 	private void configureRaysLengthModifier(final float pTargetRays) {
@@ -109,14 +104,14 @@ public class Sunshine extends Entity {
 	}
 
 	private float getCurrentRaysLength() {
-		final float current = mSpriteMiddle.getScaleY() * mSpriteMiddle.getHeight();
+		final float current = mSpriteRayBody.getScaleY() * mSpriteRayBody.getHeight();
 		return current;
 	}
 
 	private void setCurrentRaysLength(final float pNewRaysValue) {
-		final float scale = pNewRaysValue / mSpriteMiddle.getHeight();
-		mSpriteMiddle.setScaleY(scale);
-		mSpriteBottom.setY(mSpriteMiddle.getY() + pNewRaysValue);
+		final float scale = pNewRaysValue / mSpriteRayBody.getHeight();
+		mSpriteRayBody.setScaleY(scale);
+		mSpriteRayTail.setY(mSpriteRayBody.getY() + pNewRaysValue);
 	}
 
 	// ===========================================================
