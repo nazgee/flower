@@ -26,7 +26,8 @@ public class RadialBlurShaderProgram extends ShaderProgram {
 	"	" + "gl_Position = " + ShaderProgramConstants.UNIFORM_MODELVIEWPROJECTIONMATRIX + " * " + ShaderProgramConstants.ATTRIBUTE_POSITION + ";\n" +
 	"}";
 
-	private static final String UNIFORM_RADIALBLUR_CENTER = "u_radialblur_center";
+	private static final String UNIFORM_FX_CENTER = "u_fx_center";
+	private static final String UNIFORM_REGION_CENTER = "u_region_center";
 	private static final String UNIFORM_RADIALBLUR_STRENGTH = "u_radialblur_strength";
 
 	public static final String FRAGMENTSHADER =
@@ -35,62 +36,44 @@ public class RadialBlurShaderProgram extends ShaderProgram {
 	"uniform sampler2D " + ShaderProgramConstants.UNIFORM_TEXTURE_0	+ ";\n"  +
 	"varying mediump vec2 " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + ";\n" +
 
-	"uniform vec2 " + RadialBlurShaderProgram.UNIFORM_RADIALBLUR_CENTER + ";\n" +
+	"uniform vec2 " + RadialBlurShaderProgram.UNIFORM_FX_CENTER + ";\n" +
+	"uniform vec2 " + RadialBlurShaderProgram.UNIFORM_REGION_CENTER + ";\n" +
 	"uniform float " + RadialBlurShaderProgram.UNIFORM_RADIALBLUR_STRENGTH + ";\n" 	+
 
-	"const float sampleShare = (1.0 / 20.0);\n" +
-	"const float sampleDist = 0.1;\n" +
+			"const float sampleDist = 48.0 / 1024.0;\n" +
+			"const float sampleStrength = 1.0;\n" +
 
-	"void main() {\n" +
-	/* The actual (unblurred) sample. */
-	"	vec4 color = texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + ");\n"	+
+			"void main() {\n" +
+			/* The actual (unburred) sample. */
+			"	vec4 color = texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + ");\n" +
 
-	/* Calculate direction towards center of the blur. */
-	"	vec2 direction = " + RadialBlurShaderProgram.UNIFORM_RADIALBLUR_CENTER 	+ " - " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES	+ ";\n" +
+			/* fragment => radial direction */
+			"	vec2 direction = " + RadialBlurShaderProgram.UNIFORM_FX_CENTER + " - " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + ";\n" +
+			/* radial => center direction */
+			"	vec2 dir_rad2cen = " + RadialBlurShaderProgram.UNIFORM_REGION_CENTER + " - " + RadialBlurShaderProgram.UNIFORM_FX_CENTER + ";\n" +
 
-	/* Calculate the distance to the center of the blur. */
-	"	float distance = sqrt(direction.x * direction.x + direction.y * direction.y);\n" +
+			/* Calculate the distance to the center of the blur. */
+			"	float distance = sqrt(direction.x * direction.x + direction.y * direction.y);\n" +
 
-	/* Normalize the direction (reuse the distance). */
-	"	direction = direction / distance;\n" +
+			/* Normalize the direction (reuse the distance). */
+			"	direction = direction / distance;\n" +
 
-	"	vec4 sum = color * sampleShare;\n" +
-	/*
-	 * Take 10 additional samples along the direction towards the center
-	 * of the blur.
-	 */
-	"	vec2 directionSampleDist = direction * sampleDist;\n" + 
-	"	sum += texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 +", " +
-		ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " - 0.08 * directionSampleDist) * sampleShare;\n" +
-	"	sum += texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " +
-		ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " - 0.05 * directionSampleDist) * sampleShare;\n" +
-	"	sum += texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " +
-		ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " - 0.03 * directionSampleDist) * sampleShare;\n" +
-	"	sum += texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " +
-		ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " - 0.02 * directionSampleDist) * sampleShare;\n" +
-	"	sum += texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " +
-		ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " - 0.01 * directionSampleDist) * sampleShare;\n" +
-	"	sum += texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " +
-		ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " + 0.01 * directionSampleDist) * sampleShare;\n" +
-	"	sum += texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " +
-		ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " + 0.02 * directionSampleDist) * sampleShare;\n" +
-	"	sum += texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " +
-		ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " + 0.03 * directionSampleDist) * sampleShare;\n" +
-	"	sum += texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " +
-		ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " + 0.05 * directionSampleDist) * sampleShare;\n" +
-	"	sum += texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " +
-		ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " + 0.08 * directionSampleDist) * sampleShare;\n" +
+			//"	float t = sqrt(distance) * sampleStrength;\n" +
+			//"	t = clamp(t, 0.0, 1.0);\n" + // 0 <= t >= 1
 
-	/*
-	 * Weighten the blur effect with the distance to the center of the
-	 * blur (further out is blurred more).
-	 */
-	"	float t = sqrt(distance) * " + RadialBlurShaderProgram.UNIFORM_RADIALBLUR_STRENGTH + ";\n" +
-	"	t = clamp(t, 0.0, 1.0);\n" + // 0 <= t >= 1
+//			"	vec4 sum = color * sampleShare;\n" +
+			"	vec2 directionSampleDist = direction * sampleDist;\n" +
+			"	vec4 sum = texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " + "+ RadialBlurShaderProgram.UNIFORM_RADIALBLUR_STRENGTH +" * directionSampleDist);\n" +
 
-	/* Blend the original color with the averaged pixels. */
-	"	gl_FragColor = mix(color, sum, t);\n" +
-	"}";
+			"	gl_FragColor = sum; \n" +
+
+//			/* Weighten the blur effect with the distance to the center of the blur (further out is blurred more). */
+//			"	float t = sqrt(distance) * sampleStrength;\n" +
+//			"	t = clamp(t, 0.0, 1.0);\n" + // 0 <= t >= 1
+//
+//			/* Blend the original color with the averaged pixels. */
+//			"	gl_FragColor = mix(color, sum, t);\n" +
+			"}";
 
 	// ===========================================================
 	// Fields
@@ -98,8 +81,9 @@ public class RadialBlurShaderProgram extends ShaderProgram {
 
 	public static int sUniformModelViewPositionMatrixLocation = ShaderProgramConstants.LOCATION_INVALID;
 	public static int sUniformTexture0Location = ShaderProgramConstants.LOCATION_INVALID;
-	public static int sUniformRadialBlurCenterLocation = ShaderProgramConstants.LOCATION_INVALID;
-	public static int sUniformRadialBlurStrength = ShaderProgramConstants.LOCATION_INVALID;
+	public static int sUniformFXCenterLocation = ShaderProgramConstants.LOCATION_INVALID;
+	public static int sUniformFXStrength = ShaderProgramConstants.LOCATION_INVALID;
+	public static int sUniformRegionCenterLocation = ShaderProgramConstants.LOCATION_INVALID;
 
 	// ===========================================================
 	// Constructors
@@ -140,8 +124,9 @@ public class RadialBlurShaderProgram extends ShaderProgram {
 		RadialBlurShaderProgram.sUniformModelViewPositionMatrixLocation = getUniformLocation(ShaderProgramConstants.UNIFORM_MODELVIEWPROJECTIONMATRIX);
 		RadialBlurShaderProgram.sUniformTexture0Location = getUniformLocation(ShaderProgramConstants.UNIFORM_TEXTURE_0);
 
-		RadialBlurShaderProgram.sUniformRadialBlurCenterLocation = getUniformLocation(RadialBlurShaderProgram.UNIFORM_RADIALBLUR_CENTER);
-		RadialBlurShaderProgram.sUniformRadialBlurStrength = getUniformLocation(RadialBlurShaderProgram.UNIFORM_RADIALBLUR_STRENGTH);
+		RadialBlurShaderProgram.sUniformFXCenterLocation = getUniformLocation(RadialBlurShaderProgram.UNIFORM_FX_CENTER);
+//		RadialBlurShaderProgram.sUniformRegionCenterLocation = getUniformLocation(RadialBlurShaderProgram.UNIFORM_REGION_CENTER);
+		RadialBlurShaderProgram.sUniformFXStrength = getUniformLocation(RadialBlurShaderProgram.UNIFORM_RADIALBLUR_STRENGTH);
 	}
 
 	@Override

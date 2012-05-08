@@ -4,9 +4,11 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.IEntityModifier;
+import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.MoveByModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
+import org.andengine.entity.modifier.RotationByModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
@@ -15,12 +17,15 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.util.GLState;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.math.MathUtils;
 import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseQuadIn;
 import org.andengine.util.modifier.ease.EaseQuadOut;
+import org.andengine.util.modifier.util.ModifierUtils;
 
 import android.opengl.GLES20;
+import android.util.FloatMath;
 import eu.nazgee.flower.RadialBlurShaderProgram;
 import eu.nazgee.flower.activity.game.scene.main.Sky;
 import eu.nazgee.game.utils.misc.UtilsMath;
@@ -54,30 +59,56 @@ public class Sun extends Entity {
 	/**
 	 * Creates a SunSprite, and attach it to the Sun
 	 */
-	private static Sprite initSun(final Sun pSun, final float w, final float h, ITextureRegion pSunTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
+	private static Sprite initSun(final Sun pSun, final float w, final float h, final ITextureRegion pSunTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
 		ShaderProgram shdr = new RadialBlurShaderProgram();
-		final float cx = pSunTexture.getU() + (pSunTexture.getU2() - pSunTexture.getU())/2;
-		final float cy = pSunTexture.getV() + (pSunTexture.getV2() - pSunTexture.getV())/2;
+		final float cw = (pSunTexture.getU2() - pSunTexture.getU());
+		final float ch = (pSunTexture.getV2() - pSunTexture.getV());
+		final float cx = pSunTexture.getU() + cw/2;
+		final float cy = pSunTexture.getV() + ch/2;
 
 		Sprite sun = new Sprite(-w/2, -h/2, w, h, pSunTexture, pVertexBufferObjectManager, shdr) {
-			private float bloorstrength = 0;
+			private float step = 0;
+			private float seed = 666;
+			private final float r = 0.5f;
+			private float angle = 0; 
+			private float valx = 0;
+			private float valy = 0;
 			@Override
 			protected void preDraw(final GLState pGLState, final Camera pCamera) {
 				super.preDraw(pGLState, pCamera);
+				if (seed > Math.PI * 2) {
+					step = MathUtils.random(0.1f, 0.5f);
+					seed = 0;
+					angle = MathUtils.random(0, (float) (Math.PI * 2));
+					valx = (float) (r * Math.sin(angle));
+					valy = (float) (r * Math.cos(angle));
+				}
+				seed += step;
 
-				// srodek
-				GLES20.glUniform2f(RadialBlurShaderProgram.sUniformRadialBlurCenterLocation, cx, cy);
+				float valfx = 0.1f;
+				valfx = (float) (Math.sin(seed/2)*valfx/2 + valfx/2);
+				GLES20.glUniform2f(RadialBlurShaderProgram.sUniformFXCenterLocation, cx + valx * cw,  cy + valy * ch);
+				GLES20.glUniform1f(RadialBlurShaderProgram.sUniformFXStrength, valfx);
 
-				// sila
-				bloorstrength += 0.07f;
-				UtilsMath.normalizeAngleRad(bloorstrength);
-
-				final float val = 2f;
-				GLES20.glUniform1f(RadialBlurShaderProgram.sUniformRadialBlurStrength, (float) (Math.sin(bloorstrength)*val/2 + val/2));
+//				seed += 0.01f;
+//
+//				float valx = 0.3f;
+//				float valy = 0.3f;
+//				float valfx = 0.08f;
+//
+//				valx = (float) (Math.sin(seed)*valx);
+//				valy = (float) (Math.cos(seed)*valy);
+//				valfx = (float) (Math.cos(seed * 6)*valfx/2 + valfx/2);
+//				GLES20.glUniform2f(RadialBlurShaderProgram.sUniformFXCenterLocation, cx + valx * cw,  cy + valy * ch);
+//				GLES20.glUniform1f(RadialBlurShaderProgram.sUniformFXStrength, valfx);
+////				GLES20.glUniform2f(RadialBlurShaderProgram.sUniformRegionCenterLocation, cx,  cy);
 			}
 		};
 
 		pSun.attachChild(sun);
+		sun.registerEntityModifier(new LoopEntityModifier(
+					new RotationByModifier(5, 360)
+				));
 		sun.setZIndex(0);
 		pSun.sortChildren();
 
