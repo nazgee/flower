@@ -17,7 +17,7 @@ public @interface Consts {
 	public static final int TOUCH_OFFSET_Y = (int) (- CAMERA_HEIGHT * 0.1f);
 	public static final String LEVEL_PREFS_FILE = "levelrefs";
 
-	public static final String MENU_FONT = "ELEKTRA.ttf";
+	public static final String MENU_FONT = "Creepshow.ttf";
 	public static final String HUD_FONT = "ELEKTRA.ttf";
 
 	public static final Color COLOR_TEXT_SELECTED = Color.RED;

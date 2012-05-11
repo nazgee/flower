@@ -17,11 +17,11 @@ import org.andengine.util.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.base.pagerscene.ArrayLayout;
+import eu.nazgee.flower.base.pagerscene.IPage;
+import eu.nazgee.flower.base.pagerscene.ScenePager;
+import eu.nazgee.flower.base.pagerscene.ArrayLayout.eAnchorPointXY;
 import eu.nazgee.flower.level.GameLevel;
-import eu.nazgee.flower.pagerscene.ArrayLayout;
-import eu.nazgee.flower.pagerscene.ArrayLayout.eAnchorPointXY;
-import eu.nazgee.flower.pagerscene.IPage;
-import eu.nazgee.flower.pagerscene.ScenePager;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 
@@ -130,7 +130,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 			final FontManager fontManager = e.getFontManager();
 
 			final ITexture font_texture = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
-			FONT = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.HUD_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
+			FONT = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
 			FONT.load();
 		}
 

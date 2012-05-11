@@ -4,9 +4,9 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
 import org.andengine.util.math.MathUtils;
 
-import eu.nazgee.flower.pagerscene.IPage;
-import eu.nazgee.flower.pagerscene.PageMoverCamera;
-import eu.nazgee.flower.pagerscene.ScenePager;
+import eu.nazgee.flower.base.pagerscene.IPage;
+import eu.nazgee.flower.base.pagerscene.PageMoverCamera;
+import eu.nazgee.flower.base.pagerscene.ScenePager;
 
 public class PageMover<T extends IEntity> extends PageMoverCamera<T> {
 	// ===========================================================

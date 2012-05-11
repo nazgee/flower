@@ -1,9 +1,13 @@
-package eu.nazgee.flower.pagerscene;
+package eu.nazgee.flower.base.questionscene;
+
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ColorMenuItemDecorator;
@@ -12,7 +16,6 @@ import org.andengine.entity.text.AutoWrap;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
@@ -24,6 +27,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.HorizontalAlign;
+import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
@@ -41,7 +45,7 @@ public class SceneQuestion extends MenuLoadable {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private final MyResources mResources;
+	protected final MyResources mResources;
 	private final String[] mButtons;
 	private ISceneQuestionListener mSceneQuestionListener;
 	// ===========================================================
@@ -52,7 +56,6 @@ public class SceneQuestion extends MenuLoadable {
 			CharSequence pCharSequence, HorizontalAlign pHorizontalAlign, String... pButtons) {
 		super(W, H, pCamera, pVertexBufferObjectManager);
 		mButtons = pButtons;
-
 		mResources = new MyResources(pCharSequence, pHorizontalAlign);
 		getLoader().install(mResources);
 	}
@@ -79,19 +82,26 @@ public class SceneQuestion extends MenuLoadable {
 	}
 
 	@Override
-	public void onLoad(Engine e, Context c) {
-		final Sprite mFrame = new Sprite(0, 0, mResources.TEX_FRAME, getVertexBufferObjectManager());
+	public void onLoad(final Engine e, final Context c) {
+		prepareContent(e, c);
 
-		attachChild(mFrame);
-		attachChild(mResources.QUESTION_TEXT);
+		this.setMenuAnimator(new HorizontalMenuAnimator());
 
-		Positioner.setCentered(mFrame, getW()/2, getH()/2);
-		Positioner.setCentered(mResources.QUESTION_TEXT, getW()/2, getH()/2);
+		float texts_width = 0;
+		SmartList<Text> texts = new SmartList<Text>(mButtons.length);
+		for (String button : mButtons) {
+			texts.add(new Text(0, 0, mResources.FONT, button, getVertexBufferObjectManager()));
+			texts_width += texts.getLast().getWidth();
+		}
 
-		mFrame.setAlpha(0.5f);
-		mFrame.setColor(Color.BLACK);
+		for (Iterator<Text> iterator = texts.iterator(); iterator.hasNext();) {
+			Text text = (Text) iterator.next();
 
-		addMenuEntry(getW() * 0.5f, 0.2f * getH(), mResources.TEX_FRAME, 666, Color.WHITE, Color.RED, getVertexBufferObjectManager());
+			IMenuItem item = addMenuEntry(getW() * text.getWidth() / texts_width, getH() * 0.2f, mResources.TEX_FRAME, 666, Color.WHITE, Color.RED, getVertexBufferObjectManager());
+			item.attachChild(text);
+			Positioner.setCentered(text, item);
+		}
+
 		this.buildAnimations();
 		setBackgroundEnabled(false);
 		reset();
@@ -102,21 +112,35 @@ public class SceneQuestion extends MenuLoadable {
 		clearEntityModifiers();
 		clearUpdateHandlers();
 		clearTouchAreas();
+		clearMenuItems();
 		detachChildren();
 	}
 
+	private void prepareContent(final Engine e, final Context c) {
+		final Sprite mFrame = new Sprite(0, 0, mResources.TEX_FRAME, getVertexBufferObjectManager());
 
+		attachChild(mFrame);
+		attachChild(mResources.QUESTION_TEXT);
+
+		Positioner.setCentered(mResources.QUESTION_TEXT, mFrame);
+
+		mFrame.setAlpha(0.5f);
+		mFrame.setColor(Color.BLACK);
+	}
 	// ===========================================================
 	// Methods
 	// ===========================================================
 	public IMenuItem addMenuEntry(float w, float h,
 			ITextureRegion pTextureRegion, int pID, Color pSelected,
 			Color pUnselected, VertexBufferObjectManager pVBOM) {
-		final IMenuItem menuItem = new ColorMenuItemDecorator(new SpriteMenuItem(pID, w, h, pTextureRegion, pVBOM), pSelected, pUnselected);
+		final IMenuItem menuItem;
+		menuItem = new ColorMenuItemDecorator(new SpriteMenuItem(pID, w, h, pTextureRegion, pVBOM), pSelected, pUnselected);
 		menuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
 		addMenuItem(menuItem);
 		return menuItem;
 	}
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
@@ -147,7 +171,7 @@ public class SceneQuestion extends MenuLoadable {
 			final FontManager fontManager = e.getFontManager();
 
 			final ITexture font_texture = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
-			FONT = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.HUD_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
+			FONT = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
 			FONT.load();
 			QUESTION_TEXT = new Text(0, 0, FONT, mQuestionText,
 					new TextOptions(AutoWrap.WORDS, getW() * 0.9f, mHorizontalAlign,Text.LEADING_DEFAULT), getVertexBufferObjectManager());

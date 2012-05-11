@@ -29,10 +29,9 @@ import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.activity.game.ActivityGame;
 import eu.nazgee.flower.activity.levelselector.scene.GameLevelItem;
 import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
-import eu.nazgee.flower.pagerscene.ScenePager;
-import eu.nazgee.flower.pagerscene.ScenePager.IItemClikedListener;
-import eu.nazgee.flower.pagerscene.SceneQuestion;
-import eu.nazgee.flower.pagerscene.SceneQuestion.ISceneQuestionListener;
+import eu.nazgee.flower.base.pagerscene.ScenePager;
+import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
+import eu.nazgee.flower.base.questionscene.SceneQuestion;
 
 public class ActivityLevelselector extends SimpleBaseGameActivity{
 
@@ -45,7 +44,7 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 	// ===========================================================
 	private Camera mCamera;
 	private ScenePager<GameLevelItem> mScenePager;
-	private SceneQuestion mSceneQuestion;
+	private SceneQuestion mSceneInfo;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -82,16 +81,17 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 	protected Scene onCreateScene() {
 		mEngine.registerUpdateHandler(new FPSLogger());
 
-		mSceneQuestion = new SceneQuestion(mCamera.getWidth(), mCamera.getHeight(), mCamera, getVertexBufferObjectManager(),
-				"this is very long placeholder which I will use for testing questions scene", HorizontalAlign.CENTER, "button");
+		mSceneInfo = new SceneQuestion(mCamera.getWidth(), mCamera.getHeight(), mCamera,
+				getVertexBufferObjectManager(),
+				"this is very long placeholder which I will use for testing questions scene", HorizontalAlign.CENTER, "button", "ok");
 
-		mSceneQuestion.loadResources(getEngine(), ActivityLevelselector.this);
-		mSceneQuestion.setOnMenuItemClickListener(new IOnMenuItemClickListener() {
+		mSceneInfo.loadResources(getEngine(), ActivityLevelselector.this);
+		mSceneInfo.setOnMenuItemClickListener(new IOnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
 					float pMenuItemLocalX, float pMenuItemLocalY) {
 				getEngine().getScene().back();
-				mSceneQuestion.unload();
+				mSceneInfo.unload();
 				return true;
 			}
 		});
@@ -109,8 +109,8 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 					startActivityForResult(i, 0);
 				} else {
 					pItem.registerEntityModifier(nodYourHead(3, 0.1f, 20));
-					mSceneQuestion.load(getEngine(), ActivityLevelselector.this);
-					getEngine().getScene().setChildScene(mSceneQuestion, false, false, true);
+					mSceneInfo.load(getEngine(), ActivityLevelselector.this);
+					getEngine().getScene().setChildScene(mSceneInfo, false, false, true);
 				}
 			}
 		});

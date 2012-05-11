@@ -1,4 +1,4 @@
-package eu.nazgee.flower.pagerscene;
+package eu.nazgee.flower.base.pagerscene;
 
 import java.util.LinkedList;
 
