@@ -31,6 +31,7 @@ import eu.nazgee.flower.activity.levelselector.scene.GameLevelItem;
 import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
+import eu.nazgee.flower.base.questionscene.SceneInfo;
 import eu.nazgee.flower.base.questionscene.SceneQuestion;
 
 public class ActivityLevelselector extends SimpleBaseGameActivity{
@@ -81,9 +82,9 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 	protected Scene onCreateScene() {
 		mEngine.registerUpdateHandler(new FPSLogger());
 
-		mSceneInfo = new SceneQuestion(mCamera.getWidth(), mCamera.getHeight(), mCamera,
+		mSceneInfo = new SceneInfo(mCamera.getWidth(), mCamera.getHeight(), mCamera,
 				getVertexBufferObjectManager(),
-				"this is very long placeholder which I will use for testing questions scene", HorizontalAlign.CENTER, "button", "ok");
+				"this is very long placeholder which I will use for testing questions scene", "button", "ok");
 
 		mSceneInfo.loadResources(getEngine(), ActivityLevelselector.this);
 		mSceneInfo.setOnMenuItemClickListener(new IOnMenuItemClickListener() {

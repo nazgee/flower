@@ -27,7 +27,7 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	// ===========================================================
 
 	private static final float SCROLL_MIN_SCREEN_WIDTH = 0.06f;
-	private static final int CLICK_TIME_MAX = 100; 
+	private static final int CLICK_TIME_MAX = 200; 
 	// ===========================================================
 	// Fields
 	// ===========================================================
