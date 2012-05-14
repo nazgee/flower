@@ -18,7 +18,6 @@ import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureA
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-import org.andengine.util.HorizontalAlign;
 import org.andengine.util.modifier.ease.EaseStrongIn;
 import org.andengine.util.modifier.ease.EaseStrongInOut;
 import org.andengine.util.modifier.ease.EaseStrongOut;
@@ -26,13 +25,14 @@ import org.andengine.util.modifier.ease.EaseStrongOut;
 import android.content.Intent;
 import android.os.Bundle;
 import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.Statics;
 import eu.nazgee.flower.activity.game.ActivityGame;
 import eu.nazgee.flower.activity.levelselector.scene.GameLevelItem;
 import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
-import eu.nazgee.flower.base.questionscene.SceneInfo;
-import eu.nazgee.flower.base.questionscene.SceneQuestion;
+import eu.nazgee.flower.base.questionscene.SceneMenuButtons;
+import eu.nazgee.flower.base.questionscene.SceneMessagebox;
 
 public class ActivityLevelselector extends SimpleBaseGameActivity{
 
@@ -43,9 +43,8 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private Camera mCamera;
 	private ScenePager<GameLevelItem> mScenePager;
-	private SceneQuestion mSceneInfo;
+	private SceneMenuButtons mSceneInfo;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -64,11 +63,11 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-		mCamera = new SmoothCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT,
+		Camera camera = new SmoothCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT,
 				Consts.CAMERA_WIDTH * 3, Consts.CAMERA_HEIGHT * 3, 1);
 
 		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
-				new FillResolutionPolicy(), mCamera);
+				new FillResolutionPolicy(), camera);
 	}
 
 	@Override
@@ -76,15 +75,22 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		SVGBitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		FontFactory.setAssetBasePath("fonts/");
+
+		// Make sure, that statics are usable for anyone
+		Statics.getInstanceSafe(getEngine(), this);
 	}
 
 	@Override
 	protected Scene onCreateScene() {
 		mEngine.registerUpdateHandler(new FPSLogger());
+		Camera camera = getEngine().getCamera();
 
-		mSceneInfo = new SceneInfo(mCamera.getWidth(), mCamera.getHeight(), mCamera,
-				getVertexBufferObjectManager(),
-				"this is very long placeholder which I will use for testing questions scene", "button", "ok");
+		mSceneInfo = new SceneMessagebox(camera.getWidth(), camera.getHeight(),
+				camera, getVertexBufferObjectManager(),
+				Statics.getInstanceUnsafe().FONT_DESC,
+				Statics.getInstanceUnsafe().FONT_DESC,
+				"this is a text which is very long and which i will use for testing message box",
+				"button", "ok");
 
 		mSceneInfo.loadResources(getEngine(), ActivityLevelselector.this);
 		mSceneInfo.setOnMenuItemClickListener(new IOnMenuItemClickListener() {
@@ -96,7 +102,7 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 				return true;
 			}
 		});
-		mScenePager = new SceneLevelselector(mCamera.getWidth(), mCamera.getHeight(), getVertexBufferObjectManager());
+		mScenePager = new SceneLevelselector(camera.getWidth(), camera.getHeight(), getVertexBufferObjectManager());
 //		mScenePager.getLoader().install(mSceneQuestion);
 		mScenePager.loadResources(getEngine(), this);
 		mScenePager.load(getEngine(), this);

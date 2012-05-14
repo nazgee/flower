@@ -13,15 +13,15 @@ import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.HorizontalAlign;
 import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
+import eu.nazgee.flower.Statics;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.scene.menu.MenuLoadable;
 
-public abstract class SceneQuestion extends MenuLoadable {
+public abstract class SceneMenuButtons extends MenuLoadable {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -30,10 +30,11 @@ public abstract class SceneQuestion extends MenuLoadable {
 	// Fields
 	// ===========================================================
 	protected final String[] mButtons;
+	private CharSequence mText;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public SceneQuestion(float W, float H, final Camera pCamera,
+	public SceneMenuButtons(float W, float H, final Camera pCamera,
 			VertexBufferObjectManager pVertexBufferObjectManager, String... pButtons) {
 		super(W, H, pCamera, pVertexBufferObjectManager);
 		mButtons = pButtons;
@@ -44,12 +45,22 @@ public abstract class SceneQuestion extends MenuLoadable {
 	abstract protected Font getButtonFont();
 	abstract protected ITextureRegion getButtonFace(Text pText);
 	abstract protected HorizontalMenuAnimator getMenuAnimator(Engine e, Context c);
+
+	public CharSequence getText() {
+		return mText;
+	}
+
+	public void setText(CharSequence mText) {
+		this.mText = mText;
+	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 
 	@Override
 	public void onLoadResources(Engine e, Context c) {
+		// Make sure statics will be available
+		Statics.getInstanceSafe(e, c);
 	}
 
 	@Override

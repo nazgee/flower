@@ -1,6 +1,5 @@
 package eu.nazgee.flower.activity.game;
 
-import org.andengine.engine.Engine;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -21,7 +20,6 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.color.Color;
 
-import android.content.Context;
 import android.view.KeyEvent;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.Statics;
@@ -32,7 +30,6 @@ import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.engine.camera.SmootherEmpty;
 import eu.nazgee.game.utils.engine.camera.SmootherLinear;
 import eu.nazgee.game.utils.loadable.ILoadableResourceScene;
-import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 import eu.nazgee.game.utils.scene.SceneLoader;
 import eu.nazgee.game.utils.scene.SceneLoader.ISceneLoaderListener;
 import eu.nazgee.game.utils.scene.SceneLoader.eLoadingSceneHandling;
@@ -48,7 +45,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	// Fields
 	// ===========================================================
 
-	MyResources mResources = new MyResources();
+
 	MenuItemClickListener mMenuItemClickListener = new MenuItemClickListener();
 	private SceneGame mSceneMain;
 	private MenuIngame mMenuIngame;
@@ -69,7 +66,6 @@ public class ActivityGame extends SimpleBaseGameActivity {
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-//		final Camera camera = new SmoothCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, Consts.CAMERA_WIDTH * 2.5f, Consts.CAMERA_HEIGHT * 2.5f, 0);
 		final SmoothTrackingCamera camera = new SmoothTrackingCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, 0, new SmootherLinear(5), new SmootherEmpty(), new SmootherLinear(5));
 		EngineOptions engopts = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT), camera);
 		engopts.getRenderOptions().setDithering(true);
@@ -83,16 +79,12 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		SVGBitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		FontFactory.setAssetBasePath("fonts/");
 
-		// Load all our resources- these are the only resources
-		// that have to be loaded manually (mResources.FONT_MENU will be ready to use)
-		mResources.getLoader().install(new Statics());
-		mResources.loadResources(getEngine(), this);
-		mResources.load(getEngine(), this);
-
+		// Make sure statics are ready to use for anyone
+		Statics.getInstanceSafe(getEngine(), this);
 		mSceneMain = new SceneGame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager());
 
 		// Create "Loading..." scene that will be used for all loading-related activities
-		SceneLoading loadingScene = new SceneLoading(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, mResources.FONT_MENU, "Loading...", getVertexBufferObjectManager());
+		SceneLoading loadingScene = new SceneLoading(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, Statics.getInstanceUnsafe().FONT_DESC, "Loading...", getVertexBufferObjectManager());
 
 		mLoader = new SceneLoader(loadingScene);
 		mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_DONT_TOUCH).setLoadingSceneUnload(false);
@@ -213,29 +205,6 @@ public class ActivityGame extends SimpleBaseGameActivity {
 				}
 			}
 			return false;
-		}
-	}
-
-	private static class MyResources extends SimpleLoadableResource {
-		public Font FONT_MENU;
-
-		@Override
-		public void onLoadResources(Engine e, Context c) {
-		}
-
-		@Override
-		public void onLoad(Engine e, Context c) {
-			final TextureManager textureManager = e.getTextureManager();
-			final FontManager fontManager = e.getFontManager();
-
-			final ITexture font_texture = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
-			FONT_MENU = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.10f, true, Color.WHITE.getARGBPackedInt());
-			FONT_MENU.load();
-		}
-
-		@Override
-		public void onUnload() {
-			FONT_MENU.unload();
 		}
 	}
 }

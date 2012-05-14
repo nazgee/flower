@@ -18,7 +18,7 @@ abstract public class PooledEntityItem<T extends Entity> extends PoolItem {
 	 * This method safely detaches entity, and puts Item back to the pool
 	 */
 	public void scheduleDetachAndRecycle() {
-		Statics.ENTITY_DETACH_HANDLER.scheduleDetach(getEntity(), new DetachCallback());
+		Statics.getInstanceUnsafe().ENTITY_DETACH_HANDLER.scheduleDetach(getEntity(), new DetachCallback());
 	}
 
 	private class DetachCallback implements Callback<IEntity> {
