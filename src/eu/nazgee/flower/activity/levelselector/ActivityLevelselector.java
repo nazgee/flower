@@ -31,8 +31,8 @@ import eu.nazgee.flower.activity.levelselector.scene.GameLevelItem;
 import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
-import eu.nazgee.flower.base.questionscene.SceneMenuButtons;
-import eu.nazgee.flower.base.questionscene.SceneMessagebox;
+import eu.nazgee.flower.base.questionscene.SceneButtons;
+import eu.nazgee.flower.base.questionscene.SceneButtonsMessagebox;
 
 public class ActivityLevelselector extends SimpleBaseGameActivity{
 
@@ -44,7 +44,7 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 	// Fields
 	// ===========================================================
 	private ScenePager<GameLevelItem> mScenePager;
-	private SceneMenuButtons mSceneInfo;
+	private SceneButtons mSceneInfo;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -85,7 +85,7 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 		mEngine.registerUpdateHandler(new FPSLogger());
 		Camera camera = getEngine().getCamera();
 
-		mSceneInfo = new SceneMessagebox(camera.getWidth(), camera.getHeight(),
+		mSceneInfo = new SceneButtonsMessagebox(camera.getWidth(), camera.getHeight(),
 				camera, getVertexBufferObjectManager(),
 				Statics.getInstanceUnsafe().FONT_DESC,
 				Statics.getInstanceUnsafe().FONT_DESC,

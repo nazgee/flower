@@ -20,7 +20,7 @@ import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 
-public class SceneMessagebox extends SceneMenuButtons {
+public class SceneButtonsMessagebox extends SceneButtons {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -34,7 +34,7 @@ public class SceneMessagebox extends SceneMenuButtons {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public SceneMessagebox(float W, float H, Camera pCamera,
+	public SceneButtonsMessagebox(float W, float H, Camera pCamera,
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			Font pFontText, Font pFontButton, CharSequence pText,
 			String... pButtons) {

@@ -18,7 +18,7 @@ import android.content.Context;
 import eu.nazgee.flower.Statics;
 import eu.nazgee.game.utils.scene.menu.MenuLoadable;
 
-public abstract class SceneMenuButtons extends MenuLoadable {
+public abstract class SceneButtons extends MenuLoadable {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -32,14 +32,14 @@ public abstract class SceneMenuButtons extends MenuLoadable {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public SceneMenuButtons(float W, float H, final Camera pCamera,
+	public SceneButtons(float W, float H, final Camera pCamera,
 			VertexBufferObjectManager pVertexBufferObjectManager, String... pButtons) {
 		super(W, H, pCamera, pVertexBufferObjectManager);
 
 		this.mButtons = pButtons;
 
 		this.mBackground = new Rectangle(0, 0, getW(), getH(), getVertexBufferObjectManager());
-		this.mBackground.setZIndex(SceneMenuButtons.ZINDEX_BACKGROUND);
+		this.mBackground.setZIndex(SceneButtons.ZINDEX_BACKGROUND);
 
 		setBackgroundEnabled(false);
 	}
