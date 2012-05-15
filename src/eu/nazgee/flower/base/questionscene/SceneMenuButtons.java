@@ -1,16 +1,14 @@
 package eu.nazgee.flower.base.questionscene;
 
-import java.util.Iterator;
-
 import javax.microedition.khronos.opengles.GL10;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ColorMenuItemDecorator;
 import org.andengine.entity.text.Text;
-import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.list.SmartList;
@@ -18,33 +16,39 @@ import org.andengine.util.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.Statics;
-import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.scene.menu.MenuLoadable;
 
 public abstract class SceneMenuButtons extends MenuLoadable {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-
+	protected static final int ZINDEX_BACKGROUND = -666;
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	protected final String[] mButtons;
+	protected final CharSequence[] mButtons;
 	private CharSequence mText;
+	private Rectangle mBackground;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public SceneMenuButtons(float W, float H, final Camera pCamera,
 			VertexBufferObjectManager pVertexBufferObjectManager, String... pButtons) {
 		super(W, H, pCamera, pVertexBufferObjectManager);
-		mButtons = pButtons;
+
+		this.mButtons = pButtons;
+
+		this.mBackground = new Rectangle(0, 0, getW(), getH(), getVertexBufferObjectManager());
+		this.mBackground.setZIndex(SceneMenuButtons.ZINDEX_BACKGROUND);
+
+		setBackgroundEnabled(false);
 	}
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	abstract protected Font getButtonFont();
-	abstract protected ITextureRegion getButtonFace(Text pText);
-	abstract protected HorizontalMenuAnimator getMenuAnimator(Engine e, Context c);
+	abstract protected HorizontalMenuAnimator getMenuAnimator(final Engine e, final Context c);
+	abstract protected Text prepareText(final CharSequence pText);
+	abstract protected IMenuItem prepareMenuItem(final Text pText, final float pTotalWidth, int pID);
 
 	public CharSequence getText() {
 		return mText;
@@ -52,6 +56,27 @@ public abstract class SceneMenuButtons extends MenuLoadable {
 
 	public void setText(CharSequence mText) {
 		this.mText = mText;
+	}
+
+	public Color getBackgroundColor() {
+		return this.mBackground.getColor();
+	}
+
+	public void setBackgroundColor(Color pColor) {
+		this.mBackground.setColor(pColor);
+	}
+
+	public int getButtonId(CharSequence pButtonText) {
+		for (int i = 0; i < mButtons.length; i++) {
+			CharSequence text = mButtons[i];
+			if (text.equals(pButtonText))
+				return i;
+		}
+		return -1;
+	}
+
+	public CharSequence getButtonText(int pID) {
+		return mButtons[pID];
 	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
@@ -65,26 +90,25 @@ public abstract class SceneMenuButtons extends MenuLoadable {
 
 	@Override
 	public void onLoad(final Engine e, final Context c) {
+		reset();
 		this.setMenuAnimator(getMenuAnimator(e, c));
+		attachChild(this.mBackground);
 
-		float texts_width = 0;
+		float totalWidth = 0;
 		SmartList<Text> texts = new SmartList<Text>(mButtons.length);
-		for (String button : mButtons) {
-			texts.add(new Text(0, 0, getButtonFont(), button, getVertexBufferObjectManager()));
-			texts_width += texts.getLast().getWidth();
+		for (CharSequence button : mButtons) {
+			texts.add(prepareText(button));
+			totalWidth += texts.getLast().getWidth();
 		}
 
-		for (Iterator<Text> iterator = texts.iterator(); iterator.hasNext();) {
-			Text text = (Text) iterator.next();
-
-			IMenuItem item = addMenuEntry(getW() * text.getWidth() / texts_width, getH() * 0.2f, getButtonFace(text), 666, Color.WHITE, Color.RED, getVertexBufferObjectManager());
-			item.attachChild(text);
-			Positioner.setCentered(text, item);
+		for (int i = 0; i < texts.size(); i++) {
+			Text txt = texts.get(i);
+			IMenuItem item = prepareMenuItem(txt, totalWidth, getButtonId(txt.getText()));
+			addMenuItem(item);
 		}
 
 		this.buildAnimations();
-		setBackgroundEnabled(false);
-		reset();
+		sortChildren(false);
 	}
 
 	@Override
@@ -99,14 +123,12 @@ public abstract class SceneMenuButtons extends MenuLoadable {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	protected IMenuItem addMenuEntry(float w, float h,
+	protected IMenuItem populateMenuEntry(float w, float h,
 			ITextureRegion pTextureRegion, int pID, Color pSelected,
 			Color pUnselected, VertexBufferObjectManager pVBOM) {
 		final IMenuItem menuItem;
 		menuItem = new ColorMenuItemDecorator(new SpriteMenuItem(pID, w, h, pTextureRegion, pVBOM), pSelected, pUnselected);
 		menuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-
-		addMenuItem(menuItem);
 		return menuItem;
 	}
 

@@ -89,8 +89,7 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 				camera, getVertexBufferObjectManager(),
 				Statics.getInstanceUnsafe().FONT_DESC,
 				Statics.getInstanceUnsafe().FONT_DESC,
-				"this is a text which is very long and which i will use for testing message box",
-				"button", "ok");
+				"This level is not unlocked yet!", "ok");
 
 		mSceneInfo.loadResources(getEngine(), ActivityLevelselector.this);
 		mSceneInfo.setOnMenuItemClickListener(new IOnMenuItemClickListener() {
