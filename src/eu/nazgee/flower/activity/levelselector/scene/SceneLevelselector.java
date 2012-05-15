@@ -56,7 +56,10 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-
+	@Override
+	protected int getItemsNumber() {
+		return mLevelItemsLoader.levels.size();
+	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
@@ -86,20 +89,15 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	protected void attachPage(final IPage<GameLevelItem> pPage, int pPageNumber) {
 		pPage.setPosition(pPageNumber * getW(), 0);
 		attachChild(pPage);
-//		pPage.setColor(Color.RED);
-//		pPage.setAlpha(0);
 	}
 
-	@Override
-	protected int getItemsNumber() {
-		return mLevelItemsLoader.levels.size();
-	}
 	// ===========================================================
 	// Methods
 	// ===========================================================
 	private int getFrameW() {
 		return (int) (getW()/COLS);
 	}
+
 	private int getFrameH() {
 		return (int) (getH()/ROWS);
 	}
