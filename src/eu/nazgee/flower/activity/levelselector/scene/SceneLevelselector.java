@@ -19,6 +19,8 @@ import android.content.Context;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.IPage;
+import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
+import eu.nazgee.flower.base.pagerscene.PageRectangleTransparent;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout.eAnchorPointXY;
 import eu.nazgee.flower.level.GameLevel;
@@ -61,7 +63,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	@Override
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
-		setPageMover(new PageMover<GameLevelItem>(e.getCamera(), getW()));
+		setPageMover(new PageMoverCameraZoom<GameLevelItem>(e.getCamera(), getW()));
 		setBackground(mLoadableParallaxBackground.getLoadedBacground());
 	}
 
@@ -74,7 +76,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 
 	@Override
 	protected IPage<GameLevelItem> populatePage(int pPageNumber) {
-		IPage<GameLevelItem> page = new PageTransparent<GameLevelItem>(0, 0, getW(), getH(), 
+		IPage<GameLevelItem> page = new PageRectangleTransparent<GameLevelItem>(0, 0, getW(), getH(), 
 				getVertexBufferObjectManager(),
 				new ArrayLayout(COLS, ROWS, getW(), getH(), eAnchorPointXY.CENTERED));
 		return page;

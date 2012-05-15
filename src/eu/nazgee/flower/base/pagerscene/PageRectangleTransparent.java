@@ -1,14 +1,12 @@
-package eu.nazgee.flower.activity.levelselector.scene;
+package eu.nazgee.flower.base.pagerscene;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.IEntityParameterCallable;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import eu.nazgee.flower.base.pagerscene.ILayout;
-import eu.nazgee.flower.base.pagerscene.PageRectangle;
 
-public class PageTransparent<T extends IEntity> extends PageRectangle<T> {
-	public PageTransparent(float pX, float pY, float pWidth, float pHeight,
+public class PageRectangleTransparent<T extends IEntity> extends PageRectangle<T> {
+	public PageRectangleTransparent(float pX, float pY, float pWidth, float pHeight,
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			ILayout pLayout) {
 		super(pX, pY, pWidth, pHeight, pVertexBufferObjectManager, pLayout);

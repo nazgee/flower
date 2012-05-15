@@ -1,14 +1,11 @@
-package eu.nazgee.flower.activity.levelselector.scene;
+package eu.nazgee.flower.base.pagerscene;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
 import org.andengine.util.math.MathUtils;
 
-import eu.nazgee.flower.base.pagerscene.IPage;
-import eu.nazgee.flower.base.pagerscene.PageMoverCamera;
-import eu.nazgee.flower.base.pagerscene.ScenePager;
 
-public class PageMover<T extends IEntity> extends PageMoverCamera<T> {
+public class PageMoverCameraZoom<T extends IEntity> extends PageMoverCamera<T> {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -20,7 +17,7 @@ public class PageMover<T extends IEntity> extends PageMoverCamera<T> {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public PageMover(Camera mCamera, float pStepPerPage) {
+	public PageMoverCameraZoom(Camera mCamera, float pStepPerPage) {
 		super(mCamera, pStepPerPage);
 	}
 	// ===========================================================

@@ -101,8 +101,8 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 				return true;
 			}
 		});
+
 		mScenePager = new SceneLevelselector(camera.getWidth(), camera.getHeight(), getVertexBufferObjectManager());
-//		mScenePager.getLoader().install(mSceneQuestion);
 		mScenePager.loadResources(getEngine(), this);
 		mScenePager.load(getEngine(), this);
 		mScenePager.setItemClikedListener(new IItemClikedListener<GameLevelItem>() {
