@@ -15,7 +15,8 @@ public @interface Consts {
 	 * How high above finger are flowers while dragging them around
 	 */
 	public static final int TOUCH_OFFSET_Y = (int) (- CAMERA_HEIGHT * 0.1f);
-	public static final String LEVEL_PREFS_FILE = "levelrefs";
+	public static final String LEVEL_PREFS_FILE = "levelprefs";
+	public static final String SEEDS_PREFS_FILE = "seedsprefs";
 
 	public static final String MENU_FONT = "Creepshow.ttf";
 	public static final String HUD_FONT = "ELEKTRA.ttf";

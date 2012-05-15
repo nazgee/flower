@@ -1,11 +1,15 @@
 package eu.nazgee.flower.level;
 
+import java.util.Iterator;
+
 import org.andengine.engine.Engine;
+import org.andengine.util.adt.list.SmartList;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.seed.Seed;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 
 public enum GameLevel {
@@ -49,6 +53,7 @@ public enum GameLevel {
 	public final int cash;
 	public final boolean lockedByDefault;
 	public final LevelResourcesBasic resources;
+	public final Seed[] seeds;
 
 	// ===========================================================
 	// Constructors
@@ -57,16 +62,30 @@ public enum GameLevel {
 		this(pID, pCash, true);
 	}
 
-	private GameLevel(final int pID, final int pCash, boolean pLocked) {
+	private GameLevel(final int pID, final int pCash, boolean pLocked, Seed ... pSeeds) {
 		id = pID;
 		cash = pCash;
-		resources = new LevelResourcesBasic();
 		lockedByDefault = pLocked;
+		resources = new LevelResourcesBasic();
+		seeds = pSeeds;
 	}
 
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	public SmartList<Seed> getSeeds() {
+		SmartList<Seed> ret = new SmartList<Seed>(id);
+
+		for (int i = 1; i <= id; i++) {
+			Seed[] new_seeds = getLevelById(i).seeds;
+			for (Seed seed : new_seeds) {
+				ret.add(seed);
+			}
+		}
+
+		return ret;
+	}
+
 	public static GameLevel getLevelById(final int pID) {
 		switch (pID) {
 		case 1:
