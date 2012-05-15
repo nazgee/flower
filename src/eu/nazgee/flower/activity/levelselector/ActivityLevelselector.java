@@ -29,10 +29,10 @@ import eu.nazgee.flower.Statics;
 import eu.nazgee.flower.activity.game.ActivityGame;
 import eu.nazgee.flower.activity.levelselector.scene.GameLevelItem;
 import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
+import eu.nazgee.flower.base.buttonscene.SceneButtons;
+import eu.nazgee.flower.base.buttonscene.SceneButtonsMessagebox;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
-import eu.nazgee.flower.base.questionscene.SceneButtons;
-import eu.nazgee.flower.base.questionscene.SceneButtonsMessagebox;
 
 public class ActivityLevelselector extends SimpleBaseGameActivity{
 

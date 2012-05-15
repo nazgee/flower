@@ -1,4 +1,4 @@
-package eu.nazgee.flower.base.questionscene;
+package eu.nazgee.flower.base.buttonscene;
 
 import javax.microedition.khronos.opengles.GL10;
 
