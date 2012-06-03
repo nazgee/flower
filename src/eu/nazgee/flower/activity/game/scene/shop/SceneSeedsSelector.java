@@ -22,7 +22,7 @@ import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.seed.Seed;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
-import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
+import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
 public class SceneSeedsSelector extends ScenePager<SeedItem>{
 
@@ -115,7 +115,7 @@ public class SceneSeedsSelector extends ScenePager<SeedItem>{
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	private class MyResources extends SimpleLoadableResource {
+	private class MyResources extends LoadableResourceSimple {
 		private BuildableBitmapTextureAtlas[] mAtlases;
 		public ITextureRegion TEX_FRAME;
 		public static final int SEEDS_ATLAS_NUM = 0;

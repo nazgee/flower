@@ -19,7 +19,7 @@ import eu.nazgee.flower.base.pagerscene.PageRectangleTransparent;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
-import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
+import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
 public class SceneLevelselector extends ScenePager<GameLevelItem>{
 
@@ -98,7 +98,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	private class MyResources extends SimpleLoadableResource {
+	private class MyResources extends LoadableResourceSimple {
 		private BuildableBitmapTextureAtlas[] mAtlases;
 		public ITextureRegion TEX_FRAME;
 

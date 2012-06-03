@@ -22,7 +22,7 @@ import org.andengine.util.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
+import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.HUDLoadable;
 
 public class HudGame extends HUDLoadable {
@@ -109,7 +109,7 @@ public class HudGame extends HUDLoadable {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	private static class MyResources extends SimpleLoadableResource {
+	private static class MyResources extends LoadableResourceSimple {
 		public volatile Font FONT_HUD;
 
 		@Override

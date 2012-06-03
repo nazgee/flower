@@ -13,7 +13,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
+import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
 public enum Seed {
 	// ===========================================================
@@ -198,7 +198,7 @@ public enum Seed {
 	// Inner and Anonymous Classes
 	// ===========================================================
 	
-	public class SeedResourcesBasic extends SimpleLoadableResource {
+	public class SeedResourcesBasic extends LoadableResourceSimple {
 
 		// ===========================================================
 		// Constants

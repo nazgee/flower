@@ -6,9 +6,9 @@ import org.andengine.engine.Engine;
 
 import android.content.Context;
 import eu.nazgee.game.utils.helpers.SoundLoader;
-import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
+import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
-public class LoadableSFX extends SimpleLoadableResource {
+public class LoadableSFX extends LoadableResourceSimple {
 	// ===========================================================
 	// Constants
 	// ===========================================================

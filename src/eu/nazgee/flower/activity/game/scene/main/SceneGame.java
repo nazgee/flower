@@ -46,7 +46,7 @@ import eu.nazgee.game.flower.flower.Flower.eLevel;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;
-import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
+import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.SceneLoadable;
 import eu.nazgee.game.utils.track.TrackVector;
 
@@ -361,7 +361,7 @@ public class SceneGame extends SceneLoadable{
 		}
 	}
 
-	private static class MyResources extends SimpleLoadableResource {
+	private static class MyResources extends LoadableResourceSimple {
 		public ITextureRegion TEX_SUN;
 		public ITiledTextureRegion TEXS_SUNSHINE;
 

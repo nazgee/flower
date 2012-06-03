@@ -12,9 +12,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.content.Context;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
-import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
+import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
-public class LoadableParallaxBackground extends SimpleLoadableResource {
+public class LoadableParallaxBackground extends LoadableResourceSimple {
 	// ===========================================================
 	// Constants
 	// ===========================================================

@@ -6,9 +6,9 @@ import org.andengine.engine.Engine;
 
 import android.content.Context;
 import eu.nazgee.flower.level.GameLevel;
-import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
+import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
-public class GameLevelsLoader extends SimpleLoadableResource {
+public class GameLevelsLoader extends LoadableResourceSimple {
 	public LinkedList<GameLevel> levels = new LinkedList<GameLevel>();
 
 	public GameLevelsLoader() {

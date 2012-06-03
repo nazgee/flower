@@ -129,8 +129,8 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	}
 
 	private void loadMainScene() {
-		mLoader.loadScene(mSceneGame, getEngine(), this, new ISceneLoaderListener() {
-//		mLoader.loadScene(mSceneSeedsSelector, getEngine(), this, new ISceneLoaderListener() {
+//		mLoader.loadScene(mSceneGame, getEngine(), this, new ISceneLoaderListener() {
+		mLoader.loadScene(mSceneSeedsSelector, getEngine(), this, new ISceneLoaderListener() {
 			@Override
 			public void onSceneLoaded(Scene pScene) {
 				/*

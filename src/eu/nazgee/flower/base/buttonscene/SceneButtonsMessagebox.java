@@ -18,7 +18,7 @@ import org.andengine.util.color.Color;
 import android.content.Context;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
-import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
+import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
 public class SceneButtonsMessagebox extends SceneButtons {
 	// ===========================================================
@@ -100,7 +100,7 @@ public class SceneButtonsMessagebox extends SceneButtons {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	private class MyResources extends SimpleLoadableResource {
+	private class MyResources extends LoadableResourceSimple {
 		protected BuildableBitmapTextureAtlas[] mAtlases;
 		public ITextureRegion TEX_FRAME;
 

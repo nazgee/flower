@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.seed.Seed;
-import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
+import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
 public enum GameLevel {
 	// ===========================================================
@@ -164,7 +164,7 @@ public enum GameLevel {
 	// Inner and Anonymous Classes
 	// ===========================================================
 	
-	public class LevelResourcesBasic extends SimpleLoadableResource {
+	public class LevelResourcesBasic extends LoadableResourceSimple {
 
 		// ===========================================================
 		// Constants
