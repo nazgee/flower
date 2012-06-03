@@ -1,6 +1,9 @@
 package eu.nazgee.flower.seed;
 
+import java.util.List;
+
 import org.andengine.engine.Engine;
+import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -9,7 +12,6 @@ import org.andengine.util.color.Color;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.res.AssetManager;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 
@@ -20,30 +22,30 @@ public enum Seed {
 	/*
 	 * When defined as Enum, seeds are singletons 
 	 */
-	SEED1(1,	100,	"flowers/001.svg",	"seeds/001.svg",	false,	Color.RED),
-	SEED2(2,	100,	"flowers/001.svg",	"seeds/001.svg",	false, 	Color.YELLOW),
-	SEED3(3,	100,	"flowers/001.svg",	"seeds/001.svg",	false, 	Color.BLUE),
-	SEED4(4,	200,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED, Color.YELLOW),
-	SEED5(5,	200,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.BLUE, Color.YELLOW),
-	SEED6(6,	200,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED, Color.BLUE),
-	SEED7(7,	300,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED, Color.YELLOW, Color.BLUE),
-	SEED8(8,	300,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED, Color.YELLOW, Color.BLUE),
-	SEED9(9,	300,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED, Color.YELLOW, Color.BLUE),
-	SEED10(10,	500,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED11(11,	500,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED12(12,	500,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED13(13,	800,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED14(14,	800,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED15(15,	800,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED16(16,	1300,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED17(17,	1300,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED18(18,	1300,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED19(19,	2100,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED20(20,	2100,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED21(21,	2100,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED22(22,	3400,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED23(23,	3400,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED),
-	SEED24(24,	3400,	"flowers/001.svg",	"seeds/001.svg",	true, 	Color.RED);
+	SEED1(1,	100,	"flowers/001.svg",	"seeds/001.png",	false,	Color.RED),
+	SEED2(2,	100,	"flowers/001.svg",	"seeds/001.png",	false, 	Color.YELLOW),
+	SEED3(3,	100,	"flowers/001.svg",	"seeds/001.png",	false, 	Color.BLUE),
+	SEED4(4,	200,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED, Color.YELLOW),
+	SEED5(5,	200,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.BLUE, Color.YELLOW),
+	SEED6(6,	200,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED, Color.BLUE),
+	SEED7(7,	300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED, Color.YELLOW, Color.BLUE),
+	SEED8(8,	300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED, Color.YELLOW, Color.BLUE),
+	SEED9(9,	300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED, Color.YELLOW, Color.BLUE),
+	SEED10(10,	500,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED11(11,	500,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED12(12,	500,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED13(13,	800,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED14(14,	800,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED15(15,	800,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED16(16,	1300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED17(17,	1300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED18(18,	1300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED19(19,	2100,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED20(20,	2100,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED21(21,	2100,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED22(22,	3400,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED23(23,	3400,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
+	SEED24(24,	3400,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED);
 
 	public static final int SEEDS_NUMBER = SEED24.id;
 
@@ -74,21 +76,31 @@ public enum Seed {
 	private Seed(final int pID, final int pCost, final CharSequence pTexSeed_file, final CharSequence pTexPlant_file, boolean pLockedByDefault, Color ... pColors) {
 		id = pID;
 		cost = pCost;
-		tex_seed_file = pTexSeed_file;
-		tex_plant_file = pTexPlant_file;
+		tex_seed_file = pTexPlant_file;
+		tex_plant_file = pTexSeed_file;
 		lockedByDefault = pLockedByDefault;
 		col_plant = pColors;
 	}
 
-	public static void createSeedAssets(BuildableBitmapTextureAtlas pAtlas,  AssetManager pAssetManager, Seed ... pSeeds) {
+	public static void createSeedAssets(BuildableBitmapTextureAtlas pAtlas,  Context pContext, List<Seed> pSeeds) {
 		for (Seed seed : pSeeds) {
-			BitmapTextureAtlasTextureRegionFactory.createFromAsset(pAtlas, pAssetManager, seed.tex_seed_file.toString());
+			seed.mTexSeed = BitmapTextureAtlasTextureRegionFactory.createFromAsset(pAtlas, pContext, seed.tex_seed_file.toString());
+//			if (seed.mTexSeed == null) {
+//				throw new RuntimeException("wtf? " + seed.tex_seed_file);
+//			} else {
+//				Log.w("bmp!", seed.tex_seed_file.toString());
+//			}
 		}
 	}
 
-	public static void createPlantAssets(BuildableBitmapTextureAtlas pAtlas,  AssetManager pAssetManager, Seed ... pSeeds) {
+	public static void createPlantAssets(BuildableBitmapTextureAtlas pAtlas,  Context pContext, List<Seed> pSeeds) {
 		for (Seed seed : pSeeds) {
-			BitmapTextureAtlasTextureRegionFactory.createFromAsset(pAtlas, pAssetManager, seed.tex_seed_file.toString());
+			seed.mTexPlant = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(pAtlas, pContext, seed.tex_plant_file.toString(), Consts.FLOWER_TEX_WIDTH, Consts.FLOWER_TEX_HEIGHT);
+//			if (seed.mTexPlant == null) {
+//				throw new RuntimeException("wtf? " + seed.tex_plant_file);
+//			} else {
+//				Log.w("svg!", seed.tex_plant_file.toString());
+//			}
 		}
 	}
 
@@ -101,9 +113,9 @@ public enum Seed {
 	 */
 	public static void createAllAssets(BuildableBitmapTextureAtlas pAtlasSeeds,
 			BuildableBitmapTextureAtlas pAtlasPlants,
-			AssetManager pAssetManager, Seed ... pSeeds) {
-		createSeedAssets(pAtlasSeeds, pAssetManager, pSeeds);
-		createPlantAssets(pAtlasPlants, pAssetManager, pSeeds);
+			Context pContext, List<Seed> pSeeds) {
+		createSeedAssets(pAtlasSeeds, pContext, pSeeds);
+		createPlantAssets(pAtlasPlants, pContext, pSeeds);
 	}
 
 	// ===========================================================

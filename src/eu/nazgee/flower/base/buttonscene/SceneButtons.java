@@ -15,7 +15,6 @@ import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
-import eu.nazgee.flower.Statics;
 import eu.nazgee.game.utils.scene.menu.MenuLoadable;
 
 public abstract class SceneButtons extends MenuLoadable {
@@ -81,12 +80,6 @@ public abstract class SceneButtons extends MenuLoadable {
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
-
-	@Override
-	public void onLoadResources(Engine e, Context c) {
-		// Make sure statics will be available
-		Statics.getInstanceSafe(e, c);
-	}
 
 	@Override
 	public void onLoad(final Engine e, final Context c) {

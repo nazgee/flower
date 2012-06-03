@@ -1,5 +1,6 @@
 package eu.nazgee.flower.activity.game;
 
+import org.andengine.engine.Engine;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -18,14 +19,17 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
 
+import android.content.Context;
 import android.view.KeyEvent;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.Statics;
 import eu.nazgee.flower.activity.game.scene.ingame.MenuIngame;
 import eu.nazgee.flower.activity.game.scene.main.SceneGame;
 import eu.nazgee.flower.activity.game.scene.over.MenuGameOver;
+import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsSelector;
+import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.engine.camera.SmootherEmpty;
 import eu.nazgee.game.utils.engine.camera.SmootherLinear;
@@ -47,7 +51,8 @@ public class ActivityGame extends SimpleBaseGameActivity {
 
 
 	MenuItemClickListener mMenuItemClickListener = new MenuItemClickListener();
-	private SceneGame mSceneMain;
+	private SceneGame mSceneGame;
+	private SceneSeedsSelector mSceneSeedsSelector;
 	private MenuIngame mMenuIngame;
 	private MenuGameOver mMenuGameOver;
 	private SceneLoader mLoader;
@@ -81,7 +86,9 @@ public class ActivityGame extends SimpleBaseGameActivity {
 
 		// Make sure statics are ready to use for anyone
 		Statics.getInstanceSafe(getEngine(), this);
-		mSceneMain = new SceneGame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager());
+
+		mSceneGame = new SceneGame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager());
+		mSceneSeedsSelector = new SceneSeedsSelector(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), GameLevel.LEVEL1);
 
 		// Create "Loading..." scene that will be used for all loading-related activities
 		SceneLoading loadingScene = new SceneLoading(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, Statics.getInstanceUnsafe().FONT_DESC, "Loading...", getVertexBufferObjectManager());
@@ -115,14 +122,15 @@ public class ActivityGame extends SimpleBaseGameActivity {
 
 		/*
 		 * At first, engine will show "Loading..." scene. mSceneMain will be
-		 * set as active scene right after it will be fully loaded (loading takes plac in background). 
+		 * set as active scene right after it will be fully loaded (loading takes place in background). 
 		 */
 		loadMainScene();
 		return mLoader.getLoadingScene();
 	}
 
 	private void loadMainScene() {
-		mLoader.loadScene(mSceneMain, getEngine(), this, new ISceneLoaderListener() {
+		mLoader.loadScene(mSceneGame, getEngine(), this, new ISceneLoaderListener() {
+//		mLoader.loadScene(mSceneSeedsSelector, getEngine(), this, new ISceneLoaderListener() {
 			@Override
 			public void onSceneLoaded(Scene pScene) {
 				/*
@@ -142,7 +150,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		if ((keyCode == KeyEvent.KEYCODE_MENU || keyCode == KeyEvent.KEYCODE_BACK)
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {
 
-			if (getEngine().getScene() == mSceneMain) {
+			if (getEngine().getScene() == mSceneGame) {
 				loadSubscene(mMenuIngame);
 				return true;
 			} else {
@@ -169,7 +177,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		mLoader.unloadEveryYoungerScene(getEngine().getScene()); // unload current childmenu
 		getEngine().getScene().back();
 
-		mSceneMain.unload();
+		mSceneGame.unload();
 		mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_SET_ACTIVE);
 		mLoader.getLoadingScene().setBackgroundEnabled(true);
 		loadMainScene();
@@ -177,6 +185,48 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	/**
+	 * This kind of singleton class should be implemented and used per-activity,
+	 * to avoid memory leaks.
+	 * @author nazgee
+	 *
+	 */
+	public static class Statics {
+		private static Statics mInstance;
+		public final EntityDetachRunnablePoolUpdateHandler ENTITY_DETACH_HANDLER;
+		public final Font FONT_DESC;
+
+		private Statics(Engine e, Context c) {
+			ENTITY_DETACH_HANDLER = new EntityDetachRunnablePoolUpdateHandler();
+			e.registerUpdateHandler(ENTITY_DETACH_HANDLER);
+
+			final TextureManager textureManager = e.getTextureManager();
+			final FontManager fontManager = e.getFontManager();
+
+			final ITexture font_texture = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
+			FONT_DESC = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
+			FONT_DESC.load();
+		}
+
+		static public synchronized Statics getInstanceSafe(Engine e, Context c) {
+			if (!isInitialized()) {
+				mInstance = new Statics(e, c);
+			}
+			return mInstance;
+		}
+
+		static public synchronized Statics getInstanceUnsafe() {
+			if (!isInitialized()) {
+				throw new RuntimeException("You have not initialized statics!");
+			}
+			return mInstance;
+		}
+
+		static public synchronized boolean isInitialized() {
+			return (mInstance != null);
+		}
+	}
+
 	private class MenuItemClickListener implements IOnMenuItemClickListener {
 		@Override
 		public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,

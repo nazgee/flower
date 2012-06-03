@@ -1,5 +1,6 @@
 package eu.nazgee.flower.activity.levelselector;
 
+import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.options.EngineOptions;
@@ -15,17 +16,25 @@ import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.font.FontManager;
+import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.TextureManager;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
+import org.andengine.util.color.Color;
 import org.andengine.util.modifier.ease.EaseStrongIn;
 import org.andengine.util.modifier.ease.EaseStrongInOut;
 import org.andengine.util.modifier.ease.EaseStrongOut;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.Statics;
 import eu.nazgee.flower.activity.game.ActivityGame;
 import eu.nazgee.flower.activity.levelselector.scene.GameLevelItem;
 import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
@@ -146,9 +155,46 @@ public class ActivityLevelselector extends SimpleBaseGameActivity{
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	/**
+	 * This kind of singleton class should be implemented and used per-activity,
+	 * to avoid memory leaks.
+	 * @author nazgee
+	 *
+	 */
+	public static class Statics {
+		private static Statics mInstance;
+		public final EntityDetachRunnablePoolUpdateHandler ENTITY_DETACH_HANDLER;
+		public final Font FONT_DESC;
 
+		private Statics(Engine e, Context c) {
+			ENTITY_DETACH_HANDLER = new EntityDetachRunnablePoolUpdateHandler();
+			e.registerUpdateHandler(ENTITY_DETACH_HANDLER);
 
+			final TextureManager textureManager = e.getTextureManager();
+			final FontManager fontManager = e.getFontManager();
 
+			final ITexture font_texture = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
+			FONT_DESC = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
+			FONT_DESC.load();
+		}
 
+		static public synchronized Statics getInstanceSafe(Engine e, Context c) {
+			if (!isInitialized()) {
+				mInstance = new Statics(e, c);
+			}
+			return mInstance;
+		}
+
+		static public synchronized Statics getInstanceUnsafe() {
+			if (!isInitialized()) {
+				throw new RuntimeException("You have not initialized statics!");
+			}
+			return mInstance;
+		}
+
+		static public synchronized boolean isInitialized() {
+			return (mInstance != null);
+		}
+	}
 
 }

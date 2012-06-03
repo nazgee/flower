@@ -73,6 +73,12 @@ public class SceneButtonsMessagebox extends SceneButtons {
 	}
 
 	@Override
+	public void onLoadResources(Engine e, Context c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public void onLoad(final Engine e, final Context c) {
 		super.onLoad(e, c);
 		prepareContent(e, c);
@@ -124,5 +130,4 @@ public class SceneButtonsMessagebox extends SceneButtons {
 			}
 		}
 	}
-
 }

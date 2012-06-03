@@ -11,7 +11,7 @@ import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
-import eu.nazgee.flower.Statics;
+import eu.nazgee.flower.activity.game.ActivityGame.Statics;
 import eu.nazgee.flower.activity.levelselector.scene.LoadableParallaxBackground;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout.eAnchorPointXY;
@@ -60,7 +60,7 @@ public class SceneSeedsSelector extends ScenePager<SeedItem>{
 		// Install all the seeds resources (this is needed, as long as seeds will
 		// be considered as needing resources)
 		for (Seed seed : this.mSeeds) {
-			getLoader().install(seed.resources);
+			this.mResources.getLoader().install(seed.resources);
 		}
 	}
 	// ===========================================================
@@ -68,17 +68,11 @@ public class SceneSeedsSelector extends ScenePager<SeedItem>{
 	// ===========================================================
 	@Override
 	protected int getItemsNumber() {
-		return mSeeds.size();
+		return this.mSeeds.size();
 	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
-	@Override
-	public void onLoadResources(Engine e, Context c) {
-		super.onLoadResources(e, c);
-		// Make sure that statics are safe to use from now on
-		Statics.getInstanceSafe(e, c);
-	}
 
 	@Override
 	public void onLoad(Engine e, Context c) {
@@ -124,15 +118,25 @@ public class SceneSeedsSelector extends ScenePager<SeedItem>{
 	private class MyResources extends SimpleLoadableResource {
 		private BuildableBitmapTextureAtlas[] mAtlases;
 		public ITextureRegion TEX_FRAME;
+		public static final int SEEDS_ATLAS_NUM = 0;
+		public static final int PLANTS_ATLAS_NUM = 1;
+		public static final int MISC_ATLAS_NUM = 2;
 
 		@Override
 		public void onLoadResources(Engine e, Context c) {
 
-			mAtlases = new BuildableBitmapTextureAtlas[1];
+			mAtlases = new BuildableBitmapTextureAtlas[3];
 			for (int i = 0; i < mAtlases.length; i++) {
 				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 1024, 1024, TextureOptions.REPEATING_BILINEAR);
+
+				if (i == SEEDS_ATLAS_NUM) {
+					Seed.createSeedAssets(mAtlases[SEEDS_ATLAS_NUM], c, SceneSeedsSelector.this.mSeeds);
+				} else if (i == PLANTS_ATLAS_NUM) {
+					Seed.createPlantAssets(mAtlases[PLANTS_ATLAS_NUM], c, SceneSeedsSelector.this.mSeeds);
+				} else {
+				}
 			}
-			BuildableBitmapTextureAtlas atlasMain = mAtlases[0];
+			BuildableBitmapTextureAtlas atlasMain = mAtlases[MISC_ATLAS_NUM];
 
 			TEX_FRAME = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(atlasMain, c, "hud/frame.svg", getFrameW(), getFrameH());
 

@@ -24,28 +24,40 @@ public class SeedItem extends Entity implements ITouchArea{
 	// Fields
 	// ===========================================================
 	private final Seed mSeed;
-	private final Sprite mFrame;
+	private final Sprite mSpriteFrame;
+	private final Sprite mSpriteSeed;
+	private final Sprite mSpritePlant;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public SeedItem(Seed pSeed, Font pFont, ITextureRegion pFrameTexture, VertexBufferObjectManager pVBOM) {
 		mSeed = pSeed;
-		mFrame = new Sprite(0, 0, pFrameTexture, pVBOM) {
+
+		mSpriteSeed = new Sprite(0, 0, mSeed.mTexSeed, pVBOM);
+		mSpritePlant = new Sprite(0, 0, mSeed.mTexPlant, pVBOM);
+
+		mSpriteFrame = new Sprite(0, 0, pFrameTexture, pVBOM) {
 			@Override
 			public 	void setAlpha(final float pAlpha) {
 				super.setAlpha(pAlpha * 0.5f);
 			}
 		};
 		if (mSeed.resources.isLocked()) {
-			mFrame.setColor(Color.RED);
+			mSpriteFrame.setColor(Color.RED);
 		}
 		final Text text = new Text(0, 0, pFont, "seed=" + pSeed.id, pVBOM);
 		text.setColor(Color.BLACK);
-		attachChild(mFrame);
+
+		attachChild(mSpriteFrame);
+		attachChild(mSpritePlant);
+		attachChild(mSpriteSeed);
 		attachChild(text);
-		Positioner.setCentered(mFrame, this);
-//		Positioner.setCentered(pSeed.tex_seed, this);
+
+		Positioner.setCentered(mSpriteFrame, this);
+		Positioner.setCentered(mSpriteSeed, this);
+		mSpritePlant.setPosition(0, 0);
 		Positioner.setCentered(text, this);
+
 		setAlpha(1);
 	}
 	// ===========================================================
@@ -57,13 +69,13 @@ public class SeedItem extends Entity implements ITouchArea{
 	// ===========================================================
 	@Override
 	public boolean contains(float pX, float pY) {
-		return mFrame.contains(pX, pY);
+		return mSpriteFrame.contains(pX, pY);
 	}
 
 	@Override
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 			float pTouchAreaLocalX, float pTouchAreaLocalY) {
-		return mFrame.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+		return mSpriteFrame.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 	} 
 	// ===========================================================
 	// Methods

@@ -29,6 +29,7 @@ import android.content.Context;
 import com.badlogic.gdx.math.Vector2;
 
 import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.activity.game.ActivityGame.Statics;
 import eu.nazgee.flower.activity.game.GameScore;
 import eu.nazgee.flower.activity.game.hud.HudGame;
 import eu.nazgee.flower.activity.game.sound.LoadableSFX;
@@ -112,7 +113,7 @@ public class SceneGame extends SceneLoadable{
 		mScore.setHUD(mHud);
 		mScore.set(0, SEEDS_COUNT, 0);
 
-		mPopupPool = new PopupPool(mResources.FONT_POPUP, vbom);
+		mPopupPool = new PopupPool(mResources.FONT_POPUP, Statics.getInstanceUnsafe().ENTITY_DETACH_HANDLER, vbom);
 
 		/*
 		 * Prepare fancy background- everything was loaded by mLoadableBacground
@@ -150,7 +151,9 @@ public class SceneGame extends SceneLoadable{
 		mCloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/3,
 				getW() * 0.1f, 10, 0.2f, 0.2f, 6, mSky,
 				mResources.TEXS_CLOUDS, mResources.TEX_WATERDROP, 
-				mResources.TEXS_SPLASH, vbom);
+				mResources.TEXS_SPLASH,
+				Statics.getInstanceUnsafe().ENTITY_DETACH_HANDLER,
+				vbom);
 		attachChild(mCloudLayer);
 		mCloudLayer.setWaterDropListener(new IWaterDropListener() {
 			@Override

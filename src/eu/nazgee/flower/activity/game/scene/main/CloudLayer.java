@@ -12,6 +12,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
+import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 
 import eu.nazgee.flower.pool.cloud.Cloud;
 import eu.nazgee.flower.pool.cloud.CloudItem;
@@ -55,7 +56,9 @@ public class CloudLayer extends Entity{
 			float pAvgSpeed, float pAvgTime,
 			float pVariationSpeed, float pVariationTime, final int pCloudsNumber,
 			final Sky pSky,
-			ITiledTextureRegion pCloudTexture, ITextureRegion pWaterDropTexture, ITiledTextureRegion pWaterSplashTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
+			ITiledTextureRegion pCloudTexture, ITextureRegion pWaterDropTexture, ITiledTextureRegion pWaterSplashTexture,
+			EntityDetachRunnablePoolUpdateHandler pDetacher,
+			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY);
 		mW = W;
 		mH = H;
@@ -65,9 +68,9 @@ public class CloudLayer extends Entity{
 		mAvgDistance = pAvgSpeed * pAvgTime;
 		mVariationSpeed = pVariationSpeed;
 		mVariationTime = pVariationTime;
-		mCloudPool = new CloudPool(pCloudTexture, pVertexBufferObjectManager);
-		mDropPool = new WaterDropPool(pWaterDropTexture, pVertexBufferObjectManager);
-		mSplashPool = new WaterSplashPool(pWaterSplashTexture, pVertexBufferObjectManager);
+		mCloudPool = new CloudPool(pCloudTexture, pDetacher, pVertexBufferObjectManager);
+		mDropPool = new WaterDropPool(pWaterDropTexture, pDetacher, pVertexBufferObjectManager);
+		mSplashPool = new WaterSplashPool(pWaterSplashTexture, pDetacher, pVertexBufferObjectManager);
 
 		/*
 		 * Smoothly ramp up number of clouds on layer

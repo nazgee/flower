@@ -3,26 +3,20 @@ package eu.nazgee.flower.activity.levelselector.scene;
 import org.andengine.engine.Engine;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.font.Font;
-import org.andengine.opengl.font.FontFactory;
-import org.andengine.opengl.font.FontManager;
-import org.andengine.opengl.texture.ITexture;
-import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
-import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.activity.levelselector.ActivityLevelselector.Statics;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
+import eu.nazgee.flower.base.pagerscene.ArrayLayout.eAnchorPointXY;
 import eu.nazgee.flower.base.pagerscene.IPage;
 import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
 import eu.nazgee.flower.base.pagerscene.PageRectangleTransparent;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
-import eu.nazgee.flower.base.pagerscene.ArrayLayout.eAnchorPointXY;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
@@ -73,7 +67,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	@Override
 	protected GameLevelItem populateItem(int pItem, int pItemOnPage, int pPage) {
 		GameLevel lvl = mLevelItemsLoader.levels.get(pItem);
-		GameLevelItem item = new GameLevelItem(lvl, mResources.FONT, mResources.TEX_FRAME, getVertexBufferObjectManager());
+		GameLevelItem item = new GameLevelItem(lvl, Statics.getInstanceUnsafe().FONT_DESC, mResources.TEX_FRAME, getVertexBufferObjectManager());
 		return item;
 	}
 
@@ -106,7 +100,6 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	// ===========================================================
 	private class MyResources extends SimpleLoadableResource {
 		private BuildableBitmapTextureAtlas[] mAtlases;
-		public Font FONT;
 		public ITextureRegion TEX_FRAME;
 
 		@Override
@@ -125,13 +118,6 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 		@Override
 		public void onLoad(Engine e, Context c) {
 			AtlasLoader.buildAndLoad(mAtlases);
-
-			final TextureManager textureManager = e.getTextureManager();
-			final FontManager fontManager = e.getFontManager();
-
-			final ITexture font_texture = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
-			FONT = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
-			FONT.load();
 		}
 
 		@Override
@@ -139,7 +125,6 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 			for (BuildableBitmapTextureAtlas atlas : mAtlases) {
 				atlas.unload();
 			}
-			FONT.unload();
 		}
 	}
 }
