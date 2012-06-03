@@ -1,11 +1,15 @@
 package eu.nazgee.flower.seed;
 
 import org.andengine.engine.Engine;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.AssetManager;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.game.utils.loadable.SimpleLoadableResource;
 
@@ -50,9 +54,11 @@ public enum Seed {
 	public final boolean lockedByDefault;
 	public final int id;
 	public final int cost;
-	public final CharSequence tex_seed;
-	public final CharSequence tex_plant;
+	public final CharSequence tex_seed_file;
+	public final CharSequence tex_plant_file;
 	public final Color[] col_plant;
+	public ITextureRegion mTexSeed;
+	public ITextureRegion mTexPlant;
 
 	// ===========================================================
 	// Constructors
@@ -65,72 +71,98 @@ public enum Seed {
 		this(pID, pCost, pTexSeed, pTexPlant, pLockedByDefault, Color.WHITE);
 	}
 
-	private Seed(final int pID, final int pCost, final CharSequence pTexSeed, final CharSequence pTexPlant, boolean pLockedByDefault, Color ... pColors) {
+	private Seed(final int pID, final int pCost, final CharSequence pTexSeed_file, final CharSequence pTexPlant_file, boolean pLockedByDefault, Color ... pColors) {
 		id = pID;
 		cost = pCost;
-		tex_seed = pTexSeed;
-		tex_plant = pTexPlant;
+		tex_seed_file = pTexSeed_file;
+		tex_plant_file = pTexPlant_file;
 		lockedByDefault = pLockedByDefault;
 		col_plant = pColors;
+	}
+
+	public static void createSeedAssets(BuildableBitmapTextureAtlas pAtlas,  AssetManager pAssetManager, Seed ... pSeeds) {
+		for (Seed seed : pSeeds) {
+			BitmapTextureAtlasTextureRegionFactory.createFromAsset(pAtlas, pAssetManager, seed.tex_seed_file.toString());
+		}
+	}
+
+	public static void createPlantAssets(BuildableBitmapTextureAtlas pAtlas,  AssetManager pAssetManager, Seed ... pSeeds) {
+		for (Seed seed : pSeeds) {
+			BitmapTextureAtlasTextureRegionFactory.createFromAsset(pAtlas, pAssetManager, seed.tex_seed_file.toString());
+		}
+	}
+
+	/**
+	 * Binds appropriate textures to seeds
+	 * @param pAtlasSeeds
+	 * @param pAtlasPlants
+	 * @param pAssetManager
+	 * @param pSeeds
+	 */
+	public static void createAllAssets(BuildableBitmapTextureAtlas pAtlasSeeds,
+			BuildableBitmapTextureAtlas pAtlasPlants,
+			AssetManager pAssetManager, Seed ... pSeeds) {
+		createSeedAssets(pAtlasSeeds, pAssetManager, pSeeds);
+		createPlantAssets(pAtlasPlants, pAssetManager, pSeeds);
 	}
 
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-//	public static Seed getLevelById(final int pID) {
-//		switch (pID) {
-//		case 1:
-//			return LEVEL1;
-//		case 2:
-//			return LEVEL2;
-//		case 3:
-//			return LEVEL3;
-//		case 4:
-//			return LEVEL4;
-//		case 5:
-//			return LEVEL5;
-//		case 6:
-//			return LEVEL6;
-//		case 7:
-//			return LEVEL7;
-//		case 8:
-//			return LEVEL8;
-//		case 9:
-//			return LEVEL9;
-//		case 10:
-//			return LEVEL10;
-//		case 11:
-//			return LEVEL11;
-//		case 12:
-//			return LEVEL12;
-//		case 13:
-//			return LEVEL13;
-//		case 14:
-//			return LEVEL14;
-//		case 15:
-//			return LEVEL15;
-//		case 16:
-//			return LEVEL16;
-//		case 17:
-//			return LEVEL17;
-//		case 18:
-//			return LEVEL18;
-//		case 19:
-//			return LEVEL19;
-//		case 20:
-//			return LEVEL20;
-//		case 21:
-//			return LEVEL21;
-//		case 22:
-//			return LEVEL22;
-//		case 23:
-//			return LEVEL23;
-//		case 24:
-//			return LEVEL24;
-//		default:
-//			throw new RuntimeException("No such level as " + pID + "!");
-//		}
-//	}
+	public static Seed getSeedById(final int pID) {
+		switch (pID) {
+		case 1:
+			return SEED1;
+		case 2:
+			return SEED2;
+		case 3:
+			return SEED3;
+		case 4:
+			return SEED4;
+		case 5:
+			return SEED5;
+		case 6:
+			return SEED6;
+		case 7:
+			return SEED7;
+		case 8:
+			return SEED8;
+		case 9:
+			return SEED9;
+		case 10:
+			return SEED10;
+		case 11:
+			return SEED11;
+		case 12:
+			return SEED12;
+		case 13:
+			return SEED13;
+		case 14:
+			return SEED14;
+		case 15:
+			return SEED15;
+		case 16:
+			return SEED16;
+		case 17:
+			return SEED17;
+		case 18:
+			return SEED18;
+		case 19:
+			return SEED19;
+		case 20:
+			return SEED20;
+		case 21:
+			return SEED21;
+		case 22:
+			return SEED22;
+		case 23:
+			return SEED23;
+		case 24:
+			return SEED24;
+		default:
+			throw new RuntimeException("No such seed as " + pID + "!");
+		}
+	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================

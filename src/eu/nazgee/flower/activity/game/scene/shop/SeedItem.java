@@ -44,6 +44,7 @@ public class SeedItem extends Entity implements ITouchArea{
 		attachChild(mFrame);
 		attachChild(text);
 		Positioner.setCentered(mFrame, this);
+//		Positioner.setCentered(pSeed.tex_seed, this);
 		Positioner.setCentered(text, this);
 		setAlpha(1);
 	}

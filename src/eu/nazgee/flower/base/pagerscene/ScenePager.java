@@ -71,9 +71,34 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
+	/**
+	 * Populate a graphical representation of an item which is to be used with this pager.
+	 * All the parameters are helpers only- a hint for you
+	 * @param pItem
+	 * @param pItemOnPage
+	 * @param pPage
+	 * @return
+	 */
 	abstract protected T populateItem(int pItem, int pItemOnPage, int pPage);
+	/**
+	 * Populate a page with a given page number
+	 * @param pPageNumber
+	 * @return
+	 */
 	abstract protected IPage<T> populatePage(int pPageNumber);
+	/**
+	 * Attach given page (populated via populatePage) to the scene. You can
+	 * attach it side-by-side, top-to-bottom, one over another, I do not care,
+	 * as long as it matches IPageMover you use (set by setPageMover)
+	 * @param pPage
+	 * @param pPageNumber
+	 */
 	abstract protected void attachPage(final IPage<T> pPage, int pPageNumber);
+	/**
+	 * Return number of items you would like to have on your pager here.
+	 * populateItem() will be called that many times.
+	 * @return
+	 */
 	abstract protected int getItemsNumber();
 
 	public interface IItemClikedListener<T> {

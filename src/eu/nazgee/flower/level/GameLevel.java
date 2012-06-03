@@ -1,7 +1,5 @@
 package eu.nazgee.flower.level;
 
-import java.util.Iterator;
-
 import org.andengine.engine.Engine;
 import org.andengine.util.adt.list.SmartList;
 
@@ -19,18 +17,18 @@ public enum GameLevel {
 	/*
 	 * When defined as Enum, levels are singletons 
 	 */
-	LEVEL1(1, 1000, false),
+	LEVEL1(1, 1000, false, Seed.SEED1, Seed.SEED2, Seed.SEED3),
 	LEVEL2(2, 1000),
 	LEVEL3(3, 1000),
-	LEVEL4(4, 1000),
-	LEVEL5(5, 1000),
-	LEVEL6(6, 1000),
-	LEVEL7(7, 1000),
+	LEVEL4(4, 1000, Seed.SEED4),
+	LEVEL5(5, 1000, Seed.SEED5),
+	LEVEL6(6, 1000, Seed.SEED6),
+	LEVEL7(7, 1000, Seed.SEED7, Seed.SEED8, Seed.SEED9),
 	LEVEL8(8, 1000),
 	LEVEL9(9, 1000),
-	LEVEL10(10, 1000),
+	LEVEL10(10, 1000, Seed.SEED10, Seed.SEED11),
 	LEVEL11(11, 1000),
-	LEVEL12(12, 1000),
+	LEVEL12(12, 1000, Seed.SEED12, Seed.SEED13),
 	LEVEL13(13, 1000),
 	LEVEL14(14, 1000),
 	LEVEL15(15, 1000),
@@ -62,6 +60,10 @@ public enum GameLevel {
 		this(pID, pCash, true);
 	}
 
+	private GameLevel(final int pID, final int pCash, Seed ... pSeeds) {
+		this(pID, pCash, true, pSeeds);
+	}
+
 	private GameLevel(final int pID, final int pCash, boolean pLocked, Seed ... pSeeds) {
 		id = pID;
 		cash = pCash;
@@ -76,6 +78,8 @@ public enum GameLevel {
 	public SmartList<Seed> getSeeds() {
 		SmartList<Seed> ret = new SmartList<Seed>(id);
 
+		// Current level has it's own collection of seeds, plus seeds from all
+		// previous levels- this builds up a collection that is returned here
 		for (int i = 1; i <= id; i++) {
 			Seed[] new_seeds = getLevelById(i).seeds;
 			for (Seed seed : new_seeds) {

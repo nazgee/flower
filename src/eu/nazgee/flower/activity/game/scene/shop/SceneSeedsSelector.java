@@ -45,12 +45,20 @@ public class SceneSeedsSelector extends ScenePager<SeedItem>{
 			VertexBufferObjectManager pVertexBufferObjectManager, GameLevel pGameLevel) {
 		super(W, H, pVertexBufferObjectManager, (int) (W * 0.3f));
 		this.mGameLevel = pGameLevel;
+
+		// Install shop's background
 		this.mLoadableParallaxBackground = new LoadableParallaxBackground(pVertexBufferObjectManager);
 		getLoader().install(this.mResources);
 		getLoader().install(this.mLoadableParallaxBackground);
+
 		setBackgroundEnabled(true);
 		setBackground(new Background(Color.BLUE));
+
+		// Get a collection of the seeds for current level
 		this.mSeeds = this.mGameLevel.getSeeds();
+
+		// Install all the seeds resources (this is needed, as long as seeds will
+		// be considered as needing resources)
 		for (Seed seed : this.mSeeds) {
 			getLoader().install(seed.resources);
 		}
