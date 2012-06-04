@@ -1,4 +1,4 @@
-package eu.nazgee.flower.activity.game.hud;
+package eu.nazgee.flower;
 
 import java.text.DecimalFormat;
 
@@ -25,25 +25,27 @@ import eu.nazgee.flower.Consts;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.HUDLoadable;
 
-public class HudGame extends HUDLoadable {
+public class BaseHUD extends HUDLoadable {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-	private static final int SCORE_LINES = 3;
 	// ===========================================================
 	// Fields
 	// ===========================================================
 
-	MyResources mResource = new MyResources();
-	Text mTextFPS;
-	Text mTextScore[] = new Text[SCORE_LINES];
+	protected HudResources mResources = new HudResources();
+	protected final int mTexLinesCount;
+	private Text mTextFPS;
+	private Text mTextLines[];
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public HudGame(float W, float H,
+	public BaseHUD(float W, float H, int pTexLinesCount,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, pVertexBufferObjectManager);
-		getLoader().install(mResource);
+		this.mTexLinesCount = pTexLinesCount;
+		this.mTextLines = new Text[mTexLinesCount];
+		getLoader().install(mResources);
 	}
 	// ===========================================================
 	// Getter & Setter
@@ -58,14 +60,14 @@ public class HudGame extends HUDLoadable {
 
 	@Override
 	public void onLoad(Engine e, Context c) {
-		mTextFPS = new Text(0, 0, mResource.FONT_HUD, "", 20, getVertexBufferObjectManager());
+		mTextFPS = new Text(0, 0, mResources.FONT_HUD, "", 20, getVertexBufferObjectManager());
 		attachChild(mTextFPS);
 
-		for (int i = 0; i < mTextScore.length; i++) {
-			mTextScore[i] = new Text(0, i * mResource.FONT_HUD.getLineHeight(), mResource.FONT_HUD, "0", 50,
+		for (int i = 0; i < mTextLines.length; i++) {
+			mTextLines[i] = new Text(0, i * mResources.FONT_HUD.getLineHeight(), mResources.FONT_HUD, "0", 50,
 					new TextOptions(AutoWrap.LETTERS, getW() * 0.95f, HorizontalAlign.RIGHT, Text.LEADING_DEFAULT),
 					getVertexBufferObjectManager());
-			attachChild(mTextScore[i]);
+			attachChild(mTextLines[i]);
 		}
 
 
@@ -97,19 +99,14 @@ public class HudGame extends HUDLoadable {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	public void setTextScore0(CharSequence pText) {
-		mTextScore[0].setText(pText);
+	protected void setTextLine(int pLine, CharSequence pText) {
+		mTextLines[pLine].setText(pText);
 	}
-	public void setTextScore1(CharSequence pText) {
-		mTextScore[1].setText(pText);
-	}
-	public void setTextScore2(CharSequence pText) {
-		mTextScore[2].setText(pText);
-	}
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	private static class MyResources extends LoadableResourceSimple {
+	protected static class HudResources extends LoadableResourceSimple {
 		public volatile Font FONT_HUD;
 
 		@Override

@@ -2,7 +2,7 @@ package eu.nazgee.flower.activity.game;
 
 import org.andengine.util.call.Callback;
 
-import eu.nazgee.flower.activity.game.hud.HudGame;
+import eu.nazgee.flower.activity.game.scene.main.HudGame;
 import eu.nazgee.flower.score.Score;
 import eu.nazgee.flower.score.Value;
 
@@ -16,7 +16,7 @@ public class GameScore extends Score {
 			public void onCallback(Value pCallbackValue) {
 				if (getHUD() == null)
 					return;
-				getHUD().setTextScore0(pCallbackValue.get() + "$");
+				getHUD().setTextScore(pCallbackValue.get() + "$");
 			}
 		});
 
@@ -25,7 +25,7 @@ public class GameScore extends Score {
 			public void onCallback(Value pCallbackValue) {
 				if (getHUD() == null)
 					return;
-				getHUD().setTextScore1("seeds:  " + pCallbackValue.get());
+				getHUD().setTextSeeds("seeds:  " + pCallbackValue.get());
 			}
 		});
 
@@ -34,7 +34,7 @@ public class GameScore extends Score {
 			public void onCallback(Value pCallbackValue) {
 				if (getHUD() == null)
 					return;
-				getHUD().setTextScore2("flowers:  " + pCallbackValue.get());
+				getHUD().setTextFlowers("flowers:  " + pCallbackValue.get());
 			}
 		});
 	}

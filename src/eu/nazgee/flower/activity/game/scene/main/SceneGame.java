@@ -31,7 +31,6 @@ import com.badlogic.gdx.math.Vector2;
 
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.activity.game.GameScore;
-import eu.nazgee.flower.activity.game.hud.HudGame;
 import eu.nazgee.flower.activity.game.sound.LoadableSFX;
 import eu.nazgee.flower.pool.cloud.Cloud;
 import eu.nazgee.flower.pool.popup.PopupItem;

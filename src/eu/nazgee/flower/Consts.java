@@ -24,4 +24,11 @@ public @interface Consts {
 	public static final Color COLOR_TEXT_SELECTED = Color.RED;
 	public static final Color COLOR_TEXT_UNSELECTED = Color.WHITE;
 	public static final Color COLOR_TEXT_DESCRIPTION = Color.BLACK;
+
+	public static final String FILE_BASE_HUD_FRAME = "basic/frame.svg";
+	public static final String FILE_LEVELSELECTOR_ITEM_FRAME = FILE_BASE_HUD_FRAME;
+	public static final String FILE_MESSAGEBOX_BUTTON = FILE_BASE_HUD_FRAME;
+
+	public static final String FILE_SHOP_ITEM_FRAME = FILE_BASE_HUD_FRAME;
+	public static final String FILE_SHOP_BUTTON_DONE = FILE_BASE_HUD_FRAME;
 }

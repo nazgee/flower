@@ -11,6 +11,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
+import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout.eAnchorPointXY;
 import eu.nazgee.flower.base.pagerscene.IPage;
@@ -113,7 +114,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 			}
 			BuildableBitmapTextureAtlas atlasMain = mAtlases[0];
 
-			TEX_FRAME = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(atlasMain, c, "hud/frame.svg", getFrameW(), getFrameH());
+			TEX_FRAME = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(atlasMain, c, Consts.FILE_LEVELSELECTOR_ITEM_FRAME, getFrameW(), getFrameH());
 
 		}
 

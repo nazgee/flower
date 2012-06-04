@@ -1,6 +1,6 @@
 package eu.nazgee.flower.score;
 
-import eu.nazgee.flower.activity.game.hud.HudGame;
+import eu.nazgee.flower.activity.game.scene.main.HudGame;
 
 public class Score {
 	private HudGame mHud;

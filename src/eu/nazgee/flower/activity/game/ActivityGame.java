@@ -28,7 +28,9 @@ import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.activity.game.scene.ingame.MenuIngame;
 import eu.nazgee.flower.activity.game.scene.main.SceneGame;
 import eu.nazgee.flower.activity.game.scene.over.MenuGameOver;
-import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsSelector;
+import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop;
+import eu.nazgee.flower.activity.game.scene.shop.SeedItem;
+import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.engine.camera.SmootherEmpty;
@@ -53,7 +55,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 
 	MenuItemClickListener mMenuItemClickListener = new MenuItemClickListener();
 	private SceneGame mSceneGame;
-	private SceneSeedsSelector mSceneSeedsSelector;
+	private SceneSeedsShop mSceneShop;
 	private MenuIngame mMenuIngame;
 	private MenuGameOver mMenuGameOver;
 	private SceneLoader mLoader;
@@ -94,7 +96,13 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		mResources.load(getEngine(), this);
 
 		mSceneGame = new SceneGame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, mResources.ENTITY_DETACH_HANDLER, getVertexBufferObjectManager());
-		mSceneSeedsSelector = new SceneSeedsSelector(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getStaticResources().FONT_DESC, getVertexBufferObjectManager(), GameLevel.LEVEL1);
+		mSceneShop = new SceneSeedsShop(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getStaticResources().FONT_DESC, getVertexBufferObjectManager(), GameLevel.LEVEL1);
+		mSceneShop.setItemClikedListener(new IItemClikedListener<SeedItem>() {
+			@Override
+			public void onItemClicked(SeedItem pItem) {
+				// play sound? do something?
+			}
+		});
 
 		// Create "Loading..." scene that will be used for all loading-related activities
 		SceneLoading loadingScene = new SceneLoading(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getStaticResources().FONT_DESC, "Loading...", getVertexBufferObjectManager());
@@ -130,13 +138,17 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		 * At first, engine will show "Loading..." scene. mSceneMain will be
 		 * set as active scene right after it will be fully loaded (loading takes place in background). 
 		 */
-		loadMainScene();
+		loadSceneShop();
+//		loadSceneGame();
 		return mLoader.getLoadingScene();
 	}
 
-	private void loadMainScene() {
-		mLoader.loadScene(mSceneGame, getEngine(), this, new ISceneLoaderListener() {
-//		mLoader.loadScene(mSceneSeedsSelector, getEngine(), this, new ISceneLoaderListener() {
+	private void loadSceneGame() {
+		mLoader.loadScene(mSceneGame, getEngine(), this, null);
+	}
+
+	private void loadSceneShop() {
+		mLoader.loadScene(mSceneShop, getEngine(), this, new ISceneLoaderListener() {
 			@Override
 			public void onSceneLoaded(Scene pScene) {
 				/*
@@ -192,7 +204,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		mSceneGame.unload();
 		mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_SET_ACTIVE);
 		mLoader.getLoadingScene().setBackgroundEnabled(true);
-		loadMainScene();
+		loadSceneShop();
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes

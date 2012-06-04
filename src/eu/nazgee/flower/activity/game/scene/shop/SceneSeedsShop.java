@@ -1,5 +1,7 @@
 package eu.nazgee.flower.activity.game.scene.shop;
 
+import java.util.List;
+
 import org.andengine.engine.Engine;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
@@ -12,6 +14,7 @@ import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
+import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.activity.levelselector.scene.LoadableParallaxBackground;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout.eAnchorPointXY;
@@ -24,7 +27,7 @@ import eu.nazgee.flower.seed.Seed;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
-public class SceneSeedsSelector extends ScenePager<SeedItem>{
+public class SceneSeedsShop extends ScenePager<SeedItem>{
 
 	// ===========================================================
 	// Constants
@@ -35,24 +38,28 @@ public class SceneSeedsSelector extends ScenePager<SeedItem>{
 	// Fields
 	// ===========================================================
 	private final MyResources mResources = new MyResources();
+	private final HudShop mHUD;
 	private final LoadableParallaxBackground mLoadableParallaxBackground;
 	private final GameLevel mGameLevel;
 	private final SmartList<Seed> mSeeds;
 	private final Font mDescFont;
+	private IShoppingListener mShoppingListener;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public SceneSeedsSelector(float W, float H,
+	public SceneSeedsShop(float W, float H,
 			final Font pDescFont,
 			VertexBufferObjectManager pVertexBufferObjectManager, GameLevel pGameLevel) {
 		super(W, H, pVertexBufferObjectManager, (int) (W * 0.3f));
 		this.mDescFont = pDescFont;
 		this.mGameLevel = pGameLevel;
+		this.mHUD = new HudShop(W, H, pVertexBufferObjectManager);
 
 		// Install shop's background
 		this.mLoadableParallaxBackground = new LoadableParallaxBackground(pVertexBufferObjectManager);
 		getLoader().install(this.mResources);
 		getLoader().install(this.mLoadableParallaxBackground);
+		getLoader().install(mHUD);
 
 		setBackgroundEnabled(true);
 		setBackground(new Background(Color.BLUE));
@@ -73,6 +80,14 @@ public class SceneSeedsSelector extends ScenePager<SeedItem>{
 	protected int getItemsNumber() {
 		return this.mSeeds.size();
 	}
+
+	public IShoppingListener getShoppingListener() {
+		return mShoppingListener;
+	}
+
+	public void setShoppingListener(IShoppingListener pShoppingListener) {
+		this.mShoppingListener = pShoppingListener;
+	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
@@ -82,6 +97,8 @@ public class SceneSeedsSelector extends ScenePager<SeedItem>{
 		super.onLoad(e, c);
 		setPageMover(new PageMoverCameraZoom<SeedItem>(e.getCamera(), getW()));
 		setBackground(mLoadableParallaxBackground.getLoadedBacground());
+
+		e.getCamera().setHUD(mHUD);
 	}
 
 	@Override
@@ -115,9 +132,14 @@ public class SceneSeedsSelector extends ScenePager<SeedItem>{
 	private int getFrameH() {
 		return (int) (getH()/ROWS);
 	}
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	public interface IShoppingListener {
+		public void onShoppingFinished(List<Seed> pBoughtItems);
+	}
+
 	private class MyResources extends LoadableResourceSimple {
 		private BuildableBitmapTextureAtlas[] mAtlases;
 		public ITextureRegion TEX_FRAME;
@@ -133,15 +155,15 @@ public class SceneSeedsSelector extends ScenePager<SeedItem>{
 				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 1024, 1024, TextureOptions.REPEATING_BILINEAR);
 
 				if (i == SEEDS_ATLAS_NUM) {
-					Seed.createSeedAssets(mAtlases[SEEDS_ATLAS_NUM], c, SceneSeedsSelector.this.mSeeds);
+					Seed.createSeedAssets(mAtlases[SEEDS_ATLAS_NUM], c, SceneSeedsShop.this.mSeeds);
 				} else if (i == PLANTS_ATLAS_NUM) {
-					Seed.createPlantAssets(mAtlases[PLANTS_ATLAS_NUM], c, SceneSeedsSelector.this.mSeeds);
+					Seed.createPlantAssets(mAtlases[PLANTS_ATLAS_NUM], c, SceneSeedsShop.this.mSeeds);
 				} else {
 				}
 			}
 			BuildableBitmapTextureAtlas atlasMain = mAtlases[MISC_ATLAS_NUM];
 
-			TEX_FRAME = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(atlasMain, c, "hud/frame.svg", getFrameW(), getFrameH());
+			TEX_FRAME = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(atlasMain, c, Consts.FILE_SHOP_ITEM_FRAME, getFrameW(), getFrameH());
 
 		}
 

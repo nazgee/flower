@@ -16,6 +16,7 @@ import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
+import eu.nazgee.flower.Consts;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
@@ -118,7 +119,7 @@ public class SceneButtonsMessagebox extends SceneButtons {
 			this.mAtlases[0] = new BuildableBitmapTextureAtlas(e.getTextureManager(), frameW + 5, frameH + 5, TextureOptions.REPEATING_BILINEAR);
 
 			BuildableBitmapTextureAtlas frameAtlas = this.mAtlases[0];
-			TEX_FRAME = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(frameAtlas, c, "hud/frame.svg", frameW, frameH);
+			TEX_FRAME = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(frameAtlas, c, Consts.FILE_MESSAGEBOX_BUTTON, frameW, frameH);
 			AtlasLoader.buildAndLoad(this.mAtlases);
 		}
 
