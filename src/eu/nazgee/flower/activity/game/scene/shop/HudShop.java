@@ -58,7 +58,7 @@ public class HudShop extends BaseHUD {
 				@Override
 				public void onClick(ClickDetector pClickDetector, int pPointerID,
 						float pSceneX, float pSceneY) {
-					registerEntityModifier(new RotationByModifier(1, 30));
+					registerEntityModifier(new RotationByModifier(0.1f, 30));
 				}
 			});
 			@Override
