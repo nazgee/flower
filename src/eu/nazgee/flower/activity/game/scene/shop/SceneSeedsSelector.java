@@ -3,6 +3,7 @@ package eu.nazgee.flower.activity.game.scene.shop;
 import org.andengine.engine.Engine;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -11,7 +12,6 @@ import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
-import eu.nazgee.flower.activity.game.ActivityGame.Statics;
 import eu.nazgee.flower.activity.levelselector.scene.LoadableParallaxBackground;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout.eAnchorPointXY;
@@ -38,12 +38,15 @@ public class SceneSeedsSelector extends ScenePager<SeedItem>{
 	private final LoadableParallaxBackground mLoadableParallaxBackground;
 	private final GameLevel mGameLevel;
 	private final SmartList<Seed> mSeeds;
+	private final Font mDescFont;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public SceneSeedsSelector(float W, float H,
+			final Font pDescFont,
 			VertexBufferObjectManager pVertexBufferObjectManager, GameLevel pGameLevel) {
 		super(W, H, pVertexBufferObjectManager, (int) (W * 0.3f));
+		this.mDescFont = pDescFont;
 		this.mGameLevel = pGameLevel;
 
 		// Install shop's background
@@ -84,7 +87,7 @@ public class SceneSeedsSelector extends ScenePager<SeedItem>{
 	@Override
 	protected SeedItem populateItem(int pItem, int pItemOnPage, int pPage) {
 		Seed seed = mSeeds.get(pItem);
-		SeedItem item = new SeedItem(seed, Statics.getInstanceUnsafe().FONT_DESC, mResources.TEX_FRAME, getVertexBufferObjectManager());
+		SeedItem item = new SeedItem(seed, mDescFont, mResources.TEX_FRAME, getVertexBufferObjectManager());
 		return item;
 	}
 

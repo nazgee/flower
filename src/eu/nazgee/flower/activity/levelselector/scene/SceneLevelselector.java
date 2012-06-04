@@ -3,6 +3,7 @@ package eu.nazgee.flower.activity.levelselector.scene;
 import org.andengine.engine.Engine;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -10,7 +11,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
-import eu.nazgee.flower.activity.levelselector.ActivityLevelselector.Statics;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout.eAnchorPointXY;
 import eu.nazgee.flower.base.pagerscene.IPage;
@@ -34,12 +34,14 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	private final MyResources mResources = new MyResources();
 	private final GameLevelsLoader mLevelItemsLoader = new GameLevelsLoader();
 	private final LoadableParallaxBackground mLoadableParallaxBackground;
+	private final Font mFontDesc;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public SceneLevelselector(float W, float H,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			final Font pFontDesc, VertexBufferObjectManager pVertexBufferObjectManager, GameLevel level1) {
 		super(W, H, pVertexBufferObjectManager, (int) (W * 0.3f));
+		this.mFontDesc = pFontDesc;
 		mLoadableParallaxBackground = new LoadableParallaxBackground(pVertexBufferObjectManager);
 		getLoader().install(mResources);
 		getLoader().install(mLevelItemsLoader);
@@ -67,7 +69,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	@Override
 	protected GameLevelItem populateItem(int pItem, int pItemOnPage, int pPage) {
 		GameLevel lvl = mLevelItemsLoader.levels.get(pItem);
-		GameLevelItem item = new GameLevelItem(lvl, Statics.getInstanceUnsafe().FONT_DESC, mResources.TEX_FRAME, getVertexBufferObjectManager());
+		GameLevelItem item = new GameLevelItem(lvl, mFontDesc, mResources.TEX_FRAME, getVertexBufferObjectManager());
 		return item;
 	}
 

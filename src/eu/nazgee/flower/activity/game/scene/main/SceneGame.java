@@ -22,6 +22,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
+import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
@@ -29,7 +30,6 @@ import android.content.Context;
 import com.badlogic.gdx.math.Vector2;
 
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.activity.game.ActivityGame.Statics;
 import eu.nazgee.flower.activity.game.GameScore;
 import eu.nazgee.flower.activity.game.hud.HudGame;
 import eu.nazgee.flower.activity.game.sound.LoadableSFX;
@@ -73,13 +73,16 @@ public class SceneGame extends SceneLoadable{
 
 	private final LinkedList<Flower> mFlowers = new LinkedList<Flower>();
 	private final FlowerListener mFlowerListener = new FlowerListener();
+	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public SceneGame(float W, float H,
+			final EntityDetachRunnablePoolUpdateHandler pEntityDetachRunnablePoolUpdateHandler,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, pVertexBufferObjectManager);
+		this.mDetacher = pEntityDetachRunnablePoolUpdateHandler;
 		
 		mSFX = new LoadableSFX();
 		mHud = new HudGame(W, H, pVertexBufferObjectManager);
@@ -113,7 +116,7 @@ public class SceneGame extends SceneLoadable{
 		mScore.setHUD(mHud);
 		mScore.set(0, SEEDS_COUNT, 0);
 
-		mPopupPool = new PopupPool(mResources.FONT_POPUP, Statics.getInstanceUnsafe().ENTITY_DETACH_HANDLER, vbom);
+		mPopupPool = new PopupPool(mResources.FONT_POPUP, mDetacher, vbom);
 
 		/*
 		 * Prepare fancy background- everything was loaded by mLoadableBacground
@@ -152,7 +155,7 @@ public class SceneGame extends SceneLoadable{
 				getW() * 0.1f, 10, 0.2f, 0.2f, 6, mSky,
 				mResources.TEXS_CLOUDS, mResources.TEX_WATERDROP, 
 				mResources.TEXS_SPLASH,
-				Statics.getInstanceUnsafe().ENTITY_DETACH_HANDLER,
+				mDetacher,
 				vbom);
 		attachChild(mCloudLayer);
 		mCloudLayer.setWaterDropListener(new IWaterDropListener() {

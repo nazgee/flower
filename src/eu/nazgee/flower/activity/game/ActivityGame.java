@@ -34,6 +34,7 @@ import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.engine.camera.SmootherEmpty;
 import eu.nazgee.game.utils.engine.camera.SmootherLinear;
 import eu.nazgee.game.utils.loadable.ILoadableResourceScene;
+import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.SceneLoader;
 import eu.nazgee.game.utils.scene.SceneLoader.ISceneLoaderListener;
 import eu.nazgee.game.utils.scene.SceneLoader.eLoadingSceneHandling;
@@ -56,6 +57,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	private MenuIngame mMenuIngame;
 	private MenuGameOver mMenuGameOver;
 	private SceneLoader mLoader;
+	private final MyResources mResources = new MyResources();
 
 	// ===========================================================
 	// Constructors
@@ -64,6 +66,9 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	public MyResources getStaticResources() {
+		return mResources;
+	}
 
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
@@ -85,13 +90,14 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		FontFactory.setAssetBasePath("fonts/");
 
 		// Make sure statics are ready to use for anyone
-		Statics.getInstanceSafe(getEngine(), this);
+		mResources.loadResources(getEngine(), this);
+		mResources.load(getEngine(), this);
 
-		mSceneGame = new SceneGame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager());
-		mSceneSeedsSelector = new SceneSeedsSelector(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), GameLevel.LEVEL1);
+		mSceneGame = new SceneGame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, mResources.ENTITY_DETACH_HANDLER, getVertexBufferObjectManager());
+		mSceneSeedsSelector = new SceneSeedsSelector(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getStaticResources().FONT_DESC, getVertexBufferObjectManager(), GameLevel.LEVEL1);
 
 		// Create "Loading..." scene that will be used for all loading-related activities
-		SceneLoading loadingScene = new SceneLoading(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, Statics.getInstanceUnsafe().FONT_DESC, "Loading...", getVertexBufferObjectManager());
+		SceneLoading loadingScene = new SceneLoading(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getStaticResources().FONT_DESC, "Loading...", getVertexBufferObjectManager());
 
 		mLoader = new SceneLoader(loadingScene);
 		mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_DONT_TOUCH).setLoadingSceneUnload(false);
@@ -129,8 +135,8 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	}
 
 	private void loadMainScene() {
-//		mLoader.loadScene(mSceneGame, getEngine(), this, new ISceneLoaderListener() {
-		mLoader.loadScene(mSceneSeedsSelector, getEngine(), this, new ISceneLoaderListener() {
+		mLoader.loadScene(mSceneGame, getEngine(), this, new ISceneLoaderListener() {
+//		mLoader.loadScene(mSceneSeedsSelector, getEngine(), this, new ISceneLoaderListener() {
 			@Override
 			public void onSceneLoaded(Scene pScene) {
 				/*
@@ -170,6 +176,12 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		}
 	}
 
+	@Override
+	public void onDestroyResources() throws Exception {
+		super.onDestroyResources();
+		mResources.unload();
+	}
+
 	// ===========================================================
 	// Methods
 	// ===========================================================
@@ -185,18 +197,18 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	/**
-	 * This kind of singleton class should be implemented and used per-activity,
-	 * to avoid memory leaks.
-	 * @author nazgee
-	 *
-	 */
-	public static class Statics {
-		private static Statics mInstance;
-		public final EntityDetachRunnablePoolUpdateHandler ENTITY_DETACH_HANDLER;
-		public final Font FONT_DESC;
+	public class MyResources extends LoadableResourceSimple {
+		public EntityDetachRunnablePoolUpdateHandler ENTITY_DETACH_HANDLER;
+		public Font FONT_DESC;
 
-		private Statics(Engine e, Context c) {
+		@Override
+		public void onLoadResources(Engine e, Context c) {
+		}
+
+		@Override
+		public void onLoad(Engine e, Context c) {
+			e.unregisterUpdateHandler(ENTITY_DETACH_HANDLER);
+
 			ENTITY_DETACH_HANDLER = new EntityDetachRunnablePoolUpdateHandler();
 			e.registerUpdateHandler(ENTITY_DETACH_HANDLER);
 
@@ -208,22 +220,9 @@ public class ActivityGame extends SimpleBaseGameActivity {
 			FONT_DESC.load();
 		}
 
-		static public synchronized Statics getInstanceSafe(Engine e, Context c) {
-			if (!isInitialized()) {
-				mInstance = new Statics(e, c);
-			}
-			return mInstance;
-		}
-
-		static public synchronized Statics getInstanceUnsafe() {
-			if (!isInitialized()) {
-				throw new RuntimeException("You have not initialized statics!");
-			}
-			return mInstance;
-		}
-
-		static public synchronized boolean isInitialized() {
-			return (mInstance != null);
+		@Override
+		public void onUnload() {
+			FONT_DESC.unload();
 		}
 	}
 
