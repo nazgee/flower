@@ -1,7 +1,6 @@
 package eu.nazgee.flower.activity.game.scene.shop;
 
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.entity.modifier.RotationByModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
@@ -14,7 +13,6 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.content.Context;
-import android.util.Log;
 import eu.nazgee.flower.BaseHUD;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
@@ -28,6 +26,7 @@ public class HudShop extends BaseHUD {
 	// ===========================================================
 	// Fields
 	// ===========================================================
+	private IHudListener mHudListener;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -47,6 +46,14 @@ public class HudShop extends BaseHUD {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	public IHudListener getHudListener() {
+		return mHudListener;
+	}
+
+	public void setHudListener(IHudListener mHudListener) {
+		this.mHudListener = mHudListener;
+	}
+
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
@@ -59,6 +66,9 @@ public class HudShop extends BaseHUD {
 				public void onClick(ClickDetector pClickDetector, int pPointerID,
 						float pSceneX, float pSceneY) {
 					registerEntityModifier(new RotationByModifier(0.1f, 30));
+					if (null != getHudListener()) {
+						getHudListener().onFinishedClicked();
+					}
 				}
 			});
 			@Override
@@ -78,6 +88,10 @@ public class HudShop extends BaseHUD {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	public interface IHudListener {
+		public void onFinishedClicked();
+	}
+
 	protected class ShopResources extends HudResources {
 		private BuildableBitmapTextureAtlas[] mAtlases;
 

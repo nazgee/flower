@@ -32,6 +32,9 @@ public class PageRectangle<T extends IEntity> extends Rectangle implements IPage
 
 	@Override
 	public void setItems(LinkedList<T> pItems) {
+		for (T item : mItems) {
+			detachChild(item);
+		}
 		mItems.clear();
 		mLayout.layoutItems(pItems);
 		for (T item : pItems) {

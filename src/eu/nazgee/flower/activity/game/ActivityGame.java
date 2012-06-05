@@ -1,5 +1,7 @@
 package eu.nazgee.flower.activity.game;
 
+import java.util.List;
+
 import org.andengine.engine.Engine;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -23,15 +25,19 @@ import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.KeyEvent;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.activity.game.scene.ingame.MenuIngame;
 import eu.nazgee.flower.activity.game.scene.main.SceneGame;
 import eu.nazgee.flower.activity.game.scene.over.MenuGameOver;
 import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop;
+import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop.IShoppingListener;
 import eu.nazgee.flower.activity.game.scene.shop.SeedItem;
+import eu.nazgee.flower.activity.levelselector.ActivityLevelselector;
 import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
 import eu.nazgee.flower.level.GameLevel;
+import eu.nazgee.flower.seed.Seed;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.engine.camera.SmootherEmpty;
 import eu.nazgee.game.utils.engine.camera.SmootherLinear;
@@ -40,6 +46,7 @@ import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.SceneLoader;
 import eu.nazgee.game.utils.scene.SceneLoader.ISceneLoaderListener;
 import eu.nazgee.game.utils.scene.SceneLoader.eLoadingSceneHandling;
+import eu.nazgee.game.utils.scene.SceneLoader.eOldSceneHandling;
 import eu.nazgee.game.utils.scene.SceneLoading;
 
 public class ActivityGame extends SimpleBaseGameActivity {
@@ -101,6 +108,13 @@ public class ActivityGame extends SimpleBaseGameActivity {
 			@Override
 			public void onItemClicked(SeedItem pItem) {
 				// play sound? do something?
+			}
+		});
+		mSceneShop.setShoppingListener(new IShoppingListener() {
+			@Override
+			public void onShoppingFinished(List<Seed> pBoughtItems) {
+//				loadSceneGame();
+				loadSubscene(mSceneGame);
 			}
 		});
 
@@ -168,11 +182,14 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		if ((keyCode == KeyEvent.KEYCODE_MENU || keyCode == KeyEvent.KEYCODE_BACK)
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {
 
-			if (getEngine().getScene() == mSceneGame) {
-				loadSubscene(mMenuIngame);
+			Scene youngest = SceneLoader.getYoungestScene(getEngine().getScene());
+
+			if (youngest == mMenuIngame) {
+				loadSubscene(null);
 				return true;
 			} else {
-				throw new RuntimeException("wtf?!");
+				loadSubscene(mMenuIngame);
+				return true;
 			}
 		}
 
@@ -180,11 +197,10 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	}
 
 	protected void loadSubscene(ILoadableResourceScene pScene) {
-		if (getEngine().getScene().getChildScene() != null) {
-			mLoader.unloadEveryYoungerScene(getEngine().getScene()); // unload current childmenu
-			getEngine().getScene().back();
+		if (pScene == null) {
+			SceneLoader.unloadYoungestChildSceneCallBack(getEngine().getScene());
 		} else {
-			mLoader.loadChildScene(mMenuIngame, getEngine(), this, null);
+			mLoader.loadChildSceneNested(pScene, getEngine(), this, null);
 		}
 	}
 
@@ -192,16 +208,15 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	public void onDestroyResources() throws Exception {
 		super.onDestroyResources();
 		mResources.unload();
+		mLoader.unloadEveryYoungerSceneWithGivenCallBack(getEngine().getScene());
 	}
 
 	// ===========================================================
 	// Methods
 	// ===========================================================
 	public void restartScene() {
-		mLoader.unloadEveryYoungerScene(getEngine().getScene()); // unload current childmenu
-		getEngine().getScene().back();
+		mLoader.unloadEveryYoungerSceneWithGivenCallBack(getEngine().getScene());
 
-		mSceneGame.unload();
 		mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_SET_ACTIVE);
 		mLoader.getLoadingScene().setBackgroundEnabled(true);
 		loadSceneShop();
