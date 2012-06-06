@@ -25,8 +25,8 @@ import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
 import eu.nazgee.flower.base.pagerscene.PageRectangleTransparent;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.level.GameLevel;
-import eu.nazgee.flower.pool.popup.PopupItem;
 import eu.nazgee.flower.pool.popup.PopupPool;
+import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
 import eu.nazgee.flower.seed.Seed;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
@@ -112,7 +112,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 			updateHUDBasket();
 			PopupItem popup = mPopupPool.obtainPoolItem();
 			attachChild(popup.getEntity());
-			popup.getEntity().pop(pItem, "$" + pItem.getSeed().cost, 1);
+			popup.getEntity().pop(pItem, "$" +pItem.getSeed().cost, 1);
 		}
 		super.callClickListener(pItem);
 	}

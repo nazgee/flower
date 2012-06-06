@@ -16,6 +16,7 @@ import org.andengine.util.modifier.ease.EaseQuadIn;
 
 import android.util.Log;
 import eu.nazgee.flower.Kinematics;
+import eu.nazgee.flower.pool.waterdrop.WaterDropPool.WaterDropItem;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 

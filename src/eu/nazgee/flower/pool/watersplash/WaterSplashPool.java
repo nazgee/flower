@@ -5,6 +5,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.adt.pool.Pool;
 
+import eu.nazgee.flower.pool.PooledEntityItem;
+import eu.nazgee.flower.pool.watersplash.WaterSplashPool.WaterSplashItem;
+
 public class WaterSplashPool extends Pool<WaterSplashItem> {
 
 	private final ITiledTextureRegion mWaterSplashTextureRegions;
@@ -22,4 +25,10 @@ public class WaterSplashPool extends Pool<WaterSplashItem> {
 		return new WaterSplashItem(mWaterSplashTextureRegions, mDetacher, mVertexBufferObjectManager);
 	}
 
+	public static class WaterSplashItem extends PooledEntityItem<WaterSplash> {
+		public WaterSplashItem(ITiledTextureRegion pTextureWaterDrop, EntityDetachRunnablePoolUpdateHandler pDetacher, VertexBufferObjectManager pVertexBufferObjectManager) {
+			super(pDetacher);
+			mEntity = new WaterSplash(0, 0, pTextureWaterDrop, pVertexBufferObjectManager, this);
+		}
+	}
 }

@@ -17,6 +17,7 @@ import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 
+import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 

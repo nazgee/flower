@@ -15,14 +15,14 @@ import org.andengine.util.Constants;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 
 import eu.nazgee.flower.pool.cloud.Cloud;
-import eu.nazgee.flower.pool.cloud.CloudItem;
 import eu.nazgee.flower.pool.cloud.CloudPool;
+import eu.nazgee.flower.pool.cloud.CloudPool.CloudItem;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop;
-import eu.nazgee.flower.pool.waterdrop.WaterDropItem;
-import eu.nazgee.flower.pool.waterdrop.WaterDropPool;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
-import eu.nazgee.flower.pool.watersplash.WaterSplashItem;
+import eu.nazgee.flower.pool.waterdrop.WaterDropPool;
+import eu.nazgee.flower.pool.waterdrop.WaterDropPool.WaterDropItem;
 import eu.nazgee.flower.pool.watersplash.WaterSplashPool;
+import eu.nazgee.flower.pool.watersplash.WaterSplashPool.WaterSplashItem;
 
 public class CloudLayer extends Entity{
 	// ===========================================================
