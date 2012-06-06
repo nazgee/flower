@@ -10,6 +10,7 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
@@ -24,6 +25,8 @@ import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
 import eu.nazgee.flower.base.pagerscene.PageRectangleTransparent;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.level.GameLevel;
+import eu.nazgee.flower.pool.popup.PopupItem;
+import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.seed.Seed;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
@@ -42,6 +45,8 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	private final HudShop mHUD;
 	private final LoadableParallaxBackground mLoadableParallaxBackground;
 	private final Font mDescFont;
+	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
+	private PopupPool mPopupPool;
 
 	private IShoppingListener mShoppingListener;
 	private final SeedsShop mShop;
@@ -49,23 +54,31 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	// Constructors
 	// ===========================================================
 	public SceneSeedsShop(float W, float H,
-			final Font pDescFont,
-			VertexBufferObjectManager pVertexBufferObjectManager, GameLevel pGameLevel) {
+			VertexBufferObjectManager pVertexBufferObjectManager,
+			GameLevel pGameLevel, final Font pDescFont,
+			final EntityDetachRunnablePoolUpdateHandler pDetacher) {
 		super(W, H, pVertexBufferObjectManager, (int) (W * 0.3f));
 		this.mDescFont = pDescFont;
-		this.mHUD = new HudShop(W, H, pVertexBufferObjectManager);
+		this.mDetacher = pDetacher;
+
+		// Install resources
+		getLoader().install(this.mResources);
 
 		// Install shop's background
 		this.mLoadableParallaxBackground = new LoadableParallaxBackground(pVertexBufferObjectManager);
-		getLoader().install(this.mResources);
 		getLoader().install(this.mLoadableParallaxBackground);
-		getLoader().install(mHUD);
-
 		setBackgroundEnabled(true);
 		setBackground(new Background(Color.BLUE));
 
+		// Install HUD
+		this.mHUD = new HudShop(W, H, pVertexBufferObjectManager);
+		getLoader().install(this.mHUD);
+
+		// Prepare pools
+		this.mPopupPool = new PopupPool(this.mDescFont, this.mDetacher, pVertexBufferObjectManager);
+
 		// Create a shop
-		mShop = new SeedsShop(pGameLevel);
+		this.mShop = new SeedsShop(pGameLevel);
 
 		// Install all the seeds resources (this is needed, as long as seeds will
 		// be considered as needing resources)
@@ -97,6 +110,9 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	protected void callClickListener(SeedItem pItem) {
 		if (mShop.addToBasket(pItem.getSeed())) {
 			updateHUDBasket();
+			PopupItem popup = mPopupPool.obtainPoolItem();
+			attachChild(popup.getEntity());
+			popup.getEntity().pop(pItem, "$" + pItem.getSeed().cost, 1);
 		}
 		super.callClickListener(pItem);
 	}

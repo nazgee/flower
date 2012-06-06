@@ -41,7 +41,7 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	private final int mTurnPageThreshold;
 
 	private int mCurrentPage;
-	T mCurrentlyTouchedItem;
+	private T mCurrentlyTouchedItem;
 
 	// ===========================================================
 	// Constructors
