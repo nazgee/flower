@@ -148,23 +148,8 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		 * At first, engine will show "Loading..." scene. mSceneMain will be
 		 * set as active scene right after it will be fully loaded (loading takes place in background). 
 		 */
-		loadSceneShop();
+		loadScene(mSceneShop);
 		return mLoader.getLoadingScene();
-	}
-
-	private void loadSceneShop() {
-		mLoader.loadScene(mSceneShop, getEngine(), this, new ISceneLoaderListener() {
-			@Override
-			public void onSceneLoaded(Scene pScene) {
-				/*
-				 * Only first scene has to be loaded with SCENE_DONT_TOUCH. 
-				 * Other scenes should be loaded with SCENE_SET_ACTIVE or SCENE_SET_CHILD
-				 * to make "Loading..." scene visible
-				 */
-				mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_SET_CHILD);
-				mLoader.getLoadingScene().setBackgroundEnabled(false);
-			}
-		});
 	}
 
 	@Override
@@ -187,14 +172,6 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	protected void loadSubscene(ILoadableResourceScene pScene) {
-		if (pScene == null) {
-			SceneLoader.unloadYoungestChildSceneCallBack(getEngine().getScene());
-		} else {
-			mLoader.loadChildSceneNested(pScene, getEngine(), this, null);
-		}
-	}
-
 	@Override
 	public void onDestroyResources() throws Exception {
 		super.onDestroyResources();
@@ -205,12 +182,35 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	public void restartScene() {
+	private void restart() {
 		mLoader.unloadEveryYoungerSceneWithGivenCallBack(getEngine().getScene());
 
 		mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_SET_ACTIVE);
 		mLoader.getLoadingScene().setBackgroundEnabled(true);
-		loadSceneShop();
+		loadScene(mSceneShop);
+	}
+
+	private void loadSubscene(ILoadableResourceScene pScene) {
+		if (pScene == null) {
+			SceneLoader.unloadYoungestChildSceneCallBack(getEngine().getScene());
+		} else {
+			mLoader.loadChildSceneNested(pScene, getEngine(), this, null);
+		}
+	}
+
+	private void loadScene(ILoadableResourceScene pScene) {
+		mLoader.loadScene(pScene, getEngine(), this, new ISceneLoaderListener() {
+			@Override
+			public void onSceneLoaded(Scene pScene) {
+				/*
+				 * Only the top scene scene has to be loaded with SCENE_DONT_TOUCH. 
+				 * Other scenes should be loaded with SCENE_SET_ACTIVE or SCENE_SET_CHILD
+				 * to make "Loading..." scene visible
+				 */
+				mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_SET_CHILD);
+				mLoader.getLoadingScene().setBackgroundEnabled(false);
+			}
+		});
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes
@@ -254,7 +254,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 					finish();
 					break;
 				case MenuIngame.MENU_RESET:
-					restartScene();
+					restart();
 					return true;
 				default:
 					break;
@@ -265,7 +265,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 					finish();
 					break;
 				case MenuIngame.MENU_RESET:
-					restartScene();
+					restart();
 					return true;
 				default:
 					break;
