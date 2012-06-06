@@ -22,12 +22,12 @@ public enum Seed {
 	/*
 	 * When defined as Enum, seeds are singletons 
 	 */
-	SEED1(1,	100,	"flowers/001.svg",	"seeds/001.png",	false,	Color.RED),
-	SEED2(2,	100,	"flowers/001.svg",	"seeds/001.png",	false, 	Color.YELLOW),
-	SEED3(3,	100,	"flowers/001.svg",	"seeds/001.png",	false, 	Color.BLUE),
-	SEED4(4,	200,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED, Color.YELLOW),
-	SEED5(5,	200,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.BLUE, Color.YELLOW),
-	SEED6(6,	200,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED, Color.BLUE),
+	SEED1(1,	100,	"flowers/001.svg",	"seeds/001.png",	false,	Color.RED, Color.WHITE),
+	SEED2(2,	100,	"flowers/002.svg",	"seeds/001.png",	false, 	Color.YELLOW),
+	SEED3(3,	100,	"flowers/002.svg",	"seeds/001.png",	false, 	Color.BLUE),
+	SEED4(4,	200,	"flowers/003.svg",	"seeds/001.png",	true, 	Color.RED, Color.YELLOW),
+	SEED5(5,	200,	"flowers/004.svg",	"seeds/001.png",	true, 	Color.BLUE, Color.YELLOW),
+	SEED6(6,	200,	"flowers/005.svg",	"seeds/001.png",	true, 	Color.RED, Color.BLUE),
 	SEED7(7,	300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED, Color.YELLOW, Color.BLUE),
 	SEED8(8,	300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED, Color.YELLOW, Color.BLUE),
 	SEED9(9,	300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED, Color.YELLOW, Color.BLUE),

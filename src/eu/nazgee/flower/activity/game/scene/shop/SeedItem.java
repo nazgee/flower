@@ -26,15 +26,19 @@ public class SeedItem extends Entity implements ITouchArea{
 	private final Seed mSeed;
 	private final Sprite mSpriteFrame;
 	private final Sprite mSpriteSeed;
-	private final Sprite mSpritePlant;
+	private final Sprite mSpriteBlossoms[];
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public SeedItem(Seed pSeed, Font pFont, ITextureRegion pFrameTexture, VertexBufferObjectManager pVBOM) {
 		mSeed = pSeed;
 
-		mSpriteSeed = new Sprite(0, 0, mSeed.mTexSeed, pVBOM);
-		mSpritePlant = new Sprite(0, 0, mSeed.mTexPlant, pVBOM);
+		mSpriteSeed = new Sprite(0, 0, pSeed.mTexSeed, pVBOM);
+		mSpriteBlossoms = new Sprite[pSeed.col_plant.length];
+		for (int i = 0; i < mSpriteBlossoms.length; i++) {
+			mSpriteBlossoms[i] = new Sprite(0, 0, pSeed.mTexPlant, pVBOM);
+			mSpriteBlossoms[i].setColor(pSeed.col_plant[i]);
+		}
 
 		mSpriteFrame = new Sprite(0, 0, pFrameTexture, pVBOM) {
 			@Override
@@ -49,13 +53,17 @@ public class SeedItem extends Entity implements ITouchArea{
 		text.setColor(Color.BLACK);
 
 		attachChild(mSpriteFrame);
-		attachChild(mSpritePlant);
+		int blossomX = 0;
+		for (Sprite blossom : mSpriteBlossoms) {
+			mSpriteFrame.attachChild(blossom);
+			blossom.setX(blossomX);
+			blossomX += blossom.getWidth();
+		}
 		attachChild(mSpriteSeed);
 		attachChild(text);
 
 		Positioner.setCentered(mSpriteFrame, this);
 		Positioner.setCentered(mSpriteSeed, this);
-		mSpritePlant.setPosition(0, 0);
 		Positioner.setCentered(text, this);
 
 		setAlpha(1);
