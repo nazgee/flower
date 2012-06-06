@@ -95,6 +95,10 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 		return this.mShop.getSeedsInShop().size();
 	}
 
+	public final SeedsShop getShop() {
+		return this.mShop;
+	}
+
 	public IShoppingListener getShoppingListener() {
 		return mShoppingListener;
 	}

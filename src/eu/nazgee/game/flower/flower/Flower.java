@@ -63,6 +63,7 @@ public class Flower extends Entity implements ITouchArea{
 	// ===========================================================
 
 	public Flower(float pX, float pY, ITextureRegion pTextureRegion,
+			Color pColor,
 			ITextureRegion pPotTextureRegion,
 			ITiledTextureRegion pWaterTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
@@ -86,10 +87,8 @@ public class Flower extends Entity implements ITouchArea{
 		Positioner.setCentered(mSpriteWater, this);
 		Positioner.setCenteredTop(mSpriteBlossom, mSpritePot);
 
-		Random rand = new Random();
-		Color col = new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
-		mSpriteBlossom.setColor(col);
-		mSpritePot.setColor(col);
+		mSpriteBlossom.setColor(pColor);
+		mSpritePot.setColor(pColor);
 
 		sortChildren();
 		setScale(0.75f);

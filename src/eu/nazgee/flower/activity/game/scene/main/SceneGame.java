@@ -25,6 +25,7 @@ import org.andengine.util.Constants;
 import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
+import org.andengine.util.math.MathUtils;
 
 import android.content.Context;
 
@@ -32,6 +33,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.activity.game.GameScore;
+import eu.nazgee.flower.activity.game.scene.shop.SeedsShop;
 import eu.nazgee.flower.activity.game.sound.LoadableSFX;
 import eu.nazgee.flower.pool.cloud.Cloud;
 import eu.nazgee.flower.pool.popup.PopupPool;
@@ -56,7 +58,6 @@ public class SceneGame extends SceneLoadable{
 	// Constants
 	// ===========================================================
 
-	private static final int SEEDS_COUNT = 20;
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -75,15 +76,17 @@ public class SceneGame extends SceneLoadable{
 	private final LinkedList<Flower> mFlowers = new LinkedList<Flower>();
 	private final FlowerListener mFlowerListener = new FlowerListener();
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
+	private final SeedsShop mSeedsShop; // TODO change it to list/array/whatever. No need to keep the whole shop here
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public SceneGame(float W, float H,
 			VertexBufferObjectManager pVertexBufferObjectManager,
-			final EntityDetachRunnablePoolUpdateHandler pEntityDetachRunnablePoolUpdateHandler) {
+			final EntityDetachRunnablePoolUpdateHandler pEntityDetachRunnablePoolUpdateHandler, final SeedsShop pSeedsShop) {
 		super(W, H, pVertexBufferObjectManager);
 		this.mDetacher = pEntityDetachRunnablePoolUpdateHandler;
+		this.mSeedsShop = pSeedsShop;
 		
 		mSFX = new LoadableSFX();
 		mHud = new HudGame(W, H, pVertexBufferObjectManager);
@@ -111,11 +114,14 @@ public class SceneGame extends SceneLoadable{
 	public void onLoad(Engine e, Context c) {
 		final VertexBufferObjectManager vbom = this.getVertexBufferObjectManager();
 
-		Random r = new Random();
+		Random rand = MathUtils.RANDOM;
+
 		SmoothTrackingCamera camera = (SmoothTrackingCamera) e.getCamera();
 		camera.setHUD(mHud);
 		mScore.setHUD(mHud);
-		mScore.set(0, SEEDS_COUNT, 0);
+		mScore.score.set(0);
+		mScore.flowers.set(0);
+		mScore.seeds.set(mSeedsShop.getSeedsInBasket().size());
 
 		mPopupPool = new PopupPool(mResources.FONT_POPUP, mDetacher, vbom);
 
@@ -169,21 +175,20 @@ public class SceneGame extends SceneLoadable{
 		/*
 		 * Create some flowers
 		 */
-		for (int i = 0; i < SEEDS_COUNT; i++) {
-			/*
-			 * Choose random texture
-			 */
-			ITextureRegion tex = mResources.TEXS_FLOWERS.getTextureRegion(
-					r.nextInt(mResources.TEXS_FLOWERS.getTileCount()));
+		for (int i = 0; i < mSeedsShop.getSeedsInBasket().size(); i++) {
+			Seed seed = mSeedsShop.getSeedsInBasket().get(i);
+
+			ITextureRegion tex =  seed.mTexPlant;
 
 			/*
 			 *  Create a sprite
 			 */
-			Flower flower = new Flower(0, 0, tex, mResources.TEX_POT, mResources.TEXS_POT_WATER, getVertexBufferObjectManager());
+			Color color = seed.col_plant[rand.nextInt(seed.col_plant.length)];
+			Flower flower = new Flower(0, 0, tex, color, mResources.TEX_POT, mResources.TEXS_POT_WATER, getVertexBufferObjectManager());
 			flower.setZIndex(-1);
 			flower.setFlowerStateHandler(mFlowerListener);
 
-			flower.setPosition(getW() * r.nextFloat(), getH() * r.nextFloat());
+			flower.setPosition(getW() * rand.nextFloat(), getH() * rand.nextFloat());
 			/*
 			 * Attach it to the scene, so it gets drawn and updated
 			 */
