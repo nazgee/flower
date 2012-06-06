@@ -10,12 +10,12 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
+import eu.nazgee.flower.BaseButton;
+import eu.nazgee.flower.BaseButton.IButtonListener;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.activity.game.scene.shop.HudShop.IHudListener;
 import eu.nazgee.flower.activity.levelselector.scene.LoadableParallaxBackground;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout.eAnchorPointXY;
@@ -28,7 +28,7 @@ import eu.nazgee.flower.seed.Seed;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
-public class SceneSeedsShop extends ScenePager<SeedItem> implements IHudListener{
+public class SceneSeedsShop extends ScenePager<SeedItem> {
 
 	// ===========================================================
 	// Constants
@@ -41,10 +41,10 @@ public class SceneSeedsShop extends ScenePager<SeedItem> implements IHudListener
 	private final MyResources mResources = new MyResources();
 	private final HudShop mHUD;
 	private final LoadableParallaxBackground mLoadableParallaxBackground;
-	private final GameLevel mGameLevel;
-	private final SmartList<Seed> mSeeds;
 	private final Font mDescFont;
+
 	private IShoppingListener mShoppingListener;
+	private final Shop mShop;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -53,9 +53,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> implements IHudListener
 			VertexBufferObjectManager pVertexBufferObjectManager, GameLevel pGameLevel) {
 		super(W, H, pVertexBufferObjectManager, (int) (W * 0.3f));
 		this.mDescFont = pDescFont;
-		this.mGameLevel = pGameLevel;
 		this.mHUD = new HudShop(W, H, pVertexBufferObjectManager);
-		this.mHUD.setHudListener(this);
 
 		// Install shop's background
 		this.mLoadableParallaxBackground = new LoadableParallaxBackground(pVertexBufferObjectManager);
@@ -66,21 +64,22 @@ public class SceneSeedsShop extends ScenePager<SeedItem> implements IHudListener
 		setBackgroundEnabled(true);
 		setBackground(new Background(Color.BLUE));
 
-		// Get a collection of the seeds for current level
-		this.mSeeds = this.mGameLevel.getSeeds();
+		// Create a shop
+		mShop = new Shop(pGameLevel);
 
 		// Install all the seeds resources (this is needed, as long as seeds will
 		// be considered as needing resources)
-		for (Seed seed : this.mSeeds) {
+		for (Seed seed : this.mShop.getSeeds()) {
 			this.mResources.getLoader().install(seed.resources);
 		}
+
 	}
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
 	@Override
 	protected int getItemsNumber() {
-		return this.mSeeds.size();
+		return this.mShop.getSeeds().size();
 	}
 
 	public IShoppingListener getShoppingListener() {
@@ -95,17 +94,36 @@ public class SceneSeedsShop extends ScenePager<SeedItem> implements IHudListener
 	// ===========================================================
 
 	@Override
+	protected void callClickListener(SeedItem pItem) {
+		
+		super.callClickListener(pItem);
+	}
+
+	@Override
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
 		setPageMover(new PageMoverCameraZoom<SeedItem>(e.getCamera(), getW()));
 		setBackground(mLoadableParallaxBackground.getLoadedBacground());
 
 		e.getCamera().setHUD(mHUD);
+
+		// --- user input handling ---
+
+		// HUD buttons clicks
+		this.mHUD.getButtonDone().setButtonListener(new IButtonListener() {
+			@Override
+			public void onClicked(BaseButton pButton) {
+				if (null != getShoppingListener()) {
+					getShoppingListener().onShoppingFinished(null);
+				}
+			}
+		});
+
 	}
 
 	@Override
 	protected SeedItem populateItem(int pItem, int pItemOnPage, int pPage) {
-		Seed seed = mSeeds.get(pItem);
+		Seed seed = this.mShop.getSeeds().get(pItem);
 		SeedItem item = new SeedItem(seed, mDescFont, mResources.TEX_FRAME, getVertexBufferObjectManager());
 		return item;
 	}
@@ -122,13 +140,6 @@ public class SceneSeedsShop extends ScenePager<SeedItem> implements IHudListener
 	protected void attachPage(final IPage<SeedItem> pPage, int pPageNumber) {
 		pPage.setPosition(pPageNumber * getW(), 0);
 		attachChild(pPage);
-	}
-
-	@Override
-	public void onFinishedClicked() {
-		if (null != getShoppingListener()) {
-			getShoppingListener().onShoppingFinished(null);
-		}
 	}
 
 	// ===========================================================
@@ -164,10 +175,10 @@ public class SceneSeedsShop extends ScenePager<SeedItem> implements IHudListener
 				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 2048, 2048, TextureOptions.REPEATING_BILINEAR);
 
 				if (i == SEEDS_ATLAS_NUM) {
-					Seed.createSeedAssets(mAtlases[SEEDS_ATLAS_NUM], c, SceneSeedsShop.this.mSeeds);
+					Seed.createSeedAssets(mAtlases[SEEDS_ATLAS_NUM], c, SceneSeedsShop.this.mShop.getSeeds());
 				}
 				if (i == PLANTS_ATLAS_NUM) {
-					Seed.createPlantAssets(mAtlases[PLANTS_ATLAS_NUM], c, SceneSeedsShop.this.mSeeds);
+					Seed.createPlantAssets(mAtlases[PLANTS_ATLAS_NUM], c, SceneSeedsShop.this.mShop.getSeeds());
 				}
 			}
 			BuildableBitmapTextureAtlas atlas = mAtlases[MISC_ATLAS_NUM];

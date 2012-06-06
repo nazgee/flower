@@ -25,7 +25,6 @@ import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.KeyEvent;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.activity.game.scene.ingame.MenuIngame;
@@ -34,7 +33,6 @@ import eu.nazgee.flower.activity.game.scene.over.MenuGameOver;
 import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop;
 import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop.IShoppingListener;
 import eu.nazgee.flower.activity.game.scene.shop.SeedItem;
-import eu.nazgee.flower.activity.levelselector.ActivityLevelselector;
 import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.seed.Seed;
@@ -46,7 +44,6 @@ import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.SceneLoader;
 import eu.nazgee.game.utils.scene.SceneLoader.ISceneLoaderListener;
 import eu.nazgee.game.utils.scene.SceneLoader.eLoadingSceneHandling;
-import eu.nazgee.game.utils.scene.SceneLoader.eOldSceneHandling;
 import eu.nazgee.game.utils.scene.SceneLoading;
 
 public class ActivityGame extends SimpleBaseGameActivity {

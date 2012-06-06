@@ -3,7 +3,6 @@ package eu.nazgee.flower.base.pagerscene;
 import java.util.LinkedList;
 
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.IOnSceneTouchListener;
@@ -21,7 +20,6 @@ import org.andengine.util.math.MathUtils;
 import android.content.Context;
 import android.util.Log;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.scene.SceneLoadable;
 
 abstract public class ScenePager<T extends IEntity> extends SceneLoadable implements IOnSceneTouchListener, IScrollDetectorListener, IOnAreaTouchListener, IClickDetectorListener {
@@ -162,7 +160,7 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 			float pSceneX, float pSceneY) {
 		mSurfaceScrollDetector.reset();
 		callPageMoverOnCompleteSwipe(mCurrentPage);
-		callClickListener();
+		callClickListener(mCurrentlyTouchedItem);
 	}
 
 
@@ -229,9 +227,9 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 		}
 	}
 
-	private void callClickListener() {
+	protected void callClickListener(T pItem) {
 		if (getItemClikedListener() != null) {
-			getItemClikedListener().onItemClicked(mCurrentlyTouchedItem);
+			getItemClikedListener().onItemClicked(pItem);
 		}
 	}
 
