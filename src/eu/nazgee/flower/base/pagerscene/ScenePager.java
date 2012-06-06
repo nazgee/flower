@@ -136,7 +136,11 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 				unregisterTouchArea((ITouchArea) item);
 				item.detachSelf();
 			}
+			page.clearEntityModifiers();
+			page.clearUpdateHandlers();
+			detachChild(page);
 		}
+		mPages.clear();
 	}
 
 	@Override

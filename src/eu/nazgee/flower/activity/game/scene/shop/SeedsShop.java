@@ -58,7 +58,7 @@ public class SeedsShop {
 	public boolean addToBasket(Seed pSeed) {
 		if (mCustomerCash >= (mBasketValue + pSeed.cost)) {
 			mSeedsInBasket.add(pSeed);
-			mBasketValue = calculateValue(mSeedsInBasket);
+			recalculateBasketValue();
 			return true;
 		} else {
 			return false;
@@ -67,7 +67,7 @@ public class SeedsShop {
 
 	public boolean removeFromBasket(Seed pSeed) {
 		if (mSeedsInBasket.remove(pSeed)) {
-			mBasketValue = calculateValue(mSeedsInBasket);
+			recalculateBasketValue();
 			return true;
 		} else {
 			return false;
@@ -76,7 +76,11 @@ public class SeedsShop {
 
 	public void emptyBasket() {
 		mSeedsInBasket.clear();
-		calculateValue(mSeedsInBasket);
+		recalculateBasketValue();
+	}
+
+	protected void recalculateBasketValue() {
+		mBasketValue = calculateValue(mSeedsInBasket);
 	}
 
 	protected int calculateValue(SmartList<Seed> pSeeds) {
