@@ -22,6 +22,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
+import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
 
@@ -37,6 +38,7 @@ import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
+import eu.nazgee.flower.seed.Seed;
 import eu.nazgee.flower.sun.Sun;
 import eu.nazgee.flower.sun.Sun.TravelListener;
 import eu.nazgee.game.flower.flower.Flower;
@@ -78,8 +80,8 @@ public class SceneGame extends SceneLoadable{
 	// Constructors
 	// ===========================================================
 	public SceneGame(float W, float H,
-			final EntityDetachRunnablePoolUpdateHandler pEntityDetachRunnablePoolUpdateHandler,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager,
+			final EntityDetachRunnablePoolUpdateHandler pEntityDetachRunnablePoolUpdateHandler) {
 		super(W, H, pVertexBufferObjectManager);
 		this.mDetacher = pEntityDetachRunnablePoolUpdateHandler;
 		

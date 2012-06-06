@@ -99,7 +99,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		mResources.loadResources(getEngine(), this);
 		mResources.load(getEngine(), this);
 
-		mSceneGame = new SceneGame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, mResources.ENTITY_DETACH_HANDLER, getVertexBufferObjectManager());
+		mSceneGame = new SceneGame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), mResources.ENTITY_DETACH_HANDLER);
 		mSceneShop = new SceneSeedsShop(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), GameLevel.LEVEL1, getStaticResources().FONT_DESC, mResources.ENTITY_DETACH_HANDLER);
 		mSceneShop.setItemClikedListener(new IItemClikedListener<SeedItem>() {
 			@Override
