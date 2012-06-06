@@ -110,7 +110,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		mSceneShop.setShoppingListener(new IShoppingListener() {
 			@Override
 			public void onShoppingFinished(List<Seed> pBoughtItems) {
-//				loadSceneGame();
+				mLoader.setChildSceneModalDraw(true); // we do NOT want to see the background scene for the sake of framerate
 				loadSubscene(mSceneGame);
 			}
 		});
@@ -144,18 +144,12 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	protected Scene onCreateScene() {
 		this.mEngine.registerUpdateHandler(new FPSLogger());
 
-
 		/*
 		 * At first, engine will show "Loading..." scene. mSceneMain will be
 		 * set as active scene right after it will be fully loaded (loading takes place in background). 
 		 */
 		loadSceneShop();
-//		loadSceneGame();
 		return mLoader.getLoadingScene();
-	}
-
-	private void loadSceneGame() {
-		mLoader.loadScene(mSceneGame, getEngine(), this, null);
 	}
 
 	private void loadSceneShop() {
@@ -168,7 +162,6 @@ public class ActivityGame extends SimpleBaseGameActivity {
 				 * to make "Loading..." scene visible
 				 */
 				mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_SET_CHILD);
-				mLoader.setChildSceneModalDraw(false).setChildSceneModalTouch(true).setChildSceneModalUpdate(true);
 				mLoader.getLoadingScene().setBackgroundEnabled(false);
 			}
 		});
@@ -185,6 +178,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 				loadSubscene(null);
 				return true;
 			} else {
+				mLoader.setChildSceneModalDraw(false); // we want to see the background scene
 				loadSubscene(mMenuIngame);
 				return true;
 			}

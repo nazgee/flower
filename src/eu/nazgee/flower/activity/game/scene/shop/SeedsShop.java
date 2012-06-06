@@ -5,7 +5,7 @@ import org.andengine.util.adt.list.SmartList;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.seed.Seed;
 
-public class Shop {
+public class SeedsShop {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -13,18 +13,20 @@ public class Shop {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private final SmartList<Seed> mSeeds;
+	private final SmartList<Seed> mSeedsInShop;
+	private final SmartList<Seed> mSeedsInBasket = new SmartList<Seed>();
 	private int mCustomerCash;
+	private int mBasketValue;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public Shop(GameLevel pGameLevel) {
+	public SeedsShop(GameLevel pGameLevel) {
 		this(pGameLevel.getSeeds(), pGameLevel.cash);
 	}
 
-	public Shop(SmartList<Seed> mSeeds, int mCustomerCash) {
+	public SeedsShop(SmartList<Seed> mSeeds, int mCustomerCash) {
 		super();
-		this.mSeeds = mSeeds;
+		this.mSeedsInShop = mSeeds;
 		this.setCustomerCash(mCustomerCash);
 	}
 	// ===========================================================
@@ -36,10 +38,15 @@ public class Shop {
 	public void setCustomerCash(int mCustomerCash) {
 		this.mCustomerCash = mCustomerCash;
 	}
-	public SmartList<Seed> getSeeds() {
-		return mSeeds;
+	public SmartList<Seed> getSeedsInShop() {
+		return mSeedsInShop;
 	}
-
+	public SmartList<Seed> getSeedsInBasket() {
+		return mSeedsInBasket;
+	}
+	public int getBasketValue() {
+		return mBasketValue;
+	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
@@ -47,9 +54,35 @@ public class Shop {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+	public boolean addToBasket(Seed pSeed) {
+		if (mCustomerCash >= (mBasketValue + pSeed.cost)) {
+			mSeedsInBasket.add(pSeed);
+			mBasketValue = calculateValue(mSeedsInBasket);
+			return true;
+		} else {
+			return false;
+		}
+	}
 
+	public boolean removeFromBasket(Seed pSeed) {
+		if (mSeedsInBasket.remove(pSeed)) {
+			mBasketValue = calculateValue(mSeedsInBasket);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected int calculateValue(SmartList<Seed> pSeeds) {
+		int value = 0;
+		for (Seed seed : pSeeds) {
+			value += seed.cost;
+		}
+		return value;
+	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+
 
 }

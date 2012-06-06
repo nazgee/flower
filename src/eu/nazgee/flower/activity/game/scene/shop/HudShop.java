@@ -28,7 +28,7 @@ public class HudShop extends BaseHUD {
 	// ===========================================================
 	public HudShop(float W, float H,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(W, H, 1, pVertexBufferObjectManager);
+		super(W, H, 2, pVertexBufferObjectManager);
 
 		// make sure, that we use our new version of resources, instead of a base one
 		getLoader().uninstall(mResources);
@@ -36,9 +36,7 @@ public class HudShop extends BaseHUD {
 		getLoader().install(mResources);
 	}
 
-	public void setTextCash(CharSequence pText) {
-		setTextLine(0, pText);
-	}
+
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
@@ -51,6 +49,8 @@ public class HudShop extends BaseHUD {
 
 	@Override
 	public void onLoad(Engine e, Context c) {
+		super.onLoad(e, c);
+
 		mButtonDone = new BaseButton(0, 0, ((ShopResources)mResources).TEX_BUTTON_DONE, getVertexBufferObjectManager());
 		attachChild(mButtonDone);
 		this.mButtonDone.setPosition(getW() - mButtonDone.getWidth(), getH() - mButtonDone.getHeight());
@@ -61,6 +61,12 @@ public class HudShop extends BaseHUD {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+	public void setTextCash(CharSequence pText) {
+		setTextLine(0, pText);
+	}
+	public void setTextBasketValue(CharSequence pText) {
+		setTextLine(1, pText);
+	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================

@@ -34,7 +34,6 @@ public class BaseHUD extends HUDLoadable {
 	// ===========================================================
 
 	protected HudResources mResources = new HudResources();
-	protected final int mTexLinesCount;
 	private Text mTextFPS;
 	private Text mTextLines[];
 	// ===========================================================
@@ -43,8 +42,7 @@ public class BaseHUD extends HUDLoadable {
 	public BaseHUD(float W, float H, int pTexLinesCount,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, pVertexBufferObjectManager);
-		this.mTexLinesCount = pTexLinesCount;
-		this.mTextLines = new Text[mTexLinesCount];
+		this.mTextLines = new Text[pTexLinesCount];
 		getLoader().install(mResources);
 	}
 	// ===========================================================

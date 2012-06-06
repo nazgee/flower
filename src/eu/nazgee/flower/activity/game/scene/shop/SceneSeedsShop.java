@@ -44,7 +44,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	private final Font mDescFont;
 
 	private IShoppingListener mShoppingListener;
-	private final Shop mShop;
+	private final SeedsShop mShop;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -65,11 +65,11 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 		setBackground(new Background(Color.BLUE));
 
 		// Create a shop
-		mShop = new Shop(pGameLevel);
+		mShop = new SeedsShop(pGameLevel);
 
 		// Install all the seeds resources (this is needed, as long as seeds will
 		// be considered as needing resources)
-		for (Seed seed : this.mShop.getSeeds()) {
+		for (Seed seed : this.mShop.getSeedsInShop()) {
 			this.mResources.getLoader().install(seed.resources);
 		}
 
@@ -79,7 +79,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	// ===========================================================
 	@Override
 	protected int getItemsNumber() {
-		return this.mShop.getSeeds().size();
+		return this.mShop.getSeedsInShop().size();
 	}
 
 	public IShoppingListener getShoppingListener() {
@@ -95,7 +95,9 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 
 	@Override
 	protected void callClickListener(SeedItem pItem) {
-		
+		if (mShop.addToBasket(pItem.getSeed())) {
+			updateHUDBasket();
+		}
 		super.callClickListener(pItem);
 	}
 
@@ -106,8 +108,8 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 		setBackground(mLoadableParallaxBackground.getLoadedBacground());
 
 		e.getCamera().setHUD(mHUD);
-
-		// --- user input handling ---
+		updateHUDBasket();
+		updateHUDCash();
 
 		// HUD buttons clicks
 		this.mHUD.getButtonDone().setButtonListener(new IButtonListener() {
@@ -123,7 +125,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 
 	@Override
 	protected SeedItem populateItem(int pItem, int pItemOnPage, int pPage) {
-		Seed seed = this.mShop.getSeeds().get(pItem);
+		Seed seed = this.mShop.getSeedsInShop().get(pItem);
 		SeedItem item = new SeedItem(seed, mDescFont, mResources.TEX_FRAME, getVertexBufferObjectManager());
 		return item;
 	}
@@ -153,6 +155,14 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 		return (int) (getH()/ROWS);
 	}
 
+	private void updateHUDBasket() {
+		mHUD.setTextBasketValue("basket: $" + mShop.getBasketValue());
+	}
+
+	private void updateHUDCash() {
+		mHUD.setTextCash("cash: $" + mShop.getCustomerCash());
+	}
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
@@ -175,10 +185,10 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 2048, 2048, TextureOptions.REPEATING_BILINEAR);
 
 				if (i == SEEDS_ATLAS_NUM) {
-					Seed.createSeedAssets(mAtlases[SEEDS_ATLAS_NUM], c, SceneSeedsShop.this.mShop.getSeeds());
+					Seed.createSeedAssets(mAtlases[SEEDS_ATLAS_NUM], c, SceneSeedsShop.this.mShop.getSeedsInShop());
 				}
 				if (i == PLANTS_ATLAS_NUM) {
-					Seed.createPlantAssets(mAtlases[PLANTS_ATLAS_NUM], c, SceneSeedsShop.this.mShop.getSeeds());
+					Seed.createPlantAssets(mAtlases[PLANTS_ATLAS_NUM], c, SceneSeedsShop.this.mShop.getSeedsInShop());
 				}
 			}
 			BuildableBitmapTextureAtlas atlas = mAtlases[MISC_ATLAS_NUM];
