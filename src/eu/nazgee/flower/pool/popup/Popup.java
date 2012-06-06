@@ -5,6 +5,7 @@ import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.modifier.FadeOutModifier;
 import org.andengine.entity.modifier.IEntityModifier;
+import org.andengine.entity.modifier.MoveByModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
@@ -57,6 +58,34 @@ public class Popup extends Text {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+
+	public void fxPop(final float time) {
+		runModifier(populateModifierDefaultPop(time));
+	}
+
+	public void fxMoveBy(final float time, final float pX, final float pY) {
+		runModifier(populateModifierDefaultMoveBy(time, pX, pY));
+	}
+
+	public void fxMoveTo(final float time, final float pX, final float pY) {
+		runModifier(populateModifierDefaultMoveBy(time, pX - getX(), pY - getY()));
+	}
+
+	public void fxMoveTo(final float time, IEntity pWhere) {
+		float pos[] = pWhere.getSceneCenterCoordinates();
+		fxMoveTo(time, pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
+	}
+
+	public void put(IEntity pWhere, CharSequence pCharSequence) {
+		float pos[] = pWhere.getSceneCenterCoordinates();
+		put(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y], pCharSequence);
+	}
+
+	public void put(final float pX, final float pY, CharSequence pCharSequence) {
+		Positioner.setCentered(this, pX, pY);
+		setText(pCharSequence);
+	}
+
 	/**
 	 * Places a popup in a given location.
 	 * 
@@ -67,30 +96,50 @@ public class Popup extends Text {
 	 * @param pY
 	 * @param pCharSequence
 	 */
-	synchronized public void pop(final float pX, final float pY, CharSequence pCharSequence, final float time) {
+	synchronized protected void runModifier(final IEntityModifier pModifier) {
 		unregisterEntityModifier(mEffectModifier);
 
-		setText(pCharSequence);
-		Positioner.setCentered(this, pX, pY);
-
-		mEffectModifier = new ParallelEntityModifier(
-				new SequenceEntityModifier(
-						new ScaleModifier(time, 0, 1, EaseElasticOut.getInstance())
-						),
-				new SequenceEntityModifier(
-						new FadeInModifier(time*0.1f),
-						new DelayModifier(time * 0.8f),
-						new FadeOutModifier(time*0.1f)
-						)
-				);
+		mEffectModifier = pModifier;
 		mEffectModifier.setAutoUnregisterWhenFinished(false);
 		mEffectModifier.addModifierListener(mEffectModifierListener);
 		registerEntityModifier(mEffectModifier);
 	}
 
-	synchronized public void pop(IEntity pEntity, CharSequence pCharSequence, final float time) {
-		float pos[] = pEntity.getSceneCenterCoordinates();
-		pop(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y], pCharSequence, time);
+	public IEntityModifier populateModifierDefaultPop(final float time) {
+		return new ParallelEntityModifier(
+				populateModifierFadeInOut(time),
+				new ScaleModifier(time, 0, 1, EaseElasticOut.getInstance())
+				);
+	}
+
+	public IEntityModifier populateModifierDefaultMoveBy(final float time, final float pX, final float pY) {
+		return populateModifierDefaultMoveBy(time, pX, pY, 0.66f);
+	}
+
+	public IEntityModifier populateModifierDefaultMoveBy(final float time, final float pX, final float pY, final float pFreezeFactor) {
+		final float timeFreeze = time * pFreezeFactor;
+		final float timeMove = time * (1-pFreezeFactor);
+
+		return new ParallelEntityModifier(
+				populateModifierFadeInOut(time, 0.1f, timeMove/time),
+				new ScaleModifier(time, 0, 1, EaseElasticOut.getInstance()),
+				new SequenceEntityModifier(
+						new DelayModifier(timeFreeze),
+						new MoveByModifier(timeMove, pX, pY)
+						)
+				);
+	}
+
+	public IEntityModifier populateModifierFadeInOut(final float time) {
+		return populateModifierFadeInOut(time, 0.1f, 0.1f);
+	}
+
+	public IEntityModifier populateModifierFadeInOut(final float time, final float pFadingInFactor, final float pFadingOutFactor) {
+		return 	new SequenceEntityModifier(
+				new FadeInModifier(time * pFadingInFactor),
+				new DelayModifier(time * (1 - pFadingInFactor - pFadingOutFactor)),
+				new FadeOutModifier(time * pFadingOutFactor)
+				);
 	}
 
 	// ===========================================================

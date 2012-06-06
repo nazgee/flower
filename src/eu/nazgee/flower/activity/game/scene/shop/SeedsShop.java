@@ -54,6 +54,7 @@ public class SeedsShop {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+
 	public boolean addToBasket(Seed pSeed) {
 		if (mCustomerCash >= (mBasketValue + pSeed.cost)) {
 			mSeedsInBasket.add(pSeed);
@@ -71,6 +72,11 @@ public class SeedsShop {
 		} else {
 			return false;
 		}
+	}
+
+	public void emptyBasket() {
+		mSeedsInBasket.clear();
+		calculateValue(mSeedsInBasket);
 	}
 
 	protected int calculateValue(SmartList<Seed> pSeeds) {

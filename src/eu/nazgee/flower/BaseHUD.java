@@ -101,6 +101,10 @@ public class BaseHUD extends HUDLoadable {
 		mTextLines[pLine].setText(pText);
 	}
 
+	protected Text getTextLine(int pLine) {
+		return mTextLines[pLine];
+	}
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================

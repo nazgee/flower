@@ -281,7 +281,8 @@ public class SceneGame extends SceneLoadable{
 			mScore.seeds.dec(1);
 
 			PopupItem item = mPopupPool.obtainPoolItem();
-			item.getEntity().pop(pFlower, "+100$", 1.5f);
+			item.getEntity().put(pFlower, "+100$");
+			item.getEntity().fxPop(1.5f);
 			attachChild(item.getEntity());
 		}
 
@@ -292,7 +293,8 @@ public class SceneGame extends SceneLoadable{
 			mScore.seeds.dec(1);
 
 			PopupItem item = mPopupPool.obtainPoolItem();
-			item.getEntity().pop(pFlower, "fried!", 1f);
+			item.getEntity().put(pFlower, "fried!");
+			item.getEntity().fxPop(1f);
 			attachChild(item.getEntity());
 		}
 

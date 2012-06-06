@@ -111,8 +111,9 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 		if (mShop.addToBasket(pItem.getSeed())) {
 			updateHUDBasket();
 			PopupItem popup = mPopupPool.obtainPoolItem();
+			popup.getEntity().put(pItem, "$" + pItem.getSeed().cost);
+			popup.getEntity().fxMoveTo(0.75f, mHUD.getTextBasket());
 			attachChild(popup.getEntity());
-			popup.getEntity().pop(pItem, "$" +pItem.getSeed().cost, 1);
 		}
 		super.callClickListener(pItem);
 	}
@@ -136,7 +137,12 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 				}
 			}
 		});
+	}
 
+	@Override
+	public void onUnload() {
+		super.onUnload();
+		this.mShop.emptyBasket();
 	}
 
 	@Override

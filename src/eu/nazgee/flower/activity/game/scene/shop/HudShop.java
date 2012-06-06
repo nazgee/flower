@@ -1,6 +1,7 @@
 package eu.nazgee.flower.activity.game.scene.shop;
 
 import org.andengine.engine.Engine;
+import org.andengine.entity.text.Text;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
@@ -66,6 +67,9 @@ public class HudShop extends BaseHUD {
 	}
 	public void setTextBasketValue(CharSequence pText) {
 		setTextLine(1, pText);
+	}
+	public Text getTextBasket() {
+		return getTextLine(1);
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes
