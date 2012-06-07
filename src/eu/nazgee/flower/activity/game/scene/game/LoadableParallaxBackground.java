@@ -1,4 +1,4 @@
-package eu.nazgee.flower.activity.game.scene.main;
+package eu.nazgee.flower.activity.game.scene.game;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;

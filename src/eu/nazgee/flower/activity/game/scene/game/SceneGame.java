@@ -1,4 +1,4 @@
-package eu.nazgee.flower.activity.game.scene.main;
+package eu.nazgee.flower.activity.game.scene.game;
 
 import java.util.LinkedList;
 import java.util.Random;

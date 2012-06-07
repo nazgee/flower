@@ -27,7 +27,7 @@ import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.EaseQuadIn;
 
 import android.util.Log;
-import eu.nazgee.flower.activity.game.scene.main.Sky;
+import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 

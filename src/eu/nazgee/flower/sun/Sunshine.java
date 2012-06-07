@@ -11,7 +11,7 @@ import org.andengine.util.Constants;
 import org.andengine.util.modifier.ease.EaseBounceOut;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
-import eu.nazgee.flower.activity.game.scene.main.Sky;
+import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 public class Sunshine extends Entity {

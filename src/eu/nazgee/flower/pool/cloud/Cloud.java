@@ -14,7 +14,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
 
-import eu.nazgee.flower.activity.game.scene.main.Sky;
+import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.flower.pool.cloud.CloudPool.CloudItem;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop.IWaterDropListener;

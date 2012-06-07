@@ -27,7 +27,7 @@ import org.andengine.util.modifier.util.ModifierUtils;
 import android.opengl.GLES20;
 import android.util.FloatMath;
 import eu.nazgee.flower.RadialBlurShaderProgram;
-import eu.nazgee.flower.activity.game.scene.main.Sky;
+import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.game.utils.misc.UtilsMath;
 
 

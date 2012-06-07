@@ -1,44 +1,53 @@
-package eu.nazgee.flower.activity.game.scene.main;
+package eu.nazgee.flower.activity.game.scene.game;
 
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.engine.camera.Camera;
+import org.andengine.entity.scene.background.ParallaxBackground;
 
-import eu.nazgee.flower.BaseHUD;
-
-public class HudGame extends BaseHUD {
+public class CameraParallaxBackground extends ParallaxBackground {
 	// ===========================================================
 	// Constants
 	// ===========================================================
+
 	// ===========================================================
 	// Fields
 	// ===========================================================
+	private final Camera mCamera;
+	private final float mCameraFactor;
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public HudGame(float W, float H,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		super(W, H, 3, pVertexBufferObjectManager);
+	public CameraParallaxBackground(float pRed, float pGreen, float pBlue,
+			Camera pCamera) {
+		this(pRed, pGreen, pBlue, pCamera, 1);
 	}
 
-	public void setTextScore(CharSequence pText) {
-		setTextLine(0, pText);
-	}
-
-	public void setTextSeeds(CharSequence pText) {
-		setTextLine(1, pText);
-	}
-
-	public void setTextFlowers(CharSequence pText) {
-		setTextLine(2, pText);
+	public CameraParallaxBackground(float pRed, float pGreen, float pBlue,
+			Camera pCamera, final float pCameraFactor) {
+		super(pRed, pGreen, pBlue);
+		mCamera = pCamera;
+		mCameraFactor = pCameraFactor;
 	}
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	
+	@Override
+	public void onUpdate(float pSecondsElapsed) {
+		final float camx = mCamera.getCenterX();
+		setParallaxValue(camx * mCameraFactor);
+
+		super.onUpdate(pSecondsElapsed);
+	}
+
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
+	
 	// ===========================================================
 	// Methods
 	// ===========================================================
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================

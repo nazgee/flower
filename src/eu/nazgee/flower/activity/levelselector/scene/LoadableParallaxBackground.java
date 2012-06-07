@@ -11,7 +11,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.content.Context;
-import eu.nazgee.flower.activity.game.scene.main.CameraParallaxBackground;
+import eu.nazgee.flower.activity.game.scene.game.CameraParallaxBackground;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
