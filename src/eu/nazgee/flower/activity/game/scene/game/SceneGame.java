@@ -35,6 +35,9 @@ import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.activity.game.GameScore;
 import eu.nazgee.flower.activity.game.scene.shop.SeedsShop;
 import eu.nazgee.flower.activity.game.sound.LoadableSFX;
+import eu.nazgee.flower.flower.Flower;
+import eu.nazgee.flower.flower.Flower.IFlowerStateHandler;
+import eu.nazgee.flower.flower.Flower.eLevel;
 import eu.nazgee.flower.pool.cloud.Cloud;
 import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
@@ -43,9 +46,6 @@ import eu.nazgee.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
 import eu.nazgee.flower.seed.Seed;
 import eu.nazgee.flower.sun.Sun;
 import eu.nazgee.flower.sun.Sun.TravelListener;
-import eu.nazgee.game.flower.flower.Flower;
-import eu.nazgee.game.flower.flower.Flower.IFlowerStateHandler;
-import eu.nazgee.game.flower.flower.Flower.eLevel;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;
@@ -77,6 +77,7 @@ public class SceneGame extends SceneLoadable{
 	private final FlowerListener mFlowerListener = new FlowerListener();
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 	private final SeedsShop mSeedsShop; // TODO change it to list/array/whatever. No need to keep the whole shop here
+	private IGameListener mGameListerner;
 
 	// ===========================================================
 	// Constructors
@@ -99,7 +100,13 @@ public class SceneGame extends SceneLoadable{
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	public IGameListener getGameListerner() {
+		return mGameListerner;
+	}
 
+	public void setGameListerner(IGameListener mGameListerner) {
+		this.mGameListerner = mGameListerner;
+	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
@@ -278,6 +285,10 @@ public class SceneGame extends SceneLoadable{
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	public interface IGameListener {
+		public void onGameFinished();
+	}
+
 	private class FlowerListener implements IFlowerStateHandler {
 		@Override
 		public void onBloomed(Flower pFlower) {
@@ -334,7 +345,10 @@ public class SceneGame extends SceneLoadable{
 		}
 		@Override
 		public void onFinished(Sun pSun) {
-			pSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 40, this);
+			//pSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 40, this);
+			if (null != getGameListerner()) {
+				getGameListerner().onGameFinished();
+			}
 		}
 	}
 
