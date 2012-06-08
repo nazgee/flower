@@ -1,6 +1,7 @@
-package eu.nazgee.flower.seed;
+package eu.nazgee.flower.flower;
 
 import java.util.List;
+import java.util.Random;
 
 import org.andengine.engine.Engine;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
@@ -121,6 +122,10 @@ public enum Seed {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	public Color getRandomColor(Random pRandom) {
+		return col_plant[pRandom.nextInt(col_plant.length)];
+	}
+
 	public static Seed getSeedById(final int pID) {
 		switch (pID) {
 		case 1:

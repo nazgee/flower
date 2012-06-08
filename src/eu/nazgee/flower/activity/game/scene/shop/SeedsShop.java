@@ -2,8 +2,8 @@ package eu.nazgee.flower.activity.game.scene.shop;
 
 import org.andengine.util.adt.list.SmartList;
 
+import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.level.GameLevel;
-import eu.nazgee.flower.seed.Seed;
 
 public class SeedsShop {
 	// ===========================================================

@@ -20,6 +20,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
+import org.andengine.util.math.MathUtils;
 import org.andengine.util.modifier.ease.EaseBounceOut;
 import org.andengine.util.modifier.ease.EaseElasticIn;
 import org.andengine.util.modifier.ease.EaseElasticOut;
@@ -36,8 +37,9 @@ public class Flower extends Entity implements ITouchArea{
 	// Constants
 	// ===========================================================
 	private static final int ZINDEX_BLOSSOM = 0;
-	private static final int ZINDEX_WATER = -1;
-	private static final int ZINDEX_POT = -2;
+//	private static final int ZINDEX_WATER = -1;
+	private static final int ZINDEX_SEED = -1;
+//	private static final int ZINDEX_POT = -2;
 
 	public enum eLevel {
 		LOW,
@@ -52,46 +54,34 @@ public class Flower extends Entity implements ITouchArea{
 	private boolean isBloomed = false;
 	private boolean isFried = false;
 
-	private final Sprite mSpriteBlossom;
-	private final Sprite mSpritePot;
-	private final AnimatedSprite mSpriteWater;
+	private final EntityBlossom mSpriteBlossom;
+	private final EntitySeed mEntitySeed;
 
 	private IEntityModifier mDropModifier;
 	private IFlowerStateHandler mFlowerStateHandler;
+	private final Seed mSeed;
+	private final Color mColor;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public Flower(float pX, float pY, ITextureRegion pTextureRegion,
-			Color pColor,
-			ITextureRegion pPotTextureRegion,
-			ITiledTextureRegion pWaterTextureRegion,
+	public Flower(float pX, float pY, Seed pSeed,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
+		this.mSeed = pSeed;
 
-		mSpriteBlossom = new Sprite(0, 0, pTextureRegion, pVertexBufferObjectManager);
-		mSpritePot = new Sprite(0, 0, pPotTextureRegion, pVertexBufferObjectManager);
-		mSpriteWater = new AnimatedSprite(0, 0, pWaterTextureRegion, pVertexBufferObjectManager);
+		this.mColor = pSeed.getRandomColor(MathUtils.RANDOM);
+		this.mSpriteBlossom = new EntityBlossom(0, 0, pSeed.mTexPlant, pVertexBufferObjectManager, mColor);
+		this.mEntitySeed = new EntitySeed(0, 0, pSeed.mTexSeed, pVertexBufferObjectManager, mColor);
 
-		/*
-		 * Do not attach it just yet- no need to do it this early. It will be
-		 * attached when flower will bloom
-		 */
-		// attachChild(mSpriteBlossom); 
-		attachChild(mSpritePot);
-		attachChild(mSpriteWater);
+		attachChild(mEntitySeed);
+
 		mSpriteBlossom.setZIndex(ZINDEX_BLOSSOM);
-		mSpritePot.setZIndex(ZINDEX_POT);
-		mSpriteWater.setZIndex(ZINDEX_WATER);
+		mEntitySeed.setZIndex(ZINDEX_SEED);
 
-		Positioner.setCentered(mSpritePot, this);
-		Positioner.setCentered(mSpriteWater, this);
-		Positioner.setCenteredTop(mSpriteBlossom, mSpritePot);
-
-		mSpriteBlossom.setColor(pColor);
-		mSpritePot.setColor(pColor);
+		Positioner.setCentered(mEntitySeed, this);
+		Positioner.setCenteredTop(mSpriteBlossom, mEntitySeed);
 
 		sortChildren();
-		setScale(0.75f);
 	}
 	// ===========================================================
 	// Getter & Setter
@@ -142,13 +132,13 @@ public class Flower extends Entity implements ITouchArea{
 	// ===========================================================
 	@Override
 	public boolean contains(float pX, float pY) {
-		return mSpritePot.contains(pX, pY);
+		return mEntitySeed.contains(pX, pY);
 	}
 
 	@Override
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 			float pTouchAreaLocalX, float pTouchAreaLocalY) {
-		return mSpritePot.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+		return mEntitySeed.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 	}
 	// ===========================================================
 	// Methods
@@ -242,36 +232,16 @@ public class Flower extends Entity implements ITouchArea{
 	}
 
 	private void animateBloom() {
-		if (!mSpriteBlossom.hasParent()) {
-			attachChild(mSpriteBlossom);
-			sortChildren();
-		}
-
-		Log.d(getClass().getSimpleName(), "animateBloom();");
-
-		final float time = 1;
-		IEntityModifier bloomer = new ParallelEntityModifier(
-				new SequenceEntityModifier(
-						new ColorModifier(time, Color.GREEN, mSpriteBlossom.getColor())
-						),
-				new SequenceEntityModifier(
-						new ScaleModifier(time, 0, 1f, EaseElasticOut.getInstance())
-						)
-				);
-		mSpriteBlossom.registerEntityModifier(bloomer);
+		attachChild(mSpriteBlossom);	// blossom was not attached yet, for performance reasons
+		mSpriteBlossom.animateBloom();
 	}
 
 	private void animateFry() {
-		Log.d(getClass().getSimpleName(), "animateFry();");
-
-		final float time = 0.4f;
-		registerEntityModifier(new RotationModifier(time, 0, 180, EaseQuadIn.getInstance()));
-		mSpriteWater.registerEntityModifier(new FadeOutModifier(time));
+		mEntitySeed.animateFry();
 	}
 
 	private void animateWater() {
-		Log.d(getClass().getSimpleName(), "animateWater();");
-		mSpriteWater.animate(100, false);
+		mEntitySeed.animateWater();
 	}
 
 	private void animateMove(final float pX_from, final float pY_from, final float pX_to, final float pY_to) {

@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.seed.Seed;
+import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
 public enum GameLevel {

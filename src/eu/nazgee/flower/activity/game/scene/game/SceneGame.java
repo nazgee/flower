@@ -36,6 +36,7 @@ import eu.nazgee.flower.activity.game.GameScore;
 import eu.nazgee.flower.activity.game.scene.shop.SeedsShop;
 import eu.nazgee.flower.activity.game.sound.LoadableSFX;
 import eu.nazgee.flower.flower.Flower;
+import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.flower.Flower.IFlowerStateHandler;
 import eu.nazgee.flower.flower.Flower.eLevel;
 import eu.nazgee.flower.pool.cloud.Cloud;
@@ -43,7 +44,6 @@ import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
-import eu.nazgee.flower.seed.Seed;
 import eu.nazgee.flower.sun.Sun;
 import eu.nazgee.flower.sun.Sun.TravelListener;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
@@ -185,13 +185,10 @@ public class SceneGame extends SceneLoadable{
 		for (int i = 0; i < mSeedsShop.getSeedsInBasket().size(); i++) {
 			Seed seed = mSeedsShop.getSeedsInBasket().get(i);
 
-			ITextureRegion tex =  seed.mTexPlant;
-
 			/*
 			 *  Create a sprite
 			 */
-			Color color = seed.col_plant[rand.nextInt(seed.col_plant.length)];
-			Flower flower = new Flower(0, 0, tex, color, mResources.TEX_POT, mResources.TEXS_POT_WATER, getVertexBufferObjectManager());
+			Flower flower = new Flower(0, 0, seed, getVertexBufferObjectManager());
 			flower.setZIndex(-1);
 			flower.setFlowerStateHandler(mFlowerListener);
 

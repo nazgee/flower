@@ -12,7 +12,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import eu.nazgee.flower.seed.Seed;
+import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.game.utils.helpers.Positioner;
 
 public class SeedItem extends Entity implements ITouchArea{
