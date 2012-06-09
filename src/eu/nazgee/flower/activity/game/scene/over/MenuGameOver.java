@@ -37,7 +37,7 @@ public class MenuGameOver extends SceneMenu {
 		attachChild(mDescription);
 	}
 
-	void setDescription(String pDescription) {
+	public void setDescription(String pDescription) {
 		mDescription.setText(pDescription);
 	}
 

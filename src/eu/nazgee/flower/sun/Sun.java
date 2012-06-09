@@ -22,13 +22,10 @@ import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseQuadIn;
 import org.andengine.util.modifier.ease.EaseQuadOut;
-import org.andengine.util.modifier.util.ModifierUtils;
 
 import android.opengl.GLES20;
-import android.util.FloatMath;
-import eu.nazgee.flower.RadialBlurShaderProgram;
+import eu.nazgee.flower.FisheyeShaderProgram;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
-import eu.nazgee.game.utils.misc.UtilsMath;
 
 
 public class Sun extends Entity {
@@ -60,11 +57,12 @@ public class Sun extends Entity {
 	 * Creates a SunSprite, and attach it to the Sun
 	 */
 	private static Sprite initSun(final Sun pSun, final float w, final float h, final ITextureRegion pSunTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
-		ShaderProgram shdr = new RadialBlurShaderProgram();
+		ShaderProgram shdr = new FisheyeShaderProgram();
 		final float cw = (pSunTexture.getU2() - pSunTexture.getU());
 		final float ch = (pSunTexture.getV2() - pSunTexture.getV());
 		final float cx = pSunTexture.getU() + cw/2;
 		final float cy = pSunTexture.getV() + ch/2;
+
 
 		Sprite sun = new Sprite(-w/2, -h/2, w, h, pSunTexture, pVertexBufferObjectManager, shdr) {
 			private float step = 0;
@@ -73,23 +71,25 @@ public class Sun extends Entity {
 			private float angle = 0; 
 			private float valx = 0;
 			private float valy = 0;
+			private float valfx = 0;
 			@Override
 			protected void preDraw(final GLState pGLState, final Camera pCamera) {
 				super.preDraw(pGLState, pCamera);
 				if (seed > Math.PI * 2) {
-					step = MathUtils.random(0.1f, 0.5f);
+					step = MathUtils.random(0.05f, 0.2f);
 					seed = 0;
 					angle = MathUtils.random(0, (float) (Math.PI * 2));
-					valx = (float) (r * Math.sin(angle));
-					valy = (float) (r * Math.cos(angle));
+//					valx = (float) (r * Math.sin(angle));
+//					valy = (float) (r * Math.cos(angle));
+					valx = 0;
+					valy = 0;
 				}
 				seed += step;
 
-				float valfx = 0.1f;
-				valfx = (float) (Math.sin(seed/2)*valfx/2 + valfx/2);
-				GLES20.glUniform2f(RadialBlurShaderProgram.sUniformFXCenterLocation, cx + valx * cw,  cy + valy * ch);
-				GLES20.glUniform1f(RadialBlurShaderProgram.sUniformFXStrength, valfx);
-
+				valfx = (float) (Math.sin(seed) * 0.5f + 0.5f);
+				GLES20.glUniform2f(FisheyeShaderProgram.sUniformFXCenterLocation, cx + valx * cw,  cy + valy * ch);
+				GLES20.glUniform2f(FisheyeShaderProgram.sUniformRegionSizeLocation, cw, ch);
+				GLES20.glUniform1f(FisheyeShaderProgram.sUniformFXStrength, valfx);
 //				seed += 0.01f;
 //
 //				float valx = 0.3f;
@@ -106,9 +106,9 @@ public class Sun extends Entity {
 		};
 
 		pSun.attachChild(sun);
-		sun.registerEntityModifier(new LoopEntityModifier(
-					new RotationByModifier(5, 360)
-				));
+//		sun.registerEntityModifier(new LoopEntityModifier(
+//					new RotationByModifier(5, 360)
+//				));
 		sun.setZIndex(0);
 		pSun.sortChildren();
 

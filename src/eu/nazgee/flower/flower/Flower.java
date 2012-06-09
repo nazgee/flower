@@ -86,6 +86,10 @@ public class Flower extends Entity implements ITouchArea{
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	public Seed getSeed() {
+		return mSeed;
+	}
+
 	public IFlowerStateHandler getFlowerStateHandler() {
 		return mFlowerStateHandler;
 	}
@@ -140,6 +144,7 @@ public class Flower extends Entity implements ITouchArea{
 			float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		return mEntitySeed.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 	}
+
 	// ===========================================================
 	// Methods
 	// ===========================================================

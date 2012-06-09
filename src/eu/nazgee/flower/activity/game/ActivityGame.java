@@ -28,6 +28,7 @@ import android.content.Context;
 import android.view.KeyEvent;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.activity.game.scene.game.SceneGame;
+import eu.nazgee.flower.activity.game.scene.game.SceneGame.IGameListener;
 import eu.nazgee.flower.activity.game.scene.ingame.MenuIngame;
 import eu.nazgee.flower.activity.game.scene.over.MenuGameOver;
 import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop;
@@ -99,7 +100,8 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		mResources.loadResources(getEngine(), this);
 		mResources.load(getEngine(), this);
 
-		mSceneShop = new SceneSeedsShop(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), GameLevel.LEVEL1, getStaticResources().FONT_DESC, mResources.ENTITY_DETACH_HANDLER);
+		// SCENE: seeds shop
+		mSceneShop = new SceneSeedsShop(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), GameLevel.LEVEL1, getStaticResources().FONT, mResources.ENTITY_DETACH_HANDLER);
 		mSceneShop.setItemClikedListener(new IItemClikedListener<SeedItem>() {
 			@Override
 			public void onItemClicked(SeedItem pItem) {
@@ -114,31 +116,30 @@ public class ActivityGame extends SimpleBaseGameActivity {
 			}
 		});
 
+		// SCENE: gameplay
 		mSceneGame = new SceneGame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), mResources.ENTITY_DETACH_HANDLER, mSceneShop.getShop());
+		mSceneGame.setGameListerner(new IGameListener() {
+			@Override
+			public void onGameFinished() {
+				mLoader.setChildSceneModalDraw(false); // we do WANT to see the background scene for the sake of wow-factor :)
+				loadSubscene(mMenuGameOver);
+			}
+		});
+
+		// SCENE: in-game menu
+		mMenuIngame = new MenuIngame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getEngine().getCamera(), mResources.FONT, getVertexBufferObjectManager());
+		mMenuIngame.setOnMenuItemClickListener(mMenuItemClickListener);
+
+		// SCENE: game over menu
+		mMenuGameOver = new MenuGameOver(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getEngine().getCamera(), mResources.FONT, mResources.FONT, getVertexBufferObjectManager());
+		mMenuGameOver.setOnMenuItemClickListener(mMenuItemClickListener);
+		mMenuGameOver.setDescription("this is a game over scene stub");
 
 		// Create "Loading..." scene that will be used for all loading-related activities
-		SceneLoading loadingScene = new SceneLoading(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getStaticResources().FONT_DESC, "Loading...", getVertexBufferObjectManager());
+		SceneLoading loadingScene = new SceneLoading(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getStaticResources().FONT, "Loading...", getVertexBufferObjectManager());
 
 		mLoader = new SceneLoader(loadingScene);
 		mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_DONT_TOUCH).setLoadingSceneUnload(false);
-
-		/*
-		 * Create menu scenes
-		 */
-		final TextureManager textureManager = getTextureManager();
-		final FontManager fontManager = getFontManager();
-
-		final ITexture textureFontHud = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
-		Font mFont = FontFactory.createFromAsset(fontManager, textureFontHud, getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.10f, true, Color.WHITE.getARGBPackedInt());
-		mFont.load();
-		final ITexture textureFontHudSmall = new BitmapTextureAtlas(textureManager, 256, 256, TextureOptions.BILINEAR);
-		Font mFontDesc = FontFactory.createFromAsset(fontManager, textureFontHudSmall, getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.06f, true, Color.WHITE.getARGBPackedInt());
-		mFontDesc.load();
-
-		mMenuIngame = new MenuIngame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getEngine().getCamera(), mFont, getVertexBufferObjectManager());
-		mMenuIngame.setOnMenuItemClickListener(mMenuItemClickListener);
-		mMenuGameOver = new MenuGameOver(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getEngine().getCamera(), mFont, mFontDesc, getVertexBufferObjectManager());
-		mMenuGameOver.setOnMenuItemClickListener(mMenuItemClickListener);
 	}
 
 	@Override
@@ -218,7 +219,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	// ===========================================================
 	public class MyResources extends LoadableResourceSimple {
 		public EntityDetachRunnablePoolUpdateHandler ENTITY_DETACH_HANDLER;
-		public Font FONT_DESC;
+		public Font FONT;
 
 		@Override
 		public void onLoadResources(Engine e, Context c) {
@@ -235,13 +236,13 @@ public class ActivityGame extends SimpleBaseGameActivity {
 			final FontManager fontManager = e.getFontManager();
 
 			final ITexture font_texture = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
-			FONT_DESC = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
-			FONT_DESC.load();
+			FONT = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
+			FONT.load();
 		}
 
 		@Override
 		public void onUnload() {
-			FONT_DESC.unload();
+			FONT.unload();
 		}
 	}
 
