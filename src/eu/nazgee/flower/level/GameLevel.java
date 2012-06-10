@@ -17,7 +17,8 @@ public enum GameLevel {
 	/*
 	 * When defined as Enum, levels are singletons 
 	 */
-	LEVEL1(1, 1000, false, Seed.SEED1, Seed.SEED2, Seed.SEED3),
+	LEVEL1(1, 1000, false, Seed.SEED1, Seed.SEED2, Seed.SEED3, Seed.SEED14, Seed.SEED15, Seed.SEED16, Seed.SEED17, Seed.SEED18, Seed.SEED19),
+//	LEVEL1(1, 1000, false, Seed.SEED1, Seed.SEED2, Seed.SEED3),
 	LEVEL2(2, 1000),
 	LEVEL3(3, 1000),
 	LEVEL4(4, 1000, Seed.SEED4),

@@ -1,17 +1,26 @@
 package eu.nazgee.flower.activity.game.scene.shop;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.camera.Camera;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.primitive.vbo.HighPerformanceRectangleVertexBufferObject;
 import org.andengine.entity.text.Text;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.vbo.DrawType;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.BaseButton;
 import eu.nazgee.flower.BaseHUD;
 import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.Gradient2WayVertexBufferObject;
+import eu.nazgee.flower.Gradient2WayVertexBufferObject.eGradientVertices;
+import eu.nazgee.flower.Gradient3Way;
+import eu.nazgee.flower.Gradient3Way.eGradientPosition;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 
 public class HudShop extends BaseHUD {
@@ -19,6 +28,7 @@ public class HudShop extends BaseHUD {
 	// ===========================================================
 	// Constants
 	// ===========================================================
+	protected static int ZINDEX_GRADIENT = -1;
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -51,12 +61,20 @@ public class HudShop extends BaseHUD {
 	@Override
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
+		Camera camera = e.getCamera();
 
 		mButtonDone = new BaseButton(0, 0, ((ShopResources)mResources).TEX_BUTTON_DONE, getVertexBufferObjectManager());
 		attachChild(mButtonDone);
 		this.mButtonDone.setPosition(getW() - mButtonDone.getWidth(), getH() - mButtonDone.getHeight());
-
 		this.registerTouchArea(mButtonDone);
+
+		Gradient3Way grad = new Gradient3Way(camera.getWidth()/2, 0, camera.getWidth()/2, camera.getHeight(), 0.5f, getVertexBufferObjectManager());
+		attachChild(grad);
+		grad.setColor(Color.BLACK);
+		grad.setGradientColor(eGradientPosition.GRADIENT_LEFT, Color.TRANSPARENT);
+		grad.setZIndex(ZINDEX_GRADIENT);
+
+		sortChildren();
 	}
 
 	// ===========================================================

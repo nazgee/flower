@@ -1,6 +1,6 @@
 package eu.nazgee.flower.base.pagerscene;
 
-import org.andengine.engine.camera.Camera;
+import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.IEntity;
 import org.andengine.util.math.MathUtils;
 
@@ -17,7 +17,7 @@ public class PageMoverCameraZoom<T extends IEntity> extends PageMoverCamera<T> {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public PageMoverCameraZoom(Camera mCamera, float pStepPerPage) {
+	public PageMoverCameraZoom(SmoothCamera mCamera, float pStepPerPage) {
 		super(mCamera, pStepPerPage);
 	}
 	// ===========================================================

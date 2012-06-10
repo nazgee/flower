@@ -1,6 +1,7 @@
 package eu.nazgee.flower.activity.levelselector.scene;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.font.Font;
@@ -29,6 +30,8 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	// ===========================================================
 	public static final int ROWS = 3;
 	public static final int COLS = 3;
+	public static final float PAGE_WIDTH_EFFECTIVE = 0.66f;
+	public static final float PAGE_WIDTH_FLIP = 0.3f;
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -41,7 +44,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	// ===========================================================
 	public SceneLevelselector(float W, float H,
 			final Font pFontDesc, VertexBufferObjectManager pVertexBufferObjectManager, GameLevel level1) {
-		super(W, H, pVertexBufferObjectManager, (int) (W * 0.3f));
+		super(W, H, pVertexBufferObjectManager, (int) (W * PAGE_WIDTH_FLIP));
 		this.mFontDesc = pFontDesc;
 		mLoadableParallaxBackground = new LoadableParallaxBackground(pVertexBufferObjectManager);
 		getLoader().install(mResources);
@@ -63,7 +66,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	@Override
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
-		setPageMover(new PageMoverCameraZoom<GameLevelItem>(e.getCamera(), getW()));
+		setPageMover(new PageMoverCameraZoom<GameLevelItem>((SmoothCamera) e.getCamera(), getW()));
 		setBackground(mLoadableParallaxBackground.getLoadedBacground());
 	}
 
@@ -76,9 +79,9 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 
 	@Override
 	protected IPage<GameLevelItem> populatePage(int pPageNumber) {
-		IPage<GameLevelItem> page = new PageRectangleTransparent<GameLevelItem>(0, 0, getW(), getH(), 
+		IPage<GameLevelItem> page = new PageRectangleTransparent<GameLevelItem>(0, 0, getW() * PAGE_WIDTH_EFFECTIVE, getH(), 
 				getVertexBufferObjectManager(),
-				new ArrayLayout(COLS, ROWS, getW(), getH(), eAnchorPointXY.CENTERED));
+				new ArrayLayout(COLS, ROWS, getW() * PAGE_WIDTH_EFFECTIVE, getH(), eAnchorPointXY.CENTERED));
 		return page;
 	}
 
@@ -92,7 +95,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	// Methods
 	// ===========================================================
 	private int getFrameW() {
-		return (int) (getW()/COLS);
+		return (int) (getW() * PAGE_WIDTH_EFFECTIVE / COLS);
 	}
 
 	private int getFrameH() {
