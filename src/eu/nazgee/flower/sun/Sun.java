@@ -67,10 +67,6 @@ public class Sun extends Entity {
 		Sprite sun = new Sprite(-w/2, -h/2, w, h, pSunTexture, pVertexBufferObjectManager, shdr) {
 			private float step = 0;
 			private float seed = 666;
-			private final float r = 0.5f;
-			private float angle = 0; 
-			private float valx = 0;
-			private float valy = 0;
 			private float valfx = 0;
 			@Override
 			protected void preDraw(final GLState pGLState, final Camera pCamera) {
@@ -78,37 +74,20 @@ public class Sun extends Entity {
 				if (seed > Math.PI * 2) {
 					step = MathUtils.random(0.05f, 0.2f);
 					seed = 0;
-					angle = MathUtils.random(0, (float) (Math.PI * 2));
-//					valx = (float) (r * Math.sin(angle));
-//					valy = (float) (r * Math.cos(angle));
-					valx = 0;
-					valy = 0;
 				}
 				seed += step;
 
 				valfx = (float) (Math.sin(seed) * 0.5f + 0.5f);
-				GLES20.glUniform2f(FisheyeShaderProgram.sUniformFXCenterLocation, cx + valx * cw,  cy + valy * ch);
-				GLES20.glUniform2f(FisheyeShaderProgram.sUniformRegionSizeLocation, cw, ch);
 				GLES20.glUniform1f(FisheyeShaderProgram.sUniformFXStrength, valfx);
-//				seed += 0.01f;
-//
-//				float valx = 0.3f;
-//				float valy = 0.3f;
-//				float valfx = 0.08f;
-//
-//				valx = (float) (Math.sin(seed)*valx);
-//				valy = (float) (Math.cos(seed)*valy);
-//				valfx = (float) (Math.cos(seed * 6)*valfx/2 + valfx/2);
-//				GLES20.glUniform2f(RadialBlurShaderProgram.sUniformFXCenterLocation, cx + valx * cw,  cy + valy * ch);
-//				GLES20.glUniform1f(RadialBlurShaderProgram.sUniformFXStrength, valfx);
-////				GLES20.glUniform2f(RadialBlurShaderProgram.sUniformRegionCenterLocation, cx,  cy);
+				GLES20.glUniform2f(FisheyeShaderProgram.sUniformFXCenterLocation, cx,  cy);
+				GLES20.glUniform2f(FisheyeShaderProgram.sUniformRegionSizeLocation, cw, ch);
 			}
 		};
 
 		pSun.attachChild(sun);
-//		sun.registerEntityModifier(new LoopEntityModifier(
-//					new RotationByModifier(5, 360)
-//				));
+		sun.registerEntityModifier(new LoopEntityModifier(
+					new RotationByModifier(5, 360)
+				));
 		sun.setZIndex(0);
 		pSun.sortChildren();
 

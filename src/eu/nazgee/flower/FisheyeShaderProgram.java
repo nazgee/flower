@@ -45,19 +45,31 @@ public class FisheyeShaderProgram extends ShaderProgram {
 	"const float sampleDist = 48.0 / 1024.0;\n" +
 	"const float sampleStrength = 1.0;\n" +
 
-	"float f1(float seed, vec2 centeroffset) {\n" +
-	"	return exp(0.5 + 20.0*seed * length(centeroffset));\n" +
+	"float f1(float fx, vec2 centeroffset) {\n" +
+	"	return exp(0.5 + 20.0*fx * length(centeroffset));\n" +
 	"}\n" +
 
 	"void main() {\n" +
+	"	float fx = "+ FisheyeShaderProgram.UNIFORM_FX_STRENGTH + ";\n" + // 0..1
+
+	/*
+	 * If there is nothing to do (UNIFORM_FX_STRENGTH == 0) we fall-back to a regular
+	 * texturing mode
+	 */
+	"	if (fx == 0.0) {\n" +
+	"		gl_FragColor = texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + ");\n" +
+	"		return;\n" +
+	"	}\n" +
+
+	/*
+	 * If we reached this point, it means that UNIFORM_FX_STRENGTH !=0. This
+	 * means that we have to apply fish-eye effect
+	 */
 	"	vec2 fxdirection = " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " - " + FisheyeShaderProgram.UNIFORM_FX_CENTER + ";\n" +
-	"	float seed = "+ FisheyeShaderProgram.UNIFORM_FX_STRENGTH + ";\n" + // 0..1
-
-	"	float z = f1(seed, fxdirection);\n" +
-	"	float zmax = f1(seed, vec2("+ FisheyeShaderProgram.UNIFORM_REGION_SIZE +".y * 0.5, 0.0));\n" +
-	"	float zmin = f1(seed, vec2(0.0, 0.0));\n" +
-
+	"	float z = f1(fx, fxdirection);\n" +
+	"	float zmax = f1(fx, vec2("+ FisheyeShaderProgram.UNIFORM_REGION_SIZE +".y * 0.5, 0.0));\n" +
 	"	z = z / zmax;\n" +
+
 	"	vec2 translated = fxdirection * z;\n" +
 
 	"	if (length(translated) < " + FisheyeShaderProgram.UNIFORM_REGION_SIZE +".y * 0.5) {\n" +
@@ -65,30 +77,6 @@ public class FisheyeShaderProgram extends ShaderProgram {
 	"	} else {\n" +
 	"		gl_FragColor = vec4(1.0, 1.0, 0.0, 0.0);\n" +
 	"	}\n" +
-
-//			/* The actual (unburred) sample. */
-//			"	vec4 color = texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + ");\n" +
-//
-//			/* fragment => radial direction */
-//			"	vec2 direction = " + FisheyeShaderProgram.UNIFORM_FX_CENTER + " - " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + ";\n" +
-//			/* radial => center direction */
-//			"	vec2 dir_rad2cen = " + FisheyeShaderProgram.UNIFORM_REGION_CENTER + " - " + FisheyeShaderProgram.UNIFORM_FX_CENTER + ";\n" +
-//
-//			/* Calculate the distance to the center of the blur. */
-//			"	float distance = sqrt(direction.x * direction.x + direction.y * direction.y);\n" +
-//
-//			/* Normalize the direction (reuse the distance). */
-//			"	direction = direction / distance;\n" +
-//
-//			//"	float t = sqrt(distance) * sampleStrength;\n" +
-//			//"	t = clamp(t, 0.0, 1.0);\n" + // 0 <= t >= 1
-//
-////			"	vec4 sum = color * sampleShare;\n" +
-//			"	vec2 directionSampleDist = direction * sampleDist;\n" +
-//			"	vec4 sum = texture2D(" + ShaderProgramConstants.UNIFORM_TEXTURE_0 + ", " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " + "+ FisheyeShaderProgram.UNIFORM_FX_STRENGTH +" * directionSampleDist);\n" +
-//
-//			"	gl_FragColor = sum; \n" +
-
 	"}";
 
 	// ===========================================================
