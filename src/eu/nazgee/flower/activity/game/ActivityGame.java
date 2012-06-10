@@ -27,6 +27,7 @@ import org.andengine.util.color.Color;
 import android.content.Context;
 import android.view.KeyEvent;
 import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.FisheyeShaderProgram;
 import eu.nazgee.flower.activity.game.scene.game.SceneGame;
 import eu.nazgee.flower.activity.game.scene.game.SceneGame.IGameListener;
 import eu.nazgee.flower.activity.game.scene.ingame.MenuIngame;
@@ -95,6 +96,9 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		SVGBitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		FontFactory.setAssetBasePath("fonts/");
+
+		// Make sure custom shaders are available
+		getEngine().getShaderProgramManager().loadShaderProgram(FisheyeShaderProgram.getInstance());
 
 		// Make sure statics are ready to use for anyone
 		mResources.loadResources(getEngine(), this);
