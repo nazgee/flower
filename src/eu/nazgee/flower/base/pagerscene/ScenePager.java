@@ -185,6 +185,11 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 			float pDistanceX, float pDistanceY) {
 		mScrollDistanceX += pDistanceX;
 		Log.d(getClass().getSimpleName(), "scrolling! " + pDistanceX + "/" + mScrollDistanceX);
+
+		if (Math.abs(mScrollDistanceX) > mTurnPageThreshold) {
+			mClickDetector.reset();
+		}
+
 		if (mPageMover != null) {
 			mPageMover.onProgressSwipe(this, mPages.get(mCurrentPage), mScrollDistanceX, pDistanceX);
 		}

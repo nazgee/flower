@@ -66,7 +66,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	@Override
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
-		setPageMover(new PageMoverCameraZoom<GameLevelItem>((SmoothCamera) e.getCamera(), getW()));
+		setPageMover(new PageMoverCameraZoom<GameLevelItem>((SmoothCamera) e.getCamera(), getW() * PAGE_WIDTH_EFFECTIVE));
 		setBackground(mLoadableParallaxBackground.getLoadedBacground());
 	}
 
@@ -87,7 +87,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 
 	@Override
 	protected void attachPage(final IPage<GameLevelItem> pPage, int pPageNumber) {
-		pPage.setPosition(pPageNumber * getW(), 0);
+		pPage.setPosition(pPageNumber * getW() * PAGE_WIDTH_EFFECTIVE, 0);
 		attachChild(pPage);
 	}
 

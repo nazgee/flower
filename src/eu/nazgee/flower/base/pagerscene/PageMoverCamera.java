@@ -10,12 +10,17 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-
+	public enum ePageAlignment {
+		PAGE_ALIGN_LEFT,
+		PAGE_ALIGN_CENTER,
+		PAGE_ALIGN_RIGHT
+	}
 	// ===========================================================
 	// Fields
 	// ===========================================================
 	protected final SmoothCamera mCamera;
 	protected final float mStepPerPage;
+	protected final ePageAlignment mPageAlignment = ePageAlignment.PAGE_ALIGN_RIGHT;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -41,7 +46,20 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 	@Override
 	public void onCompletedSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, int pNewPageIndex, int pOldPageIndex) {
 		Log.d(getClass().getSimpleName(), "onCompletedSwipe(); pNewPageIndex=" + pNewPageIndex + "; mStepPerPage=" + mStepPerPage);
-		mCamera.setCenter(pNewPageIndex * mStepPerPage + mStepPerPage/2, mCamera.getCenterY());
+
+		float offset = 0;
+		switch (mPageAlignment) {
+		case PAGE_ALIGN_LEFT:
+			offset = mCamera.getWidth()/2;
+			break;
+		case PAGE_ALIGN_CENTER:
+			offset = mStepPerPage/2;
+			break;
+		case PAGE_ALIGN_RIGHT:
+			offset = (mCamera.getWidth() - mStepPerPage)/2;
+			break;
+		}
+		mCamera.setCenter(pNewPageIndex * mStepPerPage + offset, mCamera.getCenterY());
 	}
 	// ===========================================================
 	// Methods
