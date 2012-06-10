@@ -13,12 +13,12 @@ import android.content.Context;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.game.utils.scene.menu.SceneMenu;
 
-public class MenuGameOver extends SceneMenu {
+public class MenuGameLost extends SceneMenu {
 	public static final int MENU_RESET = 0;
 	public static final int MENU_GO_MAIN = 1;
 	private Text mDescription;
 
-	public MenuGameOver(float W, float H, Camera pCamera, Font pFont,
+	public MenuGameLost(float W, float H, Camera pCamera, Font pFont,
 			Font pDescFont, VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, pCamera, pFont, pVertexBufferObjectManager);
 

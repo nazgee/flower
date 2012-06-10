@@ -31,7 +31,7 @@ import eu.nazgee.flower.FisheyeShaderProgram;
 import eu.nazgee.flower.activity.game.scene.game.SceneGame;
 import eu.nazgee.flower.activity.game.scene.game.SceneGame.IGameListener;
 import eu.nazgee.flower.activity.game.scene.ingame.MenuIngame;
-import eu.nazgee.flower.activity.game.scene.over.MenuGameOver;
+import eu.nazgee.flower.activity.game.scene.over.MenuGameLost;
 import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop;
 import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop.IShoppingListener;
 import eu.nazgee.flower.activity.game.scene.shop.SeedItem;
@@ -63,7 +63,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	private SceneGame mSceneGame;
 	private SceneSeedsShop mSceneShop;
 	private MenuIngame mMenuIngame;
-	private MenuGameOver mMenuGameOver;
+	private MenuGameLost mMenuGameOver;
 	private SceneLoader mLoader;
 	private final MyResources mResources = new MyResources();
 
@@ -135,7 +135,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		mMenuIngame.setOnMenuItemClickListener(mMenuItemClickListener);
 
 		// SCENE: game over menu
-		mMenuGameOver = new MenuGameOver(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getEngine().getCamera(), mResources.FONT, mResources.FONT, getVertexBufferObjectManager());
+		mMenuGameOver = new MenuGameLost(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getEngine().getCamera(), mResources.FONT, mResources.FONT, getVertexBufferObjectManager());
 		mMenuGameOver.setOnMenuItemClickListener(mMenuItemClickListener);
 		mMenuGameOver.setDescription("this is a game over scene stub");
 
