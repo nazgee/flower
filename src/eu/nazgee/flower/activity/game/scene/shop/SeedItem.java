@@ -1,5 +1,6 @@
 package eu.nazgee.flower.activity.game.scene.shop;
 
+import org.andengine.engine.camera.Camera;
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.IEntityParameterCallable;
@@ -85,6 +86,11 @@ public class SeedItem extends Entity implements ITouchArea{
 			float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		return mSpriteFrame.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 	} 
+
+	@Override
+	public boolean isCulled(Camera pCamera) {
+		return mSpriteFrame.isCulled(pCamera);
+	}
 	// ===========================================================
 	// Methods
 	// ===========================================================

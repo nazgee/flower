@@ -20,7 +20,7 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 	// ===========================================================
 	protected final SmoothCamera mCamera;
 	protected final float mStepPerPage;
-	protected final ePageAlignment mPageAlignment = ePageAlignment.PAGE_ALIGN_RIGHT;
+	private ePageAlignment mPageAlignment = ePageAlignment.PAGE_ALIGN_LEFT;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -32,7 +32,13 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	public ePageAlignment getPageAlignment() {
+		return mPageAlignment;
+	}
 
+	public void setPageAlignment(ePageAlignment pPageAlignment) {
+		this.mPageAlignment = pPageAlignment;
+	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================

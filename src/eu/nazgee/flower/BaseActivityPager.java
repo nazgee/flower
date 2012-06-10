@@ -75,8 +75,10 @@ public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGame
 //		final SmoothTrackingCamera camera = new SmoothTrackingCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, 0, new SmootherLinear(5), new SmootherEmpty(), new SmootherLinear(5));
 		Camera camera = new SmoothCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, Consts.CAMERA_WIDTH * 3, Consts.CAMERA_HEIGHT * 3, 1);
 
-		return new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
+		EngineOptions engopts = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
 				new FillResolutionPolicy(), camera);
+		engopts.getRenderOptions().setDithering(true);
+		return engopts;
 	}
 
 	@Override

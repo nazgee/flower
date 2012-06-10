@@ -1,5 +1,6 @@
 package eu.nazgee.flower.activity.levelselector.scene;
 
+import org.andengine.engine.camera.Camera;
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.IEntityParameterCallable;
@@ -63,7 +64,13 @@ public class GameLevelItem extends Entity implements ITouchArea{
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 			float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		return mFrame.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
-	} 
+	}
+
+	@Override
+	public boolean isCulled(Camera pCamera) {
+		return mFrame.isCulled(pCamera);
+	}
+
 	// ===========================================================
 	// Methods
 	// ===========================================================

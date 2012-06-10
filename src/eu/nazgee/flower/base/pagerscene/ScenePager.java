@@ -62,6 +62,7 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 
 	public void setPageMover(IPageMover<T> mPageMover) {
 		this.mPageMover = mPageMover;
+		callPageMoverOnCompleteSwipe(mCurrentPage);
 	}
 	public IItemClikedListener<T> getItemClikedListener() {
 		return mItemClikedListener;
@@ -121,10 +122,15 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 		setOnSceneTouchListenerBindingOnActionDownEnabled(true);
 		mPages = preparePages();
 		for (IPage<T> page : mPages) {
+			page.setCullingEnabled(true);
 			for (T item : page.getItems()) {
 				registerTouchArea((ITouchArea) item);
+				item.setCullingEnabled(true);
 			}
 		}
+
+		mCurrentPage = 0;
+		callPageMoverOnCompleteSwipe(mCurrentPage);
 	}
 
 	@Override

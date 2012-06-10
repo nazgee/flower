@@ -13,6 +13,7 @@ import org.andengine.util.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.activity.game.scene.shop.HudShop;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout.eAnchorPointXY;
 import eu.nazgee.flower.base.pagerscene.IPage;
@@ -39,6 +40,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	private final GameLevelsLoader mLevelItemsLoader = new GameLevelsLoader();
 	private final LoadableParallaxBackground mLoadableParallaxBackground;
 	private final Font mFontDesc;
+	private HudLevelselector mHUD;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -52,6 +54,10 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 		getLoader().install(mLoadableParallaxBackground);
 		setBackgroundEnabled(true);
 		setBackground(new Background(Color.BLUE));
+
+		// Install HUD
+		this.mHUD = new HudLevelselector(W, H, pVertexBufferObjectManager);
+		getLoader().install(this.mHUD);
 	}
 	// ===========================================================
 	// Getter & Setter
@@ -66,8 +72,11 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	@Override
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
-		setPageMover(new PageMoverCameraZoom<GameLevelItem>((SmoothCamera) e.getCamera(), getW() * PAGE_WIDTH_EFFECTIVE));
+		SmoothCamera camera = (SmoothCamera) e.getCamera();
+		setPageMover(new PageMoverCameraZoom<GameLevelItem>(camera, getW() * PAGE_WIDTH_EFFECTIVE));
 		setBackground(mLoadableParallaxBackground.getLoadedBacground());
+
+		camera.setHUD(mHUD);
 	}
 
 	@Override
