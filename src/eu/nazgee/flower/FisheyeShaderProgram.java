@@ -94,7 +94,7 @@ public class FisheyeShaderProgram extends ShaderProgram {
 	// Constructors
 	// ===========================================================
 
-	public FisheyeShaderProgram() {
+	protected FisheyeShaderProgram() {
 		super(FisheyeShaderProgram.VERTEXSHADER,
 				FisheyeShaderProgram.FRAGMENTSHADER);
 	}

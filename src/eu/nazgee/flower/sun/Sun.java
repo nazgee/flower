@@ -57,7 +57,7 @@ public class Sun extends Entity {
 	 * Creates a SunSprite, and attach it to the Sun
 	 */
 	private static Sprite initSun(final Sun pSun, final float w, final float h, final ITextureRegion pSunTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
-		ShaderProgram shdr = new FisheyeShaderProgram();
+		ShaderProgram shdr = FisheyeShaderProgram.getInstance();
 		final float cw = (pSunTexture.getU2() - pSunTexture.getU());
 		final float ch = (pSunTexture.getV2() - pSunTexture.getV());
 		final float cx = pSunTexture.getU() + cw/2;

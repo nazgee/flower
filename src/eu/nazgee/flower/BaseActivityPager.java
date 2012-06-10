@@ -31,9 +31,6 @@ import android.os.Bundle;
 import eu.nazgee.flower.base.buttonscene.SceneButtons;
 import eu.nazgee.flower.base.buttonscene.SceneButtonsMessagebox;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
-import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
-import eu.nazgee.game.utils.engine.camera.SmootherEmpty;
-import eu.nazgee.game.utils.engine.camera.SmootherLinear;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
 public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGameActivity{
