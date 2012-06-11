@@ -14,6 +14,7 @@ import eu.nazgee.flower.Gradient3Way;
 import eu.nazgee.flower.Gradient3Way.eGradientPosition;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.TexturesLibrary.TexturesMain;
+import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
 
 public class HudShop extends BaseHUD {
 
@@ -61,24 +62,28 @@ public class HudShop extends BaseHUD {
 		this.registerTouchArea(mButtonDone);
 
 		/*
-		 * Prepare basket icon
-		 */
-		final float h = getTextBasket().getHeight();
-		Sprite basket = new Sprite(0, 0, h, h, mTexturesLibrary.getMain().get(TexturesMain.ICONS_SHOP_ID), getVertexBufferObjectManager());
-		attachChild(basket);
-		basket.setPosition(getW() - basket.getWidth(), 0);
-
-		/*
 		 * Prepare cash icon
 		 */
+		final float h = getTextCash().getHeight();
 		Sprite cash = new Sprite(0, 0, h, h, mTexturesLibrary.getMain().get(TexturesMain.ICONS_CASH_ID), getVertexBufferObjectManager());
 		attachChild(cash);
-		cash.setPosition(getW() - cash.getWidth(), basket.getY() + basket.getHeight());
+		cash.setPosition(getW() - cash.getWidth(), 0);
 
-		Gradient3Way grad = new Gradient3Way(camera.getWidth()/2, 0, camera.getWidth()/2, camera.getHeight(), 0.5f, getVertexBufferObjectManager());
+		/*
+		 * Prepare basket icon
+		 */
+		Sprite basket = new Sprite(0, 0, h, h, mTexturesLibrary.getMain().get(TexturesMain.ICONS_SHOP_ID), getVertexBufferObjectManager());
+		attachChild(basket);
+		basket.setPosition(getW() - basket.getWidth(), cash.getY() + cash.getHeight());
+
+		final float gradW = camera.getWidth() * (1 - SceneLevelselector.PAGE_WIDTH_EFFECTIVE);
+		Gradient3Way grad = new Gradient3Way(camera.getWidth() - gradW, 0, gradW, camera.getHeight(), 0.1f, getVertexBufferObjectManager());
 		attachChild(grad);
-		grad.setColor(Color.BLACK);
-		grad.setGradientColor(eGradientPosition.GRADIENT_LEFT, Color.TRANSPARENT);
+		Color col = new Color(0,0,0,1);
+		grad.setColor(col);
+		grad.setAlpha(0.9f);
+		col.setAlpha(0);
+		grad.setGradientColor(eGradientPosition.GRADIENT_LEFT, col);
 		grad.setZIndex(ZINDEX_GRADIENT);
 
 		sortChildren();
@@ -87,13 +92,13 @@ public class HudShop extends BaseHUD {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	public void setTextCash(CharSequence pText) {
+	public void setTextBasket(CharSequence pText) {
 		setTextLine(1, pText);
 	}
-	public void setTextBasketValue(CharSequence pText) {
+	public void setTextCash(CharSequence pText) {
 		setTextLine(0, pText);
 	}
-	public Text getTextBasket() {
+	public Text getTextCash() {
 		return getTextLine(1);
 	}
 	// ===========================================================

@@ -125,7 +125,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 			updateHUDCash();
 			PopupItem popup = mPopupPool.obtainPoolItem();
 			popup.getEntity().put(pItem, "$" + pItem.getSeed().cost);
-			popup.getEntity().fxMoveTo(0.75f, mHUD.getTextBasket());
+			popup.getEntity().fxMoveTo(0.75f, mHUD.getTextCash());
 			attachChild(popup.getEntity());
 		}
 		super.callClickListener(pItem);
@@ -191,7 +191,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	}
 
 	private void updateHUDBasket() {
-		mHUD.setTextBasketValue("$" + mShop.getBasketValue());
+		mHUD.setTextBasket("$" + mShop.getBasketValue());
 	}
 
 	private void updateHUDCash() {
