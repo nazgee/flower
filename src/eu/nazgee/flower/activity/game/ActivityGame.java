@@ -147,7 +147,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		mMenuIngame.setOnMenuItemClickListener(mMenuItemClickListener);
 
 		// SCENE: game over menu
-		mMenuGameOver = new MenuGameLost(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getEngine().getCamera(), mResources.FONT, mResources.FONT, getVertexBufferObjectManager());
+		mMenuGameOver = new MenuGameLost(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getEngine().getCamera(), mResources.FONT, mResources.FONT, getVertexBufferObjectManager(), mTexturesLibrary);
 		mMenuGameOver.setOnMenuItemClickListener(mMenuItemClickListener);
 		mMenuGameOver.setDescription("this is a game over scene stub");
 
@@ -177,7 +177,9 @@ public class ActivityGame extends SimpleBaseGameActivity {
 
 			Scene youngest = SceneLoader.getYoungestScene(getEngine().getScene());
 
-			if (youngest == mMenuIngame) {
+			if (youngest == mMenuGameOver || youngest == mMenuGameOver) {
+				return false;
+			} else if (youngest == mMenuIngame) {
 				loadSubscene(null);
 				return true;
 			} else {

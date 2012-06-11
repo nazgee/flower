@@ -21,7 +21,8 @@ public class MenuIngame extends SceneMenu {
 				Consts.COLOR_TEXT_UNSELECTED, getVertexBufferObjectManager());
 		addMenuEntry("Main Menu", MENU_GO_MAIN, Consts.COLOR_TEXT_SELECTED,
 				Consts.COLOR_TEXT_UNSELECTED, getVertexBufferObjectManager());
-		buildAnimations();
+//		buildAnimations();
+		prepareAnimations();
 		setBackgroundEnabled(false);
 	}
 

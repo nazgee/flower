@@ -23,7 +23,7 @@ public @interface Consts {
 
 	public static final Color COLOR_TEXT_SELECTED = Color.RED;
 	public static final Color COLOR_TEXT_UNSELECTED = Color.WHITE;
-	public static final Color COLOR_TEXT_DESCRIPTION = Color.YELLOW;
+	public static final Color COLOR_TEXT_DESCRIPTION = Color.WHITE;
 
 	public static final String FILE_BASE_HUD_FRAME = "basic/frame.svg";
 	public static final String FILE_LEVELSELECTOR_ITEM_FRAME = FILE_BASE_HUD_FRAME;

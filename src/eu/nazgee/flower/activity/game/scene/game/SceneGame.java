@@ -163,7 +163,7 @@ public class SceneGame extends SceneLoadable{
 		 */
 		mSun = new Sun(0, 0, mResources.TEX_SUN, mResources.TEXS_SUNSHINE, vbom);
 		attachChild(mSun);
-		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 60, new SunTravelListener());
+		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 3, new SunTravelListener());
 		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.25f, 0)), 0);
 
 		/*
