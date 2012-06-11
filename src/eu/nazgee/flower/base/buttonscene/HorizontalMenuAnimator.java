@@ -36,34 +36,6 @@ public class HorizontalMenuAnimator extends BaseMenuAnimator {
 		setVerticalOffset(pVerticalOffset);
 	}
 
-//	public HorizontalMenuAnimator(final IEaseFunction pEaseFunction) {
-//		super(pEaseFunction);
-//	}
-//
-//	public HorizontalMenuAnimator(final HorizontalAlign pHorizontalAlign) {
-//		super(pHorizontalAlign);
-//	}
-//
-//	public HorizontalMenuAnimator(final HorizontalAlign pHorizontalAlign, final IEaseFunction pEaseFunction) {
-//		super(pHorizontalAlign, pEaseFunction);
-//	}
-//
-//	public HorizontalMenuAnimator(final float pMenuItemSpacing) {
-//		super(pMenuItemSpacing);
-//	}
-//
-//	public HorizontalMenuAnimator(final float pMenuItemSpacing, final IEaseFunction pEaseFunction) {
-//		super(pMenuItemSpacing, pEaseFunction);
-//	}
-//
-//	public HorizontalMenuAnimator(final HorizontalAlign pHorizontalAlign, final float pMenuItemSpacing) {
-//		super(pHorizontalAlign, pMenuItemSpacing);
-//	}
-//
-//	public HorizontalMenuAnimator(final HorizontalAlign pHorizontalAlign, final float pMenuItemSpacing, final IEaseFunction pEaseFunction) {
-//		super(pHorizontalAlign, pMenuItemSpacing, pEaseFunction);
-//	}
-
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
