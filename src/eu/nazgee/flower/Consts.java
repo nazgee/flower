@@ -30,5 +30,4 @@ public @interface Consts {
 	public static final String FILE_MESSAGEBOX_BUTTON = FILE_BASE_HUD_FRAME;
 
 	public static final String FILE_SHOP_ITEM_FRAME = FILE_BASE_HUD_FRAME;
-	public static final String FILE_SHOP_BUTTON_DONE = FILE_BASE_HUD_FRAME;
 }

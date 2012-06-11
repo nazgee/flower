@@ -12,6 +12,10 @@ import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePack;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackLoader;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackTextureRegionLibrary;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
@@ -23,11 +27,13 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
+import org.andengine.util.debug.Debug;
 
 import android.content.Context;
 import android.view.KeyEvent;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.FisheyeShaderProgram;
+import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.SceneGame;
 import eu.nazgee.flower.activity.game.scene.game.SceneGame.IGameListener;
 import eu.nazgee.flower.activity.game.scene.ingame.MenuIngame;
@@ -66,6 +72,8 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	private MenuGameLost mMenuGameOver;
 	private SceneLoader mLoader;
 	private final MyResources mResources = new MyResources();
+	private TexturesLibrary mTexturesLibrary = new TexturesLibrary(true);
+
 
 	// ===========================================================
 	// Constructors
@@ -97,6 +105,10 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		SVGBitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		FontFactory.setAssetBasePath("fonts/");
 
+		// Load spritesheets
+		mTexturesLibrary.loadResources(getEngine(), this);
+		mTexturesLibrary.load(getEngine(), this);
+
 		// Make sure custom shaders are available
 		getEngine().getShaderProgramManager().loadShaderProgram(FisheyeShaderProgram.getInstance());
 
@@ -105,7 +117,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		mResources.load(getEngine(), this);
 
 		// SCENE: seeds shop
-		mSceneShop = new SceneSeedsShop(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), GameLevel.LEVEL1, getStaticResources().FONT, mResources.ENTITY_DETACH_HANDLER);
+		mSceneShop = new SceneSeedsShop(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), GameLevel.LEVEL1, getStaticResources().FONT, mResources.ENTITY_DETACH_HANDLER, mTexturesLibrary);
 		mSceneShop.setItemClikedListener(new IItemClikedListener<SeedItem>() {
 			@Override
 			public void onItemClicked(SeedItem pItem) {
@@ -121,7 +133,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		});
 
 		// SCENE: gameplay
-		mSceneGame = new SceneGame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), mResources.ENTITY_DETACH_HANDLER, mSceneShop.getShop());
+		mSceneGame = new SceneGame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), mResources.ENTITY_DETACH_HANDLER, mSceneShop.getShop(), mTexturesLibrary);
 		mSceneGame.setGameListerner(new IGameListener() {
 			@Override
 			public void onGameFinished() {

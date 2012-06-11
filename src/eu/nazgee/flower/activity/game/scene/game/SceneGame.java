@@ -32,6 +32,7 @@ import android.content.Context;
 import com.badlogic.gdx.math.Vector2;
 
 import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.GameScore;
 import eu.nazgee.flower.activity.game.scene.shop.SeedsShop;
 import eu.nazgee.flower.activity.game.sound.LoadableSFX;
@@ -78,16 +79,19 @@ public class SceneGame extends SceneLoadable{
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 	private final SeedsShop mSeedsShop; // TODO change it to list/array/whatever. No need to keep the whole shop here
 	private IGameListener mGameListerner;
+	private final TexturesLibrary mTexturesLibrary;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public SceneGame(float W, float H,
 			VertexBufferObjectManager pVertexBufferObjectManager,
-			final EntityDetachRunnablePoolUpdateHandler pEntityDetachRunnablePoolUpdateHandler, final SeedsShop pSeedsShop) {
+			final EntityDetachRunnablePoolUpdateHandler pEntityDetachRunnablePoolUpdateHandler, final SeedsShop pSeedsShop,
+			TexturesLibrary pTexturesLibrary) {
 		super(W, H, pVertexBufferObjectManager);
 		this.mDetacher = pEntityDetachRunnablePoolUpdateHandler;
 		this.mSeedsShop = pSeedsShop;
+		this.mTexturesLibrary = pTexturesLibrary;
 		
 		mSFX = new LoadableSFX();
 		mHud = new HudGame(W, H, pVertexBufferObjectManager);
@@ -188,7 +192,7 @@ public class SceneGame extends SceneLoadable{
 			/*
 			 *  Create a sprite
 			 */
-			Flower flower = new Flower(0, 0, seed, getVertexBufferObjectManager());
+			Flower flower = new Flower(0, 0, seed, getVertexBufferObjectManager(), mTexturesLibrary);
 			flower.setZIndex(-1);
 			flower.setFlowerStateHandler(mFlowerListener);
 

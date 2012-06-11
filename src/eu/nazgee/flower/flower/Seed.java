@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.TexturesLibrary.TexturesMain;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
 public enum Seed {
@@ -23,30 +24,30 @@ public enum Seed {
 	/*
 	 * When defined as Enum, seeds are singletons 
 	 */
-	SEED1(1,	100,	"flowers/001.svg",	"seeds/001.png",	false,	Color.RED, Color.WHITE),
-	SEED2(2,	100,	"flowers/002.svg",	"seeds/001.png",	false, 	Color.YELLOW),
-	SEED3(3,	100,	"flowers/002.svg",	"seeds/001.png",	false, 	Color.BLUE),
-	SEED4(4,	200,	"flowers/003.svg",	"seeds/001.png",	true, 	Color.RED, Color.YELLOW),
-	SEED5(5,	200,	"flowers/004.svg",	"seeds/001.png",	true, 	Color.BLUE, Color.YELLOW),
-	SEED6(6,	200,	"flowers/005.svg",	"seeds/001.png",	true, 	Color.RED, Color.BLUE),
-	SEED7(7,	300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED, Color.YELLOW, Color.BLUE),
-	SEED8(8,	300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED, Color.YELLOW, Color.BLUE),
-	SEED9(9,	300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED, Color.YELLOW, Color.BLUE),
-	SEED10(10,	500,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED11(11,	500,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED12(12,	500,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED13(13,	800,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED14(14,	800,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED15(15,	800,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED16(16,	1300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED17(17,	1300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED18(18,	1300,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED19(19,	2100,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED20(20,	2100,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED21(21,	2100,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED22(22,	3400,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED23(23,	3400,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED),
-	SEED24(24,	3400,	"flowers/001.svg",	"seeds/001.png",	true, 	Color.RED);
+	SEED1(1,	100,	TexturesMain.FLOWERS_FLOWER0001_ID,	TexturesMain.SEEDS_001_ID,	false,	Color.WHITE, Color.RED),
+	SEED2(2,	100,	TexturesMain.FLOWERS_FLOWER0002_ID,	TexturesMain.SEEDS_001_ID,	false, 	Color.WHITE),
+	SEED3(3,	100,	TexturesMain.FLOWERS_FLOWER0003_ID,	TexturesMain.SEEDS_001_ID,	false, 	Color.WHITE),
+	SEED4(4,	200,	TexturesMain.FLOWERS_FLOWER0004_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW),
+	SEED5(5,	200,	TexturesMain.FLOWERS_FLOWER0005_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW),
+	SEED6(6,	200,	TexturesMain.FLOWERS_FLOWER0006_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE, Color.BLUE),
+	SEED7(7,	300,	TexturesMain.FLOWERS_FLOWER0007_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW, Color.BLUE),
+	SEED8(8,	300,	TexturesMain.FLOWERS_FLOWER0008_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW, Color.BLUE),
+	SEED9(9,	300,	TexturesMain.FLOWERS_FLOWER0009_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW, Color.BLUE),
+	SEED10(10,	500,	TexturesMain.FLOWERS_FLOWER0010_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED11(11,	500,	TexturesMain.FLOWERS_FLOWER0011_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED12(12,	500,	TexturesMain.FLOWERS_FLOWER0012_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED13(13,	800,	TexturesMain.FLOWERS_FLOWER0013_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED14(14,	800,	TexturesMain.FLOWERS_FLOWER0014_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED15(15,	800,	TexturesMain.FLOWERS_FLOWER0015_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED16(16,	1300,	TexturesMain.FLOWERS_FLOWER0016_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED17(17,	1300,	TexturesMain.FLOWERS_FLOWER0001_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED18(18,	1300,	TexturesMain.FLOWERS_FLOWER0001_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED19(19,	2100,	TexturesMain.FLOWERS_FLOWER0001_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED20(20,	2100,	TexturesMain.FLOWERS_FLOWER0001_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED21(21,	2100,	TexturesMain.FLOWERS_FLOWER0001_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED22(22,	3400,	TexturesMain.FLOWERS_FLOWER0001_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED23(23,	3400,	TexturesMain.FLOWERS_FLOWER0001_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED24(24,	3400,	TexturesMain.FLOWERS_FLOWER0001_ID,	TexturesMain.SEEDS_001_ID,	true, 	Color.WHITE);
 
 	public static final int SEEDS_NUMBER = SEED24.id;
 
@@ -57,66 +58,28 @@ public enum Seed {
 	public final boolean lockedByDefault;
 	public final int id;
 	public final int cost;
-	public final CharSequence tex_seed_file;
-	public final CharSequence tex_plant_file;
+	public final int seedID;
+	public final int blossomID;
 	public final Color[] col_plant;
-	public ITextureRegion mTexSeed;
-	public ITextureRegion mTexPlant;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	private Seed(final int pID, final int pCost, final CharSequence pTexSeed, final CharSequence pTexPlant) {
-		this(pID, pCost, pTexSeed, pTexPlant, true);
+	private Seed(final int pID, final int pCost, final int pBlossomID, final int pSeedID) {
+		this(pID, pCost, pBlossomID, pSeedID, true);
 	}
 
-	private Seed(final int pID, final int pCost, final CharSequence pTexSeed, final CharSequence pTexPlant, boolean pLockedByDefault) {
-		this(pID, pCost, pTexSeed, pTexPlant, pLockedByDefault, Color.WHITE);
+	private Seed(final int pID, final int pCost, final int pBlossomID, final int pSeedID, boolean pLockedByDefault) {
+		this(pID, pCost, pBlossomID, pSeedID, pLockedByDefault, Color.WHITE);
 	}
 
-	private Seed(final int pID, final int pCost, final CharSequence pTexSeed_file, final CharSequence pTexPlant_file, boolean pLockedByDefault, Color ... pColors) {
+	private Seed(final int pID, final int pCost, final int pBlossomID, final int pSeedID, boolean pLockedByDefault, Color ... pColors) {
 		id = pID;
 		cost = pCost;
-		tex_seed_file = pTexPlant_file;
-		tex_plant_file = pTexSeed_file;
+		seedID = pSeedID;
+		blossomID = pBlossomID;
 		lockedByDefault = pLockedByDefault;
 		col_plant = pColors;
-	}
-
-	public static void createSeedAssets(BuildableBitmapTextureAtlas pAtlas,  Context pContext, List<Seed> pSeeds) {
-		for (Seed seed : pSeeds) {
-			seed.mTexSeed = BitmapTextureAtlasTextureRegionFactory.createFromAsset(pAtlas, pContext, seed.tex_seed_file.toString());
-//			if (seed.mTexSeed == null) {
-//				throw new RuntimeException("wtf? " + seed.tex_seed_file);
-//			} else {
-//				Log.w("bmp!", seed.tex_seed_file.toString());
-//			}
-		}
-	}
-
-	public static void createPlantAssets(BuildableBitmapTextureAtlas pAtlas,  Context pContext, List<Seed> pSeeds) {
-		for (Seed seed : pSeeds) {
-			seed.mTexPlant = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(pAtlas, pContext, seed.tex_plant_file.toString(), Consts.FLOWER_TEX_WIDTH, Consts.FLOWER_TEX_HEIGHT);
-//			if (seed.mTexPlant == null) {
-//				throw new RuntimeException("wtf? " + seed.tex_plant_file);
-//			} else {
-//				Log.w("svg!", seed.tex_plant_file.toString());
-//			}
-		}
-	}
-
-	/**
-	 * Binds appropriate textures to seeds
-	 * @param pAtlasSeeds
-	 * @param pAtlasPlants
-	 * @param pAssetManager
-	 * @param pSeeds
-	 */
-	public static void createAllAssets(BuildableBitmapTextureAtlas pAtlasSeeds,
-			BuildableBitmapTextureAtlas pAtlasPlants,
-			Context pContext, List<Seed> pSeeds) {
-		createSeedAssets(pAtlasSeeds, pContext, pSeeds);
-		createPlantAssets(pAtlasPlants, pContext, pSeeds);
 	}
 
 	// ===========================================================

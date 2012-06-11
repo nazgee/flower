@@ -28,6 +28,7 @@ import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.EaseQuadIn;
 
 import android.util.Log;
+import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
 
@@ -37,9 +38,7 @@ public class Flower extends Entity implements ITouchArea{
 	// Constants
 	// ===========================================================
 	private static final int ZINDEX_BLOSSOM = 0;
-//	private static final int ZINDEX_WATER = -1;
 	private static final int ZINDEX_SEED = -1;
-//	private static final int ZINDEX_POT = -2;
 
 	public enum eLevel {
 		LOW,
@@ -54,7 +53,7 @@ public class Flower extends Entity implements ITouchArea{
 	private boolean isBloomed = false;
 	private boolean isFried = false;
 
-	private final EntityBlossom mSpriteBlossom;
+	private final EntityBlossom mEntityBlossom;
 	private final EntitySeed mEntitySeed;
 
 	private IEntityModifier mDropModifier;
@@ -66,20 +65,21 @@ public class Flower extends Entity implements ITouchArea{
 	// ===========================================================
 
 	public Flower(float pX, float pY, Seed pSeed,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager,
+			TexturesLibrary pTexturesLibrary) {
 		this.mSeed = pSeed;
 
 		this.mColor = pSeed.getRandomColor(MathUtils.RANDOM);
-		this.mSpriteBlossom = new EntityBlossom(0, 0, pSeed.mTexPlant, pVertexBufferObjectManager, mColor);
-		this.mEntitySeed = new EntitySeed(0, 0, pSeed.mTexSeed, pVertexBufferObjectManager, mColor);
+		this.mEntityBlossom = new EntityBlossom(0, 0, pTexturesLibrary.getMain().get(pSeed.blossomID), pVertexBufferObjectManager, mColor);
+		this.mEntitySeed = new EntitySeed(0, 0, pTexturesLibrary.getMain().get(pSeed.seedID), pVertexBufferObjectManager, mColor);
 
 		attachChild(mEntitySeed);
 
-		mSpriteBlossom.setZIndex(ZINDEX_BLOSSOM);
+		mEntityBlossom.setZIndex(ZINDEX_BLOSSOM);
 		mEntitySeed.setZIndex(ZINDEX_SEED);
 
 		Positioner.setCentered(mEntitySeed, this);
-		Positioner.setCenteredTop(mSpriteBlossom, mEntitySeed);
+		Positioner.setCenteredTop(mEntityBlossom, mEntitySeed);
 
 		sortChildren();
 	}
@@ -237,8 +237,8 @@ public class Flower extends Entity implements ITouchArea{
 	}
 
 	private void animateBloom() {
-		attachChild(mSpriteBlossom);	// blossom was not attached yet, for performance reasons
-		mSpriteBlossom.animateBloom();
+		attachChild(mEntityBlossom);	// blossom was not attached yet, for performance reasons
+		mEntityBlossom.animateBloom();
 	}
 
 	private void animateFry() {

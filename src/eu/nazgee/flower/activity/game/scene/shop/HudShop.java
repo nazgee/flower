@@ -2,26 +2,18 @@ package eu.nazgee.flower.activity.game.scene.shop;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.primitive.vbo.HighPerformanceRectangleVertexBufferObject;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
-import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
-import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.vbo.DrawType;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.BaseButton;
 import eu.nazgee.flower.BaseHUD;
-import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.Gradient2WayVertexBufferObject;
-import eu.nazgee.flower.Gradient2WayVertexBufferObject.eGradientVertices;
 import eu.nazgee.flower.Gradient3Way;
 import eu.nazgee.flower.Gradient3Way.eGradientPosition;
-import eu.nazgee.game.utils.helpers.AtlasLoader;
+import eu.nazgee.flower.TexturesLibrary;
+import eu.nazgee.flower.TexturesLibrary.TexturesMain;
 
 public class HudShop extends BaseHUD {
 
@@ -33,18 +25,15 @@ public class HudShop extends BaseHUD {
 	// Fields
 	// ===========================================================
 	public BaseButton mButtonDone;
+	private final TexturesLibrary mTexturesLibrary;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public HudShop(float W, float H,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			VertexBufferObjectManager pVertexBufferObjectManager, TexturesLibrary pTexturesLibrary) {
 		super(W, H, 2, pVertexBufferObjectManager);
-
-		// make sure, that we use our new version of resources, instead of a base one
-		getLoader().uninstall(mResources);
-		mResources = new ShopResources();
-		getLoader().install(mResources);
+		this.mTexturesLibrary = pTexturesLibrary;
 	}
 
 
@@ -63,10 +52,28 @@ public class HudShop extends BaseHUD {
 		super.onLoad(e, c);
 		Camera camera = e.getCamera();
 
-		mButtonDone = new BaseButton(0, 0, ((ShopResources)mResources).TEX_BUTTON_DONE, getVertexBufferObjectManager());
+		/*
+		 * Prepare done button
+		 */
+		mButtonDone = new BaseButton(0, 0, mTexturesLibrary.getMain().get(TexturesMain.ICONS_CHECK_MARK_ID), getVertexBufferObjectManager());
 		attachChild(mButtonDone);
 		this.mButtonDone.setPosition(getW() - mButtonDone.getWidth(), getH() - mButtonDone.getHeight());
 		this.registerTouchArea(mButtonDone);
+
+		/*
+		 * Prepare basket icon
+		 */
+		final float h = getTextBasket().getHeight();
+		Sprite basket = new Sprite(0, 0, h, h, mTexturesLibrary.getMain().get(TexturesMain.ICONS_SHOP_ID), getVertexBufferObjectManager());
+		attachChild(basket);
+		basket.setPosition(getW() - basket.getWidth(), 0);
+
+		/*
+		 * Prepare cash icon
+		 */
+		Sprite cash = new Sprite(0, 0, h, h, mTexturesLibrary.getMain().get(TexturesMain.ICONS_CASH_ID), getVertexBufferObjectManager());
+		attachChild(cash);
+		cash.setPosition(getW() - cash.getWidth(), basket.getY() + basket.getHeight());
 
 		Gradient3Way grad = new Gradient3Way(camera.getWidth()/2, 0, camera.getWidth()/2, camera.getHeight(), 0.5f, getVertexBufferObjectManager());
 		attachChild(grad);
@@ -81,10 +88,10 @@ public class HudShop extends BaseHUD {
 	// Methods
 	// ===========================================================
 	public void setTextCash(CharSequence pText) {
-		setTextLine(0, pText);
+		setTextLine(1, pText);
 	}
 	public void setTextBasketValue(CharSequence pText) {
-		setTextLine(1, pText);
+		setTextLine(0, pText);
 	}
 	public Text getTextBasket() {
 		return getTextLine(1);
@@ -92,39 +99,4 @@ public class HudShop extends BaseHUD {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-
-	protected class ShopResources extends HudResources {
-		private BuildableBitmapTextureAtlas[] mAtlases;
-
-		public ITextureRegion TEX_BUTTON_DONE;
-
-		@Override
-		public void onLoadResources(Engine e, Context c) {
-			super.onLoadResources(e, c);
-
-			mAtlases = new BuildableBitmapTextureAtlas[1];
-			for (int i = 0; i < mAtlases.length; i++) {
-				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 1024, 1024, TextureOptions.REPEATING_BILINEAR);
-			}
-
-			TEX_BUTTON_DONE = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlases[0], c,
-					Consts.FILE_SHOP_BUTTON_DONE, (int) (getW() * 0.3f), (int) (getH() * 0.3f));
-		}
-
-		@Override
-		public void onLoad(Engine e, Context c) {
-			super.onLoad(e, c);
-
-			AtlasLoader.buildAndLoad(mAtlases);
-		}
-
-		@Override
-		public void onUnload() {
-			super.onUnload();
-
-			for (BuildableBitmapTextureAtlas atlas : mAtlases) {
-				atlas.unload();
-			}
-		}
-	}
 }

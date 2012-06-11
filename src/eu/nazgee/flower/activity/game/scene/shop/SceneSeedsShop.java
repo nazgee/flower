@@ -6,6 +6,7 @@ import org.andengine.engine.Engine;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackTextureRegionLibrary;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
@@ -18,6 +19,7 @@ import android.content.Context;
 import eu.nazgee.flower.BaseButton;
 import eu.nazgee.flower.BaseButton.IButtonListener;
 import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.levelselector.scene.LoadableParallaxBackground;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout.eAnchorPointXY;
@@ -53,16 +55,19 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 
 	private IShoppingListener mShoppingListener;
 	private final SeedsShop mShop;
+	private final TexturesLibrary mTexturesLibrary;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public SceneSeedsShop(float W, float H,
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			GameLevel pGameLevel, final Font pDescFont,
-			final EntityDetachRunnablePoolUpdateHandler pDetacher) {
+			final EntityDetachRunnablePoolUpdateHandler pDetacher,
+			final TexturesLibrary pTexturesLibrary) {
 		super(W, H, pVertexBufferObjectManager, (int) (W * PAGE_WIDTH_FLIP));
 		this.mDescFont = pDescFont;
 		this.mDetacher = pDetacher;
+		this.mTexturesLibrary = pTexturesLibrary;
 
 		// Install resources
 		getLoader().install(this.mResources);
@@ -74,7 +79,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 		setBackground(new Background(Color.BLUE));
 
 		// Install HUD
-		this.mHUD = new HudShop(W, H, pVertexBufferObjectManager);
+		this.mHUD = new HudShop(W, H, pVertexBufferObjectManager, pTexturesLibrary);
 		getLoader().install(this.mHUD);
 
 		// Prepare pools
@@ -117,6 +122,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	protected void callClickListener(SeedItem pItem) {
 		if (mShop.addToBasket(pItem.getSeed())) {
 			updateHUDBasket();
+			updateHUDCash();
 			PopupItem popup = mPopupPool.obtainPoolItem();
 			popup.getEntity().put(pItem, "$" + pItem.getSeed().cost);
 			popup.getEntity().fxMoveTo(0.75f, mHUD.getTextBasket());
@@ -155,7 +161,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	@Override
 	protected SeedItem populateItem(int pItem, int pItemOnPage, int pPage) {
 		Seed seed = this.mShop.getSeedsInShop().get(pItem);
-		SeedItem item = new SeedItem(seed, mDescFont, mResources.TEX_FRAME, getVertexBufferObjectManager());
+		SeedItem item = new SeedItem(seed, mDescFont, mResources.TEX_FRAME, getVertexBufferObjectManager(), mTexturesLibrary);
 		return item;
 	}
 
@@ -185,11 +191,11 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	}
 
 	private void updateHUDBasket() {
-		mHUD.setTextBasketValue("basket: $" + mShop.getBasketValue());
+		mHUD.setTextBasketValue("$" + mShop.getBasketValue());
 	}
 
 	private void updateHUDCash() {
-		mHUD.setTextCash("cash: $" + mShop.getCustomerCash());
+		mHUD.setTextCash("$" + (mShop.getCustomerCash() - mShop.getBasketValue()));
 	}
 
 	// ===========================================================
@@ -203,8 +209,6 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 		private BuildableBitmapTextureAtlas[] mAtlases;
 		public ITextureRegion TEX_FRAME;
 		public static final int MISC_ATLAS_NUM = 0;
-		public static final int SEEDS_ATLAS_NUM = 0;
-		public static final int PLANTS_ATLAS_NUM = 0;
 
 		@Override
 		public void onLoadResources(Engine e, Context c) {
@@ -212,13 +216,6 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 			mAtlases = new BuildableBitmapTextureAtlas[3];
 			for (int i = 0; i < mAtlases.length; i++) {
 				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 2048, 2048, TextureOptions.REPEATING_BILINEAR);
-
-				if (i == SEEDS_ATLAS_NUM) {
-					Seed.createSeedAssets(mAtlases[SEEDS_ATLAS_NUM], c, SceneSeedsShop.this.mShop.getSeedsInShop());
-				}
-				if (i == PLANTS_ATLAS_NUM) {
-					Seed.createPlantAssets(mAtlases[PLANTS_ATLAS_NUM], c, SceneSeedsShop.this.mShop.getSeedsInShop());
-				}
 			}
 			BuildableBitmapTextureAtlas atlas = mAtlases[MISC_ATLAS_NUM];
 
