@@ -10,8 +10,7 @@ import org.andengine.util.color.Color;
 import android.content.Context;
 import eu.nazgee.flower.BaseButton;
 import eu.nazgee.flower.BaseHUD;
-import eu.nazgee.flower.Gradient3Way;
-import eu.nazgee.flower.Gradient3Way.eGradientPosition;
+import eu.nazgee.flower.GradientRectangle;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.TexturesLibrary.TexturesMain;
 import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
@@ -77,13 +76,21 @@ public class HudShop extends BaseHUD {
 		basket.setPosition(getW() - basket.getWidth(), cash.getY() + cash.getHeight());
 
 		final float gradW = camera.getWidth() * (1 - SceneLevelselector.PAGE_WIDTH_EFFECTIVE);
-		Gradient3Way grad = new Gradient3Way(camera.getWidth() - gradW, 0, gradW, camera.getHeight(), 0.1f, getVertexBufferObjectManager());
+		GradientRectangle grad = new GradientRectangle(camera.getWidth() - gradW, 0, gradW, camera.getHeight(), 5, getVertexBufferObjectManager());
 		attachChild(grad);
-		Color col = new Color(0,0,0,1);
-		grad.setColor(col);
+		grad.setColor(new Color(Color.BLACK));
 		grad.setAlpha(0.9f);
-		col.setAlpha(0);
-		grad.setGradientColor(eGradientPosition.GRADIENT_LEFT, col);
+		grad.setGradientBand(0, new Color(0.5f, 0.5f, 0.5f));
+		grad.setGradientBand(1, new Color(0.0f, 0.0f, 0.0f));
+		grad.setGradientBand(2, new Color(0.1f, 0.1f, 0.1f));
+		grad.setGradientBand(3, new Color(0.0f, 0.0f, 0.0f));
+		grad.setGradientBand(4, new Color(0.0f, 0.0f, 0.0f));
+		grad.setGradientBandAlpha(0, 0.9f);
+		grad.setGradientBandAlpha(1, 0.9f);
+		grad.setGradientBandAlpha(2, 0.9f);
+		grad.setGradientBandAlpha(3, 0.9f);
+		grad.setGradientBandAlpha(4, 1.0f);
+
 		grad.setZIndex(ZINDEX_GRADIENT);
 
 		sortChildren();
