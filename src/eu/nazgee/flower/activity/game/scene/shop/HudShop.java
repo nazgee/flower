@@ -2,13 +2,13 @@ package eu.nazgee.flower.activity.game.scene.shop;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
-import eu.nazgee.flower.BaseButton;
 import eu.nazgee.flower.BaseHUD;
 import eu.nazgee.flower.GradientRectangle;
 import eu.nazgee.flower.TexturesLibrary;
@@ -24,7 +24,7 @@ public class HudShop extends BaseHUD {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	public BaseButton mButtonDone;
+	public ButtonSprite mButtonDone;
 	private final TexturesLibrary mTexturesLibrary;
 
 	// ===========================================================
@@ -40,7 +40,7 @@ public class HudShop extends BaseHUD {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public BaseButton getButtonDone() {
+	public ButtonSprite getButtonDone() {
 		return mButtonDone;
 	}
 	// ===========================================================
@@ -55,7 +55,7 @@ public class HudShop extends BaseHUD {
 		/*
 		 * Prepare done button
 		 */
-		mButtonDone = new BaseButton(0, 0, mTexturesLibrary.getMain().get(TexturesMain.ICONS_CHECK_MARK_ID), getVertexBufferObjectManager());
+		mButtonDone = new ButtonSprite(0, 0, mTexturesLibrary.getMain().get(TexturesMain.ICONS_CHECK_MARK_ID), getVertexBufferObjectManager());
 		attachChild(mButtonDone);
 		this.mButtonDone.setPosition(getW() - mButtonDone.getWidth(), getH() - mButtonDone.getHeight());
 		this.registerTouchArea(mButtonDone);

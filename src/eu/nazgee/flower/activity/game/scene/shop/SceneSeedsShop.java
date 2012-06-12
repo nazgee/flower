@@ -5,8 +5,9 @@ import java.util.List;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.sprite.ButtonSprite;
+import org.andengine.entity.sprite.ButtonSprite.OnClickListener;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
-import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackTextureRegionLibrary;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
@@ -16,8 +17,6 @@ import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
-import eu.nazgee.flower.BaseButton;
-import eu.nazgee.flower.BaseButton.IButtonListener;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.levelselector.scene.LoadableParallaxBackground;
@@ -142,12 +141,14 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 		updateHUDCash();
 
 		// HUD buttons clicks
-		this.mHUD.getButtonDone().setButtonListener(new IButtonListener() {
+		this.mHUD.getButtonDone().setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClicked(BaseButton pButton) {
+			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX,
+					float pTouchAreaLocalY) {
 				if (null != getShoppingListener()) {
 					getShoppingListener().onShoppingFinished(null);
 				}
+				
 			}
 		});
 	}
