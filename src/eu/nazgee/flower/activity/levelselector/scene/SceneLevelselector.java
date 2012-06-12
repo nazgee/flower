@@ -12,10 +12,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
+import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.activity.game.scene.shop.HudShop;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
-import eu.nazgee.flower.base.pagerscene.ArrayLayout.eAnchorPointXY;
 import eu.nazgee.flower.base.pagerscene.IPage;
 import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
 import eu.nazgee.flower.base.pagerscene.PageRectangleTransparent;

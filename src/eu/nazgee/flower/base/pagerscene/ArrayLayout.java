@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import org.andengine.entity.IEntity;
 
 import android.util.Log;
+import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
 
 public class ArrayLayout implements ILayout {
 	// ===========================================================
@@ -56,8 +57,8 @@ public class ArrayLayout implements ILayout {
 				}
 				final float baseX = c * cw;
 				final float baseY = r * rh;
-				final float offX = mAnchorPoint.x.mul * cw / mAnchorPoint.x.div;
-				final float offY = mAnchorPoint.y.mul * rh / mAnchorPoint.y.div;
+				final float offX = mAnchorPoint.x.align * cw;
+				final float offY = mAnchorPoint.y.align * rh;
 				pItems.get(i).setPosition(baseX + offX, baseY + offY);
 			}
 		}
@@ -78,37 +79,5 @@ public class ArrayLayout implements ILayout {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	public enum eAnchorPoint {
-		MIN(0, 2),
-		MIDDLE(1, 2),
-		MAX(2, 2);
-
-		public final float mul;
-		public final float div;
-
-		private eAnchorPoint(float multiplier, float divider) {
-			this.mul = multiplier;
-			this.div = divider;
-		}
-	}
-	public enum eAnchorPointXY {
-		TOP_LEFT(eAnchorPoint.MIN, eAnchorPoint.MIN),
-		TOP_RIGHT(eAnchorPoint.MIDDLE, eAnchorPoint.MIN),
-		TOP_MIDDLE(eAnchorPoint.MAX, eAnchorPoint.MIN),
-		CENTERED_LEFT(eAnchorPoint.MIN, eAnchorPoint.MIDDLE),
-		CENTERED(eAnchorPoint.MIDDLE, eAnchorPoint.MIDDLE),
-		CENTERED_RIGHT(eAnchorPoint.MAX, eAnchorPoint.MIDDLE),
-		BOTTOM_LEFT(eAnchorPoint.MIN, eAnchorPoint.MAX),
-		BOTTOM_RIGHT(eAnchorPoint.MIDDLE, eAnchorPoint.MAX),
-		BOTTOM_MIDDLE(eAnchorPoint.MAX, eAnchorPoint.MAX);
-
-		public eAnchorPoint x;
-		public eAnchorPoint y;
-
-		private eAnchorPointXY(eAnchorPoint pAnchorPointX, eAnchorPoint pAnchorPointY) {
-			x = pAnchorPointX;
-			y = pAnchorPointY;
-		}
-	}
 
 }
