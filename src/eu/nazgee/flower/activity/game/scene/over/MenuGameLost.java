@@ -2,6 +2,7 @@ package eu.nazgee.flower.activity.game.scene.over;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.AutoWrap;
@@ -16,7 +17,11 @@ import org.andengine.util.color.Color;
 import android.content.Context;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.EmptyMenuAnimator;
+import eu.nazgee.flower.LayoutLinear;
+import eu.nazgee.flower.LayoutLinear.eDirection;
 import eu.nazgee.flower.TexturesLibrary;
+import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
+import eu.nazgee.flower.LayoutBase.eRatio;
 import eu.nazgee.flower.TexturesLibrary.TexturesMain;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.scene.menu.SceneMenu;
@@ -31,34 +36,59 @@ public class MenuGameLost extends SceneMenu {
 			TexturesLibrary pTexturesLibrary) {
 		super(W, H, pCamera, pFont, pVertexBufferObjectManager);
 		
-		setMenuAnimator(new EmptyMenuAnimator());
 		float[] reuse = new float[2];
 
+		// make sure that nobody is moving menu items around
+		setMenuAnimator(new EmptyMenuAnimator());
+
+		// Prepare background
 		Sprite bg = new org.andengine.entity.sprite.Sprite(0, 0, pTexturesLibrary.getMain().get(TexturesMain.BG_BG_ID), pVertexBufferObjectManager);
 		bg.setAlpha(0.7f);
 		attachChild(bg);
 		Positioner.setCentered(bg, pCamera.getWidth()/2, pCamera.getHeight()/2);
 
+		// Prepare menu items
+		IMenuItem hometxt = addMenuEntry("main\nmenu", MENU_GO_MAIN, Consts.COLOR_TEXT_SELECTED, Consts.COLOR_TEXT_UNSELECTED, getVertexBufferObjectManager());
 		IMenuItem homeico = addMenuEntry(pTexturesLibrary.getMain().get(TexturesMain.ICONS_HOME_ID), MENU_GO_MAIN, Color.RED, Color.WHITE, pVertexBufferObjectManager);
 		reuse = bg.convertLocalToSceneCoordinates(bg.getWidth()/2 - homeico.getWidth(), bg.getHeight() - homeico.getHeight(), reuse);
-		homeico.setPosition(reuse[Constants.VERTEX_INDEX_X], reuse[Constants.VERTEX_INDEX_Y]);
 
+		// Prepare menu items
+		IMenuItem resettxt = addMenuEntry("retry\nlevel", MENU_RESET, Consts.COLOR_TEXT_SELECTED, Consts.COLOR_TEXT_UNSELECTED, getVertexBufferObjectManager());
 		IMenuItem resetico = addMenuEntry(pTexturesLibrary.getMain().get(TexturesMain.ICONS_REFRESH_ID), MENU_RESET, Color.RED, Color.WHITE, pVertexBufferObjectManager);
 		reuse = bg.convertLocalToSceneCoordinates(bg.getWidth()/2, bg.getHeight() - resetico.getHeight(), reuse);
-		resetico.setPosition(reuse[Constants.VERTEX_INDEX_X], reuse[Constants.VERTEX_INDEX_Y]);
 
-		IMenuItem hometxt = addMenuEntry("main\nmenu", MENU_GO_MAIN, Consts.COLOR_TEXT_SELECTED, Consts.COLOR_TEXT_UNSELECTED, getVertexBufferObjectManager());
-		IMenuItem resettxt = addMenuEntry("retry\nlevel", MENU_RESET, Consts.COLOR_TEXT_SELECTED, Consts.COLOR_TEXT_UNSELECTED, getVertexBufferObjectManager());
+		/*
+		 *  We will be using layouts, which means we need to reattach menu items
+		 *  or we will get an Exception (already has a parent)
+		 */
+		detachChild(hometxt);
+		detachChild(homeico);
+		detachChild(resettxt);
+		detachChild(resetico);
 
-		hometxt.setPosition(homeico.getX() - hometxt.getWidth(), homeico.getY());
-		resettxt.setPosition(resetico.getX() + resetico.getWidth(), resetico.getY());
+		final float margin = bg.getHeight() * 0.1f;
+
+		// Use layouts for positioning
+		LayoutLinear homelayout = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.BOTTOM_LEFT, eAnchorPointXY.TOP_LEFT, 1);
+		homelayout.setItems(hometxt, homeico);
+		homelayout.setPosition(margin, bg.getHeight() - margin);
+		bg.attachChild(homelayout);
+
+		// Use layouts for positioning
+		LayoutLinear resetlayout = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.BOTTOM_RIGHT, eAnchorPointXY.TOP_LEFT, 1);
+		resetlayout.setItems(resetico, resettxt);
+		resetlayout.setPosition(bg.getWidth() - margin, bg.getHeight() - margin);
+		bg.attachChild(resetlayout);
+
+		Rectangle rect = new Rectangle(0, 0, 10, 10, getVertexBufferObjectManager());
+		rect.setColor(Color.PINK);
+		resetlayout.attachChild(rect);
 
 		buildAnimations();
 		setBackgroundEnabled(false);
 
-		final float margin = 0.1f;
-		mDescription = new Text(bg.getWidth() * margin/2, 40, pDescFont, "", 1000,
-				new TextOptions(AutoWrap.WORDS, bg.getWidth() * (1-margin),
+		mDescription = new Text(margin/2, 40, pDescFont, "", 1000,
+				new TextOptions(AutoWrap.WORDS, bg.getWidth() - margin,
 						HorizontalAlign.CENTER, Text.LEADING_DEFAULT),
 				getVertexBufferObjectManager());
 		mDescription.setColor(Consts.COLOR_TEXT_DESCRIPTION);
