@@ -11,6 +11,7 @@ import org.andengine.util.modifier.ease.EaseStrongOut;
 
 import android.content.Intent;
 import eu.nazgee.flower.BaseActivityPager;
+import eu.nazgee.flower.ModifiersFactory;
 import eu.nazgee.flower.activity.game.ActivityGame;
 import eu.nazgee.flower.activity.levelselector.scene.GameLevelItem;
 import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
@@ -54,7 +55,7 @@ public class ActivityLevelselector extends BaseActivityPager<GameLevelItem>{
 					i.putExtra(ActivityGame.BUNDLE_LEVEL_ID, pItem.getLevel().id);
 					startActivityForResult(i, 0);
 				} else {
-					pItem.registerEntityModifier(nodYourHead(3, 0.1f, 20));
+					pItem.registerEntityModifier(ModifiersFactory.shakeYourHead(3, 0.1f, 20));
 					mSceneInfo.load(getEngine(), ActivityLevelselector.this);
 					getEngine().getScene().setChildScene(mSceneInfo, false, false, true);
 				}
@@ -66,17 +67,7 @@ public class ActivityLevelselector extends BaseActivityPager<GameLevelItem>{
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	public IEntityModifier nodYourHead(int mNodsCount,
-			float mNodDuration,
-			float mNodAngle) {
-		IEntityModifier mod = new LoopEntityModifier(
-				new SequenceEntityModifier(
-						new RotationModifier(mNodDuration/4, 0,        -mNodAngle/2, EaseStrongOut.getInstance()),
-						new RotationModifier(mNodDuration/2, -mNodAngle/2, mNodAngle,    EaseStrongInOut.getInstance()),
-						new RotationModifier(mNodDuration/4, mNodAngle,    0,        EaseStrongIn.getInstance())
-						), mNodsCount);
-		return mod;
-	}
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================

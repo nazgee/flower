@@ -4,6 +4,7 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.IEntityParameterCallable;
+import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -13,8 +14,10 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
+import eu.nazgee.flower.LayoutBase;
 import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
 import eu.nazgee.flower.LayoutLinear;
+import eu.nazgee.flower.ModifiersFactory;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.TexturesLibrary.TexturesMain;
 import eu.nazgee.flower.flower.Seed;
@@ -30,9 +33,10 @@ public class SeedItem extends Entity implements ITouchArea{
 	// ===========================================================
 	private final Seed mSeed;
 	private final Sprite mSpriteFrame;
-	private final Sprite mSpriteSeed;
-	private final Sprite mSpriteBlossoms[];
+	private Sprite mSpriteSeed;
+	private Sprite mSpriteBlossoms[];
 	private final TexturesLibrary mTexturesLibrary;
+	private IEntityModifier mModifier;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -52,39 +56,6 @@ public class SeedItem extends Entity implements ITouchArea{
 		attachChild(this.mSpriteFrame);
 		Positioner.setCentered(this.mSpriteFrame, this);
 
-		/* 
-		 * Prepare blossom Sprites
-		 */
-		this.mSpriteBlossoms = new Sprite[pSeed.col_plant.length];
-		for (int i = 0; i < mSpriteBlossoms.length; i++) {
-			mSpriteBlossoms[i] = new Sprite(0, 0, pTexturesLibrary.getMain().get(pSeed.blossomID), pVBOM);
-			mSpriteBlossoms[i].setColor(pSeed.col_plant[i]);
-		}
-
-		/* 
-		 * Layout and attach blossoms in a line of appropriate width,
-		 * and with an anchor pointe set to TOP-MIDDLE
-		 */
-		LayoutLinear blossoms = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.TOP_MIDDLE, eAnchorPointXY.TOP_LEFT);
-		blossoms.setItems(mSpriteFrame.getWidth(), mSpriteBlossoms);
-		blossoms.setPosition(mSpriteFrame.getWidth()/2, 0);
-		mSpriteFrame.attachChild(blossoms);
-
-		/*
-		 * Prepare text with seed's price
-		 */
-		final Text text = new Text(0, 0, pFont, "$" + pSeed.cost, pVBOM);
-		text.setColor(Color.WHITE);
-		attachChild(text);
-		Positioner.setCentered(text, this);
-
-		/*
-		 * Prepare and attach seed sprite
-		 */
-		mSpriteSeed = new Sprite(0, 0, pTexturesLibrary.getMain().get(pSeed.seedID), pVBOM);
-		attachChild(this.mSpriteSeed);
-		Positioner.setCentered(this.mSpriteSeed, this);
-
 		/*
 		 * Prepare and attach lock icon if item is locked
 		 */
@@ -95,6 +66,39 @@ public class SeedItem extends Entity implements ITouchArea{
 			locked.setZIndex(ZINDEX_LOCK);
 			attachChild(locked);
 			Positioner.setCentered(locked, this);
+		} else {
+			/* 
+			 * Prepare blossom Sprites
+			 */
+			this.mSpriteBlossoms = new Sprite[pSeed.col_plant.length];
+			for (int i = 0; i < mSpriteBlossoms.length; i++) {
+				mSpriteBlossoms[i] = new Sprite(0, 0, pTexturesLibrary.getMain().get(pSeed.blossomID), pVBOM);
+				mSpriteBlossoms[i].setColor(pSeed.col_plant[i]);
+			}
+	
+			/* 
+			 * Layout and attach blossoms in a line of appropriate width,
+			 * and with an anchor pointe set to TOP-MIDDLE
+			 */
+			LayoutLinear blossoms = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.TOP_MIDDLE, eAnchorPointXY.TOP_LEFT);
+			blossoms.setItems(mSpriteFrame.getWidth(), mSpriteBlossoms);
+			blossoms.setPosition(mSpriteFrame.getWidth()/2, 0);
+			mSpriteFrame.attachChild(blossoms);
+	
+			/*
+			 * Prepare text with seed's price
+			 */
+			final Text text = new Text(0, 0, pFont, "$" + pSeed.cost, pVBOM);
+			text.setColor(Color.WHITE);
+			mSpriteFrame.attachChild(text);
+			LayoutBase.setItemPositionBottomRight(text, mSpriteFrame.getWidth(), mSpriteFrame.getHeight(), eAnchorPointXY.TOP_LEFT);
+	
+			/*
+			 * Prepare and attach seed sprite
+			 */
+			mSpriteSeed = new Sprite(0, 0, pTexturesLibrary.getMain().get(pSeed.seedID), pVBOM);
+			attachChild(this.mSpriteSeed);
+			Positioner.setCentered(this.mSpriteSeed, this);
 		}
 
 		setAlpha(1);
@@ -120,6 +124,20 @@ public class SeedItem extends Entity implements ITouchArea{
 	@Override
 	public boolean isCulled(Camera pCamera) {
 		return mSpriteFrame.isCulled(pCamera);
+	}
+
+	protected void registerExclusiveModifier(IEntityModifier pModifier) {
+		unregisterEntityModifier(mModifier);
+		pModifier.setAutoUnregisterWhenFinished(false);
+		registerEntityModifier(pModifier);
+	}
+
+	public void animateYes() {
+		registerExclusiveModifier(ModifiersFactory.nodYourHead(2, 0.2f, 1, 0.75f));
+	}
+
+	public void animateNo() {
+		registerExclusiveModifier(ModifiersFactory.shakeYourHead(3, 0.1f, 20));
 	}
 	// ===========================================================
 	// Methods

@@ -19,7 +19,9 @@ import org.andengine.util.color.Color;
 import android.content.Context;
 import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
 import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.ModifiersFactory;
 import eu.nazgee.flower.TexturesLibrary;
+import eu.nazgee.flower.activity.levelselector.ActivityLevelselector;
 import eu.nazgee.flower.activity.levelselector.scene.LoadableParallaxBackground;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.IPage;
@@ -119,13 +121,21 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 
 	@Override
 	protected void callClickListener(SeedItem pItem) {
-		if (mShop.addToBasket(pItem.getSeed())) {
-			updateHUDBasket();
-			updateHUDCash();
-			PopupItem popup = mPopupPool.obtainPoolItem();
-			popup.getEntity().put(pItem, "$" + pItem.getSeed().cost);
-			popup.getEntity().fxMoveTo(0.75f, mHUD.getTextCash());
-			attachChild(popup.getEntity());
+		if (!pItem.getSeed().resources.isLocked()) {
+			if (mShop.addToBasket(pItem.getSeed())) {
+				updateHUDBasket();
+				updateHUDCash();
+				PopupItem popup = mPopupPool.obtainPoolItem();
+				popup.getEntity().put(pItem, "$" + pItem.getSeed().cost);
+				popup.getEntity().fxMoveTo(0.75f, mHUD.getTextCash());
+				attachChild(popup.getEntity());
+
+				pItem.animateYes();
+			} else {
+				pItem.animateNo();
+			}
+		} else {
+			pItem.animateNo();
 		}
 		super.callClickListener(pItem);
 	}
