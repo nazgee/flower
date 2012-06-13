@@ -1,6 +1,5 @@
 package eu.nazgee.flower;
 
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.shape.IAreaShape;
 
 public class LayoutLinear extends LayoutBase {
@@ -16,96 +15,127 @@ public class LayoutLinear extends LayoutBase {
 	// Fields
 	// ===========================================================
 	protected final eDirection mDirection;
-	protected final float mPositionScale;
 	protected final eRatio mAlignment;
+	protected float mPositionScale = 1;
+	private float mItemsWidth;
+	private float mItemsHeight;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	protected LayoutLinear(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor,
-			final eDirection pDirection, final float pPositionScale, final eRatio pAlignment) {
+			final eDirection pDirection, final eRatio pAlignment) {
 		super(pLayoutAnchor, pItemsAnchor);
 		this.mDirection = pDirection;
-		this.mPositionScale = pPositionScale;
 		this.mAlignment = pAlignment;
 	}
 
-	public static LayoutLinear populateHorizontalAlignedTop(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor, final float pPositionScale) {
-		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_HORIZONTAL, pPositionScale, eRatio.MIN);
+	public static LayoutLinear populateHorizontalAlignedTop(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor) {
+		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_HORIZONTAL, eRatio.MIN);
 	}
 
-	public static LayoutLinear populateHorizontalAlignedCenter(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor, final float pPositionScale) {
-		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_HORIZONTAL, pPositionScale, eRatio.MIDDLE);
+	public static LayoutLinear populateHorizontalAlignedCenter(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor) {
+		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_HORIZONTAL, eRatio.MIDDLE);
 	}
 
-	public static LayoutLinear populateHorizontalAlignedBottom(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor, final float pPositionScale) {
-		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_HORIZONTAL, pPositionScale, eRatio.MAX);
+	public static LayoutLinear populateHorizontalAlignedBottom(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor) {
+		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_HORIZONTAL, eRatio.MAX);
 	}
 
-	public static LayoutLinear populateVerticalAlignedLeft(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor, final float pPositionScale) {
-		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_VERTICAL, pPositionScale, eRatio.MIN);
+	public static LayoutLinear populateVerticalAlignedLeft(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor) {
+		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_VERTICAL, eRatio.MIN);
 	}
 
-	public static LayoutLinear populateVerticalAlignedCenter(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor, final float pPositionScale) {
-		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_VERTICAL, pPositionScale, eRatio.MIDDLE);
+	public static LayoutLinear populateVerticalAlignedCenter(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor) {
+		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_VERTICAL, eRatio.MIDDLE);
 	}
 
-	public static LayoutLinear populateVerticalAlignedRight(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor, final float pPositionScale) {
-		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_VERTICAL, pPositionScale, eRatio.MAX);
+	public static LayoutLinear populateVerticalAlignedRight(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor) {
+		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_VERTICAL, eRatio.MAX);
 	}
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	@Override
-	protected void buildLayout() {
-		super.buildLayout();
-
-		float width = 0;
-		float height = 0;
+	protected void calculateLayout() {
+		mItemsWidth = 0;
+		mItemsHeight = 0;
 
 		for (IAreaShape item : mItems) {
 			if (mDirection == eDirection.DIR_HORIZONTAL) {
-				width += item.getWidth();
-				height = item.getHeight() > height ? item.getHeight() : height;
+				mItemsWidth += item.getWidth();
+				mItemsHeight = item.getHeight() > mItemsHeight ? item.getHeight() : mItemsHeight;
 			} else {
-				width  = item.getWidth() > width ? item.getWidth() : width;
-				height+= item.getHeight();
+				mItemsWidth  = item.getWidth() > mItemsWidth ? item.getWidth() : mItemsWidth;
+				mItemsHeight+= item.getHeight();
 			}
 		}
-
-		setItemsPositions(width, height);
 	}
 
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
+	@Override
+	public void setItems(IAreaShape... pItems) {
+		super.setItems(pItems);
+		calculateLayout();
+		mPositionScale = 1;
+		setItemsPositions(mItemsWidth, mItemsHeight);
+	}
+
+	public void setItems(final float pDesiredSize, IAreaShape... pItems) {
+		setItems(pDesiredSize, true, pItems);
+	}
+
+	public void setItems(final float pDesiredSize, final boolean pStretch, IAreaShape... pItems) {
+		super.setItems(pItems);
+		calculateLayout();
+		boolean squeezingNeeded = pStretch ||
+				(mDirection == eDirection.DIR_HORIZONTAL) ?
+				(pDesiredSize < mItemsWidth) :
+				(pDesiredSize < mItemsHeight);
+
+		if (squeezingNeeded && pItems.length > 1) {
+			final IAreaShape last = pItems[pItems.length-1];
+			final float lastW = last.getWidth();
+			final float lastH = last.getWidth();
 	
+			mPositionScale = (mDirection == eDirection.DIR_HORIZONTAL) ?
+					(pDesiredSize - lastW) / (mItemsWidth - lastW) :
+					(pDesiredSize - lastH) / (mItemsHeight - lastH);
+
+			if (mDirection == eDirection.DIR_HORIZONTAL) {
+				mItemsWidth = pDesiredSize;
+			} else {
+				mItemsHeight = pDesiredSize;
+			}
+			setItemsPositions(mItemsWidth, mItemsHeight);
+		} else {
+			mPositionScale = 1;
+			setItemsPositions(mItemsWidth, mItemsHeight);
+		}
+	}
+
 	// ===========================================================
 	// Methods
 	// ===========================================================
 	protected void setItemsPositions(float W, float H) {
 
-		if (mDirection == eDirection.DIR_HORIZONTAL) {
-			W *= mPositionScale;
-		} else {
-			H *= mPositionScale;
-		}
+		final float baseX = -getAnchor().x.getValue(W);
+		final float baseY = -getAnchor().y.getValue(H);
 
-		float baseX = -getAnchor().x.getValue(W);
-		float baseY = -getAnchor().y.getValue(H);
+//		Log.e("aaa", "W=" + W + "; baseX=" + baseX + "; scale=" + mPositionScale + "; count=" + mItems.size());
 
-
-		
+		float offset = 0;
 		if (mDirection == eDirection.DIR_HORIZONTAL) {
 			for (IAreaShape item : mItems) {
-				float y = baseY + (H - item.getHeight()) * mAlignment.ratio;
-				setItemPositionTopLeft(item, baseX, y, getItemsAnchor());
-				baseX += item.getWidth() * mPositionScale;
+				final float y = baseY + (H - item.getHeight()) * mAlignment.ratio;
+				setItemPositionTopLeft(item, baseX + offset * mPositionScale, y, getItemsAnchor());
+				offset += item.getWidth();
 			}
 		} else {
 			for (IAreaShape item : mItems) {
-				float x = baseX + (W - item.getWidth()) * mAlignment.ratio;
-				setItemPositionTopLeft(item, x, baseY, getItemsAnchor());
-				baseY += item.getHeight() * mPositionScale;
+				final float x = baseX + (W - item.getWidth()) * mAlignment.ratio;
+				setItemPositionTopLeft(item, x, baseY + offset * mPositionScale, getItemsAnchor());
+				offset += item.getWidth();
 			}
 		}
 	}

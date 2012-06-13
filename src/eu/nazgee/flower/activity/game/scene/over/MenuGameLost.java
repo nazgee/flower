@@ -10,18 +10,15 @@ import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.Constants;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.EmptyMenuAnimator;
-import eu.nazgee.flower.LayoutLinear;
-import eu.nazgee.flower.LayoutLinear.eDirection;
-import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
-import eu.nazgee.flower.LayoutBase.eRatio;
+import eu.nazgee.flower.LayoutLinear;
+import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.TexturesLibrary.TexturesMain;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.scene.menu.SceneMenu;
@@ -69,13 +66,13 @@ public class MenuGameLost extends SceneMenu {
 		final float margin = bg.getHeight() * 0.1f;
 
 		// Use layouts for positioning
-		LayoutLinear homelayout = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.BOTTOM_LEFT, eAnchorPointXY.TOP_LEFT, 1);
+		LayoutLinear homelayout = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.BOTTOM_LEFT, eAnchorPointXY.TOP_LEFT);
 		homelayout.setItems(hometxt, homeico);
 		homelayout.setPosition(margin, bg.getHeight() - margin);
 		bg.attachChild(homelayout);
 
 		// Use layouts for positioning
-		LayoutLinear resetlayout = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.BOTTOM_RIGHT, eAnchorPointXY.TOP_LEFT, 1);
+		LayoutLinear resetlayout = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.BOTTOM_RIGHT, eAnchorPointXY.TOP_LEFT);
 		resetlayout.setItems(resetico, resettxt);
 		resetlayout.setPosition(bg.getWidth() - margin, bg.getHeight() - margin);
 		bg.attachChild(resetlayout);

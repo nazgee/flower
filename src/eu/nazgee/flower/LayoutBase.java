@@ -3,7 +3,6 @@ package eu.nazgee.flower;
 import java.util.LinkedList;
 
 import org.andengine.entity.Entity;
-import org.andengine.entity.IEntity;
 import org.andengine.entity.shape.IAreaShape;
 
 
@@ -78,8 +77,6 @@ public class LayoutBase extends Entity {
 			mItems.add(item);
 			attachChild(item);
 		}
-
-		buildLayout();
 	}
 
 	/**
@@ -114,9 +111,7 @@ public class LayoutBase extends Entity {
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
-	protected void buildLayout() {
-		
-	}
+
 	// ===========================================================
 	// Methods
 	// ===========================================================

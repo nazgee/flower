@@ -13,6 +13,8 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
+import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
+import eu.nazgee.flower.LayoutLinear;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.TexturesLibrary.TexturesMain;
 import eu.nazgee.flower.flower.Seed;
@@ -38,6 +40,16 @@ public class SeedItem extends Entity implements ITouchArea{
 		this.mSeed = pSeed;
 		this.mTexturesLibrary = pTexturesLibrary;
 
+		// Prepare item's frame
+		this.mSpriteFrame = new Sprite(0, 0, pFrameTexture, pVBOM) {
+			@Override
+			public 	void setAlpha(final float pAlpha) {
+				super.setAlpha(pAlpha * 0.5f);
+			}
+		};
+		attachChild(this.mSpriteFrame);
+
+		// Prepare blossoms
 		this.mSpriteSeed = new Sprite(0, 0, pTexturesLibrary.getMain().get(pSeed.seedID), pVBOM);
 		this.mSpriteBlossoms = new Sprite[pSeed.col_plant.length];
 		for (int i = 0; i < this.mSpriteBlossoms.length; i++) {
@@ -45,23 +57,16 @@ public class SeedItem extends Entity implements ITouchArea{
 			this.mSpriteBlossoms[i].setColor(pSeed.col_plant[i]);
 		}
 
-		this.mSpriteFrame = new Sprite(0, 0, pFrameTexture, pVBOM) {
-			@Override
-			public 	void setAlpha(final float pAlpha) {
-				super.setAlpha(pAlpha * 0.5f);
-			}
-		};
+		// Layout blossoms in a line of appropriate width
+		LayoutLinear blossoms = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.TOP_MIDDLE, eAnchorPointXY.TOP_LEFT);
+		blossoms.setItems(mSpriteFrame.getWidth(), mSpriteBlossoms);
+		this.mSpriteFrame.attachChild(blossoms);
+		blossoms.setPosition(mSpriteFrame.getWidth()/2, 0);
 
 		final Text text = new Text(0, 0, pFont, "seed=" + pSeed.id, pVBOM);
 		text.setColor(Color.BLACK);
 
-		attachChild(this.mSpriteFrame);
-		int blossomX = 0;
-		for (Sprite blossom : mSpriteBlossoms) {
-			this.mSpriteFrame.attachChild(blossom);
-			blossom.setX(blossomX);
-			blossomX += blossom.getWidth();
-		}
+
 		attachChild(this.mSpriteSeed);
 		attachChild(text);
 
