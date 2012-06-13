@@ -40,7 +40,9 @@ public class SeedItem extends Entity implements ITouchArea{
 		this.mSeed = pSeed;
 		this.mTexturesLibrary = pTexturesLibrary;
 
-		// Prepare item's frame
+		/*
+		 * Prepare background frame
+		 */
 		this.mSpriteFrame = new Sprite(0, 0, pFrameTexture, pVBOM) {
 			@Override
 			public 	void setAlpha(final float pAlpha) {
@@ -48,30 +50,43 @@ public class SeedItem extends Entity implements ITouchArea{
 			}
 		};
 		attachChild(this.mSpriteFrame);
+		Positioner.setCentered(this.mSpriteFrame, this);
 
-		// Prepare blossoms
-		this.mSpriteSeed = new Sprite(0, 0, pTexturesLibrary.getMain().get(pSeed.seedID), pVBOM);
+		/* 
+		 * Prepare blossom Sprites
+		 */
 		this.mSpriteBlossoms = new Sprite[pSeed.col_plant.length];
-		for (int i = 0; i < this.mSpriteBlossoms.length; i++) {
-			this.mSpriteBlossoms[i] = new Sprite(0, 0, pTexturesLibrary.getMain().get(pSeed.blossomID), pVBOM);
-			this.mSpriteBlossoms[i].setColor(pSeed.col_plant[i]);
+		for (int i = 0; i < mSpriteBlossoms.length; i++) {
+			mSpriteBlossoms[i] = new Sprite(0, 0, pTexturesLibrary.getMain().get(pSeed.blossomID), pVBOM);
+			mSpriteBlossoms[i].setColor(pSeed.col_plant[i]);
 		}
 
-		// Layout blossoms in a line of appropriate width
+		/* 
+		 * Layout and attach blossoms in a line of appropriate width,
+		 * and with an anchor pointe set to TOP-MIDDLE
+		 */
 		LayoutLinear blossoms = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.TOP_MIDDLE, eAnchorPointXY.TOP_LEFT);
 		blossoms.setItems(mSpriteFrame.getWidth(), mSpriteBlossoms);
-		this.mSpriteFrame.attachChild(blossoms);
 		blossoms.setPosition(mSpriteFrame.getWidth()/2, 0);
-
-		final Text text = new Text(0, 0, pFont, "seed=" + pSeed.id, pVBOM);
-		text.setColor(Color.BLACK);
-
-
-		attachChild(this.mSpriteSeed);
-		attachChild(text);
+		mSpriteFrame.attachChild(blossoms);
 
 		/*
-		 * Create a lock icon on top of Item
+		 * Prepare text with seed's price
+		 */
+		final Text text = new Text(0, 0, pFont, "$" + pSeed.cost, pVBOM);
+		text.setColor(Color.WHITE);
+		attachChild(text);
+		Positioner.setCentered(text, this);
+
+		/*
+		 * Prepare and attach seed sprite
+		 */
+		mSpriteSeed = new Sprite(0, 0, pTexturesLibrary.getMain().get(pSeed.seedID), pVBOM);
+		attachChild(this.mSpriteSeed);
+		Positioner.setCentered(this.mSpriteSeed, this);
+
+		/*
+		 * Prepare and attach lock icon if item is locked
 		 */
 		if (mSeed.resources.isLocked()) {
 			this.mSpriteFrame.setColor(Color.RED);
@@ -81,10 +96,6 @@ public class SeedItem extends Entity implements ITouchArea{
 			attachChild(locked);
 			Positioner.setCentered(locked, this);
 		}
-
-		Positioner.setCentered(this.mSpriteFrame, this);
-		Positioner.setCentered(this.mSpriteSeed, this);
-		Positioner.setCentered(text, this);
 
 		setAlpha(1);
 	}

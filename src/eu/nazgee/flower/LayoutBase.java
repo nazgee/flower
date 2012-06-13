@@ -13,7 +13,7 @@ public class LayoutBase extends Entity {
 	// ===========================================================
 	public enum eRatio {
 		MIN(0),
-		MIDDLE(0.5f),
+		MED(0.5f),
 		MAX(1);
 
 		public final float ratio;
@@ -28,13 +28,13 @@ public class LayoutBase extends Entity {
 
 	public enum eAnchorPointXY {
 		TOP_LEFT(eRatio.MIN, eRatio.MIN),
-		TOP_MIDDLE(eRatio.MIDDLE, eRatio.MIN),
+		TOP_MIDDLE(eRatio.MED, eRatio.MIN),
 		TOP_RIGHT(eRatio.MAX, eRatio.MIN),
-		CENTERED_LEFT(eRatio.MIN, eRatio.MIDDLE),
-		CENTERED(eRatio.MIDDLE, eRatio.MIDDLE),
-		CENTERED_RIGHT(eRatio.MAX, eRatio.MIDDLE),
+		CENTERED_LEFT(eRatio.MIN, eRatio.MED),
+		CENTERED(eRatio.MED, eRatio.MED),
+		CENTERED_RIGHT(eRatio.MAX, eRatio.MED),
 		BOTTOM_LEFT(eRatio.MIN, eRatio.MAX),
-		BOTTOM_MIDDLE(eRatio.MIDDLE, eRatio.MAX),
+		BOTTOM_MIDDLE(eRatio.MED, eRatio.MAX),
 		BOTTOM_RIGHT(eRatio.MAX, eRatio.MAX);
 
 		public final eRatio x;
@@ -88,26 +88,41 @@ public class LayoutBase extends Entity {
 	 * @param pAnchor anchor point of given item
 	 */
 	public static void setItemPositionTopLeft(final IAreaShape pItem, final float x, final float y, final eAnchorPointXY pAnchor) {
-		final float offX = pAnchor.x.getValue(pItem.getWidth());
-		final float offY = pAnchor.y.getValue(pItem.getHeight());
-
-		pItem.setPosition(x + offX, y + offY);
+		setItemPosition(pItem, x, y, pAnchor, eRatio.MIN, eRatio.MIN);
+	}
+	public static void setItemPositionTopMiddle(final IAreaShape pItem, final float x, final float y, final eAnchorPointXY pAnchor) {
+		setItemPosition(pItem, x, y, pAnchor, eRatio.MED, eRatio.MIN);
+	}
+	public static void setItemPositionTopRight(final IAreaShape pItem, final float x, final float y, final eAnchorPointXY pAnchor) {
+		setItemPosition(pItem, x, y, pAnchor, eRatio.MAX, eRatio.MIN);
 	}
 
+	public static void setItemPositionBottomLeft(final IAreaShape pItem, final float x, final float y, final eAnchorPointXY pAnchor) {
+		setItemPosition(pItem, x, y, pAnchor, eRatio.MIN, eRatio.MAX);
+	}
+	public static void setItemPositionBottomMiddle(final IAreaShape pItem, final float x, final float y, final eAnchorPointXY pAnchor) {
+		setItemPosition(pItem, x, y, pAnchor, eRatio.MED, eRatio.MAX);
+	}
 	public static void setItemPositionBottomRight(final IAreaShape pItem, final float x, final float y, final eAnchorPointXY pAnchor) {
-		final float offX = pAnchor.x.getValue(pItem.getWidth()) - pItem.getWidth();
-		final float offY = pAnchor.y.getValue(pItem.getHeight()) - pItem.getHeight();
-
-		pItem.setPosition(x + offX, y + offY);
+		setItemPosition(pItem, x, y, pAnchor, eRatio.MAX, eRatio.MAX);
 	}
 
+	public static void setItemPositionCenterLeft(final IAreaShape pItem, final float x, final float y, final eAnchorPointXY pAnchor) {
+		setItemPosition(pItem, x, y, pAnchor, eRatio.MIN, eRatio.MED);
+	}
 	public static void setItemPositionCenter(final IAreaShape pItem, final float x, final float y, final eAnchorPointXY pAnchor) {
-		final float offX = pAnchor.x.getValue(pItem.getWidth()) - pItem.getWidth()/2;
-		final float offY = pAnchor.y.getValue(pItem.getHeight()) - pItem.getHeight()/2;
+		setItemPosition(pItem, x, y, pAnchor, eRatio.MED, eRatio.MED);
+	}
+	public static void setItemPositionCenterRight(final IAreaShape pItem, final float x, final float y, final eAnchorPointXY pAnchor) {
+		setItemPosition(pItem, x, y, pAnchor, eRatio.MAX, eRatio.MED);
+	}
+
+	public static void setItemPosition(final IAreaShape pItem, final float x, final float y, final eAnchorPointXY pAnchor, eRatio pHorizontal, eRatio pVertical) {
+		final float offX = pAnchor.x.getValue(pItem.getWidth()) - pHorizontal.getValue(pItem.getWidth());
+		final float offY = pAnchor.y.getValue(pItem.getHeight()) - pVertical.getValue(pItem.getHeight());
 
 		pItem.setPosition(x + offX, y + offY);
 	}
-
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
