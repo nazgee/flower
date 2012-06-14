@@ -17,12 +17,9 @@ import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
-import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.ModifiersFactory;
+import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
 import eu.nazgee.flower.TexturesLibrary;
-import eu.nazgee.flower.TexturesLibrary.TexturesMain;
-import eu.nazgee.flower.activity.levelselector.ActivityLevelselector;
 import eu.nazgee.flower.activity.levelselector.scene.LoadableParallaxBackground;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.IPage;
@@ -173,7 +170,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	@Override
 	protected SeedItem populateItem(int pItem, int pItemOnPage, int pPage) {
 		Seed seed = this.mShop.getSeedsInShop().get(pItem);
-		SeedItem item = new SeedItem(seed, getFrameW(), getFrameH(), mDescFont, mTexturesLibrary.getMain().get(TexturesMain.FRAME_SEED_ID), getVertexBufferObjectManager(), mTexturesLibrary);
+		SeedItem item = new SeedItem(seed, getFrameW(), getFrameH(), mDescFont, mTexturesLibrary.getMain().get(TexturesLibrary.MAIN_FRAME_SEED_ID), getVertexBufferObjectManager(), mTexturesLibrary);
 		return item;
 	}
 

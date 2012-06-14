@@ -19,7 +19,6 @@ import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
 import eu.nazgee.flower.LayoutLinear;
 import eu.nazgee.flower.ModifiersFactory;
 import eu.nazgee.flower.TexturesLibrary;
-import eu.nazgee.flower.TexturesLibrary.TexturesMain;
 import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.game.utils.helpers.Positioner;
 
@@ -57,7 +56,7 @@ public class SeedItem extends Entity implements ITouchArea{
 		if (mSeed.resources.isLocked()) {
 			this.mSpriteFrame.setColor(Color.RED);
 
-			Sprite locked = new Sprite(0, 0, pTexturesLibrary.getMain().get(TexturesMain.ICONS_LOCK_ID), pVBOM);
+			Sprite locked = new Sprite(0, 0, pTexturesLibrary.getMain().get(TexturesLibrary.MAIN_ICONS_LOCK_ID), pVBOM);
 			locked.setZIndex(ZINDEX_LOCK);
 			attachChild(locked);
 			Positioner.setCentered(locked, this);
