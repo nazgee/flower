@@ -39,7 +39,7 @@ public class MenuGameLost extends SceneMenu {
 		setMenuAnimator(new EmptyMenuAnimator());
 
 		// Prepare background
-		Sprite bg = new org.andengine.entity.sprite.Sprite(0, 0, pTexturesLibrary.getMain().get(TexturesMain.BG_BG_ID), pVertexBufferObjectManager);
+		Sprite bg = new org.andengine.entity.sprite.Sprite(0, 0, pTexturesLibrary.getMain().get(TexturesMain.FRAME_LEVEL_COMPLETE_ID), pVertexBufferObjectManager);
 		bg.setAlpha(0.7f);
 		attachChild(bg);
 		Positioner.setCentered(bg, pCamera.getWidth()/2, pCamera.getHeight()/2);

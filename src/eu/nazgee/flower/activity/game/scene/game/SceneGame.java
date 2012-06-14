@@ -395,7 +395,6 @@ public class SceneGame extends SceneLoadable{
 		public ITiledTextureRegion TEXS_SPLASH;
 
 		public ITextureRegion TEX_POT;
-		public ITiledTextureRegion TEXS_FLOWERS;
 		public ITiledTextureRegion TEXS_POT_WATER;
 
 		public ITiledTextureRegion TEXS_CLOUDS;
@@ -413,7 +412,6 @@ public class SceneGame extends SceneLoadable{
 			/*
 			 * Create nicely named shortcuts to our atlases (textures)
 			 */
-			BuildableBitmapTextureAtlas atlasFlower = mAtlases[0];
 			BuildableBitmapTextureAtlas atlasWaterdrop = mAtlases[0];
 			BuildableBitmapTextureAtlas atlasSunshine = mAtlases[0];
 			BuildableBitmapTextureAtlas atlasClouds = mAtlases[0];
@@ -441,11 +439,6 @@ public class SceneGame extends SceneLoadable{
 			/*
 			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
 			 */
-			TEXS_FLOWERS = TiledTextureRegionFactory.loadTilesSVG(c, "gfx/", "flowers",
-					atlasFlower, Consts.FLOWER_TEX_WIDTH, Consts.FLOWER_TEX_HEIGHT);
-//			TEXS_FLOWERS = SVGBitmapTextureAtlasTextureRegionFactory.createTiledFromAssetDirectory(
-//					atlasFlower, c, "flowers", Consts.FLOWER_TEX_WIDTH, Consts.FLOWER_TEX_HEIGHT);
-
 		}
 
 		@Override

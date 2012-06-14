@@ -40,19 +40,14 @@ public class SeedItem extends Entity implements ITouchArea{
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public SeedItem(Seed pSeed, Font pFont, ITextureRegion pFrameTexture, VertexBufferObjectManager pVBOM, TexturesLibrary pTexturesLibrary) {
+	public SeedItem(Seed pSeed, final float W, final float H, Font pFont, ITextureRegion pFrameTexture, VertexBufferObjectManager pVBOM, TexturesLibrary pTexturesLibrary) {
 		this.mSeed = pSeed;
 		this.mTexturesLibrary = pTexturesLibrary;
 
 		/*
 		 * Prepare background frame
 		 */
-		this.mSpriteFrame = new Sprite(0, 0, pFrameTexture, pVBOM) {
-			@Override
-			public 	void setAlpha(final float pAlpha) {
-				super.setAlpha(pAlpha * 0.5f);
-			}
-		};
+		this.mSpriteFrame = new Sprite(0, 0, W, H, pFrameTexture, pVBOM);
 		attachChild(this.mSpriteFrame);
 		Positioner.setCentered(this.mSpriteFrame, this);
 
