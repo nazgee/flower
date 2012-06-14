@@ -12,18 +12,11 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
-import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
-import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.ITiledTextureRegion;
-import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
-import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
 import org.andengine.util.math.MathUtils;
@@ -37,10 +30,11 @@ import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.GameScore;
 import eu.nazgee.flower.activity.game.scene.shop.SeedsShop;
 import eu.nazgee.flower.activity.game.sound.LoadableSFX;
+import eu.nazgee.flower.activity.levelselector.scene.LoadableParallaxBackground;
 import eu.nazgee.flower.flower.Flower;
-import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.flower.Flower.IFlowerStateHandler;
 import eu.nazgee.flower.flower.Flower.eLevel;
+import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.pool.cloud.Cloud;
 import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
@@ -49,8 +43,6 @@ import eu.nazgee.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
 import eu.nazgee.flower.sun.Sun;
 import eu.nazgee.flower.sun.Sun.TravelListener;
 import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
-import eu.nazgee.game.utils.helpers.AtlasLoader;
-import eu.nazgee.game.utils.helpers.TiledTextureRegionFactory;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.SceneLoadable;
 import eu.nazgee.game.utils.track.TrackVector;
@@ -96,7 +88,7 @@ public class SceneGame extends SceneLoadable{
 		
 		mSFX = new LoadableSFX();
 		mHud = new HudGame(W, H, pVertexBufferObjectManager);
-		mLoadableParallaxBackground = new LoadableParallaxBackground(pVertexBufferObjectManager);
+		mLoadableParallaxBackground = new LoadableParallaxBackground(mTexturesLibrary, pVertexBufferObjectManager);
 		getLoader().install(mResources);
 		getLoader().install(mLoadableParallaxBackground);
 		getLoader().install(mSFX);
@@ -143,7 +135,7 @@ public class SceneGame extends SceneLoadable{
 		 * to the sprite representing ground level
 		 */
 		setBackground(mLoadableParallaxBackground.getLoadedBacground());
-		mGround = mLoadableParallaxBackground.getLoadedGroundSprite();
+		mGround = mLoadableParallaxBackground.getGroundSprite();
 
 		/*
 		 * Create new virtual sky- this object is used to calculate how high

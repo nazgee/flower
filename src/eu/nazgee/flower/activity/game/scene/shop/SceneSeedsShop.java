@@ -45,7 +45,6 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private final MyResources mResources = new MyResources();
 	private final HudShop mHUD;
 	private final LoadableParallaxBackground mLoadableParallaxBackground;
 	private final Font mDescFont;
@@ -68,9 +67,6 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 		this.mDetacher = pDetacher;
 		this.mTexturesLibrary = pTexturesLibrary;
 
-		// Install resources
-		getLoader().install(this.mResources);
-
 		// Install shop's background
 		this.mLoadableParallaxBackground = new LoadableParallaxBackground(mTexturesLibrary, pVertexBufferObjectManager);
 		getLoader().install(this.mLoadableParallaxBackground);
@@ -90,7 +86,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 		// Install all the seeds resources (this is needed, as long as seeds will
 		// be considered as needing resources)
 		for (Seed seed : this.mShop.getSeedsInShop()) {
-			this.mResources.getLoader().install(seed.resources);
+			getLoader().install(seed.resources);
 		}
 
 	}
@@ -213,36 +209,4 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	public interface IShoppingListener {
 		public void onShoppingFinished(List<Seed> pBoughtItems);
 	}
-
-	private class MyResources extends LoadableResourceSimple {
-		private BuildableBitmapTextureAtlas[] mAtlases;
-		public ITextureRegion TEX_FRAME;
-		public static final int MISC_ATLAS_NUM = 0;
-
-		@Override
-		public void onLoadResources(Engine e, Context c) {
-
-			mAtlases = new BuildableBitmapTextureAtlas[3];
-			for (int i = 0; i < mAtlases.length; i++) {
-				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 2048, 2048, TextureOptions.REPEATING_BILINEAR);
-			}
-			BuildableBitmapTextureAtlas atlas = mAtlases[MISC_ATLAS_NUM];
-
-			TEX_FRAME = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, c, Consts.FILE_SHOP_ITEM_FRAME, getFrameW(), getFrameH());
-
-		}
-
-		@Override
-		public void onLoad(Engine e, Context c) {
-			AtlasLoader.buildAndLoad(mAtlases);
-		}
-
-		@Override
-		public void onUnload() {
-			for (BuildableBitmapTextureAtlas atlas : mAtlases) {
-				atlas.unload();
-			}
-		}
-	}
-
 }

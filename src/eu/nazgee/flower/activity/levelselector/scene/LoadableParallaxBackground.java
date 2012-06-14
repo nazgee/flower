@@ -32,6 +32,8 @@ public class LoadableParallaxBackground extends LoadableResourceSimple {
 
 	private final TexturesLibrary mTexturesLibrary;
 
+	private Sprite bgGround;
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -68,7 +70,7 @@ public class LoadableParallaxBackground extends LoadableResourceSimple {
 		final Sprite bgFar = new Sprite(0, mCamera.getHeight() - TEX_GROUND.getHeight() - TEX_BG_FAR.getHeight(), TEX_BG_FAR, vertexBufferObjectManager);
 		final Sprite bgClose = new Sprite(0, mCamera.getHeight() - TEX_GROUND.getHeight() - TEX_BG_CLOSE.getHeight(), TEX_BG_CLOSE, vertexBufferObjectManager);
 		final Sprite bgGrass = new Sprite(0, mCamera.getHeight() - TEX_GRASS.getHeight()/2, TEX_GRASS, vertexBufferObjectManager);
-		final Sprite bgGround = new Sprite(0, mCamera.getHeight() - TEX_GROUND.getHeight(), TEX_GROUND, vertexBufferObjectManager);
+		bgGround = new Sprite(0, mCamera.getHeight() - TEX_GROUND.getHeight(), TEX_GROUND, vertexBufferObjectManager);
 		mLoadedBackground = new CameraParallaxBackground(0, 0, 0, mCamera);
 		mLoadedBackground.attachParallaxEntity(new ParallaxEntity(-0.1f, bgSky));
 		mLoadedBackground.attachParallaxEntity(new ParallaxEntity(-0.25f, bgFar));
@@ -83,6 +85,10 @@ public class LoadableParallaxBackground extends LoadableResourceSimple {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+
+	public Sprite getGroundSprite() {
+		return bgGround;
+	}
 
 	// ===========================================================
 	// Inner and Anonymous Classes
