@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <texture version="1" file="main.png" type="bitmap" width="2048" height="2048" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
     <!-- Created with TexturePacker http://texturepacker.com -->
-    <!-- $TexturePacker:SmartUpdate:c56f08f213f983c1685e3b5485f5ecfe$ -->
+    <!-- $TexturePacker:SmartUpdate:3e11d44d90477fef19e7f66fbc571d76$ -->
     <textureregion id="0" src="main/ambient/cloud/CL03.png" x="1574" y="856" width="233" height="87" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="233" srcheight="87"/>
     <textureregion id="1" src="main/ambient/cloud/CL03a.png" x="1335" y="856" width="233" height="87" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="233" srcheight="87"/>
     <textureregion id="2" src="main/ambient/cloud/CL10.png" x="1813" y="865" width="199" height="83" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="199" srcheight="83"/>
