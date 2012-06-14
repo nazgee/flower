@@ -20,6 +20,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
 import org.andengine.util.adt.list.SmartList;
@@ -161,7 +162,8 @@ public class SceneGame extends SceneLoadable{
 		/*
 		 * Create a Sun and let the camera track it
 		 */
-		mSun = new Sun(0, 0, mResources.TEX_SUN, mResources.TEXS_SUNSHINE, vbom);
+		mSun = new Sun(0, 0, mTexturesLibrary.getSun(),
+				mTexturesLibrary.getSunRays(), vbom);
 		attachChild(mSun);
 		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 3, new SunTravelListener());
 		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.25f, 0)), 0);
@@ -171,8 +173,8 @@ public class SceneGame extends SceneLoadable{
 		 */
 		mCloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/3,
 				getW() * 0.1f, 10, 0.2f, 0.2f, 6, mSky,
-				mResources.TEXS_CLOUDS, mResources.TEX_WATERDROP, 
-				mResources.TEXS_SPLASH,
+				mTexturesLibrary.getClouds(), mTexturesLibrary.getRainDrop(), 
+				mTexturesLibrary.getRainSplash(),
 				mDetacher,
 				vbom);
 		attachChild(mCloudLayer);
@@ -388,66 +390,15 @@ public class SceneGame extends SceneLoadable{
 	}
 
 	private static class MyResources extends LoadableResourceSimple {
-		public ITextureRegion TEX_SUN;
-		public ITiledTextureRegion TEXS_SUNSHINE;
-
-		public ITextureRegion TEX_WATERDROP;
-		public ITiledTextureRegion TEXS_SPLASH;
-
-		public ITextureRegion TEX_POT;
-		public ITiledTextureRegion TEXS_POT_WATER;
-
-		public ITiledTextureRegion TEXS_CLOUDS;
-
-		private BuildableBitmapTextureAtlas[] mAtlases;
 		public Font FONT_POPUP;
-		private ITexture mFontAtlas;
+		private BitmapTextureAtlas mFontAtlas;
 
 		@Override
 		public void onLoadResources(Engine e, Context c) {
-			mAtlases = new BuildableBitmapTextureAtlas[1];
-			for (int i = 0; i < mAtlases.length; i++) {
-				mAtlases[i] = new BuildableBitmapTextureAtlas(e.getTextureManager(), 1024, 1024, TextureOptions.REPEATING_BILINEAR);
-			}
-			/*
-			 * Create nicely named shortcuts to our atlases (textures)
-			 */
-			BuildableBitmapTextureAtlas atlasWaterdrop = mAtlases[0];
-			BuildableBitmapTextureAtlas atlasSunshine = mAtlases[0];
-			BuildableBitmapTextureAtlas atlasClouds = mAtlases[0];
-			BuildableBitmapTextureAtlas atlasPot = mAtlases[0];
-
-			/*
-			 * Fill our texture with regions that we would like to use
-			 */
-			TEX_SUN = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasSunshine, c, "sun.png");
-			TEXS_POT_WATER = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
-					atlasPot, c, "pot/water.png", 1, 5);
-			TEX_POT = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasPot, c, "pot/pot.png");
-			TEX_WATERDROP = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-					atlasWaterdrop, c, "drop.png");
-			TEXS_SPLASH = TiledTextureRegionFactory.loadTiles(c, "gfx/", "splash",
-					atlasWaterdrop);
-			TEXS_CLOUDS = TiledTextureRegionFactory.loadTiles(c, "gfx/", "clouds",
-					atlasClouds);
-			TEXS_SUNSHINE = TiledTextureRegionFactory.loadTiles(c, "gfx/", "shine",
-					atlasSunshine);
-//			TEXS_SUNSHINE = BitmapTextureAtlasTextureRegionFactory.createTiledFromAssetDirectory(
-//					atlasSunshine, c.getAssets(), "shine");
-			/*
-			 *  note: SVGs must be rasterized before rendering to texture, so size must be provided
-			 */
 		}
 
 		@Override
 		public void onLoad(Engine e, Context c) {
-			/*
-			 *  build and load all our atlases (places regions on texture and sends it to GPU)
-			 */
-			AtlasLoader.buildAndLoad(mAtlases);
-
 			final TextureManager textureManager = e.getTextureManager();
 			final FontManager fontManager = e.getFontManager();
 
@@ -458,9 +409,7 @@ public class SceneGame extends SceneLoadable{
 
 		@Override
 		public void onUnload() {
-			for (BuildableBitmapTextureAtlas atlas : mAtlases) {
-				atlas.unload();
-			}
+
 			FONT_POPUP.unload();
 			mFontAtlas.unload();
 		}

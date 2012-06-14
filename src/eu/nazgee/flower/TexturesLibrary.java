@@ -5,6 +5,10 @@ import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.T
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackLoader;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackTextureRegionLibrary;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
+import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.util.debug.Debug;
 
 import android.content.Context;
@@ -14,6 +18,7 @@ import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 public class TexturesLibrary extends LoadableResourceSimple{
 	final boolean mLoadMain;
 	private TexturePackTextureRegionLibrary mSpritesheetMain;
+	private ITexture mTextureMain;
 
 	public TexturesLibrary(boolean pLoadMain) {
 		mLoadMain = pLoadMain;
@@ -27,7 +32,8 @@ public class TexturesLibrary extends LoadableResourceSimple{
 			try {
 				final TexturePack spritesheetTexturePack = new TexturePackLoader(e.getTextureManager(), "gfx/spritesheets/").loadFromAsset(c.getAssets(), "main.xml");
 				spritesheetTexturePack.loadTexture();
-				this.mSpritesheetMain = spritesheetTexturePack.getTexturePackTextureRegionLibrary();
+				mTextureMain = spritesheetTexturePack.getTexture();
+				mSpritesheetMain = spritesheetTexturePack.getTexturePackTextureRegionLibrary();
 			} catch (final TexturePackParseException ex) {
 				Debug.e(ex);
 			}
@@ -44,6 +50,67 @@ public class TexturesLibrary extends LoadableResourceSimple{
 
 	public TexturePackTextureRegionLibrary getMain() {
 		return mSpritesheetMain;
+	}
+
+	public ITexture getMainTexture() {
+		return mTextureMain;
+	}
+
+
+	public ITextureRegion getSky() {
+		return getMain().get(MAIN_AMBIENT_SKY_SKY1_ID);
+	}
+
+	public ITextureRegion getParalaxBack1() {
+		return getMain().get(MAIN_PARALAX_BACK1_ID);
+	}
+
+	public ITextureRegion getParalaxBack2() {
+		return getMain().get(MAIN_PARALAX_BACK2_ID);
+	}
+
+	public ITextureRegion getParalaxGround() {
+		return getMain().get(MAIN_PARALAX_GROUND_ID);
+	}
+
+	public ITextureRegion getParalaxFront1() {
+		return getMain().get(MAIN_PARALAX_FRONT1_ID);
+	}
+
+	public ITextureRegion getFrameLevel() {
+		return getMain().get(MAIN_FRAME_LEVEL_ID);
+	}
+
+	public ITextureRegion getFrameSeed() {
+		return getMain().get(MAIN_FRAME_SEED_ID);
+	}
+
+	public ITextureRegion getSun() {
+		return getMain().get(MAIN_SUN_SUN_ID);
+	}
+
+	public ITiledTextureRegion getSunRays() {
+		return new TiledTextureRegion(getMainTexture(), 
+				getMain().get(MAIN_SUN_RAY_ID),
+				getMain().get(MAIN_SUN_RAY_ID));
+	}
+
+	public ITiledTextureRegion getClouds() {
+		return new TiledTextureRegion(getMainTexture(), 
+				getMain().get(MAIN_AMBIENT_CLOUD_CL03_ID),
+				getMain().get(MAIN_AMBIENT_CLOUD_CL03A_ID),
+				getMain().get(MAIN_AMBIENT_CLOUD_CL10_ID));
+	}
+
+	public ITextureRegion getRainDrop() {
+		return getMain().get(MAIN_AMBIENT_RAINDROP_DROP1_ID);
+	}
+
+	public ITiledTextureRegion getRainSplash() {
+		return new TiledTextureRegion(getMainTexture(), 
+				getMain().get(MAIN_AMBIENT_RAINSPLASH_SPLASH1_ID),
+				getMain().get(MAIN_AMBIENT_RAINSPLASH_SPLASH2_ID),
+				getMain().get(MAIN_AMBIENT_RAINSPLASH_SPLASH3_ID));
 	}
 
 	public static final int MAIN_AMBIENT_CLOUD_CL03_ID = 0;
@@ -110,4 +177,5 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	public static final int MAIN_SUN_RAY_TAIL_ID = 61;
 	public static final int MAIN_SUN_RAY_ID = 62;
 	public static final int MAIN_SUN_SUN_ID = 63;
+
 }

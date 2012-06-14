@@ -4,15 +4,12 @@ import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.content.Context;
+import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.CameraParallaxBackground;
-import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
 public class LoadableParallaxBackground extends LoadableResourceSimple {
@@ -24,22 +21,29 @@ public class LoadableParallaxBackground extends LoadableResourceSimple {
 	// Fields
 	// ===========================================================
 	private final VertexBufferObjectManager mVBOM;
-	private BuildableBitmapTextureAtlas mAtlas;
 
-	public ITextureRegion TEX_BG_FAR;
-	public ITextureRegion TEX_BG_CLOSE;
-	public ITextureRegion TEX_GRASS;
-	public ITextureRegion TEX_GROUND;
-	public ITextureRegion TEX_SKY;
+	protected final ITextureRegion TEX_BG_FAR;
+	protected final ITextureRegion TEX_BG_CLOSE;
+	protected final ITextureRegion TEX_GRASS;
+	protected final ITextureRegion TEX_GROUND;
+	protected final ITextureRegion TEX_SKY;
 
 	private CameraParallaxBackground mLoadedBackground;
+
+	private final TexturesLibrary mTexturesLibrary;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public LoadableParallaxBackground(VertexBufferObjectManager pVBOM) {
+	public LoadableParallaxBackground(TexturesLibrary pTexturesLibrary, VertexBufferObjectManager pVBOM) {
 		super();
+		mTexturesLibrary = pTexturesLibrary;
 		mVBOM = pVBOM;
+		TEX_BG_FAR = mTexturesLibrary.getParalaxBack2();
+		TEX_BG_CLOSE = mTexturesLibrary.getParalaxBack1();
+		TEX_GROUND = mTexturesLibrary.getParalaxGround();
+		TEX_GRASS = mTexturesLibrary.getParalaxFront1();
+		TEX_SKY = mTexturesLibrary.getSky();
 	}
 
 	// ===========================================================
@@ -59,20 +63,6 @@ public class LoadableParallaxBackground extends LoadableResourceSimple {
 	public void onLoad(Engine e, Context c) {
 		Camera mCamera = e.getCamera();
 
-		mAtlas = new BuildableBitmapTextureAtlas(e.getTextureManager(), 2048, 1024, TextureOptions.REPEATING_BILINEAR);
-		TEX_SKY = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				mAtlas, c, "scene/skies/azure.jpeg");
-		TEX_BG_FAR = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				mAtlas, c, "scene/bg-far.png");
-		TEX_BG_CLOSE = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				mAtlas, c, "scene/bg-close.png");
-		TEX_GROUND = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				mAtlas, c, "scene/ground.png");
-		TEX_GRASS = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				mAtlas, c, "scene/grass.png");
-
-		AtlasLoader.buildAndLoad(mAtlas);
-
 		final VertexBufferObjectManager vertexBufferObjectManager = mVBOM;
 		final Sprite bgSky = new Sprite(0, 0, TEX_SKY, vertexBufferObjectManager);
 		final Sprite bgFar = new Sprite(0, mCamera.getHeight() - TEX_GROUND.getHeight() - TEX_BG_FAR.getHeight(), TEX_BG_FAR, vertexBufferObjectManager);
@@ -89,7 +79,6 @@ public class LoadableParallaxBackground extends LoadableResourceSimple {
 
 	@Override
 	public void onUnload() {
-		mAtlas.unload();
 	}
 	// ===========================================================
 	// Methods

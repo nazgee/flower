@@ -72,7 +72,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 		getLoader().install(this.mResources);
 
 		// Install shop's background
-		this.mLoadableParallaxBackground = new LoadableParallaxBackground(pVertexBufferObjectManager);
+		this.mLoadableParallaxBackground = new LoadableParallaxBackground(mTexturesLibrary, pVertexBufferObjectManager);
 		getLoader().install(this.mLoadableParallaxBackground);
 		setBackgroundEnabled(true);
 		setBackground(new Background(Color.BLUE));

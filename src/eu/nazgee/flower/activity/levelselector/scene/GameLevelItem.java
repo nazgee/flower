@@ -29,9 +29,9 @@ public class GameLevelItem extends Entity implements ITouchArea{
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public GameLevelItem(GameLevel pLevel, Font pFont, ITextureRegion pFrameTexture, VertexBufferObjectManager pVBOM) {
+	public GameLevelItem(GameLevel pLevel, Font pFont, ITextureRegion pFrameTexture, final float W, final float H, VertexBufferObjectManager pVBOM) {
 		mLevel = pLevel;
-		mFrame = new Sprite(0, 0, pFrameTexture, pVBOM) {
+		mFrame = new Sprite(0, 0, W, H, pFrameTexture, pVBOM) {
 			@Override
 			public 	void setAlpha(final float pAlpha) {
 				super.setAlpha(pAlpha * 0.5f);
