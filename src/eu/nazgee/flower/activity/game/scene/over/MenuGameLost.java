@@ -21,6 +21,7 @@ import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.scene.menu.SceneMenu;
 import eu.nazgee.util.LayoutLinear;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
+import eu.nazgee.util.NinePatchSprite;
 
 public class MenuGameLost extends SceneMenu {
 	public static final int MENU_RESET = 0;
@@ -38,8 +39,11 @@ public class MenuGameLost extends SceneMenu {
 		setMenuAnimator(new EmptyMenuAnimator());
 
 		// Prepare background
-		Sprite bg = new org.andengine.entity.sprite.Sprite(0, 0, pTexturesLibrary.getFrameLevelCompleted(), pVertexBufferObjectManager);
-		bg.setAlpha(0.7f);
+		Rectangle bg = new Rectangle(0, 0, pCamera.getWidth() * 0.8f, pCamera.getHeight() * 0.8f, pVertexBufferObjectManager);
+		NinePatchSprite bg9 = new NinePatchSprite(pTexturesLibrary.getFrameLevelCompleted(), 0, 0, pCamera.getWidth() * 0.8f, pCamera.getHeight() * 0.8f, pVertexBufferObjectManager);
+		bg.attachChild(bg9);
+
+		bg.setColor(Color.TRANSPARENT);
 		attachChild(bg);
 		Positioner.setCentered(bg, pCamera.getWidth()/2, pCamera.getHeight()/2);
 

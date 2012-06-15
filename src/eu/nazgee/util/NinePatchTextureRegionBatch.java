@@ -1,6 +1,7 @@
 package eu.nazgee.util;
 
 import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TextureRegionFactory;
 
@@ -32,65 +33,69 @@ public class NinePatchTextureRegionBatch extends TextureRegion {
 	// ===========================================================
 	private TextureRegion[] mRegions;
 	private Rect mCenterPatch;
-	private Rect mField;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
+	public NinePatchTextureRegionBatch(ITextureRegion pRegion,
+			final Rect pCenterPatch) {
+		this(pRegion.getTexture(), pRegion.getTextureX(), pRegion.getTextureY(),
+				pRegion.getWidth(), pRegion.getHeight(),
+				pCenterPatch);
+	}
+
 	public NinePatchTextureRegionBatch(final ITexture pTexture,
-			final int pTexturePositionX, final int pTexturePositionY,
-			final int pWidth, final int pHeight, final Rect pCenterPatch,
-			final Rect pField) {
+			final float pTexturePositionX, final float pTexturePositionY,
+			final float pWidth, final float pHeight, final Rect pCenterPatch) {
 		super(pTexture, pTexturePositionX, pTexturePositionY, pWidth, pHeight);
 
 		mRegions = new TextureRegion[9];
 		mCenterPatch = pCenterPatch;
-		mField = pField;
 
-		int x = pTexturePositionX;
-		int y = pTexturePositionY;
-		int width = pWidth;
-		int height = pHeight;
+		int x = (int) pTexturePositionX;
+		int y = (int) pTexturePositionY;
+		int width = (int) pWidth;
+		int height = (int) pHeight;
 
 		pCenterPatch.offset(x, y);
 
 		mRegions[TOP_LEFT] = TextureRegionFactory.extractFromTexture(pTexture,
-				x, y, pCenterPatch.left - x, pCenterPatch.top - y, true);
+				x, y, pCenterPatch.left - x, pCenterPatch.top - y, false);
 
 		mRegions[TOP_CENTER] = TextureRegionFactory.extractFromTexture(
 				pTexture, pCenterPatch.left, y, pCenterPatch.width(),
-				pCenterPatch.top - y, true);
+				pCenterPatch.top - y, false);
 
 		mRegions[TOP_RIGHT] = TextureRegionFactory.extractFromTexture(pTexture,
 				pCenterPatch.left + pCenterPatch.width(), y, (width + x)
 						- (pCenterPatch.left + pCenterPatch.width()),
-				pCenterPatch.top - y, true);
+				pCenterPatch.top - y, false);
 
 		mRegions[MIDDLE_LEFT] = TextureRegionFactory.extractFromTexture(
 				pTexture, x, pCenterPatch.top, pCenterPatch.left - x,
-				pCenterPatch.height(), true);
+				pCenterPatch.height(), false);
 
 		mRegions[MIDDLE_CENTER] = TextureRegionFactory.extractFromTexture(
 				pTexture, pCenterPatch.left, pCenterPatch.top,
-				pCenterPatch.width(), pCenterPatch.height(), true);
+				pCenterPatch.width(), pCenterPatch.height(), false);
 
 		mRegions[MIDDLE_RIGHT] = TextureRegionFactory.extractFromTexture(
 				pTexture, pCenterPatch.left + pCenterPatch.width(),
 				pCenterPatch.top, (width + x)
 						- (pCenterPatch.left + pCenterPatch.width()),
-				pCenterPatch.height(), true);
+				pCenterPatch.height(), false);
 
 		mRegions[BOTTOM_LEFT] = TextureRegionFactory.extractFromTexture(
 				pTexture, x, pCenterPatch.top + pCenterPatch.height(),
 				pCenterPatch.left - x, (height + y)
-						- (pCenterPatch.top + pCenterPatch.height()), true);
+						- (pCenterPatch.top + pCenterPatch.height()), false);
 
 		mRegions[BOTTOM_CENTER] = TextureRegionFactory
 				.extractFromTexture(pTexture, pCenterPatch.left,
 						pCenterPatch.top + pCenterPatch.height(),
 						pCenterPatch.width(), (height + y)
 								- (pCenterPatch.top + pCenterPatch.height()),
-						true);
+						false);
 
 		mRegions[BOTTOM_RIGHT] = TextureRegionFactory
 				.extractFromTexture(
@@ -101,7 +106,7 @@ public class NinePatchTextureRegionBatch extends TextureRegion {
 								- (pCenterPatch.left + pCenterPatch.width()),
 						(height + y)
 								- (pCenterPatch.top + pCenterPatch.height()),
-						true);
+						false);
 	}
 
 	// ===========================================================
@@ -110,10 +115,6 @@ public class NinePatchTextureRegionBatch extends TextureRegion {
 
 	public Rect getCenterPatch() {
 		return mCenterPatch;
-	}
-
-	public Rect getField() {
-		return mField;
 	}
 
 	public TextureRegion getTextureRegion(final int pRegionIndex) {

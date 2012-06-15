@@ -12,8 +12,10 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.util.debug.Debug;
 
 import android.content.Context;
+import android.graphics.Rect;
 
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
+import eu.nazgee.util.NinePatchTextureRegionBatch;
 
 public class TexturesLibrary extends LoadableResourceSimple{
 	private TexturePack mSpritesheetParalax;
@@ -88,8 +90,11 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	public ITextureRegion getFrameSeed() {
 		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.FRAME_SEED_ID);
 	}
-	public ITextureRegion getFrameLevelCompleted() {
-		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.FRAME_LEVEL_COMPLETE_ID);
+	public NinePatchTextureRegionBatch getFrameLevelCompleted() {
+		final ITextureRegion tex = mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.NINE_PATCH_GLASS_ORANGE_ID);
+		final int margin = 15;
+		return new NinePatchTextureRegionBatch(tex,new Rect(margin, margin, 
+				(int)tex.getWidth() - margin, (int)tex.getHeight() - margin));
 	}
 
 	public ITextureRegion getIconLocked() {
