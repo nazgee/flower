@@ -1,7 +1,7 @@
 // Definitions for sprite sheet paralax
 // Created with www.texturepacker.com
 
-// $TexturePacker:SmartUpdate:59fc56cb84b99f0e179575278a131256$
+// $TexturePacker:SmartUpdate:e1404daa4cbee338f438e95fa53da848$
 
 package eu.nazgee.flower;
 

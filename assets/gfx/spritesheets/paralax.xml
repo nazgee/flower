@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<texture version="1" file="paralax.png" type="bitmap" width="1024" height="1024" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
+<texture version="1" file="paralax.pvr" type="pvr" width="1024" height="1024" pixelformat="RGBA_4444" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
     <!-- Created with TexturePacker http://texturepacker.com -->
-    <!-- $TexturePacker:SmartUpdate:59fc56cb84b99f0e179575278a131256$ -->
+    <!-- $TexturePacker:SmartUpdate:e1404daa4cbee338f438e95fa53da848$ -->
     <textureregion id="0" src="back1.png" x="4" y="783" width="800" height="161" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="800" srcheight="161"/>
     <textureregion id="1" src="back2.png" x="970" y="4" width="800" height="46" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="800" srcheight="46"/>
     <textureregion id="2" src="front1.png" x="4" y="490" width="960" height="287" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="960" srcheight="287"/>
