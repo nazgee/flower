@@ -16,11 +16,11 @@ import org.andengine.util.color.Color;
 import android.content.Context;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.EmptyMenuAnimator;
-import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
-import eu.nazgee.flower.LayoutLinear;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.scene.menu.SceneMenu;
+import eu.nazgee.util.LayoutLinear;
+import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 
 public class MenuGameLost extends SceneMenu {
 	public static final int MENU_RESET = 0;

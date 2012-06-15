@@ -14,13 +14,13 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import eu.nazgee.flower.LayoutBase;
-import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
-import eu.nazgee.flower.LayoutLinear;
 import eu.nazgee.flower.ModifiersFactory;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.game.utils.helpers.Positioner;
+import eu.nazgee.util.LayoutBase;
+import eu.nazgee.util.LayoutLinear;
+import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 
 public class SeedItem extends Entity implements ITouchArea{
 	// ===========================================================

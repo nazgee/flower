@@ -1,4 +1,4 @@
-package eu.nazgee.flower;
+package eu.nazgee.util;
 
 import org.andengine.entity.shape.IAreaShape;
 

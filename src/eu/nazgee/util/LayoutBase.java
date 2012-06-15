@@ -1,4 +1,4 @@
-package eu.nazgee.flower;
+package eu.nazgee.util;
 
 import java.util.LinkedList;
 

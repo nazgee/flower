@@ -18,7 +18,6 @@ import org.andengine.util.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.levelselector.scene.LoadableParallaxBackground;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
@@ -32,6 +31,7 @@ import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
+import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 
 public class SceneSeedsShop extends ScenePager<SeedItem> {
 

@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import org.andengine.entity.IEntity;
 
 import android.util.Log;
-import eu.nazgee.flower.LayoutBase.eAnchorPointXY;
+import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 
 public class ArrayLayout implements ILayout {
 	// ===========================================================
