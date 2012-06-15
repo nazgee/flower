@@ -72,7 +72,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	private MenuGameLost mMenuGameOver;
 	private SceneLoader mLoader;
 	private final MyResources mResources = new MyResources();
-	private TexturesLibrary mTexturesLibrary = new TexturesLibrary(true);
+	private TexturesLibrary mTexturesLibrary = new TexturesLibrary();
 
 
 	// ===========================================================

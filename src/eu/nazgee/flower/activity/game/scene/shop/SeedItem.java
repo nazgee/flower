@@ -56,7 +56,7 @@ public class SeedItem extends Entity implements ITouchArea{
 		if (mSeed.resources.isLocked()) {
 			this.mSpriteFrame.setColor(Color.RED);
 
-			Sprite locked = new Sprite(0, 0, pTexturesLibrary.getMain().get(TexturesLibrary.MAIN_ICONS_LOCK_ID), pVBOM);
+			Sprite locked = new Sprite(0, 0, pTexturesLibrary.getIconLocked(), pVBOM);
 			locked.setZIndex(ZINDEX_LOCK);
 			attachChild(locked);
 			Positioner.setCentered(locked, this);
@@ -66,7 +66,7 @@ public class SeedItem extends Entity implements ITouchArea{
 			 */
 			this.mSpriteBlossoms = new Sprite[pSeed.col_plant.length];
 			for (int i = 0; i < mSpriteBlossoms.length; i++) {
-				mSpriteBlossoms[i] = new Sprite(0, 0, pTexturesLibrary.getMain().get(pSeed.blossomID), pVBOM);
+				mSpriteBlossoms[i] = new Sprite(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.blossomID), pVBOM);
 				mSpriteBlossoms[i].setColor(pSeed.col_plant[i]);
 			}
 	
@@ -90,7 +90,7 @@ public class SeedItem extends Entity implements ITouchArea{
 			/*
 			 * Prepare and attach seed sprite
 			 */
-			mSpriteSeed = new Sprite(0, 0, pTexturesLibrary.getMain().get(pSeed.seedID), pVBOM);
+			mSpriteSeed = new Sprite(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.seedID), pVBOM);
 			attachChild(this.mSpriteSeed);
 			Positioner.setCentered(this.mSpriteSeed, this);
 		}

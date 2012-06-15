@@ -24,6 +24,7 @@ import org.andengine.util.modifier.ease.EaseQuadIn;
 import org.andengine.util.modifier.ease.EaseQuadOut;
 
 import android.opengl.GLES20;
+import android.util.Log;
 import eu.nazgee.flower.FisheyeShaderProgram;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 
@@ -62,6 +63,7 @@ public class Sun extends Entity {
 		final float ch = (pSunTexture.getV2() - pSunTexture.getV());
 		final float cx = pSunTexture.getU() + cw/2;
 		final float cy = pSunTexture.getV() + ch/2;
+		Log.e("aaa", "w=" + cw + "; ch=" + ch);
 
 
 		Sprite sun = new Sprite(-w/2, -h/2, w, h, pSunTexture, pVertexBufferObjectManager, shdr) {

@@ -29,7 +29,7 @@ public class ActivityLevelselector extends BaseActivityPager<GameLevelItem>{
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private TexturesLibrary mTexturesLibrary = new TexturesLibrary(true);
+	public TexturesLibrary mTexturesLibrary = new TexturesLibrary();
 	// ===========================================================
 	// Constructors
 	// ===========================================================

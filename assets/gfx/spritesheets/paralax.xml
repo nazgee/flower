@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texture version="1" file="paralax.png" type="bitmap" width="1024" height="1024" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
+    <!-- Created with TexturePacker http://texturepacker.com -->
+    <!-- $TexturePacker:SmartUpdate:59fc56cb84b99f0e179575278a131256$ -->
+    <textureregion id="0" src="back1.png" x="4" y="783" width="800" height="161" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="800" srcheight="161"/>
+    <textureregion id="1" src="back2.png" x="970" y="4" width="800" height="46" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="800" srcheight="46"/>
+    <textureregion id="2" src="front1.png" x="4" y="490" width="960" height="287" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="960" srcheight="287"/>
+    <textureregion id="3" src="ground.png" x="4" y="950" width="800" height="60" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="800" srcheight="60"/>
+    <textureregion id="4" src="sky.jpg" x="4" y="4" width="960" height="480" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="960" srcheight="480"/>
+</texture>

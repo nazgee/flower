@@ -166,7 +166,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	@Override
 	protected SeedItem populateItem(int pItem, int pItemOnPage, int pPage) {
 		Seed seed = this.mShop.getSeedsInShop().get(pItem);
-		SeedItem item = new SeedItem(seed, getFrameW(), getFrameH(), mDescFont, mTexturesLibrary.getMain().get(TexturesLibrary.MAIN_FRAME_SEED_ID), getVertexBufferObjectManager(), mTexturesLibrary);
+		SeedItem item = new SeedItem(seed, getFrameW(), getFrameH(), mDescFont, mTexturesLibrary.getFrameSeed(), getVertexBufferObjectManager(), mTexturesLibrary);
 		return item;
 	}
 

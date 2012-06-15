@@ -38,19 +38,19 @@ public class MenuGameLost extends SceneMenu {
 		setMenuAnimator(new EmptyMenuAnimator());
 
 		// Prepare background
-		Sprite bg = new org.andengine.entity.sprite.Sprite(0, 0, pTexturesLibrary.getMain().get(TexturesLibrary.MAIN_FRAME_LEVEL_COMPLETE_ID), pVertexBufferObjectManager);
+		Sprite bg = new org.andengine.entity.sprite.Sprite(0, 0, pTexturesLibrary.getFrameLevelCompleted(), pVertexBufferObjectManager);
 		bg.setAlpha(0.7f);
 		attachChild(bg);
 		Positioner.setCentered(bg, pCamera.getWidth()/2, pCamera.getHeight()/2);
 
 		// Prepare menu items
 		IMenuItem hometxt = addMenuEntry("main\nmenu", MENU_GO_MAIN, Consts.COLOR_TEXT_SELECTED, Consts.COLOR_TEXT_UNSELECTED, getVertexBufferObjectManager());
-		IMenuItem homeico = addMenuEntry(pTexturesLibrary.getMain().get(TexturesLibrary.MAIN_ICONS_HOME_ID), MENU_GO_MAIN, Color.RED, Color.WHITE, pVertexBufferObjectManager);
+		IMenuItem homeico = addMenuEntry(pTexturesLibrary.getIconHome(), MENU_GO_MAIN, Color.RED, Color.WHITE, pVertexBufferObjectManager);
 		reuse = bg.convertLocalToSceneCoordinates(bg.getWidth()/2 - homeico.getWidth(), bg.getHeight() - homeico.getHeight(), reuse);
 
 		// Prepare menu items
 		IMenuItem resettxt = addMenuEntry("retry\nlevel", MENU_RESET, Consts.COLOR_TEXT_SELECTED, Consts.COLOR_TEXT_UNSELECTED, getVertexBufferObjectManager());
-		IMenuItem resetico = addMenuEntry(pTexturesLibrary.getMain().get(TexturesLibrary.MAIN_ICONS_REFRESH_ID), MENU_RESET, Color.RED, Color.WHITE, pVertexBufferObjectManager);
+		IMenuItem resetico = addMenuEntry(pTexturesLibrary.getIconRefresh(), MENU_RESET, Color.RED, Color.WHITE, pVertexBufferObjectManager);
 		reuse = bg.convertLocalToSceneCoordinates(bg.getWidth()/2, bg.getHeight() - resetico.getHeight(), reuse);
 
 		/*

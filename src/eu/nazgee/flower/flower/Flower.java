@@ -70,8 +70,8 @@ public class Flower extends Entity implements ITouchArea{
 		this.mSeed = pSeed;
 
 		this.mColor = pSeed.getRandomColor(MathUtils.RANDOM);
-		this.mEntityBlossom = new EntityBlossom(0, 0, pTexturesLibrary.getMain().get(pSeed.blossomID), pVertexBufferObjectManager, mColor);
-		this.mEntitySeed = new EntitySeed(0, 0, pTexturesLibrary.getMain().get(pSeed.seedID), pVertexBufferObjectManager, mColor);
+		this.mEntityBlossom = new EntityBlossom(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.blossomID), pVertexBufferObjectManager, mColor);
+		this.mEntitySeed = new EntitySeed(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.seedID), pVertexBufferObjectManager, mColor);
 
 		attachChild(mEntitySeed);
 

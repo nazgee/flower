@@ -9,7 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.TexturesLibrary;
+import eu.nazgee.flower.TexturesMisc;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
 public enum Seed {
@@ -19,30 +19,30 @@ public enum Seed {
 	/*
 	 * When defined as Enum, seeds are singletons 
 	 */
-	SEED1(1,	100,	TexturesLibrary.MAIN_FLOWERS_FLOWER0001_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	false,	Color.WHITE, Color.RED),
-	SEED2(2,	100,	TexturesLibrary.MAIN_FLOWERS_FLOWER0002_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	false, 	Color.WHITE),
-	SEED3(3,	100,	TexturesLibrary.MAIN_FLOWERS_FLOWER0003_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	false, 	Color.WHITE),
-	SEED4(4,	200,	TexturesLibrary.MAIN_FLOWERS_FLOWER0004_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW),
-	SEED5(5,	200,	TexturesLibrary.MAIN_FLOWERS_FLOWER0005_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW),
-	SEED6(6,	200,	TexturesLibrary.MAIN_FLOWERS_FLOWER0006_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE, Color.BLUE),
-	SEED7(7,	300,	TexturesLibrary.MAIN_FLOWERS_FLOWER0007_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW, Color.BLUE),
-	SEED8(8,	300,	TexturesLibrary.MAIN_FLOWERS_FLOWER0008_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW, Color.BLUE),
-	SEED9(9,	300,	TexturesLibrary.MAIN_FLOWERS_FLOWER0009_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW, Color.BLUE),
-	SEED10(10,	500,	TexturesLibrary.MAIN_FLOWERS_FLOWER0010_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED11(11,	500,	TexturesLibrary.MAIN_FLOWERS_FLOWER0011_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED12(12,	500,	TexturesLibrary.MAIN_FLOWERS_FLOWER0012_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED13(13,	800,	TexturesLibrary.MAIN_FLOWERS_FLOWER0013_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED14(14,	800,	TexturesLibrary.MAIN_FLOWERS_FLOWER0014_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED15(15,	800,	TexturesLibrary.MAIN_FLOWERS_FLOWER0015_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED16(16,	1300,	TexturesLibrary.MAIN_FLOWERS_FLOWER0016_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED17(17,	1300,	TexturesLibrary.MAIN_FLOWERS_FLOWER0001_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED18(18,	1300,	TexturesLibrary.MAIN_FLOWERS_FLOWER0001_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED19(19,	2100,	TexturesLibrary.MAIN_FLOWERS_FLOWER0001_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED20(20,	2100,	TexturesLibrary.MAIN_FLOWERS_FLOWER0001_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED21(21,	2100,	TexturesLibrary.MAIN_FLOWERS_FLOWER0001_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED22(22,	3400,	TexturesLibrary.MAIN_FLOWERS_FLOWER0001_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED23(23,	3400,	TexturesLibrary.MAIN_FLOWERS_FLOWER0001_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE),
-	SEED24(24,	3400,	TexturesLibrary.MAIN_FLOWERS_FLOWER0001_ID,	TexturesLibrary.MAIN_SEEDS_001_ID,	true, 	Color.WHITE);
+	SEED1(1,	100,	TexturesMisc.FLOWERS_FLOWER0001_ID,	TexturesMisc.SEEDS_001_ID,	false,	Color.WHITE, Color.RED),
+	SEED2(2,	100,	TexturesMisc.FLOWERS_FLOWER0002_ID,	TexturesMisc.SEEDS_001_ID,	false, 	Color.WHITE),
+	SEED3(3,	100,	TexturesMisc.FLOWERS_FLOWER0003_ID,	TexturesMisc.SEEDS_001_ID,	false, 	Color.WHITE),
+	SEED4(4,	200,	TexturesMisc.FLOWERS_FLOWER0004_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW),
+	SEED5(5,	200,	TexturesMisc.FLOWERS_FLOWER0005_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW),
+	SEED6(6,	200,	TexturesMisc.FLOWERS_FLOWER0006_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE, Color.BLUE),
+	SEED7(7,	300,	TexturesMisc.FLOWERS_FLOWER0007_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW, Color.BLUE),
+	SEED8(8,	300,	TexturesMisc.FLOWERS_FLOWER0008_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW, Color.BLUE),
+	SEED9(9,	300,	TexturesMisc.FLOWERS_FLOWER0009_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW, Color.BLUE),
+	SEED10(10,	500,	TexturesMisc.FLOWERS_FLOWER0010_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED11(11,	500,	TexturesMisc.FLOWERS_FLOWER0011_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED12(12,	500,	TexturesMisc.FLOWERS_FLOWER0012_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED13(13,	800,	TexturesMisc.FLOWERS_FLOWER0013_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED14(14,	800,	TexturesMisc.FLOWERS_FLOWER0014_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED15(15,	800,	TexturesMisc.FLOWERS_FLOWER0015_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED16(16,	1300,	TexturesMisc.FLOWERS_FLOWER0016_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED17(17,	1300,	TexturesMisc.FLOWERS_FLOWER0001_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED18(18,	1300,	TexturesMisc.FLOWERS_FLOWER0001_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED19(19,	2100,	TexturesMisc.FLOWERS_FLOWER0001_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED20(20,	2100,	TexturesMisc.FLOWERS_FLOWER0001_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED21(21,	2100,	TexturesMisc.FLOWERS_FLOWER0001_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED22(22,	3400,	TexturesMisc.FLOWERS_FLOWER0001_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED23(23,	3400,	TexturesMisc.FLOWERS_FLOWER0001_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE),
+	SEED24(24,	3400,	TexturesMisc.FLOWERS_FLOWER0001_ID,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE);
 
 	public static final int SEEDS_NUMBER = SEED24.id;
 

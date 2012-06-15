@@ -54,7 +54,7 @@ public class HudShop extends BaseHUD {
 		/*
 		 * Prepare done button
 		 */
-		mButtonDone = new ButtonSprite(0, 0, mTexturesLibrary.getMain().get(TexturesLibrary.MAIN_ICONS_CHECK_MARK_ID), getVertexBufferObjectManager());
+		mButtonDone = new ButtonSprite(0, 0, mTexturesLibrary.getIconCheck(), getVertexBufferObjectManager());
 		attachChild(mButtonDone);
 		this.mButtonDone.setPosition(getW() - mButtonDone.getWidth(), getH() - mButtonDone.getHeight());
 		this.registerTouchArea(mButtonDone);
@@ -63,14 +63,14 @@ public class HudShop extends BaseHUD {
 		 * Prepare cash icon
 		 */
 		final float h = getTextCash().getHeight();
-		Sprite cash = new Sprite(0, 0, h, h, mTexturesLibrary.getMain().get(TexturesLibrary.MAIN_ICONS_CASH_ID), getVertexBufferObjectManager());
+		Sprite cash = new Sprite(0, 0, h, h, mTexturesLibrary.getIconCash(), getVertexBufferObjectManager());
 		attachChild(cash);
 		cash.setPosition(getW() - cash.getWidth(), 0);
 
 		/*
 		 * Prepare basket icon
 		 */
-		Sprite basket = new Sprite(0, 0, h, h, mTexturesLibrary.getMain().get(TexturesLibrary.MAIN_ICONS_SHOP_ID), getVertexBufferObjectManager());
+		Sprite basket = new Sprite(0, 0, h, h, mTexturesLibrary.getIconShop(), getVertexBufferObjectManager());
 		attachChild(basket);
 		basket.setPosition(getW() - basket.getWidth(), cash.getY() + cash.getHeight());
 

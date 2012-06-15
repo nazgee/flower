@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texture version="1" file="ui.png" type="bitmap" width="1024" height="1024" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
+    <!-- Created with TexturePacker http://texturepacker.com -->
+    <!-- $TexturePacker:SmartUpdate:097e275ef30ff6c42487579c41653e8d$ -->
+    <textureregion id="0" src="frame/level-complete.png" x="4" y="4" width="610" height="405" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="610" srcheight="405"/>
+    <textureregion id="1" src="frame/level.png" x="620" y="390" width="380" height="228" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="380" srcheight="228"/>
+    <textureregion id="2" src="frame/seed.png" x="620" y="4" width="380" height="380" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="380" srcheight="380"/>
+    <textureregion id="3" src="icons/add.png" x="808" y="892" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="4" src="icons/back.png" x="808" y="758" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="5" src="icons/briefcase.png" x="674" y="892" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="6" src="icons/cash.png" x="674" y="758" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="7" src="icons/check_mark.png" x="808" y="624" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="8" src="icons/clock.png" x="674" y="624" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="9" src="icons/comment.png" x="540" y="892" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="10" src="icons/delete.png" x="540" y="758" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="11" src="icons/down.png" x="540" y="624" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="12" src="icons/flowers.png" x="406" y="817" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="13" src="icons/home.png" x="406" y="683" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="14" src="icons/info.png" x="272" y="817" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="15" src="icons/lock.png" x="272" y="683" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="16" src="icons/music.png" x="406" y="549" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="17" src="icons/new.png" x="272" y="549" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="18" src="icons/next.png" x="406" y="415" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="19" src="icons/notification.png" x="272" y="415" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="20" src="icons/question.png" x="138" y="892" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="21" src="icons/refresh.png" x="138" y="758" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="22" src="icons/sale.png" x="138" y="415" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="23" src="icons/settings.png" x="138" y="624" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="24" src="icons/shop.png" x="4" y="892" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="25" src="icons/star.png" x="4" y="758" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="26" src="icons/up.png" x="4" y="415" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+    <textureregion id="27" src="icons/warning.png" x="4" y="624" width="128" height="128" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="128" srcheight="128"/>
+</texture>
