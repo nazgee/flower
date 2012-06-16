@@ -21,8 +21,8 @@ public class MenuGameWon extends SceneMenu {
 			Font pDescFont, VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, pCamera, pFont, pVertexBufferObjectManager);
 
-		addMenuEntry("Main Menu", MENU_CONTINUE, Consts.COLOR_TEXT_SELECTED,
-				Consts.COLOR_TEXT_UNSELECTED, getVertexBufferObjectManager());
+		addMenuEntry("Main Menu", MENU_CONTINUE, Consts.COLOR_MENU_TEXT_SELECTED,
+				Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
 		buildAnimations();
 		setBackgroundEnabled(false);
 
@@ -30,7 +30,7 @@ public class MenuGameWon extends SceneMenu {
 				new TextOptions(AutoWrap.WORDS, getW() * 0.95f,
 						HorizontalAlign.CENTER, Text.LEADING_DEFAULT),
 				getVertexBufferObjectManager());
-		mDescription.setColor(Consts.COLOR_TEXT_DESCRIPTION);
+		mDescription.setColor(Consts.COLOR_MENU_TEXT_DESCRIPTION);
 		attachChild(mDescription);
 	}
 

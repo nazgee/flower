@@ -17,10 +17,10 @@ public class MenuIngame extends SceneMenu {
 			VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, pCamera, pFont, pVertexBufferObjectManager);
 
-		addMenuEntry("Reset", MENU_RESET, Consts.COLOR_TEXT_SELECTED,
-				Consts.COLOR_TEXT_UNSELECTED, getVertexBufferObjectManager());
-		addMenuEntry("Main Menu", MENU_GO_MAIN, Consts.COLOR_TEXT_SELECTED,
-				Consts.COLOR_TEXT_UNSELECTED, getVertexBufferObjectManager());
+		addMenuEntry("Reset", MENU_RESET, Consts.COLOR_MENU_TEXT_SELECTED,
+				Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
+		addMenuEntry("Main Menu", MENU_GO_MAIN, Consts.COLOR_MENU_TEXT_SELECTED,
+				Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
 //		buildAnimations();
 		prepareAnimations();
 		setBackgroundEnabled(false);

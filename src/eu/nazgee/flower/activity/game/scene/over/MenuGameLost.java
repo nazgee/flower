@@ -43,12 +43,12 @@ public class MenuGameLost extends SceneMenu {
 		Positioner.setCentered(bg, pCamera.getWidth()/2, pCamera.getHeight()/2);
 
 		// Prepare menu items
-		IMenuItem hometxt = addMenuEntry("main\nmenu", MENU_GO_MAIN, Consts.COLOR_TEXT_SELECTED, Consts.COLOR_TEXT_UNSELECTED, getVertexBufferObjectManager());
+		IMenuItem hometxt = addMenuEntry("main\nmenu", MENU_GO_MAIN, Consts.COLOR_MENU_TEXT_SELECTED, Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
 		IMenuItem homeico = addMenuEntry(pTexturesLibrary.getIconHome(), MENU_GO_MAIN, Color.RED, Color.WHITE, pVertexBufferObjectManager);
 		reuse = bg.convertLocalToSceneCoordinates(bg.getWidth()/2 - homeico.getWidth(), bg.getHeight() - homeico.getHeight(), reuse);
 
 		// Prepare menu items
-		IMenuItem resettxt = addMenuEntry("retry\nlevel", MENU_RESET, Consts.COLOR_TEXT_SELECTED, Consts.COLOR_TEXT_UNSELECTED, getVertexBufferObjectManager());
+		IMenuItem resettxt = addMenuEntry("retry\nlevel", MENU_RESET, Consts.COLOR_MENU_TEXT_SELECTED, Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
 		IMenuItem resetico = addMenuEntry(pTexturesLibrary.getIconRefresh(), MENU_RESET, Color.RED, Color.WHITE, pVertexBufferObjectManager);
 		reuse = bg.convertLocalToSceneCoordinates(bg.getWidth()/2, bg.getHeight() - resetico.getHeight(), reuse);
 
@@ -86,7 +86,7 @@ public class MenuGameLost extends SceneMenu {
 				new TextOptions(AutoWrap.WORDS, bg.getWidth() - margin,
 						HorizontalAlign.CENTER, Text.LEADING_DEFAULT),
 				getVertexBufferObjectManager());
-		mDescription.setColor(Consts.COLOR_TEXT_DESCRIPTION);
+		mDescription.setColor(Consts.COLOR_MENU_TEXT_DESCRIPTION);
 		bg.attachChild(mDescription);
 	}
 

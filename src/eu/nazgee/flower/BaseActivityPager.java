@@ -74,7 +74,7 @@ public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGame
 
 		EngineOptions engopts = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
 				new FillResolutionPolicy(), camera);
-		engopts.getRenderOptions().setDithering(true);
+		engopts.getRenderOptions().setDithering(false);
 		return engopts;
 	}
 
