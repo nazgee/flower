@@ -137,7 +137,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	@Override
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
-		setPageMover(new PageMoverCameraZoom<SeedItem>((SmoothCamera) e.getCamera(), getW() * PAGE_WIDTH_EFFECTIVE));
+		setPageMover(new PageMoverCameraZoom<SeedItem>(0.5f, (SmoothCamera) e.getCamera(), getW() * PAGE_WIDTH_EFFECTIVE));
 		setBackground(mLoadableParallaxBackground.getLoadedBacground());
 
 		e.getCamera().setHUD(mHUD);

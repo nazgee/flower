@@ -83,6 +83,9 @@ public class TexturesLibrary extends LoadableResourceSimple{
 		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.NINE_PATCH_BUT3_ID);
 	}
 
+	public ITextureRegion getFrameHudShop() {
+		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.NINE_PATCH_GLASS_PINK_ID);
+	}
 	public ITextureRegion getFrameLevel() {
 		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.NINE_PATCH_GLASS_ID);
 	}

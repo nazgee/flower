@@ -13,13 +13,14 @@ import eu.nazgee.flower.BaseHUD;
 import eu.nazgee.flower.GradientRectangle;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
+import eu.nazgee.util.NineSliceSprite;
 
 public class HudShop extends BaseHUD {
 
 	// ===========================================================
 	// Constants
 	// ===========================================================
-	protected static int ZINDEX_GRADIENT = -1;
+	protected static int ZINDEX_BG_FRAME = -1;
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -74,24 +75,28 @@ public class HudShop extends BaseHUD {
 		attachChild(basket);
 		basket.setPosition(getW() - basket.getWidth(), cash.getY() + cash.getHeight());
 
-		final float gradW = camera.getWidth() * (1 - SceneLevelselector.PAGE_WIDTH_EFFECTIVE);
-		GradientRectangle grad = new GradientRectangle(camera.getWidth() - gradW, 0, gradW, camera.getHeight(), 5, getVertexBufferObjectManager());
-		attachChild(grad);
-		grad.setColor(new Color(Color.BLACK));
-		grad.setAlpha(0.9f);
-		grad.setGradientBand(0, new Color(0.5f, 0.8f, 0.5f));
-		grad.setGradientBand(1, new Color(0.1f, 0.2f, 0.1f));
-		grad.setGradientBand(2, new Color(0.1f, 0.3f, 0.1f));
-		grad.setGradientBand(3, new Color(0.0f, 0.2f, 0.0f));
-		grad.setGradientBand(4, new Color(0.0f, 0.2f, 0.0f));
-		grad.setGradientBandAlpha(0, 0.9f);
-		grad.setGradientBandAlpha(1, 1.0f);
-		grad.setGradientBandAlpha(2, 1.0f);
-		grad.setGradientBandAlpha(3, 1.0f);
-		grad.setGradientBandAlpha(4, 1.0f);
-
-		grad.setZIndex(ZINDEX_GRADIENT);
-
+		final float inset = 15;
+		final NineSliceSprite bg = new NineSliceSprite(0.66f * getW(), 0, 0.33f * getW(), getH(), mTexturesLibrary.getFrameHudShop(), inset, inset, inset, inset, getVertexBufferObjectManager());
+		bg.setZIndex(ZINDEX_BG_FRAME);
+		attachChild(bg);
+//		final float gradW = camera.getWidth() * (1 - SceneLevelselector.PAGE_WIDTH_EFFECTIVE);
+//		GradientRectangle grad = new GradientRectangle(camera.getWidth() - gradW, 0, gradW, camera.getHeight(), 5, getVertexBufferObjectManager());
+//		attachChild(grad);
+//		grad.setColor(new Color(Color.BLACK));
+//		grad.setAlpha(0.9f);
+//		grad.setGradientBand(0, new Color(0.5f, 0.8f, 0.5f));
+//		grad.setGradientBand(1, new Color(0.1f, 0.2f, 0.1f));
+//		grad.setGradientBand(2, new Color(0.1f, 0.3f, 0.1f));
+//		grad.setGradientBand(3, new Color(0.0f, 0.2f, 0.0f));
+//		grad.setGradientBand(4, new Color(0.0f, 0.2f, 0.0f));
+//		grad.setGradientBandAlpha(0, 0.9f);
+//		grad.setGradientBandAlpha(1, 1.0f);
+//		grad.setGradientBandAlpha(2, 1.0f);
+//		grad.setGradientBandAlpha(3, 1.0f);
+//		grad.setGradientBandAlpha(4, 1.0f);
+//
+//		grad.setZIndex(ZINDEX_GRADIENT);
+//
 		sortChildren();
 	}
 

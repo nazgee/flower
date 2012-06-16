@@ -14,11 +14,14 @@ public class PageMoverCameraZoom<T extends IEntity> extends PageMoverCamera<T> {
 	// Fields
 	// ===========================================================
 
+	private final float mZoom;
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public PageMoverCameraZoom(SmoothCamera mCamera, float pStepPerPage) {
+	public PageMoverCameraZoom(final float pZoom, SmoothCamera mCamera, float pStepPerPage) {
 		super(mCamera, pStepPerPage);
+		this.mZoom = pZoom;
 	}
 	// ===========================================================
 	// Getter & Setter
@@ -46,7 +49,7 @@ public class PageMoverCameraZoom<T extends IEntity> extends PageMoverCamera<T> {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	private void setPageState(final ScenePager<T> pScenePager, final IPage<T> pPage, final float pValue, final float pDirection) {
+	protected void setPageState(final ScenePager<T> pScenePager, final IPage<T> pPage, final float pValue, final float pDirection) {
 
 		setPageState(pPage, pValue, pDirection);
 
@@ -65,12 +68,12 @@ public class PageMoverCameraZoom<T extends IEntity> extends PageMoverCamera<T> {
 		setPageState(pNext, 1-pValue, pDirection);
 	}
 
-	private void setPageState(final IPage<T> pPage, final float pValue, final float pDirection) {
+	protected void setPageState(final IPage<T> pPage, final float pValue, final float pDirection) {
 		if (pPage == null)
 			return;
 
 		pPage.setAlpha(MathUtils.bringToBounds(0.5f, 1, pValue));
-		pPage.setScaleY(1.5f - pValue * 0.5f);
+		pPage.setScaleY(1 + (1 - pValue) * (1 - mZoom));
 //		if (pDirection > 0) {
 //			pPage.setRotation(90 - pValue * 90);
 //		} else {
