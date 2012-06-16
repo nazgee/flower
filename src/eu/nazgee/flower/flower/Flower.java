@@ -1,33 +1,18 @@
 package eu.nazgee.flower.flower;
 
-import java.util.Random;
-
 import org.andengine.entity.Entity;
-import org.andengine.entity.modifier.ColorModifier;
-import org.andengine.entity.modifier.FadeOutModifier;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
-import org.andengine.entity.modifier.RotationModifier;
-import org.andengine.entity.modifier.ScaleModifier;
-import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.ITouchArea;
-import org.andengine.entity.sprite.AnimatedSprite;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.math.MathUtils;
 import org.andengine.util.modifier.ease.EaseBounceOut;
-import org.andengine.util.modifier.ease.EaseElasticIn;
-import org.andengine.util.modifier.ease.EaseElasticOut;
 import org.andengine.util.modifier.ease.EaseLinear;
-import org.andengine.util.modifier.ease.EaseQuadIn;
 
-import android.util.Log;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;

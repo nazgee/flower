@@ -32,7 +32,6 @@ import org.andengine.util.debug.Debug;
 import android.content.Context;
 import android.view.KeyEvent;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.FisheyeShaderProgram;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.SceneGame;
 import eu.nazgee.flower.activity.game.scene.game.SceneGame.IGameListener;
@@ -53,6 +52,7 @@ import eu.nazgee.game.utils.scene.SceneLoader;
 import eu.nazgee.game.utils.scene.SceneLoader.ISceneLoaderListener;
 import eu.nazgee.game.utils.scene.SceneLoader.eLoadingSceneHandling;
 import eu.nazgee.game.utils.scene.SceneLoading;
+import eu.nazgee.misc.FisheyeShaderProgram;
 
 public class ActivityGame extends SimpleBaseGameActivity {
 	// ===========================================================
@@ -143,7 +143,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		});
 
 		// SCENE: in-game menu
-		mMenuIngame = new MenuIngame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getEngine().getCamera(), mResources.FONT, getVertexBufferObjectManager());
+		mMenuIngame = new MenuIngame(mTexturesLibrary, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getEngine().getCamera(), mResources.FONT, getVertexBufferObjectManager());
 		mMenuIngame.setOnMenuItemClickListener(mMenuItemClickListener);
 
 		// SCENE: game over menu

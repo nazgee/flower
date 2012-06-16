@@ -1,4 +1,4 @@
-package eu.nazgee.flower;
+package eu.nazgee.misc;
 
 import org.andengine.opengl.shader.ShaderProgram;
 import org.andengine.opengl.shader.constants.ShaderProgramConstants;

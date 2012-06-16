@@ -1,8 +1,6 @@
 package eu.nazgee.flower.activity.game.scene.over;
 
-import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.text.AutoWrap;
 import org.andengine.entity.text.Text;
@@ -12,17 +10,16 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 
-import android.content.Context;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.EmptyMenuAnimator;
 import eu.nazgee.flower.TexturesLibrary;
+import eu.nazgee.flower.bases.BaseMenu;
 import eu.nazgee.game.utils.helpers.Positioner;
-import eu.nazgee.game.utils.scene.menu.SceneMenu;
+import eu.nazgee.util.EmptyMenuAnimator;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 import eu.nazgee.util.LayoutLinear;
 import eu.nazgee.util.NineSliceSprite;
 
-public class MenuGameLost extends SceneMenu {
+public class MenuGameLost extends BaseMenu {
 	public static final int MENU_RESET = 0;
 	public static final int MENU_GO_MAIN = 1;
 	private Text mDescription;
@@ -31,14 +28,16 @@ public class MenuGameLost extends SceneMenu {
 			Font pDescFont, VertexBufferObjectManager pVertexBufferObjectManager,
 			TexturesLibrary pTexturesLibrary) {
 		super(W, H, pCamera, pFont, pVertexBufferObjectManager);
-		
+
 		float[] reuse = new float[2];
 
 		// make sure that nobody is moving menu items around
 		setMenuAnimator(new EmptyMenuAnimator());
 
 		// Prepare background
-		NineSliceSprite bg = new NineSliceSprite(0, 0, pCamera.getWidth() * 0.8f, pCamera.getHeight()*0.8f, pTexturesLibrary.getFrameLevelCompleted(), 15, 15, 15, 15, pVertexBufferObjectManager);
+		final float bgw = pCamera.getWidth() * 0.8f;
+		final float bgh = pCamera.getHeight() * 1.0f;
+		NineSliceSprite bg = pTexturesLibrary.getFactory().populateFrameOverMenu(bgw, bgh, pVertexBufferObjectManager);
 		attachChild(bg);
 		Positioner.setCentered(bg, pCamera.getWidth()/2, pCamera.getHeight()/2);
 
@@ -75,13 +74,6 @@ public class MenuGameLost extends SceneMenu {
 		resetlayout.setPosition(bg.getWidth() - margin, bg.getHeight() - margin);
 		bg.attachChild(resetlayout);
 
-		Rectangle rect = new Rectangle(0, 0, 10, 10, getVertexBufferObjectManager());
-		rect.setColor(Color.PINK);
-		resetlayout.attachChild(rect);
-
-		buildAnimations();
-		setBackgroundEnabled(false);
-
 		mDescription = new Text(margin/2, 40, pDescFont, "", 1000,
 				new TextOptions(AutoWrap.WORDS, bg.getWidth() - margin,
 						HorizontalAlign.CENTER, Text.LEADING_DEFAULT),
@@ -93,21 +85,4 @@ public class MenuGameLost extends SceneMenu {
 	public void setDescription(String pDescription) {
 		mDescription.setText(pDescription);
 	}
-
-	@Override
-	public void onLoadResources(Engine e, Context c) {
-	}
-
-	@Override
-	public void onUnload() {
-	}
-
-	@Override
-	public void onLoad(Engine e, Context c) {
-		super.onLoad(e, c);
-		e.getCamera().setHUD(null);
-	}
-
-	
-
 }

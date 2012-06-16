@@ -25,8 +25,8 @@ import org.andengine.util.modifier.ease.EaseQuadOut;
 
 import android.opengl.GLES20;
 import android.util.Log;
-import eu.nazgee.flower.FisheyeShaderProgram;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
+import eu.nazgee.misc.FisheyeShaderProgram;
 
 
 public class Sun extends Entity {

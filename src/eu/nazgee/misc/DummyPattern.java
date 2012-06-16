@@ -1,4 +1,4 @@
-package eu.nazgee.flower;
+package eu.nazgee.misc;
 
 
 public class DummyPattern {

@@ -1,4 +1,4 @@
-package eu.nazgee.flower;
+package eu.nazgee.flower.bases;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
@@ -8,9 +8,6 @@ import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.entity.Entity;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.menu.MenuScene;
-import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
-import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.font.Font;
@@ -28,8 +25,8 @@ import org.andengine.util.color.Color;
 
 import android.content.Context;
 import android.os.Bundle;
+import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.base.buttonscene.SceneButtons;
-import eu.nazgee.flower.base.buttonscene.SceneButtonsMessagebox;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 

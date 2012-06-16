@@ -141,7 +141,7 @@ public class SceneGame extends SceneLoadable{
 		 * Create new virtual sky- this object is used to calculate how high
 		 * above ground level entities are placed
 		 */
-		mSky = new Sky(mGround.getY());
+		mSky = new Sky(getH() - 80);
 
 		/*
 		 * Register touch area listener, which will listen for the touches of
@@ -157,7 +157,7 @@ public class SceneGame extends SceneLoadable{
 		mSun = new Sun(0, 0, mTexturesLibrary.getSun(),
 				mTexturesLibrary.getSunRays(), vbom);
 		attachChild(mSun);
-		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 3, new SunTravelListener());
+		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 60, new SunTravelListener());
 		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.25f, 0)), 0);
 
 		/*

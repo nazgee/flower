@@ -7,17 +7,12 @@ import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.ButtonSprite.OnClickListener;
-import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.font.Font;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
-import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.levelselector.scene.LoadableParallaxBackground;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
@@ -29,8 +24,6 @@ import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
-import eu.nazgee.game.utils.helpers.AtlasLoader;
-import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 
 public class SceneSeedsShop extends ScenePager<SeedItem> {
@@ -166,7 +159,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	@Override
 	protected SeedItem populateItem(int pItem, int pItemOnPage, int pPage) {
 		Seed seed = this.mShop.getSeedsInShop().get(pItem);
-		SeedItem item = new SeedItem(seed, getFrameW(), getFrameH(), mDescFont, mTexturesLibrary.getFrameSeed(), mTexturesLibrary.getFrameSeedLocked(), getVertexBufferObjectManager(), mTexturesLibrary);
+		SeedItem item = new SeedItem(seed, getFrameW(), getFrameH(), mDescFont, mTexturesLibrary.getFactory(), getVertexBufferObjectManager(), mTexturesLibrary);
 		return item;
 	}
 

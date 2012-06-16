@@ -6,17 +6,15 @@ import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.menu.item.IMenuItem;
-import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ColorMenuItemDecorator;
 import org.andengine.entity.text.Text;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.color.Color;
 
 import android.content.Context;
+import eu.nazgee.flower.EntitiesFactory;
 import eu.nazgee.game.utils.scene.menu.MenuLoadable;
-import eu.nazgee.util.NineSliceMenuItem;
 
 public abstract class SceneButtons extends MenuLoadable {
 	// ===========================================================
@@ -117,12 +115,12 @@ public abstract class SceneButtons extends MenuLoadable {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	protected IMenuItem populateMenuEntry(float w, float h,
-			ITextureRegion pTextureRegion, int pID, Color pSelected,
+	protected IMenuItem createMenuButton(float w, float h,
+			final EntitiesFactory pFactory, int pID, Color pSelected,
 			Color pUnselected, VertexBufferObjectManager pVBOM) {
 		final IMenuItem menuItem;
-		final float margin = 15;
-		menuItem = new ColorMenuItemDecorator(new NineSliceMenuItem(pID, 0, 0, w, h, pTextureRegion, margin, margin, margin, margin, pVBOM), pSelected, pUnselected);
+
+		menuItem = new ColorMenuItemDecorator(pFactory.populateFrameButton(w, h, pVBOM, pID), pSelected, pUnselected);
 		menuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		return menuItem;
 	}

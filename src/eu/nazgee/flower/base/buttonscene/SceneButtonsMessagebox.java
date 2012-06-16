@@ -7,11 +7,7 @@ import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.text.AutoWrap;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
-import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.font.Font;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
@@ -19,10 +15,7 @@ import org.andengine.util.color.Color;
 import android.content.Context;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
-import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
-import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
-import eu.nazgee.util.NineSliceSprite;
 
 public class SceneButtonsMessagebox extends SceneButtons {
 	// ===========================================================
@@ -73,7 +66,7 @@ public class SceneButtonsMessagebox extends SceneButtons {
 
 	@Override
 	protected IMenuItem prepareMenuItem(final Text pText, final float pTotalWidth, int pID) {
-		IMenuItem item = populateMenuEntry(getW() * pText.getWidth() / pTotalWidth, BUTTON_HEIGHT, mTexturesLibrary.getButton(), pID, Color.RED, Color.WHITE, getVertexBufferObjectManager());
+		IMenuItem item = createMenuButton(getW() * pText.getWidth() / pTotalWidth, BUTTON_HEIGHT, mTexturesLibrary.getFactory(), pID, Color.RED, Color.WHITE, getVertexBufferObjectManager());
 		item.attachChild(pText);
 		Positioner.setCentered(pText, item);
 		return item;
@@ -89,8 +82,7 @@ public class SceneButtonsMessagebox extends SceneButtons {
 	public void onLoad(final Engine e, final Context c) {
 		super.onLoad(e, c);
 		prepareContent(e, c);
-		final float inset = 15;
-		IEntity bg = new NineSliceSprite(0, 0, getW(), getH(), mTexturesLibrary.getFrameMessageBox(), inset, inset, inset, inset, getVertexBufferObjectManager());
+		IEntity bg = mTexturesLibrary.getFactory().populateFrameMessageBox(getW(), getH(), getVertexBufferObjectManager());
 		bg.setZIndex(-1000);
 		this.attachChild(bg);
 		sortChildren();

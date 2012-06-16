@@ -2,7 +2,7 @@ package eu.nazgee.flower.activity.game.scene.game;
 
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import eu.nazgee.flower.BaseHUD;
+import eu.nazgee.flower.bases.BaseHUD;
 
 public class HudGame extends BaseHUD {
 	// ===========================================================

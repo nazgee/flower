@@ -1,4 +1,4 @@
-package eu.nazgee.flower;
+package eu.nazgee.misc;
 
 import org.andengine.opengl.vbo.DrawType;
 import org.andengine.opengl.vbo.HighPerformanceVertexBufferObject;
@@ -6,7 +6,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.opengl.vbo.attribute.VertexBufferObjectAttributes;
 import org.andengine.util.color.Color;
 
-import android.util.Log;
 import android.util.SparseArray;
 
 public class GradientVertexBufferObject extends HighPerformanceVertexBufferObject {

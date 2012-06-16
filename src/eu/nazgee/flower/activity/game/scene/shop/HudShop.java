@@ -6,13 +6,10 @@ import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
 
 import android.content.Context;
-import eu.nazgee.flower.BaseHUD;
-import eu.nazgee.flower.GradientRectangle;
 import eu.nazgee.flower.TexturesLibrary;
-import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
+import eu.nazgee.flower.bases.BaseHUD;
 import eu.nazgee.util.NineSliceSprite;
 
 public class HudShop extends BaseHUD {
@@ -75,8 +72,8 @@ public class HudShop extends BaseHUD {
 		attachChild(basket);
 		basket.setPosition(getW() - basket.getWidth(), cash.getY() + cash.getHeight());
 
-		final float inset = 15;
-		final NineSliceSprite bg = new NineSliceSprite(0.66f * getW(), 0, 0.33f * getW(), getH(), mTexturesLibrary.getFrameHudShop(), inset, inset, inset, inset, getVertexBufferObjectManager());
+		final NineSliceSprite bg = mTexturesLibrary.getFactory().populateFrameHudShop( 0.33f * getW(), getH(), getVertexBufferObjectManager());
+		bg.setPosition(0.66f * getW(), 0);
 		bg.setZIndex(ZINDEX_BG_FRAME);
 		attachChild(bg);
 //		final float gradW = camera.getWidth() * (1 - SceneLevelselector.PAGE_WIDTH_EFFECTIVE);

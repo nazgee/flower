@@ -1,4 +1,4 @@
-package eu.nazgee.flower;
+package eu.nazgee.misc;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.primitive.vbo.HighPerformanceRectangleVertexBufferObject;
@@ -14,7 +14,7 @@ import org.andengine.opengl.vbo.attribute.VertexBufferObjectAttributesBuilder;
 import org.andengine.util.color.Color;
 
 import android.opengl.GLES20;
-import eu.nazgee.flower.GradientVertexBufferObject.eGradientLayout;
+import eu.nazgee.misc.GradientVertexBufferObject.eGradientLayout;
 
 /**
  * (c) 2010 Nicolas Gramlich

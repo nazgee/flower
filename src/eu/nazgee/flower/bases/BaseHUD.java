@@ -1,4 +1,4 @@
-package eu.nazgee.flower;
+package eu.nazgee.flower.bases;
 
 import java.text.DecimalFormat;
 

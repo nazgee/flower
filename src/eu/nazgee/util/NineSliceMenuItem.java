@@ -1,16 +1,9 @@
 package eu.nazgee.util;
 
-import org.andengine.entity.Entity;
 import org.andengine.entity.scene.menu.item.IMenuItem;
-import org.andengine.entity.shape.RectangularShape;
-import org.andengine.entity.sprite.batch.SpriteBatch;
-import org.andengine.opengl.shader.PositionColorShaderProgram;
 import org.andengine.opengl.shader.PositionColorTextureCoordinatesShaderProgram;
 import org.andengine.opengl.shader.ShaderProgram;
-import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.opengl.vbo.IVertexBufferObject;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /**

@@ -1,13 +1,10 @@
 package eu.nazgee.flower.activity.levelselector.scene;
 
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.Camera;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
 
 import android.content.Context;
-import eu.nazgee.flower.BaseHUD;
-import eu.nazgee.flower.GradientRectangle;
+import eu.nazgee.flower.bases.BaseHUD;
 
 public class HudLevelselector extends BaseHUD {
 

@@ -11,6 +11,7 @@ import android.content.Context;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.CameraParallaxBackground;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
+import eu.nazgee.util.LayoutBase;
 
 public class LoadableParallaxBackground extends LoadableResourceSimple {
 	// ===========================================================
@@ -22,9 +23,10 @@ public class LoadableParallaxBackground extends LoadableResourceSimple {
 	// ===========================================================
 	private final VertexBufferObjectManager mVBOM;
 
-	protected final ITextureRegion TEX_BG_FAR;
-	protected final ITextureRegion TEX_BG_CLOSE;
-	protected final ITextureRegion TEX_GRASS;
+	protected final ITextureRegion TEX_BG4;
+	protected final ITextureRegion TEX_BG3;
+	protected final ITextureRegion TEX_BG2;
+	protected final ITextureRegion TEX_BG1;
 	protected final ITextureRegion TEX_GROUND;
 	protected final ITextureRegion TEX_SKY;
 
@@ -41,10 +43,11 @@ public class LoadableParallaxBackground extends LoadableResourceSimple {
 		super();
 		mTexturesLibrary = pTexturesLibrary;
 		mVBOM = pVBOM;
-		TEX_BG_FAR = mTexturesLibrary.getParalaxBack2();
-		TEX_BG_CLOSE = mTexturesLibrary.getParalaxBack1();
+		TEX_BG4 = mTexturesLibrary.getParalaxBack4();
+		TEX_BG3 = mTexturesLibrary.getParalaxBack3();
+		TEX_BG2 = mTexturesLibrary.getParalaxBack2();
+		TEX_BG1 = mTexturesLibrary.getParalaxBack1();
 		TEX_GROUND = mTexturesLibrary.getParalaxGround();
-		TEX_GRASS = mTexturesLibrary.getParalaxFront1();
 		TEX_SKY = mTexturesLibrary.getSky();
 	}
 
@@ -67,16 +70,30 @@ public class LoadableParallaxBackground extends LoadableResourceSimple {
 
 		final VertexBufferObjectManager vertexBufferObjectManager = mVBOM;
 		final Sprite bgSky = new Sprite(0, 0, TEX_SKY, vertexBufferObjectManager);
-		final Sprite bgFar = new Sprite(0, mCamera.getHeight() - TEX_GROUND.getHeight() - TEX_BG_FAR.getHeight(), TEX_BG_FAR, vertexBufferObjectManager);
-		final Sprite bgClose = new Sprite(0, mCamera.getHeight() - TEX_GROUND.getHeight() - TEX_BG_CLOSE.getHeight(), TEX_BG_CLOSE, vertexBufferObjectManager);
-		final Sprite bgGrass = new Sprite(0, mCamera.getHeight() - TEX_GRASS.getHeight()/2, TEX_GRASS, vertexBufferObjectManager);
-		bgGround = new Sprite(0, mCamera.getHeight() - TEX_GROUND.getHeight(), TEX_GROUND, vertexBufferObjectManager);
+
+		final float y_bottom =	mCamera.getHeight();
+		final float y_gnd =	y_bottom - TEX_GROUND.getHeight();
+		final float y_bg1 =	y_bottom - TEX_BG1.getHeight() - 42;
+		final float y_bg4 =	y_bottom - TEX_BG4.getHeight() - 88;
+		final float y_bg2 =	y_bg1 - TEX_BG2.getHeight();
+		final float y_bg3 =	y_bg1 - TEX_BG3.getHeight() - 10;
+
+		final Sprite bg4 =	new Sprite(0, y_bg4, TEX_BG4, vertexBufferObjectManager);
+		final Sprite bg3 =	new Sprite(0, y_bg3, TEX_BG3, vertexBufferObjectManager);
+		final Sprite bg2 =	new Sprite(0, y_bg2, TEX_BG2, vertexBufferObjectManager);
+		final Sprite bg1 =	new Sprite(0, y_bg1, TEX_BG1, vertexBufferObjectManager);
+		bgGround =			new Sprite(0, y_gnd, TEX_GROUND, vertexBufferObjectManager);
+
+
+//		final Sprite bgGrass = new Sprite(0, mCamera.getHeight() - TEX_GRASS.getHeight()/2, TEX_GRASS, vertexBufferObjectManager);
 		mLoadedBackground = new CameraParallaxBackground(0, 0, 0, mCamera);
 		mLoadedBackground.attachParallaxEntity(new ParallaxEntity(-0.1f, bgSky));
-		mLoadedBackground.attachParallaxEntity(new ParallaxEntity(-0.25f, bgFar));
-		mLoadedBackground.attachParallaxEntity(new ParallaxEntity(-0.5f, bgClose));
+		mLoadedBackground.attachParallaxEntity(new ParallaxEntity(-0.2f, bg4));
+		mLoadedBackground.attachParallaxEntity(new ParallaxEntity(-0.4f, bg3));
+		mLoadedBackground.attachParallaxEntity(new ParallaxEntity(-0.6f, bg2));
+		mLoadedBackground.attachParallaxEntity(new ParallaxEntity(-0.8f, bg1));
 		mLoadedBackground.attachParallaxEntity(new ParallaxEntity(-1f, bgGround));
-		mLoadedBackground.attachParallaxEntity(new ParallaxEntity(-1.5f, bgGrass));
+//		mLoadedBackground.attachParallaxEntity(new ParallaxEntity(-1.5f, bgGrass));
 	}
 
 	@Override

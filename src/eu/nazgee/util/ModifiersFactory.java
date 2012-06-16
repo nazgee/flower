@@ -1,8 +1,7 @@
-package eu.nazgee.flower;
+package eu.nazgee.util;
 
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.LoopEntityModifier;
-import org.andengine.entity.modifier.MoveByModifier;
 import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;

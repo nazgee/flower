@@ -1,9 +1,7 @@
 package eu.nazgee.util;
 
-import org.andengine.entity.Entity;
 import org.andengine.entity.shape.RectangularShape;
 import org.andengine.entity.sprite.batch.SpriteBatch;
-import org.andengine.opengl.shader.PositionColorShaderProgram;
 import org.andengine.opengl.shader.PositionColorTextureCoordinatesShaderProgram;
 import org.andengine.opengl.shader.ShaderProgram;
 import org.andengine.opengl.texture.ITexture;
@@ -49,6 +47,23 @@ public class NineSliceSprite extends RectangularShape {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
+
+	public NineSliceSprite(	final float pWidth, final float pHeight,
+			final ITextureRegion pTextureRegion, final float pInset,
+			final VertexBufferObjectManager pVertexBufferObjectManager) {
+		this(0, 0, pWidth, pHeight, pTextureRegion, pInset, pInset, pInset,
+				pInset, pVertexBufferObjectManager, 
+				PositionColorTextureCoordinatesShaderProgram.getInstance());
+	}
+
+	public NineSliceSprite(final float pX, final float pY,
+			final float pWidth, final float pHeight,
+			final ITextureRegion pTextureRegion, final float pInset,
+			final VertexBufferObjectManager pVertexBufferObjectManager) {
+		this(pX, pY, pWidth, pHeight, pTextureRegion, pInset, pInset, pInset,
+				pInset, pVertexBufferObjectManager, 
+				PositionColorTextureCoordinatesShaderProgram.getInstance());
+	}
 
 	public NineSliceSprite(final float pX, final float pY,
 			final ITextureRegion pTextureRegion, final float pInsetLeft,

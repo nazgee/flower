@@ -1,9 +1,7 @@
 package eu.nazgee.flower.score;
 
-import eu.nazgee.flower.activity.game.scene.game.HudGame;
 
 public class Score {
-	private HudGame mHud;
 	public final Value score = new Value();
 	public final Value seeds = new Value();
 	public final Value flowers = new Value();

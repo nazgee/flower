@@ -10,17 +10,17 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import eu.nazgee.flower.ModifiersFactory;
+import eu.nazgee.flower.EntitiesFactory;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.util.LayoutBase;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 import eu.nazgee.util.LayoutLinear;
+import eu.nazgee.util.ModifiersFactory;
 import eu.nazgee.util.NineSliceSprite;
 
 public class SeedItem extends Entity implements ITouchArea{
@@ -35,20 +35,17 @@ public class SeedItem extends Entity implements ITouchArea{
 	private final NineSliceSprite mSpriteFrame;
 	private Sprite mSpriteSeed;
 	private Sprite mSpriteBlossoms[];
-	private final TexturesLibrary mTexturesLibrary;
 	private IEntityModifier mModifier;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public SeedItem(Seed pSeed, final float W, final float H, Font pFont, ITextureRegion pFrameTexture, ITextureRegion pFrameTextureLocked, VertexBufferObjectManager pVBOM, TexturesLibrary pTexturesLibrary) {
+	public SeedItem(Seed pSeed, final float W, final float H, Font pFont, EntitiesFactory pFactory, VertexBufferObjectManager pVBOM, TexturesLibrary pTexturesLibrary) {
 		this.mSeed = pSeed;
-		this.mTexturesLibrary = pTexturesLibrary;
 
 		/*
 		 * Prepare background frame
 		 */
-		final float margin = 15;
-		this.mSpriteFrame = new NineSliceSprite(0, 0, W, H, mSeed.resources.isLocked() ? pFrameTextureLocked : pFrameTexture, margin, margin, margin, margin, pVBOM);
+		this.mSpriteFrame = pFactory.populateFrameSeed(W, H, pVBOM, pSeed.resources.isLocked());
 		attachChild(this.mSpriteFrame);
 		Positioner.setCentered(this.mSpriteFrame, this);
 

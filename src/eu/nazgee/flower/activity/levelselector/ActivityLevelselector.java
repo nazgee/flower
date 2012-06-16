@@ -15,8 +15,6 @@ import org.andengine.util.modifier.ease.EaseStrongInOut;
 import org.andengine.util.modifier.ease.EaseStrongOut;
 
 import android.content.Intent;
-import eu.nazgee.flower.BaseActivityPager;
-import eu.nazgee.flower.ModifiersFactory;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.ActivityGame;
 import eu.nazgee.flower.activity.levelselector.scene.GameLevelItem;
@@ -25,7 +23,9 @@ import eu.nazgee.flower.base.buttonscene.SceneButtons;
 import eu.nazgee.flower.base.buttonscene.SceneButtonsMessagebox;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
+import eu.nazgee.flower.bases.BaseActivityPager;
 import eu.nazgee.flower.level.GameLevel;
+import eu.nazgee.util.ModifiersFactory;
 
 public class ActivityLevelselector extends BaseActivityPager<GameLevelItem>{
 

@@ -5,14 +5,13 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.IEntityParameterCallable;
 import org.andengine.entity.scene.ITouchArea;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
+import eu.nazgee.flower.EntitiesFactory;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.util.NineSliceSprite;
@@ -30,14 +29,13 @@ public class GameLevelItem extends Entity implements ITouchArea{
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public GameLevelItem(GameLevel pLevel, Font pFont, ITextureRegion pFrameTexture, ITextureRegion pFrameTextureLocked,
+	public GameLevelItem(final GameLevel pLevel, final Font pFont, final EntitiesFactory pFactory,
 			final float W, final float H, VertexBufferObjectManager pVBOM) {
 		mLevel = pLevel;
 
-		final float marg = 15;
-		mFrame = new NineSliceSprite(0, 0, W, H, mLevel.resources.isLocked() ? pFrameTextureLocked : pFrameTexture, marg, marg, marg, marg, pVBOM);
+		mFrame = pFactory.populateFrameLevel(W, H, pVBOM, mLevel.resources.isLocked());
 
-		final Text text = new Text(0, 0, pFont, "lev=" + pLevel.id, pVBOM);
+		final Text text = new Text(0, 0, pFont, "level " + pLevel.id, pVBOM);
 		text.setColor(Color.BLACK);
 		attachChild(mFrame);
 		attachChild(text);

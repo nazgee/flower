@@ -77,8 +77,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	protected GameLevelItem populateItem(int pItem, int pItemOnPage, int pPage) {
 		GameLevel lvl = mLevelItemsLoader.levels.get(pItem);
 		GameLevelItem item = new GameLevelItem(lvl, mFontDesc, 
-				mTexturesLibrary.getFrameLevel(),
-				mTexturesLibrary.getFrameLevelLocked(),
+				mTexturesLibrary.getFactory(),
 				getFrameW(), getFrameH(), getVertexBufferObjectManager());
 		return item;
 	}
