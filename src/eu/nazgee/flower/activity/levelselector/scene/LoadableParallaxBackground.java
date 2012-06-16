@@ -75,8 +75,8 @@ public class LoadableParallaxBackground extends LoadableResourceSimple {
 		final float y_gnd =	y_bottom - TEX_GROUND.getHeight();
 		final float y_bg1 =	y_bottom - TEX_BG1.getHeight() - 42;
 		final float y_bg4 =	y_bottom - TEX_BG4.getHeight() - 88;
-		final float y_bg2 =	y_bg1 - TEX_BG2.getHeight();
-		final float y_bg3 =	y_bg1 - TEX_BG3.getHeight() - 10;
+		final float y_bg2 =	y_bottom - TEX_BG2.getHeight() - 88;
+		final float y_bg3 =	y_bottom - TEX_BG3.getHeight() - 88;
 
 		final Sprite bg4 =	new Sprite(0, y_bg4, TEX_BG4, vertexBufferObjectManager);
 		final Sprite bg3 =	new Sprite(0, y_bg3, TEX_BG3, vertexBufferObjectManager);

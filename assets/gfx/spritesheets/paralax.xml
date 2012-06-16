@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <texture version="1" file="paralax.png" type="bitmap" width="1024" height="1024" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
     <!-- Created with TexturePacker http://texturepacker.com -->
-    <!-- $TexturePacker:SmartUpdate:2f94f3936583f9cd596ce998a9960937$ -->
+    <!-- $TexturePacker:SmartUpdate:7aa742b4dd917dd33c703c00e7e3bf60$ -->
     <textureregion id="0" src="back1.png" x="4" y="490" width="800" height="71" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="800" srcheight="71"/>
-    <textureregion id="1" src="back2.png" x="950" y="4" width="770" height="53" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="770" srcheight="53"/>
+    <textureregion id="1" src="back2.png" x="950" y="4" width="771" height="53" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="771" srcheight="53"/>
     <textureregion id="2" src="back3.png" x="4" y="633" width="786" height="85" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="786" srcheight="85"/>
     <textureregion id="3" src="back4.png" x="4" y="567" width="800" height="60" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="800" srcheight="60"/>
     <textureregion id="4" src="ground.png" x="810" y="4" width="800" height="134" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="800" srcheight="134"/>
