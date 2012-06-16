@@ -38,19 +38,6 @@ public class HudLevelselector extends BaseHUD {
 	@Override
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
-		Camera camera = e.getCamera();
-
-		final float gradW = camera.getWidth() * (1 - SceneLevelselector.PAGE_WIDTH_EFFECTIVE);
-		GradientRectangle grad = new GradientRectangle(camera.getWidth() - gradW, 0, gradW, camera.getHeight(), 5, getVertexBufferObjectManager());
-		attachChild(grad);
-		Color col = new Color(0,0,0,1);
-		grad.setColor(col);
-		grad.setAlpha(0.9f);
-		col.setAlpha(0);
-		grad.setGradientBand(0, col);
-		grad.setZIndex(ZINDEX_GRADIENT);
-
-		sortChildren();
 	}
 
 	// ===========================================================

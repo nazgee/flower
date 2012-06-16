@@ -19,8 +19,9 @@ import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.util.LayoutBase;
-import eu.nazgee.util.LayoutLinear;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
+import eu.nazgee.util.LayoutLinear;
+import eu.nazgee.util.NineSliceSprite;
 
 public class SeedItem extends Entity implements ITouchArea{
 	// ===========================================================
@@ -31,7 +32,7 @@ public class SeedItem extends Entity implements ITouchArea{
 	// Fields
 	// ===========================================================
 	private final Seed mSeed;
-	private final Sprite mSpriteFrame;
+	private final NineSliceSprite mSpriteFrame;
 	private Sprite mSpriteSeed;
 	private Sprite mSpriteBlossoms[];
 	private final TexturesLibrary mTexturesLibrary;
@@ -39,14 +40,15 @@ public class SeedItem extends Entity implements ITouchArea{
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public SeedItem(Seed pSeed, final float W, final float H, Font pFont, ITextureRegion pFrameTexture, VertexBufferObjectManager pVBOM, TexturesLibrary pTexturesLibrary) {
+	public SeedItem(Seed pSeed, final float W, final float H, Font pFont, ITextureRegion pFrameTexture, ITextureRegion pFrameTextureLocked, VertexBufferObjectManager pVBOM, TexturesLibrary pTexturesLibrary) {
 		this.mSeed = pSeed;
 		this.mTexturesLibrary = pTexturesLibrary;
 
 		/*
 		 * Prepare background frame
 		 */
-		this.mSpriteFrame = new Sprite(0, 0, W, H, pFrameTexture, pVBOM);
+		final float margin = 15;
+		this.mSpriteFrame = new NineSliceSprite(0, 0, W, H, mSeed.resources.isLocked() ? pFrameTextureLocked : pFrameTexture, margin, margin, margin, margin, pVBOM);
 		attachChild(this.mSpriteFrame);
 		Positioner.setCentered(this.mSpriteFrame, this);
 
@@ -54,8 +56,6 @@ public class SeedItem extends Entity implements ITouchArea{
 		 * Prepare and attach lock icon if item is locked
 		 */
 		if (mSeed.resources.isLocked()) {
-			this.mSpriteFrame.setColor(Color.RED);
-
 			Sprite locked = new Sprite(0, 0, pTexturesLibrary.getIconLocked(), pVBOM);
 			locked.setZIndex(ZINDEX_LOCK);
 			attachChild(locked);

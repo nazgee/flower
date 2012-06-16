@@ -2,6 +2,7 @@ package eu.nazgee.flower.base.buttonscene;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.text.AutoWrap;
 import org.andengine.entity.text.Text;
@@ -17,35 +18,40 @@ import org.andengine.util.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.Consts;
+import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.game.utils.helpers.AtlasLoader;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
+import eu.nazgee.util.NineSliceSprite;
 
 public class SceneButtonsMessagebox extends SceneButtons {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-
+	private final float BUTTON_HEIGHT = Consts.CAMERA_HEIGHT * 0.2f;
 	// ===========================================================
 	// Fields
 	// ===========================================================
 	private final Font mFontButton;
 	private final Font mFontText;
-	private final MyResources mResources = new MyResources();
+	private final TexturesLibrary mTexturesLibrary;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public SceneButtonsMessagebox(float W, float H, Camera pCamera,
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			Font pFontText, Font pFontButton, CharSequence pText,
+			final TexturesLibrary pTexturesLibrary,
 			String... pButtons) {
 		super(W, H, pCamera, pVertexBufferObjectManager, pButtons);
 		this.mFontButton = pFontButton;
 		this.mFontText = pFontText;
-		this.getLoader().install(mResources);
+		this.mTexturesLibrary = pTexturesLibrary;
 
 		setText(pText);
-		setBackgroundColor(new Color(0, 0, 0, 0.7f));
+		setBackgroundColor(new Color(0, 0, 0, 0.0f));
+
+
 	}
 
 	// ===========================================================
@@ -67,7 +73,7 @@ public class SceneButtonsMessagebox extends SceneButtons {
 
 	@Override
 	protected IMenuItem prepareMenuItem(final Text pText, final float pTotalWidth, int pID) {
-		IMenuItem item = populateMenuEntry(getW() * pText.getWidth() / pTotalWidth, getH() * 0.2f, this.mResources.TEX_FRAME, pID, Color.WHITE, Color.RED, getVertexBufferObjectManager());
+		IMenuItem item = populateMenuEntry(getW() * pText.getWidth() / pTotalWidth, BUTTON_HEIGHT, mTexturesLibrary.getButton(), pID, Color.RED, Color.WHITE, getVertexBufferObjectManager());
 		item.attachChild(pText);
 		Positioner.setCentered(pText, item);
 		return item;
@@ -83,6 +89,11 @@ public class SceneButtonsMessagebox extends SceneButtons {
 	public void onLoad(final Engine e, final Context c) {
 		super.onLoad(e, c);
 		prepareContent(e, c);
+		final float inset = 15;
+		IEntity bg = new NineSliceSprite(0, 0, getW(), getH(), mTexturesLibrary.getFrameMessageBox(), inset, inset, inset, inset, getVertexBufferObjectManager());
+		bg.setZIndex(-1000);
+		this.attachChild(bg);
+		sortChildren();
 	}
 
 	// ===========================================================
@@ -94,41 +105,11 @@ public class SceneButtonsMessagebox extends SceneButtons {
 				getVertexBufferObjectManager());
 		attachChild(text);
 		text.setPosition((getW() - text.getWidth())/2, 
-				(getH()	- this.mResources.TEX_FRAME.getHeight() - text.getHeight()) / 2);
+				(getH()	- BUTTON_HEIGHT - text.getHeight()) / 2);
 
 		sortChildren(false);
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	private class MyResources extends LoadableResourceSimple {
-		protected BuildableBitmapTextureAtlas[] mAtlases;
-		public ITextureRegion TEX_FRAME;
-
-		@Override
-		public void onLoadResources(Engine e, Context c) {
-		}
-
-		@Override
-		public void onLoad(Engine e, Context c) {
-			final Camera camera = e.getCamera();
-
-			final int frameW = (int) camera.getWidth();
-			final int frameH = (int) (mFontButton.getLineHeight() * 1.5f);
-			this.mAtlases = new BuildableBitmapTextureAtlas[1];
-			this.mAtlases[0] = new BuildableBitmapTextureAtlas(e.getTextureManager(), frameW + 5, frameH + 5, TextureOptions.REPEATING_BILINEAR);
-
-			BuildableBitmapTextureAtlas frameAtlas = this.mAtlases[0];
-			TEX_FRAME = SVGBitmapTextureAtlasTextureRegionFactory.createFromAsset(frameAtlas, c, Consts.FILE_MESSAGEBOX_BUTTON, frameW, frameH);
-			AtlasLoader.buildAndLoad(this.mAtlases);
-		}
-
-		@Override
-		public void onUnload() {
-			for (BuildableBitmapTextureAtlas atlas : this.mAtlases) {
-				atlas.unload();
-				atlas = null;
-			}
-		}
-	}
 }

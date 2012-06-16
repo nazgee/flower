@@ -24,7 +24,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	// ===========================================================
 	public static final int ROWS = 3;
 	public static final int COLS = 3;
-	public static final float PAGE_WIDTH_EFFECTIVE = 0.66f;
+	public static final float PAGE_WIDTH_EFFECTIVE = 1f;
 	public static final float PAGE_WIDTH_FLIP = 0.3f;
 	// ===========================================================
 	// Fields
@@ -76,7 +76,10 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	@Override
 	protected GameLevelItem populateItem(int pItem, int pItemOnPage, int pPage) {
 		GameLevel lvl = mLevelItemsLoader.levels.get(pItem);
-		GameLevelItem item = new GameLevelItem(lvl, mFontDesc, mTexturesLibrary.getFrameLevel(), getFrameW(), getFrameH(), getVertexBufferObjectManager());
+		GameLevelItem item = new GameLevelItem(lvl, mFontDesc, 
+				mTexturesLibrary.getFrameLevel(),
+				mTexturesLibrary.getFrameLevelLocked(),
+				getFrameW(), getFrameH(), getVertexBufferObjectManager());
 		return item;
 	}
 

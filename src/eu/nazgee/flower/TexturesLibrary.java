@@ -3,19 +3,14 @@ package eu.nazgee.flower;
 import org.andengine.engine.Engine;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePack;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackLoader;
-import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackTextureRegionLibrary;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
-import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.util.debug.Debug;
 
 import android.content.Context;
-import android.graphics.Rect;
-
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
-import eu.nazgee.util.NinePatchTextureRegionBatch;
 
 public class TexturesLibrary extends LoadableResourceSimple{
 	private TexturePack mSpritesheetParalax;
@@ -84,17 +79,27 @@ public class TexturesLibrary extends LoadableResourceSimple{
 		return mSpritesheetParalax.getTexturePackTextureRegionLibrary().get(TexturesParalax.FRONT1_ID);
 	}
 
+	public ITextureRegion getButton() {
+		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.NINE_PATCH_BUT3_ID);
+	}
+
 	public ITextureRegion getFrameLevel() {
-		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.FRAME_LEVEL_ID);
+		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.NINE_PATCH_GLASS_ID);
+	}
+	public ITextureRegion getFrameLevelLocked() {
+		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.NINE_PATCH_GLASS_RED_ID);
 	}
 	public ITextureRegion getFrameSeed() {
-		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.FRAME_SEED_ID);
+		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.NINE_PATCH_GLASS_GREEN_DARK_ID);
 	}
-	public NinePatchTextureRegionBatch getFrameLevelCompleted() {
-		final ITextureRegion tex = mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.NINE_PATCH_GLASS_ORANGE_ID);
-		final int margin = 15;
-		return new NinePatchTextureRegionBatch(tex,new Rect(margin, margin, 
-				(int)tex.getWidth() - margin, (int)tex.getHeight() - margin));
+	public ITextureRegion getFrameSeedLocked() {
+		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.NINE_PATCH_GLASS_GREEN_ID);
+	}
+	public ITextureRegion getFrameMessageBox() {
+		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.NINE_PATCH_GLASS_BLUE_ID);
+	}
+	public ITextureRegion getFrameLevelCompleted() {
+		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.NINE_PATCH_GLASS_ORANGE_ID);
 	}
 
 	public ITextureRegion getIconLocked() {

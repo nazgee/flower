@@ -4,7 +4,6 @@ import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.menu.item.IMenuItem;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.AutoWrap;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
@@ -19,9 +18,9 @@ import eu.nazgee.flower.EmptyMenuAnimator;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.game.utils.scene.menu.SceneMenu;
-import eu.nazgee.util.LayoutLinear;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
-import eu.nazgee.util.NinePatchSprite;
+import eu.nazgee.util.LayoutLinear;
+import eu.nazgee.util.NineSliceSprite;
 
 public class MenuGameLost extends SceneMenu {
 	public static final int MENU_RESET = 0;
@@ -39,11 +38,7 @@ public class MenuGameLost extends SceneMenu {
 		setMenuAnimator(new EmptyMenuAnimator());
 
 		// Prepare background
-		Rectangle bg = new Rectangle(0, 0, pCamera.getWidth() * 0.8f, pCamera.getHeight() * 0.8f, pVertexBufferObjectManager);
-		NinePatchSprite bg9 = new NinePatchSprite(pTexturesLibrary.getFrameLevelCompleted(), 0, 0, pCamera.getWidth() * 0.8f, pCamera.getHeight() * 0.8f, pVertexBufferObjectManager);
-		bg.attachChild(bg9);
-
-		bg.setColor(Color.TRANSPARENT);
+		NineSliceSprite bg = new NineSliceSprite(0, 0, pCamera.getWidth() * 0.8f, pCamera.getHeight()*0.8f, pTexturesLibrary.getFrameLevelCompleted(), 15, 15, 15, 15, pVertexBufferObjectManager);
 		attachChild(bg);
 		Positioner.setCentered(bg, pCamera.getWidth()/2, pCamera.getHeight()/2);
 

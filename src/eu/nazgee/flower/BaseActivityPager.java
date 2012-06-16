@@ -93,23 +93,6 @@ public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGame
 		mEngine.registerUpdateHandler(new FPSLogger());
 		Camera camera = getEngine().getCamera();
 
-		mSceneInfo = new SceneButtonsMessagebox(camera.getWidth(), camera.getHeight(),
-				camera, getVertexBufferObjectManager(),
-				mResources.FONT_DESC,
-				mResources.FONT_DESC,
-				"This level is not unlocked yet!", "ok");
-
-		mSceneInfo.loadResources(getEngine(), BaseActivityPager.this);
-		mSceneInfo.setOnMenuItemClickListener(new IOnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
-					float pMenuItemLocalX, float pMenuItemLocalY) {
-				getEngine().getScene().back();
-				mSceneInfo.unload();
-				return true;
-			}
-		});
-
 		mScenePager = populatePagerScene(camera.getWidth(), camera.getHeight(), getVertexBufferObjectManager());
 		mScenePager.loadResources(getEngine(), this);
 		mScenePager.load(getEngine(), this);

@@ -16,6 +16,7 @@ import org.andengine.util.color.Color;
 
 import android.content.Context;
 import eu.nazgee.game.utils.scene.menu.MenuLoadable;
+import eu.nazgee.util.NineSliceMenuItem;
 
 public abstract class SceneButtons extends MenuLoadable {
 	// ===========================================================
@@ -120,7 +121,8 @@ public abstract class SceneButtons extends MenuLoadable {
 			ITextureRegion pTextureRegion, int pID, Color pSelected,
 			Color pUnselected, VertexBufferObjectManager pVBOM) {
 		final IMenuItem menuItem;
-		menuItem = new ColorMenuItemDecorator(new SpriteMenuItem(pID, w, h, pTextureRegion, pVBOM), pSelected, pUnselected);
+		final float margin = 15;
+		menuItem = new ColorMenuItemDecorator(new NineSliceMenuItem(pID, 0, 0, w, h, pTextureRegion, margin, margin, margin, margin, pVBOM), pSelected, pUnselected);
 		menuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		return menuItem;
 	}

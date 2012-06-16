@@ -15,6 +15,7 @@ import org.andengine.util.color.Color;
 
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.game.utils.helpers.Positioner;
+import eu.nazgee.util.NineSliceSprite;
 
 public class GameLevelItem extends Entity implements ITouchArea{
 	// ===========================================================
@@ -25,21 +26,17 @@ public class GameLevelItem extends Entity implements ITouchArea{
 	// Fields
 	// ===========================================================
 	private final GameLevel mLevel;
-	private final Sprite mFrame;
+	private final NineSliceSprite mFrame;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public GameLevelItem(GameLevel pLevel, Font pFont, ITextureRegion pFrameTexture, final float W, final float H, VertexBufferObjectManager pVBOM) {
+	public GameLevelItem(GameLevel pLevel, Font pFont, ITextureRegion pFrameTexture, ITextureRegion pFrameTextureLocked,
+			final float W, final float H, VertexBufferObjectManager pVBOM) {
 		mLevel = pLevel;
-		mFrame = new Sprite(0, 0, W, H, pFrameTexture, pVBOM) {
-			@Override
-			public 	void setAlpha(final float pAlpha) {
-				super.setAlpha(pAlpha * 0.5f);
-			}
-		};
-		if (mLevel.resources.isLocked()) {
-			mFrame.setColor(Color.RED);
-		}
+
+		final float marg = 15;
+		mFrame = new NineSliceSprite(0, 0, W, H, mLevel.resources.isLocked() ? pFrameTextureLocked : pFrameTexture, marg, marg, marg, marg, pVBOM);
+
 		final Text text = new Text(0, 0, pFont, "lev=" + pLevel.id, pVBOM);
 		text.setColor(Color.BLACK);
 		attachChild(mFrame);

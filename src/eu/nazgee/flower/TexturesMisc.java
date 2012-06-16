@@ -1,7 +1,7 @@
 // Definitions for sprite sheet misc
 // Created with www.texturepacker.com
 
-// $TexturePacker:SmartUpdate:d4f2e150b8bf185d578ba5ab7b0b2619$
+// $TexturePacker:SmartUpdate:e3e552fb8d4e8aea9c878545abd57fe2$
 
 package eu.nazgee.flower;
 
