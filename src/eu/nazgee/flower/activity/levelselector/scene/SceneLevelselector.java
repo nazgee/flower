@@ -67,7 +67,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
 		SmoothCamera camera = (SmoothCamera) e.getCamera();
-		setPageMover(new PageMoverCameraZoom<GameLevelItem>(1.5f, camera, getW() * PAGE_WIDTH_EFFECTIVE));
+		setPageMover(new PageMoverCameraZoom<GameLevelItem>(0.7f, camera, getW() * PAGE_WIDTH_EFFECTIVE));
 		setBackground(mLoadableParallaxBackground.getLoadedBacground());
 
 		camera.setHUD(mHUD);

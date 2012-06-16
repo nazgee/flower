@@ -19,7 +19,7 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 	// Fields
 	// ===========================================================
 	protected final SmoothCamera mCamera;
-	protected final float mStepPerPage;
+	private final float mStepPerPage;
 	private ePageAlignment mPageAlignment = ePageAlignment.PAGE_ALIGN_LEFT;
 	// ===========================================================
 	// Constructors
@@ -39,6 +39,11 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 	public void setPageAlignment(ePageAlignment pPageAlignment) {
 		this.mPageAlignment = pPageAlignment;
 	}
+
+	public float getStepPerPage() {
+		return mStepPerPage;
+	}
+
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
@@ -51,7 +56,7 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 
 	@Override
 	public void onCompletedSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, int pNewPageIndex, int pOldPageIndex) {
-		Log.d(getClass().getSimpleName(), "onCompletedSwipe(); pNewPageIndex=" + pNewPageIndex + "; mStepPerPage=" + mStepPerPage);
+		Log.d(getClass().getSimpleName(), "onCompletedSwipe(); pNewPageIndex=" + pNewPageIndex + "; mStepPerPage=" + getStepPerPage());
 
 		float offset = 0;
 		switch (mPageAlignment) {
@@ -59,13 +64,13 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 			offset = mCamera.getWidth()/2;
 			break;
 		case PAGE_ALIGN_CENTER:
-			offset = mStepPerPage/2;
+			offset = getStepPerPage()/2;
 			break;
 		case PAGE_ALIGN_RIGHT:
-			offset = (mCamera.getWidth() - mStepPerPage)/2;
+			offset = (mCamera.getWidth() - getStepPerPage())/2;
 			break;
 		}
-		mCamera.setCenter(pNewPageIndex * mStepPerPage + offset, mCamera.getCenterY());
+		mCamera.setCenter(pNewPageIndex * getStepPerPage() + offset, mCamera.getCenterY());
 	}
 	// ===========================================================
 	// Methods

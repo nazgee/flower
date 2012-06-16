@@ -18,8 +18,8 @@ public @interface Consts {
 	public static final String LEVEL_PREFS_FILE = "levelprefs";
 	public static final String SEEDS_PREFS_FILE = "seedsprefs";
 
-	public static final String MENU_FONT = "Creepshow.ttf";
-	public static final String HUD_FONT = "Creepshow.ttf";
+	public static final String MENU_FONT = "UNDO.ttf";
+	public static final String HUD_FONT = "UNDO.ttf";
 
 	public static final Color COLOR_TEXT_SELECTED = Color.RED;
 	public static final Color COLOR_TEXT_UNSELECTED = Color.WHITE;
