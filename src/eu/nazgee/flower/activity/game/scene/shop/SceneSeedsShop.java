@@ -14,7 +14,7 @@ import org.andengine.util.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.TexturesLibrary;
-import eu.nazgee.flower.activity.levelselector.scene.LoadableParallaxBackground;
+import eu.nazgee.flower.activity.game.scene.game.GameBackground;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.IPage;
 import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
@@ -39,11 +39,11 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	// Fields
 	// ===========================================================
 	private final HudShop mHUD;
-	private final LoadableParallaxBackground mLoadableParallaxBackground;
 	private final Font mDescFont;
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 	private PopupPool mPopupPool;
 
+	private GameBackground mBG;
 	private IShoppingListener mShoppingListener;
 	private final SeedsShop mShop;
 	private final TexturesLibrary mTexturesLibrary;
@@ -61,8 +61,6 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 		this.mTexturesLibrary = pTexturesLibrary;
 
 		// Install shop's background
-		this.mLoadableParallaxBackground = new LoadableParallaxBackground(mTexturesLibrary, pVertexBufferObjectManager);
-		getLoader().install(this.mLoadableParallaxBackground);
 		setBackgroundEnabled(true);
 		setBackground(new Background(Color.BLUE));
 
@@ -128,10 +126,16 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	}
 
 	@Override
+	public void onLoadResources(Engine e, Context c) {
+		super.onLoadResources(e, c);
+		mBG = new GameBackground(e.getCamera(), mTexturesLibrary, getVertexBufferObjectManager());
+	}
+
+	@Override
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
 		setPageMover(new PageMoverCameraZoom<SeedItem>(0.75f, (SmoothCamera) e.getCamera(), getW() * PAGE_WIDTH_EFFECTIVE));
-		setBackground(mLoadableParallaxBackground.getLoadedBacground());
+		setBackground(mBG);
 
 		e.getCamera().setHUD(mHUD);
 		updateHUDBasket();

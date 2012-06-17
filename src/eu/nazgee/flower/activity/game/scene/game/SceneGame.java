@@ -30,7 +30,6 @@ import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.GameScore;
 import eu.nazgee.flower.activity.game.scene.shop.SeedsShop;
 import eu.nazgee.flower.activity.game.sound.LoadableSFX;
-import eu.nazgee.flower.activity.levelselector.scene.LoadableParallaxBackground;
 import eu.nazgee.flower.flower.Flower;
 import eu.nazgee.flower.flower.Flower.IFlowerStateHandler;
 import eu.nazgee.flower.flower.Flower.eLevel;
@@ -59,7 +58,6 @@ public class SceneGame extends SceneLoadable{
 	private final LoadableSFX mSFX;
 	private final MyResources mResources = new MyResources();
 	private final HudGame mHud;
-	private final LoadableParallaxBackground mLoadableParallaxBackground;
 
 	private PopupPool mPopupPool;
 	private Sky mSky;
@@ -73,6 +71,7 @@ public class SceneGame extends SceneLoadable{
 	private final SeedsShop mSeedsShop; // TODO change it to list/array/whatever. No need to keep the whole shop here
 	private IGameListener mGameListerner;
 	private final TexturesLibrary mTexturesLibrary;
+	private GameBackground mBG;
 
 	// ===========================================================
 	// Constructors
@@ -88,9 +87,7 @@ public class SceneGame extends SceneLoadable{
 		
 		mSFX = new LoadableSFX();
 		mHud = new HudGame(W, H, pVertexBufferObjectManager);
-		mLoadableParallaxBackground = new LoadableParallaxBackground(mTexturesLibrary, pVertexBufferObjectManager);
 		getLoader().install(mResources);
-		getLoader().install(mLoadableParallaxBackground);
 		getLoader().install(mSFX);
 		getLoader().install(mHud);
 	}
@@ -110,14 +107,18 @@ public class SceneGame extends SceneLoadable{
 	@Override
 	public void onLoadResources(Engine e, Context c) {
 		/*
-		 * No need to do anything special here.
+		 * Prepare fancy background. We also save a shortcut
+		 * to the sprite representing ground level
 		 */
+		mBG = new GameBackground(e.getCamera(), mTexturesLibrary, getVertexBufferObjectManager());
+		mGround = mBG.getGroundSprite();
 	}
 
 	@Override
 	public void onLoad(Engine e, Context c) {
-		final VertexBufferObjectManager vbom = this.getVertexBufferObjectManager();
+		setBackground(mBG);
 
+		final VertexBufferObjectManager vbom = this.getVertexBufferObjectManager();
 		Random rand = MathUtils.RANDOM;
 
 		SmoothTrackingCamera camera = (SmoothTrackingCamera) e.getCamera();
@@ -128,14 +129,6 @@ public class SceneGame extends SceneLoadable{
 		mScore.seeds.set(mSeedsShop.getSeedsInBasket().size());
 
 		mPopupPool = new PopupPool(mResources.FONT_POPUP, mDetacher, vbom);
-
-		/*
-		 * Prepare fancy background- everything was loaded by mLoadableBacground
-		 * so all we need to do call setBackground. We also save a shortcut
-		 * to the sprite representing ground level
-		 */
-		setBackground(mLoadableParallaxBackground.getLoadedBacground());
-		mGround = mLoadableParallaxBackground.getGroundSprite();
 
 		/*
 		 * Create new virtual sky- this object is used to calculate how high

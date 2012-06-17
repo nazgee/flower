@@ -9,6 +9,7 @@ import org.andengine.util.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.TexturesLibrary;
+import eu.nazgee.flower.activity.game.scene.game.GameBackground;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.IPage;
 import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
@@ -30,10 +31,10 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	// Fields
 	// ===========================================================
 	private final GameLevelsLoader mLevelItemsLoader = new GameLevelsLoader();
-	private final LoadableParallaxBackground mLoadableParallaxBackground;
 	private final Font mFontDesc;
 	private HudLevelselector mHUD;
 	private final TexturesLibrary mTexturesLibrary;
+	private GameBackground mBG;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -43,9 +44,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 		super(W, H, pVertexBufferObjectManager, (int) (W * PAGE_WIDTH_FLIP));
 		mFontDesc = pFontDesc;
 		mTexturesLibrary = pTexturesLibrary;
-		mLoadableParallaxBackground = new LoadableParallaxBackground(mTexturesLibrary, pVertexBufferObjectManager);
 		getLoader().install(mLevelItemsLoader);
-		getLoader().install(mLoadableParallaxBackground);
 		setBackgroundEnabled(true);
 		setBackground(new Background(Color.BLUE));
 
@@ -64,11 +63,17 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
+	public void onLoadResources(Engine e, Context c) {
+		super.onLoadResources(e, c);
+		mBG = new GameBackground(e.getCamera(), mTexturesLibrary, getVertexBufferObjectManager());
+	}
+
+	@Override
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
 		SmoothCamera camera = (SmoothCamera) e.getCamera();
 		setPageMover(new PageMoverCameraZoom<GameLevelItem>(0.7f, camera, getW() * PAGE_WIDTH_EFFECTIVE));
-		setBackground(mLoadableParallaxBackground.getLoadedBacground());
+		setBackground(mBG);
 
 		camera.setHUD(mHUD);
 	}
