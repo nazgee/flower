@@ -42,7 +42,7 @@ public class EntitiesFactory {
 		return new NineSliceMenuItem(pID, 0, 0, pWidth, pHeight, mTexturesLibrary.getButton(), FRAME_MARGIN, FRAME_MARGIN, FRAME_MARGIN, FRAME_MARGIN, pVBO);
 	}
 	public NineSliceSprite populateFrameLevel(final float pWidth, final float pHeight, VertexBufferObjectManager pVBO, final boolean pLocked) {
-		return new NineSliceSprite(pWidth, pHeight, !pLocked ? mTexturesLibrary.getFrameTransparent() : mTexturesLibrary.getFrameRed(), FRAME_MARGIN, pVBO);
+		return new NineSliceSprite(pWidth, pHeight, !pLocked ? mTexturesLibrary.getFrameTransparent() : mTexturesLibrary.getFrameTransparent(), FRAME_MARGIN, pVBO);
 	}
 	public NineSliceSprite populateFrameSeed(final float pWidth, final float pHeight, VertexBufferObjectManager pVBO, final boolean pLocked) {
 		return new NineSliceSprite(pWidth, pHeight, !pLocked ? mTexturesLibrary.getFrameGreenDark() : mTexturesLibrary.getFrameGreen(), FRAME_MARGIN, pVBO);

@@ -3,6 +3,7 @@ package eu.nazgee.flower.activity.levelselector.scene;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
@@ -16,6 +17,8 @@ import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
 import eu.nazgee.flower.base.pagerscene.PageRectangleTransparent;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.level.GameLevel;
+import eu.nazgee.misc.ParallaxLayer;
+import eu.nazgee.misc.ParallaxLayerEntity;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 
 public class SceneLevelselector extends ScenePager<GameLevelItem>{
@@ -75,7 +78,25 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 		setPageMover(new PageMoverCameraZoom<GameLevelItem>(0.7f, camera, getW() * PAGE_WIDTH_EFFECTIVE));
 		setBackground(mBG);
 
+//		ParallaxLayer paralaxLayer = new ParallaxLayer(camera.getWidth(), camera.getHeight(), camera, true);
+//		paralaxLayer.setAutoParallaxChangePerSecond(1);
+//		paralaxLayer.setScrollParallaxFactor(1f);
+//
+//		Sprite tree1 = new Sprite(0, camera.getHeight() - mTexturesLibrary.getTree(0).getHeight(), mTexturesLibrary.getTree(0), getVertexBufferObjectManager());
+//		paralaxLayer.attachParallaxEntity(new ParallaxLayerEntity(-0.5f, tree1, true, 4));
+//	
+//		Sprite tree2 = new Sprite(0, camera.getHeight() - mTexturesLibrary.getTree(1).getHeight() - 150, mTexturesLibrary.getTree(1), getVertexBufferObjectManager());
+//		paralaxLayer.attachParallaxEntity(new ParallaxLayerEntity(0.5f, tree2, true, 4));
+//	
+//		Sprite tree3 = new Sprite(0, camera.getHeight() - mTexturesLibrary.getTree(2).getHeight() - 300, mTexturesLibrary.getTree(2), getVertexBufferObjectManager());
+//		paralaxLayer.attachParallaxEntity(new ParallaxLayerEntity(0.0f, tree3, true, 4));
+//
+//		attachChild(paralaxLayer);
+//		paralaxLayer.setZIndex(-1);
+
 		camera.setHUD(mHUD);
+
+		sortChildren(false);
 	}
 
 	@Override

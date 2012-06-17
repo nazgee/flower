@@ -1,7 +1,9 @@
 package eu.nazgee.flower.activity.game.scene.game;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.opengl.util.GLState;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import eu.nazgee.flower.TexturesLibrary;
@@ -62,4 +64,71 @@ public class GameBackground extends CameraParallaxBackground {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	public static class ParallaxEntityScattered extends ParallaxEntity {
+		// ===========================================================
+		// Constants
+		// ===========================================================
+
+		// ===========================================================
+		// Fields
+		// ===========================================================
+		private final float mParallaxFactor;
+		private final IAreaShape mAreaShape;
+		private final float mScatterRatio;
+
+		// ===========================================================
+		// Constructors
+		// ===========================================================
+		public ParallaxEntityScattered(final float pParallaxFactor, final IAreaShape pAreaShape) {
+			this(pParallaxFactor, pAreaShape, 1);
+		}
+
+		public ParallaxEntityScattered(final float pParallaxFactor, final IAreaShape pAreaShape, final float pScatterRatio) {
+			super(pParallaxFactor, pAreaShape);
+			this.mParallaxFactor = pParallaxFactor;
+			this.mAreaShape = pAreaShape;
+			this.mScatterRatio = pScatterRatio;
+		}
+
+		// ===========================================================
+		// Getter & Setter
+		// ===========================================================
+
+		// ===========================================================
+		// Methods for/from SuperClass/Interfaces
+		// ===========================================================
+
+		// ===========================================================
+		// Methods
+		// ===========================================================
+		public void onDraw(final GLState pGLState, final Camera pCamera, final float pParallaxValue) {
+			pGLState.pushModelViewGLMatrix();
+			{
+				float widthRange = pCamera.getWidth();
+
+				final float shapeWidthScaled = mAreaShape.getWidthScaled() * mScatterRatio;
+				float baseOffset = (pParallaxValue * mParallaxFactor) % shapeWidthScaled;
+
+				while (baseOffset > 0) {
+					baseOffset -= shapeWidthScaled;
+				}
+				pGLState.translateModelViewGLMatrixf(baseOffset, 0, 0);
+
+				float currentMaxX = baseOffset;
+
+				do {
+					mAreaShape.onDraw(pGLState, pCamera);
+					pGLState.translateModelViewGLMatrixf(shapeWidthScaled - 1, 0, 0);
+					currentMaxX += shapeWidthScaled;
+				} while (currentMaxX < widthRange);
+			}
+			pGLState.popModelViewGLMatrix();
+		}
+
+
+
+		// ===========================================================
+		// Inner and Anonymous Classes
+		// ===========================================================
+	}
 }

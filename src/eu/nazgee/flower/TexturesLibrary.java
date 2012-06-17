@@ -36,10 +36,15 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	public EntitiesFactory getFactory() {
 		return mEntitiesFactory;
 	}
+
+
+	public ITextureRegion getTree(int pTreeNumber) {
+		return mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.AMBIENT_TREE_01_ID + pTreeNumber);
+	}
+
 	public ITextureRegion getSky() {
 		return mSpritesheetParalax.getTexturePackTextureRegionLibrary().get(TexturesParalax.SKY_ID);
 	}
-
 	public ITextureRegion getParalaxBack1() {
 		return mSpritesheetParalax.getTexturePackTextureRegionLibrary().get(TexturesParalax.BACK1_ID);
 	}

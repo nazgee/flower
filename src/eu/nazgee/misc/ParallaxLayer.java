@@ -18,12 +18,12 @@ public class ParallaxLayer extends RectangularShape {
 
 	private final ArrayList<ParallaxLayerEntity> mParallaxEntities = new ArrayList<ParallaxLayerEntity>();
 
-	protected float mParallaxValue;
+	protected float mAutoParallaxValue;
 	protected float mParallaxScrollValue;
 
-	protected float mParallaxChangePerSecond;
+	protected float mAutoParallaxChangePerSecond;
 
-	protected float mParallaxScrollFactor = 0.2f;
+	protected float mScrollParallaxFactor = 0.2f;
 
 	private final Camera mCamera;
 
@@ -45,16 +45,16 @@ public class ParallaxLayer extends RectangularShape {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public void setParallaxValue(final float pParallaxValue) {
-		this.mParallaxValue = pParallaxValue;
+	public void setAutoParallaxValue(final float pAutoParallaxValue) {
+		this.mAutoParallaxValue = pAutoParallaxValue;
 	}
 
-	public void setParallaxChangePerSecond(final float pParallaxChangePerSecond) {
-		this.mParallaxChangePerSecond = pParallaxChangePerSecond;
+	public void setAutoParallaxChangePerSecond(final float pAutoParallaxChangePerSecond) {
+		this.mAutoParallaxChangePerSecond = pAutoParallaxChangePerSecond;
 	}
 
-	public void setParallaxScrollFactor(final float pParallaxScrollFactor) {
-		this.mParallaxScrollFactor = pParallaxScrollFactor;
+	public void setScrollParallaxFactor(final float pScrollParalaxFactor) {
+		this.mScrollParallaxFactor = pScrollParalaxFactor;
 	}
 
 	// ===========================================================
@@ -64,7 +64,7 @@ public class ParallaxLayer extends RectangularShape {
 	public void onManagedDraw(GLState pGLState, Camera pCamera) {
 		super.preDraw(pGLState, pCamera);
 
-		final float parallaxValue = this.mParallaxValue;
+		final float parallaxValue = this.mAutoParallaxValue;
 		final float parallaxScrollValue = this.mParallaxScrollValue;
 		final ArrayList<ParallaxLayerEntity> parallaxEntities = this.mParallaxEntities;
 
@@ -81,15 +81,18 @@ public class ParallaxLayer extends RectangularShape {
 	@Override
 	protected void onManagedUpdate(float pSecondsElapsed) {
 
+		/*  
+		 * React for camera movement
+		 */
 		if (mIsScrollable && mCameraPreviousX != this.mCamera.getCenterX()) {
 			mCameraOffsetX = mCameraPreviousX - this.mCamera.getCenterX();
 			mCameraPreviousX = this.mCamera.getCenterX();
 
-			this.mParallaxScrollValue += mCameraOffsetX * this.mParallaxScrollFactor;
+			this.mParallaxScrollValue += mCameraOffsetX * this.mScrollParallaxFactor;
 			mCameraOffsetX = 0;
 		}
 
-		this.mParallaxValue += this.mParallaxChangePerSecond * pSecondsElapsed;
+		this.mAutoParallaxValue += this.mAutoParallaxChangePerSecond * pSecondsElapsed;
 		super.onManagedUpdate(pSecondsElapsed);
 	}
 
