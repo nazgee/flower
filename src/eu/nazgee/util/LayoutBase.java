@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.shape.IAreaShape;
+import org.andengine.util.Constants;
 
 
 
@@ -39,10 +40,21 @@ public class LayoutBase extends Entity {
 
 		public final eRatio x;
 		public final eRatio y;
+		private final float[] mReuse = new float[2];
 
 		private eAnchorPointXY(eRatio pAnchorPointX, eRatio pAnchorPointY) {
 			x = pAnchorPointX;
 			y = pAnchorPointY;
+		}
+
+		public synchronized float getX(IAreaShape pShape) {
+			pShape.convertLocalToSceneCoordinates(x.getValue(pShape.getWidth()), x.getValue(pShape.getHeight()), mReuse);
+			return mReuse[Constants.VERTEX_INDEX_X];
+		}
+
+		public synchronized float getY(IAreaShape pShape) {
+			pShape.convertLocalToSceneCoordinates(x.getValue(pShape.getHeight()), y.getValue(pShape.getHeight()), mReuse);
+			return mReuse[Constants.VERTEX_INDEX_X];
 		}
 	}
 	// ===========================================================
@@ -122,6 +134,36 @@ public class LayoutBase extends Entity {
 		final float offY = pAnchor.y.getValue(pItem.getHeight()) - pVertical.getValue(pItem.getHeight());
 
 		pItem.setPosition(x + offX, y + offY);
+	}
+
+	public static void setItemPositionTopLeft(final IAreaShape pItem, final float x, final float y) {
+		setItemPositionTopLeft(pItem, x, y, eAnchorPointXY.TOP_LEFT);
+	}
+	public static void setItemPositionTopMiddle(final IAreaShape pItem, final float x, final float y) {
+		setItemPositionTopMiddle(pItem, x, y, eAnchorPointXY.TOP_LEFT);
+	}
+	public static void setItemPositionTopRight(final IAreaShape pItem, final float x, final float y) {
+		setItemPositionTopRight(pItem, x, y, eAnchorPointXY.TOP_LEFT);
+	}
+
+	public static void setItemPositionBottomLeft(final IAreaShape pItem, final float x, final float y) {
+		setItemPositionBottomLeft(pItem, x, y, eAnchorPointXY.TOP_LEFT);
+	}
+	public static void setItemPositionBottomMiddle(final IAreaShape pItem, final float x, final float y) {
+		setItemPositionBottomMiddle(pItem, x, y, eAnchorPointXY.TOP_LEFT);
+	}
+	public static void setItemPositionBottomRight(final IAreaShape pItem, final float x, final float y) {
+		setItemPositionBottomRight(pItem, x, y, eAnchorPointXY.TOP_LEFT);
+	}
+
+	public static void setItemPositionCenterLeft(final IAreaShape pItem, final float x, final float y) {
+		setItemPositionCenterLeft(pItem, x, y, eAnchorPointXY.TOP_LEFT);
+	}
+	public static void setItemPositionCenter(final IAreaShape pItem, final float x, final float y) {
+		setItemPositionCenter(pItem, x, y, eAnchorPointXY.TOP_LEFT);
+	}
+	public static void setItemPositionCenterRight(final IAreaShape pItem, final float x, final float y) {
+		setItemPositionCenterRight(pItem, x, y, eAnchorPointXY.TOP_LEFT);
 	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
