@@ -190,7 +190,7 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	public void onScroll(ScrollDetector pScollDetector, int pPointerID,
 			float pDistanceX, float pDistanceY) {
 		mScrollDistanceX += pDistanceX;
-		Log.d(getClass().getSimpleName(), "scrolling! " + pDistanceX + "/" + mScrollDistanceX);
+//		Log.d(getClass().getSimpleName(), "scrolling! " + pDistanceX + "/" + mScrollDistanceX);
 
 		if (Math.abs(mScrollDistanceX) > mTurnPageThreshold) {
 			mClickDetector.reset();
