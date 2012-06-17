@@ -10,7 +10,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import android.content.Context;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.bases.BaseHUD;
+import eu.nazgee.util.LayoutBase;
 import eu.nazgee.util.NineSliceSprite;
+import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 
 public class HudShop extends BaseHUD {
 
@@ -18,6 +20,8 @@ public class HudShop extends BaseHUD {
 	// Constants
 	// ===========================================================
 	protected static int ZINDEX_BG_FRAME = -1;
+	private static int TEXT_LINE_CASH = 0;
+	private static int TEXT_LINE_BASKET = 1;
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -50,32 +54,41 @@ public class HudShop extends BaseHUD {
 		Camera camera = e.getCamera();
 
 		/*
-		 * Prepare done button
+		 * Prepare background
 		 */
-		mButtonDone = new ButtonSprite(0, 0, mTexturesLibrary.getIconCheck(), getVertexBufferObjectManager());
-		attachChild(mButtonDone);
-		this.mButtonDone.setPosition(getW() - mButtonDone.getWidth(), getH() - mButtonDone.getHeight());
-		this.registerTouchArea(mButtonDone);
-
-		/*
-		 * Prepare cash icon
-		 */
-		final float h = getTextCash().getHeight();
-		Sprite cash = new Sprite(0, 0, h, h, mTexturesLibrary.getIconCash(), getVertexBufferObjectManager());
-		attachChild(cash);
-		cash.setPosition(getW() - cash.getWidth(), 0);
-
-		/*
-		 * Prepare basket icon
-		 */
-		Sprite basket = new Sprite(0, 0, h, h, mTexturesLibrary.getIconShop(), getVertexBufferObjectManager());
-		attachChild(basket);
-		basket.setPosition(getW() - basket.getWidth(), cash.getY() + cash.getHeight());
-
 		final NineSliceSprite bg = mTexturesLibrary.getFactory().populateFrameHudShop( 0.33f * getW(), getH(), getVertexBufferObjectManager());
 		bg.setPosition(0.66f * getW(), 0);
 		bg.setZIndex(ZINDEX_BG_FRAME);
 		attachChild(bg);
+
+		/*
+		 * Prepare done button
+		 */
+		mButtonDone = new ButtonSprite(0, 0, mTexturesLibrary.getIconCheck(), getVertexBufferObjectManager());
+		bg.attachChild(mButtonDone);
+		LayoutBase.setParentItemPositionBottomMiddle(mButtonDone, eAnchorPointXY.BOTTOM_MIDDLE);
+		registerTouchArea(mButtonDone);
+
+		/*
+		 * Prepare cash icon
+		 */
+		final float icons_height = getTextCash().getHeight() * 0.7f;
+		final float margin = 15;
+		Sprite cash = new Sprite(0, 0, icons_height, icons_height, mTexturesLibrary.getIconCash(), getVertexBufferObjectManager());
+		bg.attachChild(cash);
+		LayoutBase.setItemPositionTopRight(cash, bg.getWidth() - margin, margin);
+		LayoutBase.setSceneItemPositionCenterRight(getTextCash(), cash, eAnchorPointXY.CENTERED_LEFT);
+
+		/*
+		 * Prepare basket icon
+		 */
+		Sprite basket = new Sprite(0, 0, icons_height, icons_height, mTexturesLibrary.getIconShop(), getVertexBufferObjectManager());
+		bg.attachChild(basket);
+		LayoutBase.setSiblingItemPositionTopRight(basket, cash, eAnchorPointXY.BOTTOM_RIGHT);
+		LayoutBase.setSceneItemPositionCenterRight(getTextBasket(), basket, eAnchorPointXY.CENTERED_LEFT);
+
+		
+
 //		final float gradW = camera.getWidth() * (1 - SceneLevelselector.PAGE_WIDTH_EFFECTIVE);
 //		GradientRectangle grad = new GradientRectangle(camera.getWidth() - gradW, 0, gradW, camera.getHeight(), 5, getVertexBufferObjectManager());
 //		attachChild(grad);
@@ -101,13 +114,16 @@ public class HudShop extends BaseHUD {
 	// Methods
 	// ===========================================================
 	public void setTextBasket(CharSequence pText) {
-		setTextLine(1, pText);
+		setTextLine(TEXT_LINE_BASKET, pText);
 	}
 	public void setTextCash(CharSequence pText) {
-		setTextLine(0, pText);
+		setTextLine(TEXT_LINE_CASH, pText);
 	}
 	public Text getTextCash() {
-		return getTextLine(1);
+		return getTextLine(TEXT_LINE_CASH);
+	}
+	public Text getTextBasket() {
+		return getTextLine(TEXT_LINE_BASKET);
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes

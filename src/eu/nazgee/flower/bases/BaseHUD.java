@@ -63,7 +63,7 @@ public class BaseHUD extends HUDLoadable {
 
 		for (int i = 0; i < mTextLines.length; i++) {
 			mTextLines[i] = new Text(0, i * mResources.FONT_HUD.getLineHeight(), mResources.FONT_HUD, "0", 50,
-					new TextOptions(AutoWrap.LETTERS, getW() * 0.90f, HorizontalAlign.RIGHT, Text.LEADING_DEFAULT),
+					new TextOptions(AutoWrap.LETTERS, getW() * 0.95f, HorizontalAlign.RIGHT, Text.LEADING_DEFAULT),
 					getVertexBufferObjectManager());
 			attachChild(mTextLines[i]);
 		}
