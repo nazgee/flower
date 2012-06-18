@@ -179,7 +179,7 @@ public class SceneGame extends SceneLoadable{
 			/*
 			 *  Create a sprite
 			 */
-			Flower flower = new Flower(0, 0, seed, getVertexBufferObjectManager(), mTexturesLibrary);
+			Flower flower = new Flower(0, 0, seed, getVertexBufferObjectManager(), mTexturesLibrary, mDetacher);
 			flower.setZIndex(-1);
 			flower.setFlowerStateHandler(mFlowerListener);
 
@@ -280,12 +280,15 @@ public class SceneGame extends SceneLoadable{
 	private class FlowerListener implements IFlowerStateHandler {
 		@Override
 		public void onBloomed(Flower pFlower) {
-			SceneGame.this.postRunnable(new FlowerDeactivateRunnable(pFlower));
+			SceneGame.this.postRunnable(new DeactivateFlowerRunnable(pFlower));
 			mSFX.onFlowerBloom();
 			mScore.score.inc(100);
 			mScore.flowers.inc(1);
 			mScore.seeds.dec(1);
 
+			/*
+			 * Create a +100 text popup
+			 */
 			PopupItem item = mPopupPool.obtainPoolItem();
 			item.getEntity().put(pFlower, "+100$");
 			item.getEntity().fxPop(1.5f);
@@ -294,10 +297,13 @@ public class SceneGame extends SceneLoadable{
 
 		@Override
 		public void onFried(Flower pFlower) {
-			SceneGame.this.postRunnable(new FlowerDeactivateRunnable(pFlower));
+			SceneGame.this.postRunnable(new DeactivateFlowerRunnable(pFlower));
 			mSFX.onFlowerFry();
 			mScore.seeds.dec(1);
 
+			/*
+			 * Create a "fried" text popup
+			 */
 			PopupItem item = mPopupPool.obtainPoolItem();
 			item.getEntity().put(pFlower, "fried!");
 			item.getEntity().fxPop(1f);
@@ -312,17 +318,17 @@ public class SceneGame extends SceneLoadable{
 		public void onSunLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew) {
 		}
 
-		class FlowerDeactivateRunnable implements Runnable {
+		class DeactivateFlowerRunnable implements Runnable {
 			private final Flower mFlower;
 
-			public FlowerDeactivateRunnable(Flower mFlower) {
+			public DeactivateFlowerRunnable(Flower mFlower) {
 				this.mFlower = mFlower;
 			}
 
 			@Override
 			public void run() {
 				mFlowers.remove(mFlower);
-				mFlower.stateDropTo(mFlower.getX(), getH());
+//				mFlower.stateDropTo(mFlower.getX(), getH());
 			}
 		}
 	}

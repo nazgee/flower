@@ -41,6 +41,9 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	public ITextureRegion getTree(int pTreeNumber) {
 		return mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.AMBIENT_TREE_01_ID + pTreeNumber);
 	}
+	public ITextureRegion getFlower(int pFlowerNumber) {
+		return mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.FLOWERS_FLOWER0001_ID + pFlowerNumber);
+	}
 
 	public ITextureRegion getSky() {
 		return mSpritesheetParalax.getTexturePackTextureRegionLibrary().get(TexturesParalax.SKY_ID);

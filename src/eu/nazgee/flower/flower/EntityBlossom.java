@@ -1,6 +1,7 @@
 package eu.nazgee.flower.flower;
 
 import org.andengine.entity.modifier.ColorModifier;
+import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.modifier.ScaleModifier;
@@ -27,6 +28,14 @@ public class EntityBlossom extends Sprite {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
+
+	public EntityBlossom(float pX, float pY,
+			ITextureRegion pTextureRegion,
+			VertexBufferObjectManager pVertexBufferObjectManager,
+			final Color pColor) {
+		this(pX, pY, pTextureRegion.getWidth(), pTextureRegion.getHeight(), pTextureRegion, pVertexBufferObjectManager, pColor);
+	}
+
 	public EntityBlossom(float pX, float pY, float pWidth, float pHeight,
 			ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager,
@@ -35,13 +44,6 @@ public class EntityBlossom extends Sprite {
 		this.mColor = pColor;
 	}
 
-	public EntityBlossom(float pX, float pY,
-			ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			final Color pColor) {
-		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		this.mColor = pColor;
-	}
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
@@ -53,18 +55,25 @@ public class EntityBlossom extends Sprite {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	public void animateBloom() {
-		animateBloom(1);
+	synchronized public void animateBloom() {
+		animateBloom(1, 0);
 	}
 
-	private void animateBloom(final float pTime) {
+	synchronized public void animateBloom(final float pDelay) {
+		animateBloom(1, pDelay);
+	}
+
+	private void animateBloom(final float pTime, final float pDelay) {
 		Log.d(getClass().getSimpleName(), "animateBloom();");
 		unregisterEntityModifier(mBloomAnimator);
+		setScale(0);
 		this.mBloomAnimator = new ParallelEntityModifier(
 				new SequenceEntityModifier(
+						new DelayModifier(pDelay),
 						new ColorModifier(pTime, Color.GREEN, mColor)
 						),
 				new SequenceEntityModifier(
+						new DelayModifier(pDelay),
 						new ScaleModifier(pTime, 0, 1f, EaseElasticOut.getInstance())
 						)
 				);

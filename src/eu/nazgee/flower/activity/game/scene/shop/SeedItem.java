@@ -63,7 +63,7 @@ public class SeedItem extends Entity implements ITouchArea{
 			 */
 			this.mSpriteBlossoms = new Sprite[pSeed.col_plant.length];
 			for (int i = 0; i < mSpriteBlossoms.length; i++) {
-				mSpriteBlossoms[i] = new Sprite(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.blossomID), pVBOM);
+				mSpriteBlossoms[i] = new Sprite(0, 0, pTexturesLibrary.getFlower(pSeed.blossomID), pVBOM);
 				mSpriteBlossoms[i].setColor(pSeed.col_plant[i]);
 			}
 	

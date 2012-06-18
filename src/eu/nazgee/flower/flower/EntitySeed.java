@@ -1,13 +1,20 @@
 package eu.nazgee.flower.flower;
 
+import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.ColorModifier;
+import org.andengine.entity.modifier.FadeOutModifier;
+import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.pool.EntityDetachRunnablePoolItem;
+import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
+import org.andengine.util.modifier.IModifier;
+import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 import org.andengine.util.modifier.ease.EaseSineOut;
 
@@ -21,8 +28,9 @@ public class EntitySeed extends Sprite {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private ParallelEntityModifier mSeedAnimator;
+	private IEntityModifier mSeedAnimator;
 	private final Color mColor;
+	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 
 	// ===========================================================
 	// Constructors
@@ -30,17 +38,19 @@ public class EntitySeed extends Sprite {
 	public EntitySeed(float pX, float pY, float pWidth, float pHeight,
 			ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager,
-			final Color pColor) {
+			final Color pColor, final EntityDetachRunnablePoolUpdateHandler pDetacher) {
 		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager);
-		this.mColor = pColor;
+		mColor = pColor;
+		mDetacher = pDetacher;
 	}
 
 	public EntitySeed(float pX, float pY,
 			ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager,
-			final Color pColor) {
+			final Color pColor, final EntityDetachRunnablePoolUpdateHandler pDetacher) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		this.mColor = pColor;
+		mColor = pColor;
+		mDetacher = pDetacher;
 	}
 	// ===========================================================
 	// Getter & Setter
@@ -53,11 +63,24 @@ public class EntitySeed extends Sprite {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	public void animateWater() {
+	public synchronized void animateGrowthAndDetachSelf() {
+		animateGrowth(1);
+		mSeedAnimator.addModifierListener(new IModifierListener<IEntity>() {
+			@Override
+			public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+			}
+			@Override
+			public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+				mDetacher.scheduleDetach(pItem);
+			}
+		});
+	}
+
+	public synchronized void animateWater() {
 		animateWater(1);
 	}
 
-	public void animateFry() {
+	public synchronized void animateFry() {
 		animateFry(0.5f);
 	}
 
@@ -76,7 +99,7 @@ public class EntitySeed extends Sprite {
 	}
 
 	private void animateWater(final float pTime) {
-		Log.d(getClass().getSimpleName(), "animateGrowth();");
+		Log.d(getClass().getSimpleName(), "animateWater();");
 		unregisterEntityModifier(mSeedAnimator);
 		this.mSeedAnimator = new ParallelEntityModifier(
 				new SequenceEntityModifier(
@@ -86,6 +109,13 @@ public class EntitySeed extends Sprite {
 						new ScaleModifier(pTime, 0, 1f, EaseElasticOut.getInstance())
 						)
 				);
+		registerEntityModifier(this.mSeedAnimator);
+	}
+
+	private void animateGrowth(final float pTime) {
+		Log.d(getClass().getSimpleName(), "animateGrowth();");
+		unregisterEntityModifier(mSeedAnimator);
+		this.mSeedAnimator = new FadeOutModifier(pTime);
 		registerEntityModifier(this.mSeedAnimator);
 	}
 	// ===========================================================

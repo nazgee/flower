@@ -8,6 +8,7 @@ import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.color.Color;
 import org.andengine.util.math.MathUtils;
 import org.andengine.util.modifier.ease.EaseBounceOut;
@@ -16,6 +17,7 @@ import org.andengine.util.modifier.ease.EaseLinear;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.game.utils.helpers.Positioner;
+import eu.nazgee.util.LayoutBase;
 
 
 public class Flower extends Entity implements ITouchArea{
@@ -38,25 +40,27 @@ public class Flower extends Entity implements ITouchArea{
 	private boolean isBloomed = false;
 	private boolean isFried = false;
 
-	private final EntityBlossom mEntityBlossom;
+	private final EntityBlossomParent mEntityBlossom;
 	private final EntitySeed mEntitySeed;
 
 	private IEntityModifier mDropModifier;
 	private IFlowerStateHandler mFlowerStateHandler;
 	private final Seed mSeed;
 	private final Color mColor;
+	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public Flower(float pX, float pY, Seed pSeed,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			TexturesLibrary pTexturesLibrary) {
-		this.mSeed = pSeed;
+	public Flower(float pX, float pY, final Seed pSeed,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
+			final TexturesLibrary pTexturesLibrary, final EntityDetachRunnablePoolUpdateHandler pDetacher) {
+		mSeed = pSeed;
+		mDetacher = pDetacher;
 
 		this.mColor = pSeed.getRandomColor(MathUtils.RANDOM);
-		this.mEntityBlossom = new EntityBlossom(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.blossomID), pVertexBufferObjectManager, mColor);
-		this.mEntitySeed = new EntitySeed(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.seedID), pVertexBufferObjectManager, mColor);
+		this.mEntityBlossom = new EntityBlossomParent(0, 0, pTexturesLibrary.getFlower(pSeed.blossomID), pVertexBufferObjectManager, mColor);
+		this.mEntitySeed = new EntitySeed(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.seedID), pVertexBufferObjectManager, mColor, pDetacher);
 
 		attachChild(mEntitySeed);
 
@@ -64,7 +68,7 @@ public class Flower extends Entity implements ITouchArea{
 		mEntitySeed.setZIndex(ZINDEX_SEED);
 
 		Positioner.setCentered(mEntitySeed, this);
-		Positioner.setCenteredTop(mEntityBlossom, mEntitySeed);
+		Positioner.setCentered(mEntityBlossom, this);
 
 		sortChildren();
 	}
@@ -224,6 +228,7 @@ public class Flower extends Entity implements ITouchArea{
 	private void animateBloom() {
 		attachChild(mEntityBlossom);	// blossom was not attached yet, for performance reasons
 		mEntityBlossom.animateBloom();
+		mEntitySeed.animateGrowthAndDetachSelf();
 	}
 
 	private void animateFry() {
