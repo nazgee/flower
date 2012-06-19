@@ -154,7 +154,7 @@ public class SceneGame extends SceneLoadable{
 				mTexturesLibrary.getSunRays(), vbom);
 		attachChild(mSun);
 		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 60, new SunTravelListener());
-		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.25f, 0)), 0);
+		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.1f, 0)), 0);
 
 		/*
 		 * Create layer of Clouds
