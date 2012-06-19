@@ -26,10 +26,6 @@ public class Popup extends Text {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-
-	private final PopupItem mPopupItem;
-	private final EffectModifierListener mEffectModifierListener = new EffectModifierListener();
-
 	public Popup(float pX, float pY, IFont pFont, CharSequence pText,
 			int pCharactersMaximum, TextOptions pTextOptions,
 			VertexBufferObjectManager pVertexBufferObjectManager, PopupItem popupItem) {
@@ -41,6 +37,8 @@ public class Popup extends Text {
 	// ===========================================================
 	// Fields
 	// ===========================================================
+	private final PopupItem mPopupItem;
+	private final EffectModifierListener mEffectModifierListener = new EffectModifierListener();
 	private IEntityModifier mEffectModifier;
 
 	// ===========================================================

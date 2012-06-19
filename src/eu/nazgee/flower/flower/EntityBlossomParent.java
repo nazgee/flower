@@ -19,13 +19,17 @@ public class EntityBlossomParent extends EntityBlossom {
 	// Fields
 	// ===========================================================
 	private float mChildAnimDelay = 0;
-	private static final float CHILDREN_DELAY = 0.5f;
+	private static final int CHILDREN_MIN = 0;
+	private static final int CHILDREN_MAX = 6;
+	private static final float CHILDREN_DELAY_MIN = 0.25f;
+	private static final float CHILDREN_DELAY_MAX = 0.75f;
+	private static final float TEMPORARY_SIZE_RESCALE = 0.7f;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public EntityBlossomParent(float pX, float pY, ITextureRegion pTextureRegion,
 			VertexBufferObjectManager pVertexBufferObjectManager, Color pColor) {
-		this(pX, pY, pTextureRegion.getWidth(), pTextureRegion.getHeight(), pTextureRegion, pVertexBufferObjectManager, pColor);
+		this(pX, pY, pTextureRegion.getWidth() * TEMPORARY_SIZE_RESCALE, pTextureRegion.getHeight() * TEMPORARY_SIZE_RESCALE, pTextureRegion, pVertexBufferObjectManager, pColor);
 
 	}
 
@@ -34,14 +38,14 @@ public class EntityBlossomParent extends EntityBlossom {
 			VertexBufferObjectManager pVertexBufferObjectManager, Color pColor) {
 		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager, 	pColor);
 
-		final int children = (MathUtils.random(0, 6));
+		final int children = (MathUtils.random(CHILDREN_MIN, CHILDREN_MAX));
 		for (int i = 0; i < children; i++) {
-			final float scale = MathUtils.random(0.5f, 0.8f);
-			final float x = MathUtils.random(1f, 1.5f) * getWidth();
-			final float y = MathUtils.random(0.25f, 0.75f) * getHeight();
+			final float scale = MathUtils.random(0.6f, 0.9f);
+			final float x = MathUtils.random(1f, 3f) * getWidth();
+			final float y = MathUtils.random(0.1f, 0.9f) * getHeight();
 
 			EntityBlossom child = new EntityBlossom(0, 0, pWidth * scale, pHeight * scale,
-					pTextureRegion, pVertexBufferObjectManager, pColor);
+					pTextureRegion, pVertexBufferObjectManager, pColor, i+1);
 			LayoutBase.setItemPositionCenter(child, x, y);
 			attachChild(child);
 		}
@@ -57,7 +61,7 @@ public class EntityBlossomParent extends EntityBlossom {
 		this.callOnChildren(new IEntityParameterCallable() {
 			@Override
 			public void call(IEntity pEntity) {
-				mChildAnimDelay += CHILDREN_DELAY;
+				mChildAnimDelay += MathUtils.random(CHILDREN_DELAY_MIN, CHILDREN_DELAY_MAX);
 				EntityBlossom child = (EntityBlossom) pEntity;
 				child.animateBloom(mChildAnimDelay);
 			}
@@ -68,6 +72,25 @@ public class EntityBlossomParent extends EntityBlossom {
 			}
 		});
 	}
+
+	@Override
+	public void setBlossomListener(final IBlossomListener pBlossomListener) {
+		super.setBlossomListener(pBlossomListener);
+
+		this.callOnChildren(new IEntityParameterCallable() {
+			@Override
+			public void call(IEntity pEntity) {
+				EntityBlossom child = (EntityBlossom) pEntity;
+				child.setBlossomListener(pBlossomListener);
+			}
+		}, new IEntityMatcher() {
+			@Override
+			public boolean matches(IEntity pEntity) {
+				return (pEntity instanceof EntityBlossom);
+			}
+		});
+	}
+
 
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces

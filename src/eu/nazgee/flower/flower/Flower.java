@@ -16,6 +16,7 @@ import org.andengine.util.modifier.ease.EaseLinear;
 
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
+import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
 import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.util.LayoutBase;
 
@@ -75,9 +76,6 @@ public class Flower extends Entity implements ITouchArea{
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public Seed getSeed() {
-		return mSeed;
-	}
 
 	public IFlowerStateHandler getFlowerStateHandler() {
 		return mFlowerStateHandler;
@@ -87,6 +85,17 @@ public class Flower extends Entity implements ITouchArea{
 		mFlowerStateHandler = pFlowerStateHandler;
 	}
 
+	public void setBlossomListener(final IBlossomListener pBlossomListener) {
+		mEntityBlossom.setBlossomListener(pBlossomListener);
+	}
+
+	public IBlossomListener getBlossomListener(final IBlossomListener pBlossomListener) {
+		return mEntityBlossom.getBlossomListener();
+	}
+
+	public Seed getSeed() {
+		return mSeed;
+	}
 	public eLevel getLevelSun() {
 		return getLevel(0, 2, mSunLevel);
 	}

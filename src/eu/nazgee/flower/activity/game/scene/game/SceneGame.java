@@ -30,7 +30,9 @@ import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.GameScore;
 import eu.nazgee.flower.activity.game.scene.shop.SeedsShop;
 import eu.nazgee.flower.activity.game.sound.LoadableSFX;
+import eu.nazgee.flower.flower.EntityBlossom;
 import eu.nazgee.flower.flower.Flower;
+import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
 import eu.nazgee.flower.flower.Flower.IFlowerStateHandler;
 import eu.nazgee.flower.flower.Flower.eLevel;
 import eu.nazgee.flower.flower.Seed;
@@ -67,6 +69,7 @@ public class SceneGame extends SceneLoadable{
 
 	private final LinkedList<Flower> mFlowers = new LinkedList<Flower>();
 	private final FlowerListener mFlowerListener = new FlowerListener();
+	private final BlossomListener mBlossomListener = new BlossomListener();
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 	private final SeedsShop mSeedsShop; // TODO change it to list/array/whatever. No need to keep the whole shop here
 	private IGameListener mGameListerner;
@@ -177,11 +180,12 @@ public class SceneGame extends SceneLoadable{
 			Seed seed = mSeedsShop.getSeedsInBasket().get(i);
 
 			/*
-			 *  Create a sprite
+			 *  Create a flower
 			 */
 			Flower flower = new Flower(0, 0, seed, getVertexBufferObjectManager(), mTexturesLibrary, mDetacher);
 			flower.setZIndex(-1);
 			flower.setFlowerStateHandler(mFlowerListener);
+			flower.setBlossomListener(mBlossomListener);
 
 			flower.setPosition(getW() * rand.nextFloat(), getH() * rand.nextFloat());
 			/*
@@ -277,11 +281,14 @@ public class SceneGame extends SceneLoadable{
 		public void onGameFinished();
 	}
 
-	private class FlowerListener implements IFlowerStateHandler {
+	private class BlossomListener implements IBlossomListener {
 		@Override
-		public void onBloomed(Flower pFlower) {
-			SceneGame.this.postRunnable(new DeactivateFlowerRunnable(pFlower));
-			mSFX.onFlowerBloom();
+		public void onBlooming(EntityBlossom pBlossom) {
+			mSFX.onBloom(pBlossom.getBlossomID());
+		}
+
+		@Override
+		public void onBloomed(EntityBlossom pBlossom) {
 			mScore.score.inc(100);
 			mScore.flowers.inc(1);
 			mScore.seeds.dec(1);
@@ -290,14 +297,22 @@ public class SceneGame extends SceneLoadable{
 			 * Create a +100 text popup
 			 */
 			PopupItem item = mPopupPool.obtainPoolItem();
-			item.getEntity().put(pFlower, "+100$");
-			item.getEntity().fxPop(1.5f);
+			item.getEntity().put(pBlossom, "+100$");
+			item.getEntity().fxPop(0.5f);
 			attachChild(item.getEntity());
+		}
+	}
+
+	private class FlowerListener implements IFlowerStateHandler {
+		@Override
+		public void onBloomed(Flower pFlower) {
+			SceneGame.this.postRunnable(new DeactivateFlowerTouchesRunnable(pFlower));
+			//mSFX.onFlowerBloom();
 		}
 
 		@Override
 		public void onFried(Flower pFlower) {
-			SceneGame.this.postRunnable(new DeactivateFlowerRunnable(pFlower));
+			SceneGame.this.postRunnable(new DeactivateFlowerTouchesRunnable(pFlower));
 			mSFX.onFlowerFry();
 			mScore.seeds.dec(1);
 
@@ -318,10 +333,10 @@ public class SceneGame extends SceneLoadable{
 		public void onSunLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew) {
 		}
 
-		class DeactivateFlowerRunnable implements Runnable {
+		class DeactivateFlowerTouchesRunnable implements Runnable {
 			private final Flower mFlower;
 
-			public DeactivateFlowerRunnable(Flower mFlower) {
+			public DeactivateFlowerTouchesRunnable(Flower mFlower) {
 				this.mFlower = mFlower;
 			}
 
@@ -394,7 +409,7 @@ public class SceneGame extends SceneLoadable{
 			final FontManager fontManager = e.getFontManager();
 
 			mFontAtlas = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
-			FONT_POPUP = FontFactory.createFromAsset(fontManager, mFontAtlas, c.getAssets(), Consts.HUD_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
+			FONT_POPUP = FontFactory.createFromAsset(fontManager, mFontAtlas, c.getAssets(), Consts.HUD_FONT, Consts.CAMERA_HEIGHT*0.08f, true, Color.WHITE.getARGBPackedInt());
 			FONT_POPUP.load();
 		}
 
