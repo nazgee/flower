@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.ITouchArea;
@@ -17,22 +18,19 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
+import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
-import org.andengine.util.color.Color;
 import org.andengine.util.math.MathUtils;
 
 import android.content.Context;
-
-import com.badlogic.gdx.math.Vector2;
-
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.GameScore;
 import eu.nazgee.flower.activity.game.scene.shop.SeedsShop;
 import eu.nazgee.flower.activity.game.sound.LoadableSFX;
 import eu.nazgee.flower.flower.EntityBlossom;
-import eu.nazgee.flower.flower.Flower;
 import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
+import eu.nazgee.flower.flower.Flower;
 import eu.nazgee.flower.flower.Flower.IFlowerStateHandler;
 import eu.nazgee.flower.flower.Flower.eLevel;
 import eu.nazgee.flower.flower.Seed;
@@ -43,10 +41,8 @@ import eu.nazgee.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
 import eu.nazgee.flower.sun.Sun;
 import eu.nazgee.flower.sun.Sun.TravelListener;
-import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.SceneLoadable;
-import eu.nazgee.game.utils.track.TrackVector;
 
 public class SceneGame extends SceneLoadable{
 	// ===========================================================
@@ -124,7 +120,7 @@ public class SceneGame extends SceneLoadable{
 		final VertexBufferObjectManager vbom = this.getVertexBufferObjectManager();
 		Random rand = MathUtils.RANDOM;
 
-		SmoothTrackingCamera camera = (SmoothTrackingCamera) e.getCamera();
+		Camera camera = e.getCamera();
 		camera.setHUD(mHud);
 		mScore.setHUD(mHud);
 		mScore.score.set(0);
@@ -154,7 +150,7 @@ public class SceneGame extends SceneLoadable{
 				mTexturesLibrary.getSunRays(), vbom);
 		attachChild(mSun);
 		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 60, new SunTravelListener());
-		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.1f, 0)), 0);
+//		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.1f, 0)), 0);
 
 		/*
 		 * Create layer of Clouds

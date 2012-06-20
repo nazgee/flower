@@ -3,7 +3,6 @@ package eu.nazgee.flower.sun;
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.SingleValueSpanEntityModifier;
-import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -12,7 +11,7 @@ import org.andengine.util.modifier.ease.EaseBounceOut;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
 import eu.nazgee.flower.activity.game.scene.game.Sky;
-import eu.nazgee.game.utils.helpers.Positioner;
+import eu.nazgee.util.LayoutBase;
 
 public class Sunshine extends Entity {
 	// ===========================================================
@@ -42,8 +41,8 @@ public class Sunshine extends Entity {
 		attachChild(mSpriteRayBody);
 		attachChild(mSpriteRayTail);
 
-		Positioner.setCenteredX(mSpriteRayBody, 0);
-		Positioner.setCenteredX(mSpriteRayTail, 0);
+		LayoutBase.setItemPositionCenter(mSpriteRayBody, 0, 0);
+		LayoutBase.setItemPositionCenter(mSpriteRayTail, 0, 0);
 
 		mSpriteRayBody.setScaleCenterY(0);
 
@@ -58,7 +57,7 @@ public class Sunshine extends Entity {
 	// Getter & Setter
 	// ===========================================================
 
-	public void setTargetTop(IAreaShape pTarget, Sky pSky) {
+	public void setTargetTop(IEntity pTarget, Sky pSky) {
 		float target = pSky.getHeightOnSkyTop(pTarget);
 		setTarget(target, pSky);
 	}

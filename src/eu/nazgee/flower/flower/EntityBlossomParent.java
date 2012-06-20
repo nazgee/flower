@@ -5,7 +5,7 @@ import org.andengine.entity.IEntityMatcher;
 import org.andengine.entity.IEntityParameterCallable;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 import org.andengine.util.math.MathUtils;
 
 import eu.nazgee.util.LayoutBase;

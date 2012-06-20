@@ -1,7 +1,7 @@
 package eu.nazgee.flower.activity.game.scene.game;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.util.GLState;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -87,17 +87,17 @@ public class GameBackground extends CameraParallaxBackground {
 		// Fields
 		// ===========================================================
 		private final float mParallaxFactor;
-		private final IAreaShape mAreaShape;
+		private final IEntity mAreaShape;
 		private final float mScatterRatio;
 
 		// ===========================================================
 		// Constructors
 		// ===========================================================
-		public ParallaxEntityScattered(final float pParallaxFactor, final IAreaShape pAreaShape) {
+		public ParallaxEntityScattered(final float pParallaxFactor, final IEntity pAreaShape) {
 			this(pParallaxFactor, pAreaShape, 1);
 		}
 
-		public ParallaxEntityScattered(final float pParallaxFactor, final IAreaShape pAreaShape, final float pScatterRatio) {
+		public ParallaxEntityScattered(final float pParallaxFactor, final IEntity pAreaShape, final float pScatterRatio) {
 			super(pParallaxFactor, pAreaShape);
 			this.mParallaxFactor = pParallaxFactor;
 			this.mAreaShape = pAreaShape;

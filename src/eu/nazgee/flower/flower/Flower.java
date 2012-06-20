@@ -8,8 +8,8 @@ import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
-import org.andengine.util.color.Color;
 import org.andengine.util.math.MathUtils;
 import org.andengine.util.modifier.ease.EaseBounceOut;
 import org.andengine.util.modifier.ease.EaseLinear;
@@ -17,7 +17,6 @@ import org.andengine.util.modifier.ease.EaseLinear;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
-import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.util.LayoutBase;
 
 
@@ -68,8 +67,8 @@ public class Flower extends Entity implements ITouchArea{
 		mEntityBlossom.setZIndex(ZINDEX_BLOSSOM);
 		mEntitySeed.setZIndex(ZINDEX_SEED);
 
-		Positioner.setCentered(mEntitySeed, this);
-		Positioner.setCentered(mEntityBlossom, this);
+		LayoutBase.setSiblingItemPositionCenter(mEntitySeed, this);
+		LayoutBase.setSiblingItemPositionCenter(mEntityBlossom, this);
 
 		sortChildren();
 	}

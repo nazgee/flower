@@ -4,7 +4,7 @@ import org.andengine.opengl.vbo.DrawType;
 import org.andengine.opengl.vbo.HighPerformanceVertexBufferObject;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.opengl.vbo.attribute.VertexBufferObjectAttributes;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import android.util.SparseArray;
 

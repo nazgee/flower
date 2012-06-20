@@ -1,6 +1,6 @@
 package eu.nazgee.util;
 
-import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.IEntity;
 
 public class LayoutLinear extends LayoutBase {
 
@@ -59,7 +59,7 @@ public class LayoutLinear extends LayoutBase {
 		mItemsWidth = 0;
 		mItemsHeight = 0;
 
-		for (IAreaShape item : mItems) {
+		for (IEntity item : mItems) {
 			if (mDirection == eDirection.DIR_HORIZONTAL) {
 				mItemsWidth += item.getWidth();
 				mItemsHeight = item.getHeight() > mItemsHeight ? item.getHeight() : mItemsHeight;
@@ -74,18 +74,18 @@ public class LayoutLinear extends LayoutBase {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public void setItems(IAreaShape... pItems) {
+	public void setItems(IEntity... pItems) {
 		super.setItems(pItems);
 		calculateLayout();
 		mPositionScale = 1;
 		setItemsPositions(mItemsWidth, mItemsHeight);
 	}
 
-	public void setItems(final float pDesiredSize, IAreaShape... pItems) {
+	public void setItems(final float pDesiredSize, IEntity... pItems) {
 		setItems(pDesiredSize, true, pItems);
 	}
 
-	public void setItems(final float pDesiredSize, final boolean pStretch, IAreaShape... pItems) {
+	public void setItems(final float pDesiredSize, final boolean pStretch, IEntity... pItems) {
 		super.setItems(pItems);
 		calculateLayout();
 		boolean squeezingNeeded = pStretch ||
@@ -94,7 +94,7 @@ public class LayoutLinear extends LayoutBase {
 				(pDesiredSize < mItemsHeight);
 
 		if (squeezingNeeded && pItems.length > 1) {
-			final IAreaShape last = pItems[pItems.length-1];
+			final IEntity last = pItems[pItems.length-1];
 			final float lastW = last.getWidth();
 			final float lastH = last.getWidth();
 	
@@ -126,15 +126,15 @@ public class LayoutLinear extends LayoutBase {
 
 		float offset = 0;
 		if (mDirection == eDirection.DIR_HORIZONTAL) {
-			for (IAreaShape item : mItems) {
+			for (IEntity item : mItems) {
 				final float y = baseY + (H - item.getHeight()) * mAlignment.ratio;
-				setItemPositionTopLeft(item, baseX + offset * mPositionScale, y, getItemsAnchor());
+				setItemPositionTopLeft(item, baseX + offset * mPositionScale, y);
 				offset += item.getWidth();
 			}
 		} else {
-			for (IAreaShape item : mItems) {
+			for (IEntity item : mItems) {
 				final float x = baseX + (W - item.getWidth()) * mAlignment.ratio;
-				setItemPositionTopLeft(item, x, baseY + offset * mPositionScale, getItemsAnchor());
+				setItemPositionTopLeft(item, x, baseY + offset * mPositionScale);
 				offset += item.getWidth();
 			}
 		}

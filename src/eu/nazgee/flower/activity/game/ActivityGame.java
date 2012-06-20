@@ -1,8 +1,10 @@
 package eu.nazgee.flower.activity.game;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
@@ -12,10 +14,6 @@ import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
-import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePack;
-import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackLoader;
-import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackTextureRegionLibrary;
-import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.font.FontManager;
@@ -25,9 +23,8 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
-import org.andengine.util.color.Color;
-import org.andengine.util.debug.Debug;
 
 import android.content.Context;
 import android.view.KeyEvent;
@@ -43,9 +40,6 @@ import eu.nazgee.flower.activity.game.scene.shop.SeedItem;
 import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
 import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.level.GameLevel;
-import eu.nazgee.game.utils.engine.camera.SmoothTrackingCamera;
-import eu.nazgee.game.utils.engine.camera.SmootherEmpty;
-import eu.nazgee.game.utils.engine.camera.SmootherLinear;
 import eu.nazgee.game.utils.loadable.ILoadableResourceScene;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.SceneLoader;
@@ -92,7 +86,8 @@ public class ActivityGame extends SimpleBaseGameActivity {
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
-		final SmoothTrackingCamera camera = new SmoothTrackingCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, 0, new SmootherLinear(5), new SmootherEmpty(), new SmootherLinear(5));
+//		final SmoothTrackingCamera camera = new SmoothTrackingCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, 0, new SmootherLinear(5), new SmootherEmpty(), new SmootherLinear(5));
+		final SmoothCamera camera = new SmoothCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, 100, 100, 100);
 		EngineOptions engopts = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT), camera);
 		engopts.getRenderOptions().setDithering(true);
 		engopts.getAudioOptions().setNeedsSound(true);
@@ -193,7 +188,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	}
 
 	@Override
-	public void onDestroyResources() throws Exception {
+	public void onDestroyResources() throws IOException {
 		super.onDestroyResources();
 		mResources.unload();
 		mLoader.unloadEveryYoungerSceneWithGivenCallBack(getEngine().getScene());

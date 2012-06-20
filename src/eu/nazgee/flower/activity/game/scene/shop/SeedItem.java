@@ -11,12 +11,11 @@ import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import eu.nazgee.flower.EntitiesFactory;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.flower.Seed;
-import eu.nazgee.game.utils.helpers.Positioner;
 import eu.nazgee.util.LayoutBase;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 import eu.nazgee.util.LayoutLinear;
@@ -47,7 +46,7 @@ public class SeedItem extends Entity implements ITouchArea{
 		 */
 		this.mSpriteFrame = pFactory.populateFrameSeed(W, H, pVBOM, pSeed.resources.isLocked());
 		attachChild(this.mSpriteFrame);
-		Positioner.setCentered(this.mSpriteFrame, this);
+		LayoutBase.setSiblingItemPositionCenter(this.mSpriteFrame, this);
 
 		/*
 		 * Prepare and attach lock icon if item is locked
@@ -56,7 +55,7 @@ public class SeedItem extends Entity implements ITouchArea{
 			Sprite locked = new Sprite(0, 0, pTexturesLibrary.getIconLocked(), pVBOM);
 			locked.setZIndex(ZINDEX_LOCK);
 			attachChild(locked);
-			Positioner.setCentered(locked, this);
+			LayoutBase.setSiblingItemPositionCenter(locked, this);
 		} else {
 			/* 
 			 * Prepare blossom Sprites
@@ -82,14 +81,14 @@ public class SeedItem extends Entity implements ITouchArea{
 			final Text text = new Text(0, 0, pFont, "$" + pSeed.cost, pVBOM);
 			text.setColor(Color.WHITE);
 			mSpriteFrame.attachChild(text);
-			LayoutBase.setItemPositionBottomRight(text, mSpriteFrame.getWidth(), mSpriteFrame.getHeight(), eAnchorPointXY.TOP_LEFT);
+			LayoutBase.setItemPositionBottomRight(text, mSpriteFrame.getWidth(), mSpriteFrame.getHeight());
 	
 			/*
 			 * Prepare and attach seed sprite
 			 */
 			mSpriteSeed = new Sprite(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.seedID), pVBOM);
 			attachChild(this.mSpriteSeed);
-			Positioner.setCentered(this.mSpriteSeed, this);
+			LayoutBase.setSiblingItemPositionCenter(this.mSpriteSeed, this);
 		}
 
 		setAlpha(1);

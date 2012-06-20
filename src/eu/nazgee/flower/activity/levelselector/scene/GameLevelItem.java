@@ -5,16 +5,16 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.IEntityParameterCallable;
 import org.andengine.entity.scene.ITouchArea;
+import org.andengine.entity.sprite.NineSliceSprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import eu.nazgee.flower.EntitiesFactory;
 import eu.nazgee.flower.level.GameLevel;
-import eu.nazgee.game.utils.helpers.Positioner;
-import eu.nazgee.util.NineSliceSprite;
+import eu.nazgee.util.LayoutBase;
 
 public class GameLevelItem extends Entity implements ITouchArea{
 	// ===========================================================
@@ -39,8 +39,8 @@ public class GameLevelItem extends Entity implements ITouchArea{
 		text.setColor(Color.BLACK);
 		attachChild(mFrame);
 		attachChild(text);
-		Positioner.setCentered(mFrame, this);
-		Positioner.setCentered(text, this);
+		LayoutBase.setSiblingItemPositionCenter(mFrame, this);
+		LayoutBase.setSiblingItemPositionCenter(text, this);
 		setAlpha(1);
 	}
 	// ===========================================================

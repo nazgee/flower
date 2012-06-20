@@ -2,7 +2,7 @@ package eu.nazgee.misc;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.primitive.vbo.HighPerformanceRectangleVertexBufferObject;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.opengl.shader.PositionColorShaderProgram;
 import org.andengine.opengl.shader.constants.ShaderProgramConstants;
 import org.andengine.opengl.util.GLState;
@@ -11,7 +11,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.opengl.vbo.attribute.VertexBufferObjectAttribute;
 import org.andengine.opengl.vbo.attribute.VertexBufferObjectAttributes;
 import org.andengine.opengl.vbo.attribute.VertexBufferObjectAttributesBuilder;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import android.opengl.GLES20;
 import eu.nazgee.misc.GradientVertexBufferObject.eGradientLayout;
@@ -23,7 +23,7 @@ import eu.nazgee.misc.GradientVertexBufferObject.eGradientLayout;
  * @author Nicolas Gramlich
  * @since 12:18:49 - 13.03.2010
  */
-public class GradientRectangle extends RectangularShape {
+public class GradientRectangle extends Shape {
 	// ===========================================================
 	// Constants
 	// ===========================================================

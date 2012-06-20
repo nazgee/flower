@@ -3,11 +3,11 @@ package eu.nazgee.misc;
 import java.util.ArrayList;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.shape.RectangularShape;
+import org.andengine.entity.shape.Shape;
 import org.andengine.opengl.util.GLState;
 import org.andengine.opengl.vbo.IVertexBufferObject;
 
-public class ParallaxLayer extends RectangularShape {
+public class ParallaxLayer extends Shape {
 	// ===========================================================
 	// Constants
 	// ===========================================================

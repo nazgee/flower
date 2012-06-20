@@ -17,13 +17,14 @@ import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.HorizontalAlign;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.align.HorizontalAlign;
+import org.andengine.util.adt.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.HUDLoadable;
+import eu.nazgee.util.LayoutBase;
 
 public class BaseHUD extends HUDLoadable {
 	// ===========================================================
@@ -58,8 +59,10 @@ public class BaseHUD extends HUDLoadable {
 
 	@Override
 	public void onLoad(Engine e, Context c) {
-		mTextFPS = new Text(0, 0, mResources.FONT_HUD, "", 20, getVertexBufferObjectManager());
+		mTextFPS = new Text(0, 0, mResources.FONT_HUD, "fps:59,08", 20, getVertexBufferObjectManager());
 		attachChild(mTextFPS);
+		LayoutBase.setItemPositionTopLeft(mTextFPS, 100, e.getCamera().getHeight());
+//		mTextFPS.setPosition(100, e.getCamera().getHeight());
 
 		for (int i = 0; i < mTextLines.length; i++) {
 			mTextLines[i] = new Text(0, i * mResources.FONT_HUD.getLineHeight(), mResources.FONT_HUD, "0", 50,

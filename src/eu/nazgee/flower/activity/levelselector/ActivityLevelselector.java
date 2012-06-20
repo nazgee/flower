@@ -1,26 +1,14 @@
 package eu.nazgee.flower.activity.levelselector;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.modifier.IEntityModifier;
-import org.andengine.entity.modifier.LoopEntityModifier;
-import org.andengine.entity.modifier.RotationModifier;
-import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.menu.MenuScene;
-import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
-import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.modifier.ease.EaseStrongIn;
-import org.andengine.util.modifier.ease.EaseStrongInOut;
-import org.andengine.util.modifier.ease.EaseStrongOut;
 
 import android.content.Intent;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.ActivityGame;
 import eu.nazgee.flower.activity.levelselector.scene.GameLevelItem;
 import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
-import eu.nazgee.flower.base.buttonscene.SceneButtons;
-import eu.nazgee.flower.base.buttonscene.SceneButtonsMessagebox;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
 import eu.nazgee.flower.bases.BaseActivityPager;
@@ -37,7 +25,7 @@ public class ActivityLevelselector extends BaseActivityPager<GameLevelItem>{
 	// Fields
 	// ===========================================================
 	public TexturesLibrary mTexturesLibrary = new TexturesLibrary();
-	protected SceneButtons mSceneInfo;
+//	protected SceneButtons mSceneInfo;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -64,8 +52,8 @@ public class ActivityLevelselector extends BaseActivityPager<GameLevelItem>{
 					startActivityForResult(i, 0);
 				} else {
 					pItem.registerEntityModifier(ModifiersFactory.shakeYourHead(3, 0.1f, 20));
-					mSceneInfo.load(getEngine(), ActivityLevelselector.this);
-					getEngine().getScene().setChildScene(mSceneInfo, false, false, true);
+//					mSceneInfo.load(getEngine(), ActivityLevelselector.this);
+//					getEngine().getScene().setChildScene(mSceneInfo, false, false, true);
 				}
 			}
 		});
@@ -81,30 +69,30 @@ public class ActivityLevelselector extends BaseActivityPager<GameLevelItem>{
 		super.onCreateResources();
 	}
 
-	@Override
-	protected Scene onCreateScene() {
-		Camera camera = getEngine().getCamera();
-		mSceneInfo = new SceneButtonsMessagebox(camera.getWidth(), camera.getHeight(),
-				camera, getVertexBufferObjectManager(),
-				getStaticResources().FONT_DESC,
-				getStaticResources().FONT_DESC,
-				"This level is not unlocked yet!",
-				mTexturesLibrary,
-				"ok");
-
-		mSceneInfo.loadResources(getEngine(), this);
-		mSceneInfo.setOnMenuItemClickListener(new IOnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
-					float pMenuItemLocalX, float pMenuItemLocalY) {
-				getEngine().getScene().back();
-				mSceneInfo.unload();
-				return true;
-			}
-		});
-
-		return super.onCreateScene();
-	}
+//	@Override
+//	protected Scene onCreateScene() {
+//		Camera camera = getEngine().getCamera();
+//		mSceneInfo = new SceneButtonsMessagebox(camera.getWidth(), camera.getHeight(),
+//				camera, getVertexBufferObjectManager(),
+//				getStaticResources().FONT_DESC,
+//				getStaticResources().FONT_DESC,
+//				"This level is not unlocked yet!",
+//				mTexturesLibrary,
+//				"ok");
+//
+//		mSceneInfo.loadResources(getEngine(), this);
+//		mSceneInfo.setOnMenuItemClickListener(new IOnMenuItemClickListener() {
+//			@Override
+//			public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
+//					float pMenuItemLocalX, float pMenuItemLocalY) {
+//				getEngine().getScene().back();
+//				mSceneInfo.unload();
+//				return true;
+//			}
+//		});
+//
+//		return super.onCreateScene();
+//	}
 
 	
 

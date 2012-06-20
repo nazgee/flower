@@ -1,20 +1,20 @@
 package eu.nazgee.flower.activity.game.scene.over;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.scene.menu.animator.InstantMenuSceneAnimator;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.text.AutoWrap;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.HorizontalAlign;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.align.HorizontalAlign;
+import org.andengine.util.adt.color.Color;
 
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.bases.BaseMenu;
-import eu.nazgee.game.utils.helpers.Positioner;
-import eu.nazgee.util.EmptyMenuAnimator;
+import eu.nazgee.util.LayoutBase;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 import eu.nazgee.util.LayoutLinear;
 import eu.nazgee.util.NineSliceSprite;
@@ -29,27 +29,24 @@ public class MenuGameLost extends BaseMenu {
 			TexturesLibrary pTexturesLibrary) {
 		super(W, H, pCamera, pFont, pVertexBufferObjectManager);
 
-		float[] reuse = new float[2];
 
 		// make sure that nobody is moving menu items around
-		setMenuAnimator(new EmptyMenuAnimator());
+		setMenuSceneAnimator(new InstantMenuSceneAnimator());
 
 		// Prepare background
 		final float bgw = pCamera.getWidth() * 0.8f;
 		final float bgh = pCamera.getHeight() * 1.0f;
 		NineSliceSprite bg = pTexturesLibrary.getFactory().populateFrameOverMenu(bgw, bgh, pVertexBufferObjectManager);
 		attachChild(bg);
-		Positioner.setCentered(bg, pCamera.getWidth()/2, pCamera.getHeight()/2);
+		LayoutBase.setSiblingItemPositionCenter(bg, this);
 
 		// Prepare menu items
 		IMenuItem hometxt = addMenuEntry("main\nmenu", MENU_GO_MAIN, Consts.COLOR_MENU_TEXT_SELECTED, Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
 		IMenuItem homeico = addMenuEntry(pTexturesLibrary.getIconHome(), MENU_GO_MAIN, Color.RED, Color.WHITE, pVertexBufferObjectManager);
-		reuse = bg.convertLocalToSceneCoordinates(bg.getWidth()/2 - homeico.getWidth(), bg.getHeight() - homeico.getHeight(), reuse);
 
 		// Prepare menu items
 		IMenuItem resettxt = addMenuEntry("retry\nlevel", MENU_RESET, Consts.COLOR_MENU_TEXT_SELECTED, Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
 		IMenuItem resetico = addMenuEntry(pTexturesLibrary.getIconRefresh(), MENU_RESET, Color.RED, Color.WHITE, pVertexBufferObjectManager);
-		reuse = bg.convertLocalToSceneCoordinates(bg.getWidth()/2, bg.getHeight() - resetico.getHeight(), reuse);
 
 		/*
 		 *  We will be using layouts, which means we need to reattach menu items

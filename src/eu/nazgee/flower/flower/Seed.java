@@ -3,7 +3,7 @@ package eu.nazgee.flower.flower;
 import java.util.Random;
 
 import org.andengine.engine.Engine;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import android.content.Context;
 import android.content.SharedPreferences;

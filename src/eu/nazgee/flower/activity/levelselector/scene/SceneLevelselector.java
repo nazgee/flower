@@ -3,10 +3,9 @@ package eu.nazgee.flower.activity.levelselector.scene;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.scene.background.Background;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.TexturesLibrary;
@@ -17,8 +16,6 @@ import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
 import eu.nazgee.flower.base.pagerscene.PageRectangleTransparent;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.level.GameLevel;
-import eu.nazgee.misc.ParallaxLayer;
-import eu.nazgee.misc.ParallaxLayerEntity;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 
 public class SceneLevelselector extends ScenePager<GameLevelItem>{

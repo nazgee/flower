@@ -1,5 +1,7 @@
 package eu.nazgee.flower.bases;
 
+import java.io.IOException;
+
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.camera.SmoothCamera;
@@ -20,13 +22,12 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
-import org.andengine.util.color.Color;
 
 import android.content.Context;
 import android.os.Bundle;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.base.buttonscene.SceneButtons;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
@@ -39,7 +40,7 @@ public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGame
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	protected SceneButtons mSceneInfo;
+//	protected SceneButtons mSceneInfo;
 	private ScenePager<T> mScenePager;
 	private final MyResources mResources = new MyResources();
 	// ===========================================================
@@ -98,7 +99,7 @@ public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGame
 	}
 
 	@Override
-	public void onDestroyResources() throws Exception {
+	public void onDestroyResources() throws IOException {
 		super.onDestroyResources();
 		if (mScenePager != null)
 			mScenePager.unload();

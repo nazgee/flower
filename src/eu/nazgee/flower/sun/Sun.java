@@ -10,7 +10,6 @@ import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.modifier.RotationByModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
-import org.andengine.entity.shape.IAreaShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.shader.ShaderProgram;
 import org.andengine.opengl.texture.region.ITextureRegion;
@@ -112,7 +111,7 @@ public class Sun extends Entity {
 	// Getter & Setter
 	// ===========================================================
 
-	public void setRaysTargetTop(IAreaShape pTarget, Sky pSky) {
+	public void setRaysTargetTop(IEntity pTarget, Sky pSky) {
 		mSunshine.setTargetTop(pTarget, pSky);
 	}
 

@@ -1,7 +1,7 @@
 package eu.nazgee.misc;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.IEntity;
 import org.andengine.opengl.util.GLState;
 
 public class ParallaxLayerEntity {
@@ -14,21 +14,21 @@ public class ParallaxLayerEntity {
 		// ===========================================================
 		private final boolean mIsScrollable;
 		private final float mParallaxFactor;
-		private final IAreaShape mAreaShape;
+		private final IEntity mAreaShape;
 		private final float mFrequencyRatio;
 
 		// ===========================================================
 		// Constructors
 		// ===========================================================
-		public ParallaxLayerEntity(final float pParallaxFactor, final IAreaShape pAreaShape) {
+		public ParallaxLayerEntity(final float pParallaxFactor, final IEntity pAreaShape) {
 			this(pParallaxFactor, pAreaShape, false, 1);
 		}
 
-		public ParallaxLayerEntity(final float pParallaxFactor, final IAreaShape pAreaShape, final boolean mIsScrollable) {
+		public ParallaxLayerEntity(final float pParallaxFactor, final IEntity pAreaShape, final boolean mIsScrollable) {
 			this(pParallaxFactor, pAreaShape, mIsScrollable, 1);
 		}
 
-		public ParallaxLayerEntity(final float pParallaxFactor, final IAreaShape pAreaShape, final boolean mIsScrollable, final float pFrequencyRatio) {
+		public ParallaxLayerEntity(final float pParallaxFactor, final IEntity pAreaShape, final boolean mIsScrollable, final float pFrequencyRatio) {
 			this.mParallaxFactor = pParallaxFactor;
 			this.mAreaShape = pAreaShape;
 			this.mIsScrollable = mIsScrollable;

@@ -1,6 +1,6 @@
 package eu.nazgee.flower;
 
-import org.andengine.util.color.Color;
+import org.andengine.util.adt.color.Color;
 
 public @interface Consts {
 	// ===========================================================

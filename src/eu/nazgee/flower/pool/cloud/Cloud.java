@@ -18,7 +18,7 @@ import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.flower.pool.cloud.CloudPool.CloudItem;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
-import eu.nazgee.game.utils.helpers.Positioner;
+import eu.nazgee.util.LayoutBase;
 
 
 public class Cloud extends Sprite {
@@ -73,7 +73,7 @@ public class Cloud extends Sprite {
 			final float W, final float time, CloudListener pTravelListener) {
 
 		mCloudListener = pTravelListener;
-		Positioner.setCentered(this, pX, pY);
+		LayoutBase.setItemPositionCenter(this, pX, pY);
 		unregisterEntityModifier(mTravelModifier);
 		mTravelModifier = new ParallelEntityModifier(
 				new SequenceEntityModifier(

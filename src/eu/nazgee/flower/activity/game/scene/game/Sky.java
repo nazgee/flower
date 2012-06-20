@@ -1,7 +1,7 @@
 package eu.nazgee.flower.activity.game.scene.game;
 
 import org.andengine.entity.Entity;
-import org.andengine.entity.shape.IAreaShape;
+import org.andengine.entity.IEntity;
 import org.andengine.util.Constants;
 
 
@@ -29,12 +29,12 @@ public class Sky {
 		return getHeightOnSky(pos[Constants.VERTEX_INDEX_Y]);
 	}
 
-	public float getHeightOnSkyTop(final IAreaShape pShape) {
+	public float getHeightOnSkyTop(final IEntity pShape) {
 		final float pos[] = pShape.getSceneCenterCoordinates();
 		return getHeightOnSky(pos[Constants.VERTEX_INDEX_Y] - pShape.getHeight()/2);
 	}
 
-	public float getHeightOnSkyBottom(final IAreaShape pShape) {
+	public float getHeightOnSkyBottom(final IEntity pShape) {
 		final float pos[] = pShape.getSceneCenterCoordinates();
 		return getHeightOnSky(pos[Constants.VERTEX_INDEX_Y] + pShape.getHeight()/2);
 	}
