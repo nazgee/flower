@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import org.andengine.entity.IEntity;
 
 import android.util.Log;
+import eu.nazgee.util.LayoutBase;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 
 public class ArrayLayout implements ILayout {
@@ -57,9 +58,11 @@ public class ArrayLayout implements ILayout {
 				}
 				final float baseX = c * cw;
 				final float baseY = r * rh;
-				final float offX = mAnchorPoint.x.ratio * cw;
-				final float offY = mAnchorPoint.y.ratio * rh;
-				pItems.get(i).setPosition(baseX + offX, baseY + offY);
+//				final float offX = mAnchorPoint.x.ratio * cw;
+//				final float offY = mAnchorPoint.y.ratio * rh;
+//				pItems.get(i).setPosition(baseX + offX, baseY + offY);
+				LayoutBase.setItemPositionTopLeft(pItems.get(i), baseX, baseY);
+				Log.d("layout", "x=" + pItems.get(i).getX() + " y=" + pItems.get(i).getY());
 			}
 		}
 

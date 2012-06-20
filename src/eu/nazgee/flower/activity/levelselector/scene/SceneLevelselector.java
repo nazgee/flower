@@ -2,6 +2,7 @@ package eu.nazgee.flower.activity.levelselector.scene;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.SmoothCamera;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
@@ -16,6 +17,7 @@ import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
 import eu.nazgee.flower.base.pagerscene.PageRectangleTransparent;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.level.GameLevel;
+import eu.nazgee.util.LayoutBase;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 
 public class SceneLevelselector extends ScenePager<GameLevelItem>{
@@ -92,6 +94,11 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 //		paralaxLayer.setZIndex(-1);
 
 		camera.setHUD(mHUD);
+		attachChild(new Rectangle(getW()/2, getH()/2, 15, 15, getVertexBufferObjectManager()));
+		attachChild(new Rectangle(getW(), getH(), 15, 15, getVertexBufferObjectManager()));
+		attachChild(new Rectangle(getW(), 0, 15, 15, getVertexBufferObjectManager()));
+		attachChild(new Rectangle(0, getH(), 15, 15, getVertexBufferObjectManager()));
+		attachChild(new Rectangle(0, 0, 15, 15, getVertexBufferObjectManager()));
 
 		sortChildren(false);
 	}
@@ -115,7 +122,8 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 
 	@Override
 	protected void attachPage(final IPage<GameLevelItem> pPage, int pPageNumber) {
-		pPage.setPosition(pPageNumber * getW() * PAGE_WIDTH_EFFECTIVE, 0);
+//		pPage.setPosition(pPageNumber * getW() * PAGE_WIDTH_EFFECTIVE, 0);
+		LayoutBase.setItemPositionTopLeft(pPage, pPageNumber * getW() * PAGE_WIDTH_EFFECTIVE, 0);
 		attachChild(pPage);
 	}
 

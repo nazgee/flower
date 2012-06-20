@@ -115,7 +115,7 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	@Override
 	public void onLoad(Engine e, Context c) {
 		e.getCamera().reset();
-		e.getCamera().setCenter(Consts.CAMERA_WIDTH/2, Consts.CAMERA_HEIGHT/2);
+		e.getCamera().setCenter(getW()/2, getH()/2);
 
 		setOnAreaTouchListener(this);
 		setOnSceneTouchListener(this);
