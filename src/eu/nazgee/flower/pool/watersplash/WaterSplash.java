@@ -5,7 +5,7 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import eu.nazgee.flower.pool.watersplash.WaterSplashPool.WaterSplashItem;
-import eu.nazgee.util.LayoutBase;
+import eu.nazgee.util.Anchor;
 
 
 public class WaterSplash extends AnimatedSprite {
@@ -49,7 +49,7 @@ public class WaterSplash extends AnimatedSprite {
 	 * @param pY
 	 */
 	public synchronized void splat(final float pX, final float pY) {
-		LayoutBase.setPosCenter(this, pX, pY);
+		Anchor.setPosCenter(this, pX, pY);
 		this.animate(100, false, mWaterSplashAnimationListener);
 	}
 	// ===========================================================

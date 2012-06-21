@@ -14,9 +14,9 @@ import org.andengine.util.adt.color.Color;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.bases.BaseMenu;
-import eu.nazgee.util.LayoutBase;
-import eu.nazgee.util.LayoutBase.eAnchorPointXY;
-import eu.nazgee.util.LayoutLinear;
+import eu.nazgee.util.Anchor;
+import eu.nazgee.util.Anchor.eAnchorPointXY;
+import eu.nazgee.util.LinearLayout;
 import eu.nazgee.util.NineSliceSprite;
 
 public class MenuGameLost extends BaseMenu {
@@ -38,7 +38,7 @@ public class MenuGameLost extends BaseMenu {
 		final float bgh = pCamera.getHeight() * 1.0f;
 		NineSliceSprite bg = pTexturesLibrary.getFactory().populateFrameOverMenu(bgw, bgh, pVertexBufferObjectManager);
 		attachChild(bg);
-		LayoutBase.setPosCenterAtParent(bg, eAnchorPointXY.CENTERED);
+		Anchor.setPosCenterAtParent(bg, eAnchorPointXY.CENTERED);
 
 		// Prepare menu items
 		IMenuItem hometxt = addMenuEntry("main\nmenu", MENU_GO_MAIN, Consts.COLOR_MENU_TEXT_SELECTED, Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
@@ -59,17 +59,17 @@ public class MenuGameLost extends BaseMenu {
 
 		final float margin = bg.getHeight() * 0.1f;
 
-		// Use layouts for positioning
-		LayoutLinear homelayout = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.BOTTOM_LEFT, eAnchorPointXY.TOP_LEFT);
-		homelayout.setItems(hometxt, homeico);
-		homelayout.setPosition(margin, bg.getHeight() - margin);
-		bg.attachChild(homelayout);
-
-		// Use layouts for positioning
-		LayoutLinear resetlayout = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.BOTTOM_RIGHT, eAnchorPointXY.TOP_LEFT);
-		resetlayout.setItems(resetico, resettxt);
-		resetlayout.setPosition(bg.getWidth() - margin, bg.getHeight() - margin);
-		bg.attachChild(resetlayout);
+//		// Use layouts for positioning
+//		LayoutLinear homelayout = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.BOTTOM_LEFT, eAnchorPointXY.TOP_LEFT);
+//		homelayout.setItems(hometxt, homeico);
+//		homelayout.setPosition(margin, bg.getHeight() - margin);
+//		bg.attachChild(homelayout);
+//
+//		// Use layouts for positioning
+//		LayoutLinear resetlayout = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.BOTTOM_RIGHT, eAnchorPointXY.TOP_LEFT);
+//		resetlayout.setItems(resetico, resettxt);
+//		resetlayout.setPosition(bg.getWidth() - margin, bg.getHeight() - margin);
+//		bg.attachChild(resetlayout);
 
 		mDescription = new Text(margin/2, 40, pDescFont, "", 1000,
 				new TextOptions(AutoWrap.WORDS, bg.getWidth() - margin,

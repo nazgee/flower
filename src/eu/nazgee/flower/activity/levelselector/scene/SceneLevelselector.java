@@ -17,8 +17,8 @@ import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
 import eu.nazgee.flower.base.pagerscene.PageRectangleTransparent;
 import eu.nazgee.flower.base.pagerscene.ScenePagerBasic;
 import eu.nazgee.flower.level.GameLevel;
-import eu.nazgee.util.LayoutBase;
-import eu.nazgee.util.LayoutBase.eAnchorPointXY;
+import eu.nazgee.util.Anchor;
+import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 public class SceneLevelselector extends ScenePagerBasic<GameLevelItem>{
 
@@ -120,10 +120,10 @@ public class SceneLevelselector extends ScenePagerBasic<GameLevelItem>{
 		base.attachChild(bl);
 		base.attachChild(br);
 
-		LayoutBase.setPosTopLeftAtParent(tl, eAnchorPointXY.TOP_LEFT);
-		LayoutBase.setPosTopRightAtParent(tr, eAnchorPointXY.TOP_RIGHT);
-		LayoutBase.setPosBottomLeftAtParent(bl, eAnchorPointXY.BOTTOM_LEFT);
-		LayoutBase.setPosBottomRightAtParent(br, eAnchorPointXY.BOTTOM_RIGHT);
+		Anchor.setPosTopLeftAtParent(tl, eAnchorPointXY.TOP_LEFT);
+		Anchor.setPosTopRightAtParent(tr, eAnchorPointXY.TOP_RIGHT);
+		Anchor.setPosBottomLeftAtParent(bl, eAnchorPointXY.BOTTOM_LEFT);
+		Anchor.setPosBottomRightAtParent(br, eAnchorPointXY.BOTTOM_RIGHT);
 
 		Rectangle ttl = new Rectangle(0, BH, TW, TH, getVertexBufferObjectManager());
 		Rectangle ttr = new Rectangle(BW, BH, TW, TH, getVertexBufferObjectManager());
@@ -135,10 +135,10 @@ public class SceneLevelselector extends ScenePagerBasic<GameLevelItem>{
 		base.attachChild(bbl);
 		base.attachChild(bbr);
 
-		LayoutBase.setPosTopLeftAtSibling(ttl, tl, eAnchorPointXY.BOTTOM_RIGHT);
-		LayoutBase.setPosTopRightAtSibling(ttr, tr, eAnchorPointXY.BOTTOM_LEFT);
-		LayoutBase.setPosBottomLeftAtSibling(bbl, bl, eAnchorPointXY.TOP_RIGHT);
-		LayoutBase.setPosBottomRightAtSibling(bbr, br, eAnchorPointXY.TOP_LEFT);
+		Anchor.setPosTopLeftAtSibling(ttl, tl, eAnchorPointXY.BOTTOM_RIGHT);
+		Anchor.setPosTopRightAtSibling(ttr, tr, eAnchorPointXY.BOTTOM_LEFT);
+		Anchor.setPosBottomLeftAtSibling(bbl, bl, eAnchorPointXY.TOP_RIGHT);
+		Anchor.setPosBottomRightAtSibling(bbr, br, eAnchorPointXY.TOP_LEFT);
 
 		sortChildren(false);
 	}

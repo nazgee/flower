@@ -17,7 +17,7 @@ import org.andengine.util.modifier.ease.EaseQuadIn;
 import android.util.Log;
 import eu.nazgee.flower.pool.waterdrop.WaterDropPool.WaterDropItem;
 import eu.nazgee.util.Kinematics;
-import eu.nazgee.util.LayoutBase;
+import eu.nazgee.util.Anchor;
 
 
 public class WaterDrop extends Sprite {
@@ -70,7 +70,7 @@ public class WaterDrop extends Sprite {
 	public synchronized void fall(final float pX, final float pY, final float H, IWaterDropListener pWaterDropListener) {
 		final float time = Kinematics.time(GRAVITY_ACCEL, H);
 		mWaterDropListener = pWaterDropListener;
-		LayoutBase.setPosCenter(this, pX, pY);
+		Anchor.setPosCenter(this, pX, pY);
 		unregisterEntityModifier(mDropModifier);
 		mDropModifier = new ParallelEntityModifier(
 				new SequenceEntityModifier(

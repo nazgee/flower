@@ -3,7 +3,7 @@ package eu.nazgee.flower.base.pagerscene;
 import org.andengine.entity.IEntity;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import eu.nazgee.util.LayoutBase;
+import eu.nazgee.util.Anchor;
 
 abstract public class ScenePagerBasic<T extends IEntity> extends ScenePager<T> {
 	// ===========================================================
@@ -54,7 +54,7 @@ abstract public class ScenePagerBasic<T extends IEntity> extends ScenePager<T> {
 	@Override
 	protected void attachPage(IPage<T> pPage, int pPageNumber) {
 		attachChild(pPage);
-		LayoutBase.setPosBottomLeft(pPage, pPageNumber * getEffectiveWidth(), 0);
+		Anchor.setPosBottomLeft(pPage, pPageNumber * getEffectiveWidth(), 0);
 	}
 	// ===========================================================
 	// Methods

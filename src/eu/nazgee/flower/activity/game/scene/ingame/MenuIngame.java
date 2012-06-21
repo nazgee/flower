@@ -7,7 +7,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.bases.BaseMenu;
-import eu.nazgee.util.LayoutBase;
+import eu.nazgee.util.Anchor;
 import eu.nazgee.util.NineSliceSprite;
 
 public class MenuIngame extends BaseMenu {

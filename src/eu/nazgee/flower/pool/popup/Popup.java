@@ -19,7 +19,7 @@ import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
-import eu.nazgee.util.LayoutBase;
+import eu.nazgee.util.Anchor;
 
 
 public class Popup extends Text {
@@ -80,7 +80,7 @@ public class Popup extends Text {
 	}
 
 	public void put(final float pX, final float pY, CharSequence pCharSequence) {
-		LayoutBase.setPosCenter(this, pX, pY);
+		Anchor.setPosCenter(this, pX, pY);
 		setText(pCharSequence);
 	}
 

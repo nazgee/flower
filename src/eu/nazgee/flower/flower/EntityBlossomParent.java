@@ -8,7 +8,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.math.MathUtils;
 
-import eu.nazgee.util.LayoutBase;
+import eu.nazgee.util.Anchor;
 
 public class EntityBlossomParent extends EntityBlossom {
 	// ===========================================================
@@ -46,7 +46,7 @@ public class EntityBlossomParent extends EntityBlossom {
 
 			EntityBlossom child = new EntityBlossom(0, 0, pWidth * scale, pHeight * scale,
 					pTextureRegion, pVertexBufferObjectManager, pColor, i+1);
-			LayoutBase.setPosCenter(child, x, y);
+			Anchor.setPosCenter(child, x, y);
 			attachChild(child);
 		}
 	}

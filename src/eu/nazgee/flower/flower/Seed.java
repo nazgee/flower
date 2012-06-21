@@ -20,7 +20,7 @@ public enum Seed {
 	 * When defined as Enum, seeds are singletons 
 	 */
 	SEED1(1,	100,	0,	TexturesMisc.SEEDS_001_ID,	false,	Color.WHITE, Color.RED),
-	SEED2(2,	100,	1,	TexturesMisc.SEEDS_001_ID,	false, 	Color.WHITE),
+	SEED2(2,	100,	1,	TexturesMisc.SEEDS_001_ID,	false, 	Color.WHITE, Color.YELLOW, Color.BLUE, Color.GREEN, Color.RED),
 	SEED3(3,	100,	2,	TexturesMisc.SEEDS_001_ID,	false, 	Color.WHITE),
 	SEED4(4,	200,	3,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW),
 	SEED5(5,	200,	4,	TexturesMisc.SEEDS_001_ID,	true, 	Color.WHITE, Color.YELLOW),

@@ -7,8 +7,8 @@ import org.andengine.opengl.util.GLState;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import eu.nazgee.flower.TexturesLibrary;
-import eu.nazgee.util.LayoutBase;
-import eu.nazgee.util.LayoutBase.eAnchorPointXY;
+import eu.nazgee.util.Anchor;
+import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 public class GameBackground extends CameraParallaxBackground {
 	// ===========================================================
@@ -40,14 +40,14 @@ public class GameBackground extends CameraParallaxBackground {
 		mGround =			new Sprite(0, 0, pTexturesLibrary.getParalaxGround(), pVBOM);
 		final Sprite bgSky = new Sprite(pCamera.getWidth()/2, pCamera.getHeight()/2, pTexturesLibrary.getSky(), pVBOM);
 
-		LayoutBase.setPosBottomLeft(mGround,	0, y_bottom);
-		LayoutBase.setPosBottomLeft(bg1,		0, y_bottom + SOLID_GND_HEIGHT);
-		LayoutBase.setPosBottomLeft(bg2,		0, y_bottom + SOLID_GND_HEIGHT + h_soild_bg1);
-		LayoutBase.setPosBottomLeft(bg3,		0, eAnchorPointXY.BOTTOM_LEFT.getParentY(bg2) - 10);
-		LayoutBase.setPosBottomLeft(bg4,		0, eAnchorPointXY.BOTTOM_LEFT.getParentY(bg2) - 20);
-		LayoutBase.setPosBottomLeft(tree2,		0, y_bottom + SOLID_GND_HEIGHT);
-		LayoutBase.setPosBottomLeft(tree1,		100, y_bottom + SOLID_GND_HEIGHT);
-		LayoutBase.setPosBottomLeft(tree0,		200, y_bottom + SOLID_GND_HEIGHT);
+		Anchor.setPosBottomLeft(mGround,	0, y_bottom);
+		Anchor.setPosBottomLeft(bg1,		0, y_bottom + SOLID_GND_HEIGHT);
+		Anchor.setPosBottomLeft(bg2,		0, y_bottom + SOLID_GND_HEIGHT + h_soild_bg1);
+		Anchor.setPosBottomLeft(bg3,		0, eAnchorPointXY.BOTTOM_LEFT.getParentY(bg2) - 10);
+		Anchor.setPosBottomLeft(bg4,		0, eAnchorPointXY.BOTTOM_LEFT.getParentY(bg2) - 20);
+		Anchor.setPosBottomLeft(tree2,		0, y_bottom + SOLID_GND_HEIGHT);
+		Anchor.setPosBottomLeft(tree1,		100, y_bottom + SOLID_GND_HEIGHT);
+		Anchor.setPosBottomLeft(tree0,		200, y_bottom + SOLID_GND_HEIGHT);
 
 		attachParallaxEntity(new ParallaxEntity(-0.1f, bgSky));
 		attachParallaxEntity(new ParallaxEntity(-0.2f, bg4));

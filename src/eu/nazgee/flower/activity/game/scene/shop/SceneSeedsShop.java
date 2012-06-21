@@ -24,7 +24,7 @@ import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
-import eu.nazgee.util.LayoutBase.eAnchorPointXY;
+import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 

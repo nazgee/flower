@@ -10,8 +10,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import android.content.Context;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.bases.BaseHUD;
-import eu.nazgee.util.LayoutBase;
-import eu.nazgee.util.LayoutBase.eAnchorPointXY;
+import eu.nazgee.util.Anchor;
+import eu.nazgee.util.Anchor.eAnchorPointXY;
 import eu.nazgee.util.NineSliceSprite;
 
 public class HudShop extends BaseHUD {
@@ -58,7 +58,7 @@ public class HudShop extends BaseHUD {
 		 */
 		final NineSliceSprite bg = mTexturesLibrary.getFactory().populateFrameHudShop( 0.33f * getW(), getH(), getVertexBufferObjectManager());
 //		bg.setPosition(0.66f * getW(), 0);
-		LayoutBase.setPosBottomLeft(bg, 0.66f * getW(), 0);
+		Anchor.setPosBottomLeft(bg, 0.66f * getW(), 0);
 		bg.setZIndex(ZINDEX_BG_FRAME);
 		attachChild(bg);
 
@@ -79,8 +79,8 @@ public class HudShop extends BaseHUD {
 		detachChild(getTextCash());
 		bg.attachChild(getTextCash());
 		bg.attachChild(cash);
-		LayoutBase.setPosTopRight(cash, bg.getWidth() - margin, bg.getHeight() - margin);
-		LayoutBase.setPosCenterRightAtSibling(getTextCash(), cash, eAnchorPointXY.CENTERED_LEFT);
+		Anchor.setPosTopRight(cash, bg.getWidth() - margin, bg.getHeight() - margin);
+		Anchor.setPosCenterRightAtSibling(getTextCash(), cash, eAnchorPointXY.CENTERED_LEFT);
 
 		/*
 		 * Prepare basket icon
@@ -89,8 +89,8 @@ public class HudShop extends BaseHUD {
 		detachChild(getTextBasket());
 		bg.attachChild(getTextBasket());
 		bg.attachChild(basket);
-		LayoutBase.setPosTopMiddleAtSibling(basket, cash, eAnchorPointXY.BOTTOM_MIDDLE);
-		LayoutBase.setPosCenterRightAtSibling(getTextBasket(), basket, eAnchorPointXY.CENTERED_LEFT);
+		Anchor.setPosTopMiddleAtSibling(basket, cash, eAnchorPointXY.BOTTOM_MIDDLE);
+		Anchor.setPosCenterRightAtSibling(getTextBasket(), basket, eAnchorPointXY.CENTERED_LEFT);
 
 		
 

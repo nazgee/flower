@@ -24,7 +24,7 @@ import android.content.Context;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.HUDLoadable;
-import eu.nazgee.util.LayoutBase;
+import eu.nazgee.util.Anchor;
 
 public class BaseHUD extends HUDLoadable {
 	// ===========================================================
@@ -61,7 +61,7 @@ public class BaseHUD extends HUDLoadable {
 	public void onLoad(Engine e, Context c) {
 		mTextFPS = new Text(0, 0, mResources.FONT_HUD, "fps:59,08", 20, getVertexBufferObjectManager());
 		attachChild(mTextFPS);
-		LayoutBase.setPosTopLeft(mTextFPS, 100, e.getCamera().getHeight());
+		Anchor.setPosTopLeft(mTextFPS, 100, e.getCamera().getHeight());
 //		mTextFPS.setPosition(100, e.getCamera().getHeight());
 
 		for (int i = 0; i < mTextLines.length; i++) {

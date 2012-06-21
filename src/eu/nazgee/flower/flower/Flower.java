@@ -17,8 +17,8 @@ import org.andengine.util.modifier.ease.EaseLinear;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
-import eu.nazgee.util.LayoutBase;
-import eu.nazgee.util.LayoutBase.eAnchorPointXY;
+import eu.nazgee.util.Anchor;
+import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 
 public class Flower extends Entity implements ITouchArea{
@@ -68,7 +68,7 @@ public class Flower extends Entity implements ITouchArea{
 		mEntityBlossom.setZIndex(ZINDEX_BLOSSOM);
 		mEntitySeed.setZIndex(ZINDEX_SEED);
 
-		LayoutBase.setPosCenterAtParent(mEntitySeed, eAnchorPointXY.CENTERED);
+		Anchor.setPosCenterAtParent(mEntitySeed, eAnchorPointXY.CENTERED);
 
 		sortChildren();
 	}
@@ -235,7 +235,7 @@ public class Flower extends Entity implements ITouchArea{
 
 	private void animateBloom() {
 		attachChild(mEntityBlossom);	// blossom was not attached yet, for performance reasons
-		LayoutBase.setPosCenterAtParent(mEntityBlossom, eAnchorPointXY.CENTERED);
+		Anchor.setPosCenterAtParent(mEntityBlossom, eAnchorPointXY.CENTERED);
 
 		mEntityBlossom.animateBloom();
 		mEntitySeed.animateGrowthAndDetachSelf();

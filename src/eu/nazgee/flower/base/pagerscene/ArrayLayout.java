@@ -6,8 +6,8 @@ import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 
 import android.util.Log;
-import eu.nazgee.util.LayoutBase;
-import eu.nazgee.util.LayoutBase.eAnchorPointXY;
+import eu.nazgee.util.Anchor;
+import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 public class ArrayLayout implements ILayout {
 	// ===========================================================
@@ -62,7 +62,7 @@ public class ArrayLayout implements ILayout {
 //				final float offX = mAnchorPoint.x.ratio * cw;
 //				final float offY = mAnchorPoint.y.ratio * rh;
 //				pItems.get(i).setPosition(baseX + offX, baseY + offY);
-				LayoutBase.setPosTopLeft(pItems.get(i), baseX, baseY);
+				Anchor.setPosTopLeft(pItems.get(i), baseX, baseY);
 				Log.d("layout", "x=" + pItems.get(i).getX() + " y=" + pItems.get(i).getY());
 			}
 		}

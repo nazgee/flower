@@ -16,9 +16,10 @@ import org.andengine.util.adt.color.Color;
 import eu.nazgee.flower.EntitiesFactory;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.flower.Seed;
-import eu.nazgee.util.LayoutBase;
-import eu.nazgee.util.LayoutBase.eAnchorPointXY;
-import eu.nazgee.util.LayoutLinear;
+import eu.nazgee.util.Anchor;
+import eu.nazgee.util.Anchor.eAnchorPointXY;
+import eu.nazgee.util.LinearLayout;
+import eu.nazgee.util.LinearLayout.eDirection;
 import eu.nazgee.util.ModifiersFactory;
 import eu.nazgee.util.NineSliceSprite;
 
@@ -39,6 +40,7 @@ public class SeedItem extends Entity implements ITouchArea{
 	// Constructors
 	// ===========================================================
 	public SeedItem(Seed pSeed, final float W, final float H, Font pFont, EntitiesFactory pFactory, VertexBufferObjectManager pVBOM, TexturesLibrary pTexturesLibrary) {
+		super(0, 0, W, H);
 		this.mSeed = pSeed;
 
 		/*
@@ -46,7 +48,7 @@ public class SeedItem extends Entity implements ITouchArea{
 		 */
 		this.mSpriteFrame = pFactory.populateFrameSeed(W, H, pVBOM, pSeed.resources.isLocked());
 		attachChild(this.mSpriteFrame);
-		LayoutBase.setPosCenterAtParent(mSpriteFrame, eAnchorPointXY.CENTERED);
+		Anchor.setPosCenterAtParent(mSpriteFrame, eAnchorPointXY.CENTERED);
 
 		/*
 		 * Prepare and attach lock icon if item is locked
@@ -55,7 +57,7 @@ public class SeedItem extends Entity implements ITouchArea{
 			Sprite locked = new Sprite(0, 0, pTexturesLibrary.getIconLocked(), pVBOM);
 			locked.setZIndex(ZINDEX_LOCK);
 			attachChild(locked);
-			LayoutBase.setPosCenterAtParent(locked, eAnchorPointXY.CENTERED);
+			Anchor.setPosCenterAtParent(locked, eAnchorPointXY.CENTERED);
 		} else {
 			/* 
 			 * Prepare blossom Sprites
@@ -70,10 +72,10 @@ public class SeedItem extends Entity implements ITouchArea{
 			 * Layout and attach blossoms in a line of appropriate width,
 			 * and with an anchor pointe set to TOP-MIDDLE
 			 */
-			LayoutLinear blossoms = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.TOP_MIDDLE, eAnchorPointXY.TOP_LEFT);
-			blossoms.setItems(mSpriteFrame.getWidth(), mSpriteBlossoms);
-			blossoms.setPosition(mSpriteFrame.getWidth()/2, 0);
+			LinearLayout blossoms = new LinearLayout(mSpriteFrame.getWidth(), mSpriteFrame.getHeight()/2, eDirection.DIR_HORIZONTAL);
+			blossoms.setItems(true, mSpriteBlossoms);
 			mSpriteFrame.attachChild(blossoms);
+			Anchor.setPosTopLeftAtParent(blossoms, eAnchorPointXY.TOP_LEFT);
 	
 			/*
 			 * Prepare text with seed's price
@@ -81,14 +83,14 @@ public class SeedItem extends Entity implements ITouchArea{
 			final Text text = new Text(0, 0, pFont, "$" + pSeed.cost, pVBOM);
 			text.setColor(Color.WHITE);
 			mSpriteFrame.attachChild(text);
-			LayoutBase.setPosBottomRight(text, mSpriteFrame.getWidth(), mSpriteFrame.getHeight());
+			Anchor.setPosBottomRight(text, mSpriteFrame.getWidth(), mSpriteFrame.getHeight());
 	
 			/*
 			 * Prepare and attach seed sprite
 			 */
 			mSpriteSeed = new Sprite(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.seedID), pVBOM);
 			attachChild(this.mSpriteSeed);
-			LayoutBase.setPosCenterAtParent(mSpriteSeed, eAnchorPointXY.CENTERED);
+			Anchor.setPosCenterAtParent(mSpriteSeed, eAnchorPointXY.CENTERED);
 		}
 
 		setAlpha(1);

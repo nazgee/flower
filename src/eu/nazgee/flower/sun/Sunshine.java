@@ -11,7 +11,7 @@ import org.andengine.util.modifier.ease.EaseBounceOut;
 import org.andengine.util.modifier.ease.IEaseFunction;
 
 import eu.nazgee.flower.activity.game.scene.game.Sky;
-import eu.nazgee.util.LayoutBase;
+import eu.nazgee.util.Anchor;
 
 public class Sunshine extends Entity {
 	// ===========================================================
@@ -41,8 +41,8 @@ public class Sunshine extends Entity {
 		attachChild(mSpriteRayBody);
 		attachChild(mSpriteRayTail);
 
-		LayoutBase.setPosCenter(mSpriteRayBody, 0, 0);
-		LayoutBase.setPosCenter(mSpriteRayTail, 0, 0);
+		Anchor.setPosCenter(mSpriteRayBody, 0, 0);
+		Anchor.setPosCenter(mSpriteRayTail, 0, 0);
 
 		mSpriteRayBody.setScaleCenterY(0);
 
