@@ -6,6 +6,8 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.util.Constants;
 
+import android.util.Log;
+
 
 
 public class LayoutBase extends Entity {
@@ -120,6 +122,7 @@ public class LayoutBase extends Entity {
 		final float offX = (pAnchor.x.getValue(pItem.getWidth()));
 		final float offY = (pAnchor.y.getValue(pItem.getHeight()));
 
+		Log.d("setItemPosition", "x,y" + x + "," + y + "=>" + (x - offX) +","+ (y - offY) + "; w=" + pItem.getWidth() + "; h=" + pItem.getHeight() + "; pItem=" + pItem);
 		pItem.setPosition(x - offX, y - offY);
 	}
 

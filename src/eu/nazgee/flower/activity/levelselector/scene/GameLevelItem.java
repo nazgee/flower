@@ -31,6 +31,7 @@ public class GameLevelItem extends Entity implements ITouchArea{
 	// ===========================================================
 	public GameLevelItem(final GameLevel pLevel, final Font pFont, final EntitiesFactory pFactory,
 			final float W, final float H, VertexBufferObjectManager pVBOM) {
+		super(0, 0, W, H);
 		mLevel = pLevel;
 
 		mFrame = pFactory.populateFrameLevel(W, H, pVBOM, mLevel.resources.isLocked());
@@ -39,8 +40,8 @@ public class GameLevelItem extends Entity implements ITouchArea{
 		text.setColor(Color.BLACK);
 		attachChild(mFrame);
 		attachChild(text);
-		LayoutBase.setSiblingItemPositionCenter(mFrame, this);
-		LayoutBase.setSiblingItemPositionCenter(text, this);
+		LayoutBase.setSiblingItemPositionBottomLeft(mFrame, this);
+		text.setPosition(getWidth()/2, getHeight()/2);
 		setAlpha(1);
 	}
 	// ===========================================================

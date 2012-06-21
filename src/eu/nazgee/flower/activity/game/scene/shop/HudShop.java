@@ -57,7 +57,8 @@ public class HudShop extends BaseHUD {
 		 * Prepare background
 		 */
 		final NineSliceSprite bg = mTexturesLibrary.getFactory().populateFrameHudShop( 0.33f * getW(), getH(), getVertexBufferObjectManager());
-		bg.setPosition(0.66f * getW(), 0);
+//		bg.setPosition(0.66f * getW(), 0);
+		LayoutBase.setItemPositionBottomLeft(bg, 0.66f * getW(), 0);
 		bg.setZIndex(ZINDEX_BG_FRAME);
 		attachChild(bg);
 
@@ -66,7 +67,7 @@ public class HudShop extends BaseHUD {
 		 */
 		mButtonDone = new ButtonSprite(0, 0, mTexturesLibrary.getIconCheck(), getVertexBufferObjectManager());
 		bg.attachChild(mButtonDone);
-		LayoutBase.setParentItemPositionBottomMiddle(mButtonDone, eAnchorPointXY.BOTTOM_MIDDLE);
+		mButtonDone.setPosition(bg.getWidth()/2, mButtonDone.getHeight()/2);
 		registerTouchArea(mButtonDone);
 
 		/*

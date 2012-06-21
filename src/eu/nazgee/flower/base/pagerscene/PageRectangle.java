@@ -39,6 +39,8 @@ public class PageRectangle<T extends IEntity> extends Rectangle implements IPage
 		mLayout.layoutItems(pItems);
 		for (T item : pItems) {
 			attachChild(item);
+			item.attachChild(new Rectangle(0, 0, 5, 5, getVertexBufferObjectManager()));
+			attachChild(new Rectangle(item.getX(), item.getY(), 5, 5, getVertexBufferObjectManager()));
 			mItems.add(item);
 		}
 	}

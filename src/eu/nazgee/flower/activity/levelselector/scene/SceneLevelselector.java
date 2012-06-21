@@ -122,9 +122,12 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 
 	@Override
 	protected void attachPage(final IPage<GameLevelItem> pPage, int pPageNumber) {
-//		pPage.setPosition(pPageNumber * getW() * PAGE_WIDTH_EFFECTIVE, 0);
-		LayoutBase.setItemPositionTopLeft(pPage, pPageNumber * getW() * PAGE_WIDTH_EFFECTIVE, 0);
+		pPage.setPosition(pPageNumber * getW() * PAGE_WIDTH_EFFECTIVE, 0);
 		attachChild(pPage);
+		Rectangle rect = new Rectangle(0, 0, getW() * PAGE_WIDTH_EFFECTIVE, 100, getVertexBufferObjectManager());
+		rect.setColor(Color.RED);
+		pPage.attachChild(rect);
+		LayoutBase.setItemPositionBottomLeft(pPage, pPageNumber * getW() * PAGE_WIDTH_EFFECTIVE, 0);
 	}
 
 	// ===========================================================

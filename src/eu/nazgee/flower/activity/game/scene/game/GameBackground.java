@@ -27,7 +27,7 @@ public class GameBackground extends CameraParallaxBackground {
 	public GameBackground(final Camera pCamera, TexturesLibrary pTexturesLibrary, VertexBufferObjectManager pVBOM) {
 		super(0, 0, 0, pCamera);
 
-		final float y_bottom =	pCamera.getHeight();
+		final float y_bottom =	0;
 		final float h_soild_bg1 = 46;
 
 		final Sprite tree0 =	new Sprite(0, 0, pTexturesLibrary.getTree(0), pVBOM);
@@ -38,16 +38,16 @@ public class GameBackground extends CameraParallaxBackground {
 		final Sprite bg2 =	new Sprite(0, 0, pTexturesLibrary.getParalaxBack2(), pVBOM);
 		final Sprite bg1 =	new Sprite(0, 0, pTexturesLibrary.getParalaxBack1(), pVBOM);
 		mGround =			new Sprite(0, 0, pTexturesLibrary.getParalaxGround(), pVBOM);
-		final Sprite bgSky = new Sprite(0, 0, pTexturesLibrary.getSky(), pVBOM);
+		final Sprite bgSky = new Sprite(pCamera.getWidth()/2, pCamera.getHeight()/2, pTexturesLibrary.getSky(), pVBOM);
 
 		LayoutBase.setItemPositionBottomLeft(mGround,	0, y_bottom);
-		LayoutBase.setItemPositionBottomLeft(bg1,		0, y_bottom - SOLID_GND_HEIGHT);
-		LayoutBase.setItemPositionBottomLeft(bg2,		0, y_bottom - SOLID_GND_HEIGHT - h_soild_bg1);
-		LayoutBase.setItemPositionBottomLeft(bg3,		0, eAnchorPointXY.BOTTOM_LEFT.getSiblingY(bg2) + 10);
-		LayoutBase.setItemPositionBottomLeft(bg4,		0, eAnchorPointXY.BOTTOM_LEFT.getSiblingY(bg2) + 20);
-		LayoutBase.setItemPositionBottomLeft(tree2,		0, y_bottom - SOLID_GND_HEIGHT);
-		LayoutBase.setItemPositionBottomLeft(tree1,		100, y_bottom - SOLID_GND_HEIGHT);
-		LayoutBase.setItemPositionBottomLeft(tree0,		200, y_bottom - SOLID_GND_HEIGHT);
+		LayoutBase.setItemPositionBottomLeft(bg1,		0, y_bottom + SOLID_GND_HEIGHT);
+		LayoutBase.setItemPositionBottomLeft(bg2,		0, y_bottom + SOLID_GND_HEIGHT + h_soild_bg1);
+		LayoutBase.setItemPositionBottomLeft(bg3,		0, eAnchorPointXY.BOTTOM_LEFT.getSiblingY(bg2) - 10);
+		LayoutBase.setItemPositionBottomLeft(bg4,		0, eAnchorPointXY.BOTTOM_LEFT.getSiblingY(bg2) - 20);
+		LayoutBase.setItemPositionBottomLeft(tree2,		0, y_bottom + SOLID_GND_HEIGHT);
+		LayoutBase.setItemPositionBottomLeft(tree1,		100, y_bottom + SOLID_GND_HEIGHT);
+		LayoutBase.setItemPositionBottomLeft(tree0,		200, y_bottom + SOLID_GND_HEIGHT);
 
 		attachParallaxEntity(new ParallaxEntity(-0.1f, bgSky));
 		attachParallaxEntity(new ParallaxEntity(-0.2f, bg4));

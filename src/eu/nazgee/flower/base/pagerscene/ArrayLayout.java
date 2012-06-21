@@ -3,6 +3,7 @@ package eu.nazgee.flower.base.pagerscene;
 import java.util.LinkedList;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.primitive.Rectangle;
 
 import android.util.Log;
 import eu.nazgee.util.LayoutBase;
@@ -57,7 +58,7 @@ public class ArrayLayout implements ILayout {
 					break;
 				}
 				final float baseX = c * cw;
-				final float baseY = r * rh;
+				final float baseY = mH - r * rh;
 //				final float offX = mAnchorPoint.x.ratio * cw;
 //				final float offY = mAnchorPoint.y.ratio * rh;
 //				pItems.get(i).setPosition(baseX + offX, baseY + offY);

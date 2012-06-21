@@ -81,24 +81,24 @@ public class PageMoverCameraZoom<T extends IEntity> extends PageMoverCamera<T> {
 
 		pPage.setAlpha(MathUtils.bringToBounds(0.5f, 1, pValue));
 
-		// we want to have scale center moved around depending on a pValue
-		float pHalfWidth = pPage.getWidth()/2;
-		float pHalfHeight = pPage.getHeight()/2;
-		if (index > 0) {
-			pPage.setScaleCenter(pHalfWidth - pHalfWidth * (1 - pValue), pHalfHeight);
-		} else if (index < 0) {
-			pPage.setScaleCenter(pHalfWidth + pHalfWidth * (1 - pValue), pHalfHeight);
-		} else {
-			if (pDirection > 0) {
-				pPage.setScaleCenter(pHalfWidth - pHalfWidth * (1 - pValue), pHalfHeight);
-			} else {
-				pPage.setScaleCenter(pHalfWidth + pHalfWidth * (1 - pValue), pHalfHeight);
-			}
-		}
-
-		// we want to get linear transition between mScaleWhenOffscreen and 1
-		float a = 1 - mScaleWhenOffscreen;
-		pPage.setScale(mScaleWhenOffscreen + a*pValue);
+//		// we want to have scale center moved around depending on a pValue
+//		float pHalfWidth = pPage.getWidth()/2;
+//		float pHalfHeight = pPage.getHeight()/2;
+//		if (index > 0) {
+//			pPage.setScaleCenter(pHalfWidth - pHalfWidth * (1 - pValue), pHalfHeight);
+//		} else if (index < 0) {
+//			pPage.setScaleCenter(pHalfWidth + pHalfWidth * (1 - pValue), pHalfHeight);
+//		} else {
+//			if (pDirection > 0) {
+//				pPage.setScaleCenter(pHalfWidth - pHalfWidth * (1 - pValue), pHalfHeight);
+//			} else {
+//				pPage.setScaleCenter(pHalfWidth + pHalfWidth * (1 - pValue), pHalfHeight);
+//			}
+//		}
+//
+//		// we want to get linear transition between mScaleWhenOffscreen and 1
+//		float a = 1 - mScaleWhenOffscreen;
+//		pPage.setScale(mScaleWhenOffscreen + a*pValue);
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes

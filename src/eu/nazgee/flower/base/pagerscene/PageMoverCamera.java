@@ -3,6 +3,8 @@ package eu.nazgee.flower.base.pagerscene;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.IEntity;
 
+import eu.nazgee.flower.Consts;
+
 import android.util.Log;
 
 
@@ -20,7 +22,7 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 	// ===========================================================
 	protected final SmoothCamera mCamera;
 	private final float mStepPerPage;
-	private ePageAlignment mPageAlignment = ePageAlignment.PAGE_ALIGN_LEFT;
+	private ePageAlignment mPagesAlignment = ePageAlignment.PAGE_ALIGN_LEFT;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -33,11 +35,11 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 	// Getter & Setter
 	// ===========================================================
 	public ePageAlignment getPageAlignment() {
-		return mPageAlignment;
+		return mPagesAlignment;
 	}
 
 	public void setPageAlignment(ePageAlignment pPageAlignment) {
-		this.mPageAlignment = pPageAlignment;
+		this.mPagesAlignment = pPageAlignment;
 	}
 
 	public float getStepPerPage() {
@@ -50,8 +52,8 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 	@Override
 	public void onProgressSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, float pSwipeDistanceTotal,
 			float pSwipeDistanceDelta) {
-//		Log.d(getClass().getSimpleName(), "onProgressSwipe(); pSwipeDistanceDelta=" + pSwipeDistanceDelta);
-		mCamera.setCenterDirect(mCamera.getCenterX() - pSwipeDistanceDelta, mCamera.getCenterY());
+		Log.d(getClass().getSimpleName(), "onProgressSwipe(); pSwipeDistanceDelta=" + pSwipeDistanceDelta);
+		mCamera.setCenterDirect(mCamera.getCenterX() - pSwipeDistanceDelta, Consts.CAMERA_HEIGHT/2);
 	}
 
 	@Override
@@ -59,18 +61,20 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 //		Log.d(getClass().getSimpleName(), "onCompletedSwipe(); pNewPageIndex=" + pNewPageIndex + "; mStepPerPage=" + getStepPerPage());
 
 		float offset = 0;
-		switch (mPageAlignment) {
+		switch (mPagesAlignment) {
 		case PAGE_ALIGN_LEFT:
-			offset = mCamera.getWidth()/2;
-			break;
-		case PAGE_ALIGN_CENTER:
+//			offset = mCamera.getWidth()/2;
 			offset = getStepPerPage()/2;
 			break;
+		case PAGE_ALIGN_CENTER:
+//			offset = getStepPerPage()/2;
+			offset = mCamera.getWidth()/2;
+			break;
 		case PAGE_ALIGN_RIGHT:
-			offset = (mCamera.getWidth() - getStepPerPage())/2;
+			offset = (mCamera.getWidth() - getStepPerPage()/2);
 			break;
 		}
-		mCamera.setCenter(pNewPageIndex * getStepPerPage() + offset, mCamera.getCenterY());
+		mCamera.setCenter(pNewPageIndex * getStepPerPage() + offset, Consts.CAMERA_HEIGHT/2);
 	}
 	// ===========================================================
 	// Methods

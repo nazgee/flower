@@ -23,7 +23,7 @@ public class MenuIngame extends BaseMenu {
 		final float bgh = pCamera.getHeight() * 1.0f;
 		NineSliceSprite bg = pTexturesLibrary.getFactory().populateFrameIngameMenu(bgw, bgh, pVertexBufferObjectManager);
 		attachChild(bg);
-		LayoutBase.setSiblingItemPositionCenter(bg, this);
+		bg.setPosition(getW()/2, getH()/2);
 
 		// Prepare menu entries
 		addMenuEntry("Reset", MENU_RESET, Consts.COLOR_MENU_TEXT_SELECTED,
