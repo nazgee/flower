@@ -52,10 +52,9 @@ abstract public class ScenePagerBasic<T extends IEntity> extends ScenePager<T> {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	protected void attachPage(IPage pPage, int pPageNumber) {
-		pPage.setPosition(pPageNumber * getW() * getEffectiveWidth(), 0);
+	protected void attachPage(IPage<T> pPage, int pPageNumber) {
 		attachChild(pPage);
-		LayoutBase.setPosBottomLeft(pPage, pPageNumber * getW() * getEffectiveWidth(), 0);
+		LayoutBase.setPosBottomLeft(pPage, pPageNumber * getEffectiveWidth(), 0);
 	}
 	// ===========================================================
 	// Methods
