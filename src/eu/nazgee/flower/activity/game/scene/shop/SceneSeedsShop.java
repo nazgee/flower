@@ -168,7 +168,7 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 	protected IPage<SeedItem> populatePage(int pPageNumber) {
 		IPage<SeedItem> page = new PageRectangleTransparent<SeedItem>(0, 0, getEffectiveWidth(), getH(), 
 				getVertexBufferObjectManager(),
-				new ArrayLayout(getCols(), getRrows(), getEffectiveWidth(), getH(), eAnchorPointXY.CENTERED));
+				new ArrayLayout(getCols(), getRrows(), getEffectiveWidth(), getH()));
 		return page;
 	}
 

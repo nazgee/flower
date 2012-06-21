@@ -156,7 +156,7 @@ public class SceneLevelselector extends ScenePagerBasic<GameLevelItem>{
 	protected IPage<GameLevelItem> populatePage(int pPageNumber) {
 		IPage<GameLevelItem> page = new PageRectangleTransparent<GameLevelItem>(0, 0, getEffectiveWidth(), getH(), 
 				getVertexBufferObjectManager(),
-				new ArrayLayout(getCols(), getRrows(), getEffectiveWidth(), getH(), eAnchorPointXY.CENTERED));
+				new ArrayLayout(getCols(), getRrows(), getEffectiveWidth(), getH()));
 		return page;
 	}
 

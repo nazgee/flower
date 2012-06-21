@@ -53,7 +53,7 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 	public void onProgressSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, float pSwipeDistanceTotal,
 			float pSwipeDistanceDelta) {
 		Log.d(getClass().getSimpleName(), "onProgressSwipe(); pSwipeDistanceDelta=" + pSwipeDistanceDelta);
-		mCamera.setCenterDirect(mCamera.getCenterX() - pSwipeDistanceDelta, Consts.CAMERA_HEIGHT/2);
+		mCamera.setCenterDirect(mCamera.getCenterX() - pSwipeDistanceDelta, mCamera.getHeight()/2);
 	}
 
 	@Override
@@ -63,12 +63,10 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 		float offset = 0;
 		switch (mPagesAlignment) {
 		case PAGE_ALIGN_LEFT:
-//			offset = mCamera.getWidth()/2;
-			offset = getStepPerPage()/2;
+			offset = mCamera.getWidth()/2;
 			break;
 		case PAGE_ALIGN_CENTER:
-//			offset = getStepPerPage()/2;
-			offset = mCamera.getWidth()/2;
+			offset = getStepPerPage()/2;
 			break;
 		case PAGE_ALIGN_RIGHT:
 			offset = (mCamera.getWidth() - getStepPerPage()/2);

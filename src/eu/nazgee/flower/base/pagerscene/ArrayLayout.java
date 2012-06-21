@@ -3,11 +3,9 @@ package eu.nazgee.flower.base.pagerscene;
 import java.util.LinkedList;
 
 import org.andengine.entity.IEntity;
-import org.andengine.entity.primitive.Rectangle;
 
 import android.util.Log;
 import eu.nazgee.util.Anchor;
-import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 public class ArrayLayout implements ILayout {
 	// ===========================================================
@@ -24,22 +22,16 @@ public class ArrayLayout implements ILayout {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	private final eAnchorPointXY mAnchorPoint;
 
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
 	public ArrayLayout(int mRows, int mCols, float mW, float mH) {
-		this(mRows, mCols, mW, mH, eAnchorPointXY.CENTERED);
-	}
-
-	public ArrayLayout(int mRows, int mCols, float mW, float mH, eAnchorPointXY pAnchorPoint) {
 		super();
 		this.mRows = mRows;
 		this.mCols = mCols;
 		this.mW = mW;
 		this.mH = mH;
-		this.mAnchorPoint = pAnchorPoint;
 	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
@@ -59,9 +51,6 @@ public class ArrayLayout implements ILayout {
 				}
 				final float baseX = c * cw;
 				final float baseY = mH - r * rh;
-//				final float offX = mAnchorPoint.x.ratio * cw;
-//				final float offY = mAnchorPoint.y.ratio * rh;
-//				pItems.get(i).setPosition(baseX + offX, baseY + offY);
 				Anchor.setPosTopLeft(pItems.get(i), baseX, baseY);
 				Log.d("layout", "x=" + pItems.get(i).getX() + " y=" + pItems.get(i).getY());
 			}

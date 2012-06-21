@@ -33,7 +33,6 @@ public class SeedItem extends Entity implements ITouchArea{
 	// ===========================================================
 	private final Seed mSeed;
 	private final NineSliceSprite mSpriteFrame;
-	private Sprite mSpriteSeed;
 	private Sprite mSpriteBlossoms[];
 	private IEntityModifier mModifier;
 	// ===========================================================
@@ -73,9 +72,9 @@ public class SeedItem extends Entity implements ITouchArea{
 			 * and with an anchor pointe set to TOP-MIDDLE
 			 */
 			LinearLayout blossoms = new LinearLayout(mSpriteFrame.getWidth(), mSpriteFrame.getHeight()/2, eDirection.DIR_HORIZONTAL);
-			blossoms.setItems(true, mSpriteBlossoms);
+			blossoms.setItems(false, mSpriteBlossoms);
 			mSpriteFrame.attachChild(blossoms);
-			Anchor.setPosTopLeftAtParent(blossoms, eAnchorPointXY.TOP_LEFT);
+			Anchor.setPosTopMiddleAtParent(blossoms, eAnchorPointXY.TOP_MIDDLE);
 	
 			/*
 			 * Prepare text with seed's price
@@ -83,14 +82,7 @@ public class SeedItem extends Entity implements ITouchArea{
 			final Text text = new Text(0, 0, pFont, "$" + pSeed.cost, pVBOM);
 			text.setColor(Color.WHITE);
 			mSpriteFrame.attachChild(text);
-			Anchor.setPosBottomRight(text, mSpriteFrame.getWidth(), mSpriteFrame.getHeight());
-	
-			/*
-			 * Prepare and attach seed sprite
-			 */
-			mSpriteSeed = new Sprite(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.seedID), pVBOM);
-			attachChild(this.mSpriteSeed);
-			Anchor.setPosCenterAtParent(mSpriteSeed, eAnchorPointXY.CENTERED);
+			Anchor.setPosBottomRight(text, mSpriteFrame.getWidth() - 10, 0);
 		}
 
 		setAlpha(1);
