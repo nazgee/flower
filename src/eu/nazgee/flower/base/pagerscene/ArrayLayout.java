@@ -62,7 +62,7 @@ public class ArrayLayout implements ILayout {
 //				final float offX = mAnchorPoint.x.ratio * cw;
 //				final float offY = mAnchorPoint.y.ratio * rh;
 //				pItems.get(i).setPosition(baseX + offX, baseY + offY);
-				LayoutBase.setPositionTopLeft(pItems.get(i), baseX, baseY);
+				LayoutBase.setPosTopLeft(pItems.get(i), baseX, baseY);
 				Log.d("layout", "x=" + pItems.get(i).getX() + " y=" + pItems.get(i).getY());
 			}
 		}

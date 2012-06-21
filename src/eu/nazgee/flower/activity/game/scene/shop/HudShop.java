@@ -11,8 +11,8 @@ import android.content.Context;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.bases.BaseHUD;
 import eu.nazgee.util.LayoutBase;
-import eu.nazgee.util.NineSliceSprite;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
+import eu.nazgee.util.NineSliceSprite;
 
 public class HudShop extends BaseHUD {
 
@@ -58,7 +58,7 @@ public class HudShop extends BaseHUD {
 		 */
 		final NineSliceSprite bg = mTexturesLibrary.getFactory().populateFrameHudShop( 0.33f * getW(), getH(), getVertexBufferObjectManager());
 //		bg.setPosition(0.66f * getW(), 0);
-		LayoutBase.setPositionBottomLeft(bg, 0.66f * getW(), 0);
+		LayoutBase.setPosBottomLeft(bg, 0.66f * getW(), 0);
 		bg.setZIndex(ZINDEX_BG_FRAME);
 		attachChild(bg);
 
@@ -76,17 +76,21 @@ public class HudShop extends BaseHUD {
 		final float icons_height = getTextCash().getHeight() * 0.7f;
 		final float margin = 15;
 		Sprite cash = new Sprite(0, 0, icons_height, icons_height, mTexturesLibrary.getIconCash(), getVertexBufferObjectManager());
+		detachChild(getTextCash());
+		bg.attachChild(getTextCash());
 		bg.attachChild(cash);
-		LayoutBase.setPositionTopRight(cash, bg.getWidth() - margin, margin);
-		LayoutBase.setSceneItemPositionCenterRight(getTextCash(), cash, eAnchorPointXY.CENTERED_LEFT);
+		LayoutBase.setPosTopRight(cash, bg.getWidth() - margin, bg.getHeight() - margin);
+		LayoutBase.setPosCenterRightAtSibling(getTextCash(), cash, eAnchorPointXY.CENTERED_LEFT);
 
 		/*
 		 * Prepare basket icon
 		 */
 		Sprite basket = new Sprite(0, 0, icons_height, icons_height, mTexturesLibrary.getIconShop(), getVertexBufferObjectManager());
+		detachChild(getTextBasket());
+		bg.attachChild(getTextBasket());
 		bg.attachChild(basket);
-		LayoutBase.setSiblingItemPositionTopRight(basket, cash, eAnchorPointXY.BOTTOM_RIGHT);
-		LayoutBase.setSceneItemPositionCenterRight(getTextBasket(), basket, eAnchorPointXY.CENTERED_LEFT);
+		LayoutBase.setPosTopMiddleAtSibling(basket, cash, eAnchorPointXY.BOTTOM_MIDDLE);
+		LayoutBase.setPosCenterRightAtSibling(getTextBasket(), basket, eAnchorPointXY.CENTERED_LEFT);
 
 		
 

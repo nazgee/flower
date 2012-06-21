@@ -38,7 +38,7 @@ public class MenuGameLost extends BaseMenu {
 		final float bgh = pCamera.getHeight() * 1.0f;
 		NineSliceSprite bg = pTexturesLibrary.getFactory().populateFrameOverMenu(bgw, bgh, pVertexBufferObjectManager);
 		attachChild(bg);
-		LayoutBase.setSiblingItemPositionCenter(bg, this);
+		LayoutBase.setPosCenterAtParent(bg, eAnchorPointXY.CENTERED);
 
 		// Prepare menu items
 		IMenuItem hometxt = addMenuEntry("main\nmenu", MENU_GO_MAIN, Consts.COLOR_MENU_TEXT_SELECTED, Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());

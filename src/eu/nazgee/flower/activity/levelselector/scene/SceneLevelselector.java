@@ -100,6 +100,49 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 		attachChild(new Rectangle(0, getH(), 15, 15, getVertexBufferObjectManager()));
 		attachChild(new Rectangle(0, 0, 15, 15, getVertexBufferObjectManager()));
 
+		final float BW = 100;
+		final float BH = 100;
+		final float TW = 20;
+		final float TH = 20;
+
+		Rectangle base = new Rectangle(100, 100, BW, BH, getVertexBufferObjectManager());
+		Rectangle tl = new Rectangle(0, BH, TW, TH, getVertexBufferObjectManager());
+		Rectangle tr = new Rectangle(BW, BH, TW, TH, getVertexBufferObjectManager());
+		Rectangle bl = new Rectangle(0, 0, TW, TH, getVertexBufferObjectManager());
+		Rectangle br = new Rectangle(BW, 0, TW, TH, getVertexBufferObjectManager());
+
+		base.setColor(Color.BLACK);
+		tl.setColor(Color.RED);
+		tr.setColor(Color.GREEN);
+		bl.setColor(Color.BLUE);
+		br.setColor(Color.YELLOW);
+
+		attachChild(base);
+		base.attachChild(tl);
+		base.attachChild(tr);
+		base.attachChild(bl);
+		base.attachChild(br);
+
+		LayoutBase.setPosTopLeftAtParent(tl, eAnchorPointXY.TOP_LEFT);
+		LayoutBase.setPosTopRightAtParent(tr, eAnchorPointXY.TOP_RIGHT);
+		LayoutBase.setPosBottomLeftAtParent(bl, eAnchorPointXY.BOTTOM_LEFT);
+		LayoutBase.setPosBottomRightAtParent(br, eAnchorPointXY.BOTTOM_RIGHT);
+
+		Rectangle ttl = new Rectangle(0, BH, TW, TH, getVertexBufferObjectManager());
+		Rectangle ttr = new Rectangle(BW, BH, TW, TH, getVertexBufferObjectManager());
+		Rectangle bbl = new Rectangle(0, 0, TW, TH, getVertexBufferObjectManager());
+		Rectangle bbr = new Rectangle(BW, 0, TW, TH, getVertexBufferObjectManager());
+
+		base.attachChild(ttl);
+		base.attachChild(ttr);
+		base.attachChild(bbl);
+		base.attachChild(bbr);
+
+		LayoutBase.setPosTopLeftAtSibling(ttl, tl, eAnchorPointXY.BOTTOM_RIGHT);
+		LayoutBase.setPosTopRightAtSibling(ttr, tr, eAnchorPointXY.BOTTOM_LEFT);
+		LayoutBase.setPosBottomLeftAtSibling(bbl, bl, eAnchorPointXY.TOP_RIGHT);
+		LayoutBase.setPosBottomRightAtSibling(bbr, br, eAnchorPointXY.TOP_LEFT);
+
 		sortChildren(false);
 	}
 
@@ -124,10 +167,7 @@ public class SceneLevelselector extends ScenePager<GameLevelItem>{
 	protected void attachPage(final IPage<GameLevelItem> pPage, int pPageNumber) {
 		pPage.setPosition(pPageNumber * getW() * PAGE_WIDTH_EFFECTIVE, 0);
 		attachChild(pPage);
-		Rectangle rect = new Rectangle(0, 0, getW() * PAGE_WIDTH_EFFECTIVE, 100, getVertexBufferObjectManager());
-		rect.setColor(Color.RED);
-		pPage.attachChild(rect);
-		LayoutBase.setPositionBottomLeft(pPage, pPageNumber * getW() * PAGE_WIDTH_EFFECTIVE, 0);
+		LayoutBase.setPosBottomLeft(pPage, pPageNumber * getW() * PAGE_WIDTH_EFFECTIVE, 0);
 	}
 
 	// ===========================================================

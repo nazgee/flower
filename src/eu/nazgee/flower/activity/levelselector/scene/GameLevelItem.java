@@ -15,6 +15,7 @@ import org.andengine.util.adt.color.Color;
 import eu.nazgee.flower.EntitiesFactory;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.util.LayoutBase;
+import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 
 public class GameLevelItem extends Entity implements ITouchArea{
 	// ===========================================================
@@ -40,7 +41,7 @@ public class GameLevelItem extends Entity implements ITouchArea{
 		text.setColor(Color.BLACK);
 		attachChild(mFrame);
 		attachChild(text);
-		LayoutBase.setSiblingItemPositionBottomLeft(mFrame, this);
+		LayoutBase.setPosCenterAtParent(mFrame, eAnchorPointXY.CENTERED);
 		text.setPosition(getWidth()/2, getHeight()/2);
 		setAlpha(1);
 	}

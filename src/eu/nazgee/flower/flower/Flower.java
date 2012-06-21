@@ -18,6 +18,7 @@ import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
 import eu.nazgee.util.LayoutBase;
+import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 
 
 public class Flower extends Entity implements ITouchArea{
@@ -67,8 +68,8 @@ public class Flower extends Entity implements ITouchArea{
 		mEntityBlossom.setZIndex(ZINDEX_BLOSSOM);
 		mEntitySeed.setZIndex(ZINDEX_SEED);
 
-		LayoutBase.setSiblingItemPositionCenter(mEntitySeed, this);
-		LayoutBase.setSiblingItemPositionCenter(mEntityBlossom, this);
+		LayoutBase.setPosCenterAtParent(mEntitySeed, eAnchorPointXY.CENTERED);
+		LayoutBase.setPosCenterAtParent(mEntityBlossom, eAnchorPointXY.CENTERED);
 
 		sortChildren();
 	}

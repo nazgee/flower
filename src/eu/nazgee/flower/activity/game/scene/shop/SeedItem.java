@@ -46,7 +46,7 @@ public class SeedItem extends Entity implements ITouchArea{
 		 */
 		this.mSpriteFrame = pFactory.populateFrameSeed(W, H, pVBOM, pSeed.resources.isLocked());
 		attachChild(this.mSpriteFrame);
-		LayoutBase.setSiblingItemPositionCenter(this.mSpriteFrame, this);
+		LayoutBase.setPosCenterAtParent(mSpriteFrame, eAnchorPointXY.CENTERED);
 
 		/*
 		 * Prepare and attach lock icon if item is locked
@@ -55,7 +55,7 @@ public class SeedItem extends Entity implements ITouchArea{
 			Sprite locked = new Sprite(0, 0, pTexturesLibrary.getIconLocked(), pVBOM);
 			locked.setZIndex(ZINDEX_LOCK);
 			attachChild(locked);
-			LayoutBase.setSiblingItemPositionCenter(locked, this);
+			LayoutBase.setPosCenterAtParent(locked, eAnchorPointXY.CENTERED);
 		} else {
 			/* 
 			 * Prepare blossom Sprites
@@ -81,14 +81,14 @@ public class SeedItem extends Entity implements ITouchArea{
 			final Text text = new Text(0, 0, pFont, "$" + pSeed.cost, pVBOM);
 			text.setColor(Color.WHITE);
 			mSpriteFrame.attachChild(text);
-			LayoutBase.setPositionBottomRight(text, mSpriteFrame.getWidth(), mSpriteFrame.getHeight());
+			LayoutBase.setPosBottomRight(text, mSpriteFrame.getWidth(), mSpriteFrame.getHeight());
 	
 			/*
 			 * Prepare and attach seed sprite
 			 */
 			mSpriteSeed = new Sprite(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.seedID), pVBOM);
 			attachChild(this.mSpriteSeed);
-			LayoutBase.setSiblingItemPositionCenter(this.mSpriteSeed, this);
+			LayoutBase.setPosCenterAtParent(mSpriteSeed, eAnchorPointXY.CENTERED);
 		}
 
 		setAlpha(1);

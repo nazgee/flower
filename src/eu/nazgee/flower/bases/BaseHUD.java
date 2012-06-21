@@ -61,7 +61,7 @@ public class BaseHUD extends HUDLoadable {
 	public void onLoad(Engine e, Context c) {
 		mTextFPS = new Text(0, 0, mResources.FONT_HUD, "fps:59,08", 20, getVertexBufferObjectManager());
 		attachChild(mTextFPS);
-		LayoutBase.setPositionTopLeft(mTextFPS, 100, e.getCamera().getHeight());
+		LayoutBase.setPosTopLeft(mTextFPS, 100, e.getCamera().getHeight());
 //		mTextFPS.setPosition(100, e.getCamera().getHeight());
 
 		for (int i = 0; i < mTextLines.length; i++) {

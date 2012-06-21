@@ -50,30 +50,43 @@ public class LayoutBase extends Entity {
 			y = pAnchorPointY;
 		}
 
+		public synchronized float getObjectX(final IEntity pEntity) {
+			return x.getValue(pEntity.getWidth());
+		}
+
+		public synchronized float getObjectY(final IEntity pEntity) {
+			return y.getValue(pEntity.getHeight());
+		}
+
+		public synchronized float getParentX(final IEntity pEntity) {
+			return pEntity.getX() - getOffsetXFromDefault(pEntity);
+		}
+
+		public synchronized float getParentY(final IEntity pEntity) {
+			return pEntity.getY() - getOffsetYFromDefault(pEntity);
+		}
+
+		public synchronized float getOffsetXFromDefault(final IEntity pEntity) {
+			return eAnchorPointXY.DEFAULT.getObjectX(pEntity) - getObjectX(pEntity);
+		}
+
+		public synchronized float getOffsetYFromDefault(final IEntity pEntity) {
+			return eAnchorPointXY.DEFAULT.getObjectY(pEntity) - getObjectY(pEntity);
+		}
+
 		public synchronized float getSceneX(IEntity pShape) {
-			pShape.convertLocalCoordinatesToSceneCoordinates(x.getValue(pShape.getWidth()), x.getValue(pShape.getHeight()), mReuse);
+			pShape.convertLocalCoordinatesToSceneCoordinates(getObjectX(pShape), getObjectY(pShape), mReuse);
 			return mReuse[Constants.VERTEX_INDEX_X];
 		}
 
 		public synchronized float getSceneY(IEntity pShape) {
-			pShape.convertLocalCoordinatesToSceneCoordinates(x.getValue(pShape.getWidth()), y.getValue(pShape.getHeight()), mReuse);
+			pShape.convertLocalCoordinatesToSceneCoordinates(getObjectX(pShape), getObjectY(pShape), mReuse);
 			return mReuse[Constants.VERTEX_INDEX_Y];
 		}
 
-		public synchronized float getEntityAnchorX(IEntity pShape) {
-			return x.getValue(pShape.getWidth());
-		}
-
-		public synchronized float getEntityAnchorY(IEntity pShape) {
-			return y.getValue(pShape.getHeight());
-		}
-
-		public synchronized float getSiblingX(IEntity pShape) {
-			return pShape.getX() + getEntityAnchorX(pShape);
-		}
-
-		public synchronized float getSiblingY(IEntity pShape) {
-			return pShape.getY() + getEntityAnchorY(pShape);
+		public synchronized float[] getSceneXY(IEntity pShape, float[] pReuse) {
+			pShape.convertLocalCoordinatesToSceneCoordinates(getObjectX(pShape), getObjectY(pShape), pReuse);
+			return pReuse;
 		}
 	}
 	// ===========================================================
@@ -119,15 +132,9 @@ public class LayoutBase extends Entity {
 	 * @param pRequestedAnchor anchor point of given item
 	 * @param will NOT work correctly for rotated items!
 	 */
-	public static void setPosition(final IEntity pItem, final float x, final float y, final eAnchorPointXY pRequestedAnchor) {
-		final float requestedAnchorX = pRequestedAnchor.getEntityAnchorX(pItem);
-		final float requestedAnchorY = pRequestedAnchor.getEntityAnchorY(pItem);
-
-		final float defaultAnchorX = eAnchorPointXY.DEFAULT.getEntityAnchorX(pItem);
-		final float defaultAnchorY = eAnchorPointXY.DEFAULT.getEntityAnchorY(pItem);
-
-		final float offsetX = requestedAnchorX - defaultAnchorX;
-		final float offsetY = requestedAnchorY - defaultAnchorY;
+	public static void setPos(final IEntity pItem, final float x, final float y, final eAnchorPointXY pRequestedAnchor) {
+		final float offsetX = pRequestedAnchor.getOffsetXFromDefault(pItem);
+		final float offsetY = pRequestedAnchor.getOffsetYFromDefault(pItem);
 
 		Log.d("setItemPosition", x + "," + y + "->" + (x - offsetX) +","+ (y - offsetY) + "; w=" + pItem.getWidth() + "; h=" + pItem.getHeight() + "; pItem=" + pItem);
 		pItem.setPosition(x + offsetX, y + offsetY);
@@ -137,156 +144,235 @@ public class LayoutBase extends Entity {
 	 * some shortcuts fo setting a position without suppling AnchorPoint- appropriate anchor point
 	 * is used depending on the name of the function called
 	 */
-	public static void setPositionTopLeft(final IEntity pItem, final float x, final float y) {
-		setPosition(pItem, x, y, eAnchorPointXY.TOP_LEFT);
+	public static void setPosTopLeft(final IEntity pItem, final float x, final float y) {
+		setPos(pItem, x, y, eAnchorPointXY.TOP_LEFT);
 	}
-	public static void setPositionTopMiddle(final IEntity pItem, final float x, final float y) {
-		setPosition(pItem, x, y, eAnchorPointXY.TOP_MIDDLE);
+	public static void setPosTopMiddle(final IEntity pItem, final float x, final float y) {
+		setPos(pItem, x, y, eAnchorPointXY.TOP_MIDDLE);
 	}
-	public static void setPositionTopRight(final IEntity pItem, final float x, final float y) {
-		setPosition(pItem, x, y, eAnchorPointXY.TOP_RIGHT);
+	public static void setPosTopRight(final IEntity pItem, final float x, final float y) {
+		setPos(pItem, x, y, eAnchorPointXY.TOP_RIGHT);
 	}
-	public static void setPositionBottomLeft(final IEntity pItem, final float x, final float y) {
-		setPosition(pItem, x, y, eAnchorPointXY.BOTTOM_LEFT);
+	public static void setPosBottomLeft(final IEntity pItem, final float x, final float y) {
+		setPos(pItem, x, y, eAnchorPointXY.BOTTOM_LEFT);
 	}
-	public static void setPositionBottomMiddle(final IEntity pItem, final float x, final float y) {
-		setPosition(pItem, x, y, eAnchorPointXY.BOTTOM_MIDDLE);
+	public static void setPosBottomMiddle(final IEntity pItem, final float x, final float y) {
+		setPos(pItem, x, y, eAnchorPointXY.BOTTOM_MIDDLE);
 	}
-	public static void setPositionBottomRight(final IEntity pItem, final float x, final float y) {
-		setPosition(pItem, x, y, eAnchorPointXY.BOTTOM_RIGHT);
+	public static void setPosBottomRight(final IEntity pItem, final float x, final float y) {
+		setPos(pItem, x, y, eAnchorPointXY.BOTTOM_RIGHT);
 	}
-	public static void setPositionCenterLeft(final IEntity pItem, final float x, final float y) {
-		setPosition(pItem, x, y, eAnchorPointXY.CENTERED_LEFT);
+	public static void setPosCenterLeft(final IEntity pItem, final float x, final float y) {
+		setPos(pItem, x, y, eAnchorPointXY.CENTERED_LEFT);
 	}
-	public static void setPositionCenter(final IEntity pItem, final float x, final float y) {
-		setPosition(pItem, x, y, eAnchorPointXY.CENTERED);
+	public static void setPosCenter(final IEntity pItem, final float x, final float y) {
+		setPos(pItem, x, y, eAnchorPointXY.CENTERED);
 	}
-	public static void setPositionCenterRight(final IEntity pItem, final float x, final float y) {
-		setPosition(pItem, x, y, eAnchorPointXY.CENTERED_RIGHT);
-	}
-
-
-	public static void setSiblingItemPositionTopLeft(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
-		setPositionTopLeft(pItem, pAnchor.getSiblingX(pSibling), pAnchor.getSiblingY(pSibling));
-	}
-	public static void setSiblingItemPositionTopMiddle(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
-		setPositionTopMiddle(pItem, pAnchor.getSiblingX(pSibling), pAnchor.getSiblingY(pSibling));
-	}
-	public static void setSiblingItemPositionTopRight(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
-		setPositionTopRight(pItem, pAnchor.getSiblingX(pSibling), pAnchor.getSiblingY(pSibling));
+	public static void setPosCenterRight(final IEntity pItem, final float x, final float y) {
+		setPos(pItem, x, y, eAnchorPointXY.CENTERED_RIGHT);
 	}
 
-	public static void setSiblingItemPositionBottomLeft(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
-		setPositionBottomLeft(pItem, pAnchor.getSiblingX(pSibling), pAnchor.getSiblingY(pSibling));
+	/*
+	 * some shortcuts for setting a position relative to parent of the given entity
+	 */
+	public static void setPosAtParent(final IEntity pItem, final eAnchorPointXY pAnchorInEntity, final eAnchorPointXY pAnchorInParent) {
+		final IEntity parent = pItem.getParent();
+		final float x = pAnchorInParent.getObjectX(parent);
+		final float y = pAnchorInParent.getObjectY(parent);
+		Log.d("setPositionAtParent", x + "," + y + "; pAnchorInEntity=" + pAnchorInEntity.toString() + "; pAnchorInParent=" + pAnchorInParent.toString());
+		setPos(pItem, x, y, pAnchorInEntity);
 	}
-	public static void setSiblingItemPositionBottomMiddle(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
-		setPositionBottomMiddle(pItem, pAnchor.getSiblingX(pSibling), pAnchor.getSiblingY(pSibling));
+	public static void setPosTopLeftAtParent(final IEntity pItem, final eAnchorPointXY pAnchorInParent) {
+		setPosAtParent(pItem, eAnchorPointXY.TOP_LEFT, pAnchorInParent);
 	}
-	public static void setSiblingItemPositionBottomRight(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
-		setPositionBottomRight(pItem, pAnchor.getSiblingX(pSibling), pAnchor.getSiblingY(pSibling));
+	public static void setPosTopMiddleAtParent(final IEntity pItem, final eAnchorPointXY pAnchorInParent) {
+		setPosAtParent(pItem, eAnchorPointXY.TOP_MIDDLE, pAnchorInParent);
 	}
-
-	public static void setSiblingItemPositionCenterLeft(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
-		setPositionCenterLeft(pItem, pAnchor.getSiblingX(pSibling), pAnchor.getSiblingY(pSibling));
+	public static void setPosTopRightAtParent(final IEntity pItem, final eAnchorPointXY pAnchorInParent) {
+		setPosAtParent(pItem, eAnchorPointXY.TOP_RIGHT, pAnchorInParent);
 	}
-	public static void setSiblingItemPositionCenter(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
-		setPositionCenter(pItem, pAnchor.getSiblingX(pSibling), pAnchor.getSiblingY(pSibling));
+	public static void setPosBottomLeftAtParent(final IEntity pItem, final eAnchorPointXY pAnchorInParent) {
+		setPosAtParent(pItem, eAnchorPointXY.BOTTOM_LEFT, pAnchorInParent);
 	}
-	public static void setSiblingItemPositionCenterRight(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
-		setPositionCenterRight(pItem, pAnchor.getSiblingX(pSibling), pAnchor.getSiblingY(pSibling));
+	public static void setPosBottomMiddleAtParent(final IEntity pItem, final eAnchorPointXY pAnchorInParent) {
+		setPosAtParent(pItem, eAnchorPointXY.BOTTOM_MIDDLE, pAnchorInParent);
 	}
-
-	public static void setSiblingItemPositionTopLeft(final IEntity pItem, final IEntity pSibling) {
-		setPositionTopLeft(pItem, eAnchorPointXY.DEFAULT.getSiblingX(pSibling), eAnchorPointXY.DEFAULT.getSiblingY(pSibling));
+	public static void setPosBottomRightAtParent(final IEntity pItem, final eAnchorPointXY pAnchorInParent) {
+		setPosAtParent(pItem, eAnchorPointXY.BOTTOM_RIGHT, pAnchorInParent);
 	}
-	public static void setSiblingItemPositionTopMiddle(final IEntity pItem, final IEntity pSibling) {
-		setPositionTopMiddle(pItem, eAnchorPointXY.DEFAULT.getSiblingX(pSibling), eAnchorPointXY.DEFAULT.getSiblingY(pSibling));
+	public static void setPosCenterLeftAtParent(final IEntity pItem, final eAnchorPointXY pAnchorInParent) {
+		setPosAtParent(pItem, eAnchorPointXY.CENTERED_LEFT, pAnchorInParent);
 	}
-	public static void setSiblingItemPositionTopRight(final IEntity pItem, final IEntity pSibling) {
-		setPositionTopRight(pItem, eAnchorPointXY.DEFAULT.getSiblingX(pSibling), eAnchorPointXY.DEFAULT.getSiblingY(pSibling));
+	public static void setPosCenterAtParent(final IEntity pItem, final eAnchorPointXY pAnchorInParent) {
+		setPosAtParent(pItem, eAnchorPointXY.CENTERED, pAnchorInParent);
 	}
-
-	public static void setSiblingItemPositionBottomLeft(final IEntity pItem, final IEntity pSibling) {
-		setPositionBottomLeft(pItem, eAnchorPointXY.DEFAULT.getSiblingX(pSibling), eAnchorPointXY.DEFAULT.getSiblingY(pSibling));
-	}
-	public static void setSiblingItemPositionBottomMiddle(final IEntity pItem, final IEntity pSibling) {
-		setPositionBottomMiddle(pItem, eAnchorPointXY.DEFAULT.getSiblingX(pSibling), eAnchorPointXY.DEFAULT.getSiblingY(pSibling));
-	}
-	public static void setSiblingItemPositionBottomRight(final IEntity pItem, final IEntity pSibling) {
-		setPositionBottomRight(pItem, eAnchorPointXY.DEFAULT.getSiblingX(pSibling), eAnchorPointXY.DEFAULT.getSiblingY(pSibling));
+	public static void setPosCenterRightAtParent(final IEntity pItem, final eAnchorPointXY pAnchorInParent) {
+		setPosAtParent(pItem, eAnchorPointXY.CENTERED_RIGHT, pAnchorInParent);
 	}
 
-	public static void setSiblingItemPositionCenterLeft(final IEntity pItem, final IEntity pSibling) {
-		setPositionCenterLeft(pItem, eAnchorPointXY.DEFAULT.getSiblingX(pSibling), eAnchorPointXY.DEFAULT.getSiblingY(pSibling));
+	/*
+	 * some shortcuts for setting a position relative to the sibling of the given entity
+	 */
+	public static void setPosAtSibling(final IEntity pEntity, final eAnchorPointXY pAnchorInEntity, final IEntity pSibling, final eAnchorPointXY pAnchorInSibling) {
+		// Check whether developer knows what he's doing
+		if (pEntity.getParent() != pSibling.getParent()) {
+			throw new RuntimeException("Given entities are not Siblings! Check you code, please!");
+		}
+
+		final float parentX = pAnchorInSibling.getParentX(pSibling);
+		final float parentY = pAnchorInSibling.getParentY(pSibling);
+		setPos(pEntity, parentX, parentY, pAnchorInEntity);
 	}
-	public static void setSiblingItemPositionCenter(final IEntity pItem, final IEntity pSibling) {
-		setPositionCenter(pItem, eAnchorPointXY.DEFAULT.getSiblingX(pSibling), eAnchorPointXY.DEFAULT.getSiblingY(pSibling));
+	public static void setPosTopLeftAtSibling(final IEntity pItem, final IEntity pSibling, final eAnchorPointXY pAnchorInSibling) {
+		setPosAtSibling(pItem, eAnchorPointXY.TOP_LEFT, pSibling, pAnchorInSibling);
 	}
-	public static void setSiblingItemPositionCenterRight(final IEntity pItem, final IEntity pSibling) {
-		setPositionCenterRight(pItem, eAnchorPointXY.DEFAULT.getSiblingX(pSibling), eAnchorPointXY.DEFAULT.getSiblingY(pSibling));
+	public static void setPosTopMiddleAtSibling(final IEntity pItem, final IEntity pSibling, final eAnchorPointXY pAnchorInSibling) {
+		setPosAtSibling(pItem, eAnchorPointXY.TOP_MIDDLE, pSibling, pAnchorInSibling);
+	}
+	public static void setPosTopRightAtSibling(final IEntity pItem, final IEntity pSibling, final eAnchorPointXY pAnchorInSibling) {
+		setPosAtSibling(pItem, eAnchorPointXY.TOP_RIGHT, pSibling, pAnchorInSibling);
+	}
+	public static void setPosBottomLeftAtSibling(final IEntity pItem, final IEntity pSibling, final eAnchorPointXY pAnchorInSibling) {
+		setPosAtSibling(pItem, eAnchorPointXY.BOTTOM_LEFT, pSibling, pAnchorInSibling);
+	}
+	public static void setPosBottomMiddleAtSibling(final IEntity pItem, final IEntity pSibling, final eAnchorPointXY pAnchorInSibling) {
+		setPosAtSibling(pItem, eAnchorPointXY.BOTTOM_MIDDLE, pSibling, pAnchorInSibling);
+	}
+	public static void setPosBottomRightAtSibling(final IEntity pItem, final IEntity pSibling, final eAnchorPointXY pAnchorInSibling) {
+		setPosAtSibling(pItem, eAnchorPointXY.BOTTOM_RIGHT, pSibling, pAnchorInSibling);
+	}
+	public static void setPosCenterLeftAtSibling(final IEntity pItem, final IEntity pSibling, final eAnchorPointXY pAnchorInSibling) {
+		setPosAtSibling(pItem, eAnchorPointXY.CENTERED_LEFT, pSibling, pAnchorInSibling);
+	}
+	public static void setPosCenterAtSibling(final IEntity pItem, final IEntity pSibling, final eAnchorPointXY pAnchorInSibling) {
+		setPosAtSibling(pItem, eAnchorPointXY.CENTERED, pSibling, pAnchorInSibling);
+	}
+	public static void setPosCenterRightAtSibling(final IEntity pItem, final IEntity pSibling, final eAnchorPointXY pAnchorInSibling) {
+		setPosAtSibling(pItem, eAnchorPointXY.CENTERED_RIGHT, pSibling, pAnchorInSibling);
 	}
 
-
-	public static void setParentItemPositionTopLeft(final IEntity pItem, eAnchorPointXY pAnchor) {
-		setPositionTopLeft(pItem, pAnchor.getEntityAnchorX((IEntity) pItem.getParent()), pAnchor.getEntityAnchorY((IEntity)pItem.getParent()));
-	}
-	public static void setParentItemPositionTopMiddle(final IEntity pItem, eAnchorPointXY pAnchor) {
-		setPositionTopMiddle(pItem, pAnchor.getEntityAnchorX((IEntity) pItem.getParent()), pAnchor.getEntityAnchorY((IEntity)pItem.getParent()));
-	}
-	public static void setParentItemPositionTopRight(final IEntity pItem, final IEntity pParent, eAnchorPointXY pAnchor) {
-		setPositionTopRight(pItem, pAnchor.getEntityAnchorX((IEntity) pItem.getParent()), pAnchor.getEntityAnchorY((IEntity)pItem.getParent()));
-	}
-
-	public static void setParentItemPositionBottomLeft(final IEntity pItem, eAnchorPointXY pAnchor) {
-		setPositionBottomLeft(pItem, pAnchor.getEntityAnchorX((IEntity) pItem.getParent()), pAnchor.getEntityAnchorY((IEntity)pItem.getParent()));
-	}
-	public static void setParentItemPositionBottomMiddle(final IEntity pItem, eAnchorPointXY pAnchor) {
-		setPositionBottomMiddle(pItem, pAnchor.getEntityAnchorX((IEntity) pItem.getParent()), pAnchor.getEntityAnchorY((IEntity)pItem.getParent()));
-	}
-	public static void setParentItemPositionBottomRight(final IEntity pItem, eAnchorPointXY pAnchor) {
-		setPositionBottomRight(pItem, pAnchor.getEntityAnchorX((IEntity) pItem.getParent()), pAnchor.getEntityAnchorY((IEntity)pItem.getParent()));
-	}
-
-	public static void setParentItemPositionCenterLeft(final IEntity pItem, eAnchorPointXY pAnchor) {
-		setPositionCenterLeft(pItem, pAnchor.getEntityAnchorX((IEntity) pItem.getParent()), pAnchor.getEntityAnchorY((IEntity)pItem.getParent()));
-	}
-	public static void setParentItemPositionCenter(final IEntity pItem, eAnchorPointXY pAnchor) {
-		setPositionCenter(pItem, pAnchor.getEntityAnchorX((IEntity) pItem.getParent()), pAnchor.getEntityAnchorY((IEntity)pItem.getParent()));
-	}
-	public static void setParentItemPositionCenterRight(final IEntity pItem, eAnchorPointXY pAnchor) {
-		setPositionCenterRight(pItem, pAnchor.getEntityAnchorX((IEntity) pItem.getParent()), pAnchor.getEntityAnchorY((IEntity)pItem.getParent()));
-	}
-
-
-	public static void setSceneItemPositionTopLeft(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
-		setPositionTopLeft(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
-	}
-	public static void setSceneItemPositionTopMiddle(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
-		setPositionTopMiddle(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
-	}
-	public static void setSceneItemPositionTopRight(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
-		setPositionTopRight(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
-	}
-
-	public static void setSceneItemPositionBottomLeft(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
-		setPositionBottomLeft(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
-	}
-	public static void setSceneItemPositionBottomMiddle(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
-		setPositionBottomMiddle(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
-	}
-	public static void setSceneItemPositionBottomRight(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
-		setPositionBottomRight(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
-	}
-
-	public static void setSceneItemPositionCenterLeft(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
-		setPositionCenterLeft(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
-	}
-	public static void setSceneItemPositionCenter(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
-		setPositionCenter(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
-	}
-	public static void setSceneItemPositionCenterRight(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
-		setPositionCenterRight(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
-	}
+//
+//	public static void setSiblingItemPositionTopLeft(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
+//		setPositionTopLeft(pItem, pAnchor.getParentX(pSibling), pAnchor.getParentY(pSibling));
+//	}
+//	public static void setSiblingItemPositionTopMiddle(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
+//		setPositionTopMiddle(pItem, pAnchor.getParentX(pSibling), pAnchor.getParentY(pSibling));
+//	}
+//	public static void setSiblingItemPositionTopRight(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
+//		setPositionTopRight(pItem, pAnchor.getParentX(pSibling), pAnchor.getParentY(pSibling));
+//	}
+//
+//	public static void setSiblingItemPositionBottomLeft(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
+//		setPositionBottomLeft(pItem, pAnchor.getParentX(pSibling), pAnchor.getParentY(pSibling));
+//	}
+//	public static void setSiblingItemPositionBottomMiddle(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
+//		setPositionBottomMiddle(pItem, pAnchor.getParentX(pSibling), pAnchor.getParentY(pSibling));
+//	}
+//	public static void setSiblingItemPositionBottomRight(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
+//		setPositionBottomRight(pItem, pAnchor.getParentX(pSibling), pAnchor.getParentY(pSibling));
+//	}
+//
+//	public static void setSiblingItemPositionCenterLeft(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
+//		setPositionCenterLeft(pItem, pAnchor.getParentX(pSibling), pAnchor.getParentY(pSibling));
+//	}
+//	public static void setSiblingItemPositionCenter(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
+//		setPositionCenter(pItem, pAnchor.getParentX(pSibling), pAnchor.getParentY(pSibling));
+//	}
+//	public static void setSiblingItemPositionCenterRight(final IEntity pItem, final IEntity pSibling, eAnchorPointXY pAnchor) {
+//		setPositionCenterRight(pItem, pAnchor.getParentX(pSibling), pAnchor.getParentY(pSibling));
+//	}
+//
+//	public static void setSiblingItemPositionTopLeft(final IEntity pItem, final IEntity pSibling) {
+//		setPositionTopLeft(pItem, eAnchorPointXY.DEFAULT.getParentX(pSibling), eAnchorPointXY.DEFAULT.getParentY(pSibling));
+//	}
+//	public static void setSiblingItemPositionTopMiddle(final IEntity pItem, final IEntity pSibling) {
+//		setPositionTopMiddle(pItem, eAnchorPointXY.DEFAULT.getParentX(pSibling), eAnchorPointXY.DEFAULT.getParentY(pSibling));
+//	}
+//	public static void setSiblingItemPositionTopRight(final IEntity pItem, final IEntity pSibling) {
+//		setPositionTopRight(pItem, eAnchorPointXY.DEFAULT.getParentX(pSibling), eAnchorPointXY.DEFAULT.getParentY(pSibling));
+//	}
+//
+//	public static void setSiblingItemPositionBottomLeft(final IEntity pItem, final IEntity pSibling) {
+//		setPositionBottomLeft(pItem, eAnchorPointXY.DEFAULT.getParentX(pSibling), eAnchorPointXY.DEFAULT.getParentY(pSibling));
+//	}
+//	public static void setSiblingItemPositionBottomMiddle(final IEntity pItem, final IEntity pSibling) {
+//		setPositionBottomMiddle(pItem, eAnchorPointXY.DEFAULT.getParentX(pSibling), eAnchorPointXY.DEFAULT.getParentY(pSibling));
+//	}
+//	public static void setSiblingItemPositionBottomRight(final IEntity pItem, final IEntity pSibling) {
+//		setPositionBottomRight(pItem, eAnchorPointXY.DEFAULT.getParentX(pSibling), eAnchorPointXY.DEFAULT.getParentY(pSibling));
+//	}
+//
+//	public static void setSiblingItemPositionCenterLeft(final IEntity pItem, final IEntity pSibling) {
+//		setPositionCenterLeft(pItem, eAnchorPointXY.DEFAULT.getParentX(pSibling), eAnchorPointXY.DEFAULT.getParentY(pSibling));
+//	}
+//	public static void setSiblingItemPositionCenter(final IEntity pItem, final IEntity pSibling) {
+//		setPositionCenter(pItem, eAnchorPointXY.DEFAULT.getParentX(pSibling), eAnchorPointXY.DEFAULT.getParentY(pSibling));
+//	}
+//	public static void setSiblingItemPositionCenterRight(final IEntity pItem, final IEntity pSibling) {
+//		setPositionCenterRight(pItem, eAnchorPointXY.DEFAULT.getParentX(pSibling), eAnchorPointXY.DEFAULT.getParentY(pSibling));
+//	}
+//
+//
+//	public static void setParentItemPositionTopLeft(final IEntity pItem, eAnchorPointXY pAnchor) {
+//		setPositionTopLeft(pItem, pAnchor.getObjectX((IEntity) pItem.getParent()), pAnchor.getObjectY((IEntity)pItem.getParent()));
+//	}
+//	public static void setParentItemPositionTopMiddle(final IEntity pItem, eAnchorPointXY pAnchor) {
+//		setPositionTopMiddle(pItem, pAnchor.getObjectX((IEntity) pItem.getParent()), pAnchor.getObjectY((IEntity)pItem.getParent()));
+//	}
+//	public static void setParentItemPositionTopRight(final IEntity pItem, final IEntity pParent, eAnchorPointXY pAnchor) {
+//		setPositionTopRight(pItem, pAnchor.getObjectX((IEntity) pItem.getParent()), pAnchor.getObjectY((IEntity)pItem.getParent()));
+//	}
+//
+//	public static void setParentItemPositionBottomLeft(final IEntity pItem, eAnchorPointXY pAnchor) {
+//		setPositionBottomLeft(pItem, pAnchor.getObjectX((IEntity) pItem.getParent()), pAnchor.getObjectY((IEntity)pItem.getParent()));
+//	}
+//	public static void setParentItemPositionBottomMiddle(final IEntity pItem, eAnchorPointXY pAnchor) {
+//		setPositionBottomMiddle(pItem, pAnchor.getObjectX((IEntity) pItem.getParent()), pAnchor.getObjectY((IEntity)pItem.getParent()));
+//	}
+//	public static void setParentItemPositionBottomRight(final IEntity pItem, eAnchorPointXY pAnchor) {
+//		setPositionBottomRight(pItem, pAnchor.getObjectX((IEntity) pItem.getParent()), pAnchor.getObjectY((IEntity)pItem.getParent()));
+//	}
+//
+//	public static void setParentItemPositionCenterLeft(final IEntity pItem, eAnchorPointXY pAnchor) {
+//		setPositionCenterLeft(pItem, pAnchor.getObjectX((IEntity) pItem.getParent()), pAnchor.getObjectY((IEntity)pItem.getParent()));
+//	}
+//	public static void setParentItemPositionCenter(final IEntity pItem, eAnchorPointXY pAnchor) {
+//		setPositionCenter(pItem, pAnchor.getObjectX((IEntity) pItem.getParent()), pAnchor.getObjectY((IEntity)pItem.getParent()));
+//	}
+//	public static void setParentItemPositionCenterRight(final IEntity pItem, eAnchorPointXY pAnchor) {
+//		setPositionCenterRight(pItem, pAnchor.getObjectX((IEntity) pItem.getParent()), pAnchor.getObjectY((IEntity)pItem.getParent()));
+//	}
+//
+//
+//	public static void setSceneItemPositionTopLeft(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
+//		setPositionTopLeft(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
+//	}
+//	public static void setSceneItemPositionTopMiddle(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
+//		setPositionTopMiddle(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
+//	}
+//	public static void setSceneItemPositionTopRight(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
+//		setPositionTopRight(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
+//	}
+//
+//	public static void setSceneItemPositionBottomLeft(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
+//		setPositionBottomLeft(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
+//	}
+//	public static void setSceneItemPositionBottomMiddle(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
+//		setPositionBottomMiddle(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
+//	}
+//	public static void setSceneItemPositionBottomRight(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
+//		setPositionBottomRight(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
+//	}
+//
+//	public static void setSceneItemPositionCenterLeft(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
+//		setPositionCenterLeft(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
+//	}
+//	public static void setSceneItemPositionCenter(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
+//		setPositionCenter(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
+//	}
+//	public static void setSceneItemPositionCenterRight(final IEntity pItem, final IEntity pOther, eAnchorPointXY pAnchor) {
+//		setPositionCenterRight(pItem, pAnchor.getSceneX(pOther), pAnchor.getSceneY(pOther));
+//	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================

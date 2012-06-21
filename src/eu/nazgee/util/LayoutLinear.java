@@ -128,13 +128,13 @@ public class LayoutLinear extends LayoutBase {
 		if (mDirection == eDirection.DIR_HORIZONTAL) {
 			for (IEntity item : mItems) {
 				final float y = baseY + (H - item.getHeight()) * mAlignment.ratio;
-				setPositionTopLeft(item, baseX + offset * mPositionScale, y);
+				setPosTopLeft(item, baseX + offset * mPositionScale, y);
 				offset += item.getWidth();
 			}
 		} else {
 			for (IEntity item : mItems) {
 				final float x = baseX + (W - item.getWidth()) * mAlignment.ratio;
-				setPositionTopLeft(item, x, baseY + offset * mPositionScale);
+				setPosTopLeft(item, x, baseY + offset * mPositionScale);
 				offset += item.getWidth();
 			}
 		}

@@ -46,7 +46,7 @@ public class EntityBlossomParent extends EntityBlossom {
 
 			EntityBlossom child = new EntityBlossom(0, 0, pWidth * scale, pHeight * scale,
 					pTextureRegion, pVertexBufferObjectManager, pColor, i+1);
-			LayoutBase.setPositionCenter(child, x, y);
+			LayoutBase.setPosCenter(child, x, y);
 			attachChild(child);
 		}
 	}

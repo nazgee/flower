@@ -70,7 +70,7 @@ public class WaterDrop extends Sprite {
 	public synchronized void fall(final float pX, final float pY, final float H, IWaterDropListener pWaterDropListener) {
 		final float time = Kinematics.time(GRAVITY_ACCEL, H);
 		mWaterDropListener = pWaterDropListener;
-		LayoutBase.setPositionCenter(this, pX, pY);
+		LayoutBase.setPosCenter(this, pX, pY);
 		unregisterEntityModifier(mDropModifier);
 		mDropModifier = new ParallelEntityModifier(
 				new SequenceEntityModifier(

@@ -41,8 +41,8 @@ public class Sunshine extends Entity {
 		attachChild(mSpriteRayBody);
 		attachChild(mSpriteRayTail);
 
-		LayoutBase.setPositionCenter(mSpriteRayBody, 0, 0);
-		LayoutBase.setPositionCenter(mSpriteRayTail, 0, 0);
+		LayoutBase.setPosCenter(mSpriteRayBody, 0, 0);
+		LayoutBase.setPosCenter(mSpriteRayTail, 0, 0);
 
 		mSpriteRayBody.setScaleCenterY(0);
 
