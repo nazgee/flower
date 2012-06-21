@@ -33,7 +33,7 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	// Fields
 	// ===========================================================
 	private IItemClikedListener<T> mItemClikedListener;
-	private final ClickDetector mClickDetector = new ClickDetector(CLICK_TIME_MAX, this);
+	private final ClickDetector mClickDetector;
 	private final SurfaceScrollDetector mSurfaceScrollDetector;
 	private int mScrollDistanceX;
 	private LinkedList<IPage<T>> mPages;
@@ -50,7 +50,8 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			final int pTurnPageThreshold) {
 		super(W, H, pVertexBufferObjectManager);
-		mSurfaceScrollDetector = new SurfaceScrollDetector(getW() * SCROLL_MIN_SCREEN_WIDTH, this);
+		mSurfaceScrollDetector = new SurfaceScrollDetector(pTurnPageThreshold * SCROLL_MIN_SCREEN_WIDTH, this);
+		mClickDetector =  new ClickDetector(CLICK_TIME_MAX, this);
 		mTurnPageThreshold = pTurnPageThreshold;
 	}
 	// ===========================================================

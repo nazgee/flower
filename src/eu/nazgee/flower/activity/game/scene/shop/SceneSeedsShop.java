@@ -19,22 +19,19 @@ import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.IPage;
 import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
 import eu.nazgee.flower.base.pagerscene.PageRectangleTransparent;
-import eu.nazgee.flower.base.pagerscene.ScenePager;
+import eu.nazgee.flower.base.pagerscene.ScenePagerBasic;
 import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
 import eu.nazgee.util.LayoutBase.eAnchorPointXY;
 
-public class SceneSeedsShop extends ScenePager<SeedItem> {
+public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 
 	// ===========================================================
 	// Constants
 	// ===========================================================
-	public static final int ROWS = 2;
-	public static final int COLS = 2;
-	public static final float PAGE_WIDTH_EFFECTIVE = 0.66f;
-	public static final float PAGE_WIDTH_FLIP = 0.3f;
+
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -55,7 +52,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 			GameLevel pGameLevel, final Font pDescFont,
 			final EntityDetachRunnablePoolUpdateHandler pDetacher,
 			final TexturesLibrary pTexturesLibrary) {
-		super(W, H, pVertexBufferObjectManager, (int) (W * PAGE_WIDTH_FLIP));
+		super(W, H, pVertexBufferObjectManager, 2, 2, 0.66f, 0.33f);
 		this.mDescFont = pDescFont;
 		this.mDetacher = pDetacher;
 		this.mTexturesLibrary = pTexturesLibrary;
@@ -134,7 +131,7 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 	@Override
 	public void onLoad(Engine e, Context c) {
 		super.onLoad(e, c);
-		setPageMover(new PageMoverCameraZoom<SeedItem>(0.75f, (SmoothCamera) e.getCamera(), getW() * PAGE_WIDTH_EFFECTIVE));
+		setPageMover(new PageMoverCameraZoom<SeedItem>(0.75f, (SmoothCamera) e.getCamera(), getEffectiveWidth()));
 		setBackground(mBG);
 
 		e.getCamera().setHUD(mHUD);
@@ -169,27 +166,21 @@ public class SceneSeedsShop extends ScenePager<SeedItem> {
 
 	@Override
 	protected IPage<SeedItem> populatePage(int pPageNumber) {
-		IPage<SeedItem> page = new PageRectangleTransparent<SeedItem>(0, 0, getW() * PAGE_WIDTH_EFFECTIVE, getH(), 
+		IPage<SeedItem> page = new PageRectangleTransparent<SeedItem>(0, 0, getEffectiveWidth(), getH(), 
 				getVertexBufferObjectManager(),
-				new ArrayLayout(COLS, ROWS, getW() * PAGE_WIDTH_EFFECTIVE, getH(), eAnchorPointXY.CENTERED));
+				new ArrayLayout(getCols(), getRrows(), getEffectiveWidth(), getH(), eAnchorPointXY.CENTERED));
 		return page;
-	}
-
-	@Override
-	protected void attachPage(final IPage<SeedItem> pPage, int pPageNumber) {
-		pPage.setPosition(pPageNumber * getW() * PAGE_WIDTH_EFFECTIVE, 0);
-		attachChild(pPage);
 	}
 
 	// ===========================================================
 	// Methods
 	// ===========================================================
 	private int getFrameW() {
-		return (int) (getW() * PAGE_WIDTH_EFFECTIVE / COLS);
+		return (int) (getEffectiveWidth() / getCols());
 	}
 
 	private int getFrameH() {
-		return (int) (getH() / ROWS);
+		return (int) (getH() / getRrows());
 	}
 
 	private void updateHUDBasket() {

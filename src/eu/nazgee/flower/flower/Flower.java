@@ -69,7 +69,6 @@ public class Flower extends Entity implements ITouchArea{
 		mEntitySeed.setZIndex(ZINDEX_SEED);
 
 		LayoutBase.setPosCenterAtParent(mEntitySeed, eAnchorPointXY.CENTERED);
-		LayoutBase.setPosCenterAtParent(mEntityBlossom, eAnchorPointXY.CENTERED);
 
 		sortChildren();
 	}
@@ -236,6 +235,8 @@ public class Flower extends Entity implements ITouchArea{
 
 	private void animateBloom() {
 		attachChild(mEntityBlossom);	// blossom was not attached yet, for performance reasons
+		LayoutBase.setPosCenterAtParent(mEntityBlossom, eAnchorPointXY.CENTERED);
+
 		mEntityBlossom.animateBloom();
 		mEntitySeed.animateGrowthAndDetachSelf();
 	}
