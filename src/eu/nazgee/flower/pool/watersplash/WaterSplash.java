@@ -49,7 +49,7 @@ public class WaterSplash extends AnimatedSprite {
 	 * @param pY
 	 */
 	public synchronized void splat(final float pX, final float pY) {
-		LayoutBase.setItemPositionCenter(this, pX, pY);
+		LayoutBase.setPositionCenter(this, pX, pY);
 		this.animate(100, false, mWaterSplashAnimationListener);
 	}
 	// ===========================================================

@@ -80,7 +80,7 @@ public class Popup extends Text {
 	}
 
 	public void put(final float pX, final float pY, CharSequence pCharSequence) {
-		LayoutBase.setItemPositionCenter(this, pX, pY);
+		LayoutBase.setPositionCenter(this, pX, pY);
 		setText(pCharSequence);
 	}
 

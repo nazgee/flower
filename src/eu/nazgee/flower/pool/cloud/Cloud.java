@@ -73,7 +73,7 @@ public class Cloud extends Sprite {
 			final float W, final float time, CloudListener pTravelListener) {
 
 		mCloudListener = pTravelListener;
-		LayoutBase.setItemPositionCenter(this, pX, pY);
+		LayoutBase.setPositionCenter(this, pX, pY);
 		unregisterEntityModifier(mTravelModifier);
 		mTravelModifier = new ParallelEntityModifier(
 				new SequenceEntityModifier(

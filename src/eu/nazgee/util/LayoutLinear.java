@@ -30,27 +30,27 @@ public class LayoutLinear extends LayoutBase {
 	}
 
 	public static LayoutLinear populateHorizontalAlignedTop(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor) {
-		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_HORIZONTAL, eRatio.MIN);
+		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_HORIZONTAL, eRatio.ZERO);
 	}
 
 	public static LayoutLinear populateHorizontalAlignedCenter(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor) {
-		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_HORIZONTAL, eRatio.MED);
+		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_HORIZONTAL, eRatio.HALF);
 	}
 
 	public static LayoutLinear populateHorizontalAlignedBottom(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor) {
-		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_HORIZONTAL, eRatio.MAX);
+		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_HORIZONTAL, eRatio.ONE);
 	}
 
 	public static LayoutLinear populateVerticalAlignedLeft(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor) {
-		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_VERTICAL, eRatio.MIN);
+		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_VERTICAL, eRatio.ZERO);
 	}
 
 	public static LayoutLinear populateVerticalAlignedCenter(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor) {
-		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_VERTICAL, eRatio.MED);
+		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_VERTICAL, eRatio.HALF);
 	}
 
 	public static LayoutLinear populateVerticalAlignedRight(final eAnchorPointXY pLayoutAnchor, final eAnchorPointXY pItemsAnchor) {
-		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_VERTICAL, eRatio.MAX);
+		return new LayoutLinear(pLayoutAnchor, pItemsAnchor, eDirection.DIR_VERTICAL, eRatio.ONE);
 	}
 	// ===========================================================
 	// Getter & Setter
@@ -128,13 +128,13 @@ public class LayoutLinear extends LayoutBase {
 		if (mDirection == eDirection.DIR_HORIZONTAL) {
 			for (IEntity item : mItems) {
 				final float y = baseY + (H - item.getHeight()) * mAlignment.ratio;
-				setItemPositionTopLeft(item, baseX + offset * mPositionScale, y);
+				setPositionTopLeft(item, baseX + offset * mPositionScale, y);
 				offset += item.getWidth();
 			}
 		} else {
 			for (IEntity item : mItems) {
 				final float x = baseX + (W - item.getWidth()) * mAlignment.ratio;
-				setItemPositionTopLeft(item, x, baseY + offset * mPositionScale);
+				setPositionTopLeft(item, x, baseY + offset * mPositionScale);
 				offset += item.getWidth();
 			}
 		}

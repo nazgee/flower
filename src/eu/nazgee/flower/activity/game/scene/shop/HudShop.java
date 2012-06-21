@@ -58,7 +58,7 @@ public class HudShop extends BaseHUD {
 		 */
 		final NineSliceSprite bg = mTexturesLibrary.getFactory().populateFrameHudShop( 0.33f * getW(), getH(), getVertexBufferObjectManager());
 //		bg.setPosition(0.66f * getW(), 0);
-		LayoutBase.setItemPositionBottomLeft(bg, 0.66f * getW(), 0);
+		LayoutBase.setPositionBottomLeft(bg, 0.66f * getW(), 0);
 		bg.setZIndex(ZINDEX_BG_FRAME);
 		attachChild(bg);
 
@@ -77,7 +77,7 @@ public class HudShop extends BaseHUD {
 		final float margin = 15;
 		Sprite cash = new Sprite(0, 0, icons_height, icons_height, mTexturesLibrary.getIconCash(), getVertexBufferObjectManager());
 		bg.attachChild(cash);
-		LayoutBase.setItemPositionTopRight(cash, bg.getWidth() - margin, margin);
+		LayoutBase.setPositionTopRight(cash, bg.getWidth() - margin, margin);
 		LayoutBase.setSceneItemPositionCenterRight(getTextCash(), cash, eAnchorPointXY.CENTERED_LEFT);
 
 		/*

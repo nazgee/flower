@@ -81,7 +81,7 @@ public class SeedItem extends Entity implements ITouchArea{
 			final Text text = new Text(0, 0, pFont, "$" + pSeed.cost, pVBOM);
 			text.setColor(Color.WHITE);
 			mSpriteFrame.attachChild(text);
-			LayoutBase.setItemPositionBottomRight(text, mSpriteFrame.getWidth(), mSpriteFrame.getHeight());
+			LayoutBase.setPositionBottomRight(text, mSpriteFrame.getWidth(), mSpriteFrame.getHeight());
 	
 			/*
 			 * Prepare and attach seed sprite
