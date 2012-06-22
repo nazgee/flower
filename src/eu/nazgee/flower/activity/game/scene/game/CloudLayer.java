@@ -133,10 +133,10 @@ public class CloudLayer extends Entity{
 		cloud.travel(x, y, speed*time, time, listener);
 	}
 
-	public Cloud getHighestCloudAtX(final float pX, final float pLowestY) {
+	public Cloud getHighestCloudAtX(final float pX, final float pHighestY) {
 		for (Cloud cloud : mClouds) {
 			final float pos[] = cloud.getSceneCenterCoordinates();
-			if (pos[Constants.VERTEX_INDEX_Y] > pLowestY &&
+			if (pos[Constants.VERTEX_INDEX_Y] < pHighestY &&
 					cloud.contains(pX, pos[Constants.VERTEX_INDEX_Y])) {
 				return cloud;
 			}
@@ -201,9 +201,8 @@ public class CloudLayer extends Entity{
 			@Override
 			public void onHitTheGround(WaterDrop pWaterDrop) {
 				final WaterSplashItem splashitem = mSplashPool.obtainPoolItem();
-				CloudLayer.this.attachChild(splashitem.getEntity());
-				mPos = pWaterDrop.getSceneCenterCoordinates();
-				splashitem.getEntity().splat(mPos[Constants.VERTEX_INDEX_X], mPos[Constants.VERTEX_INDEX_Y]);
+				mCloud.attachChild(splashitem.getEntity());
+				splashitem.getEntity().splat(pWaterDrop.getX(), pWaterDrop.getY());
 
 				if (getWaterDropListener() != null) {
 					getWaterDropListener().onHitTheGround(pWaterDrop);

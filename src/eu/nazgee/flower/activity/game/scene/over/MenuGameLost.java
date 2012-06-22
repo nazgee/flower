@@ -64,19 +64,28 @@ public class MenuGameLost extends BaseMenu {
 //		homelayout.setItems(hometxt, homeico);
 //		homelayout.setPosition(margin, bg.getHeight() - margin);
 //		bg.attachChild(homelayout);
+		bg.attachChild(homeico);
+		bg.attachChild(hometxt);
+		Anchor.setPosBottomRight(hometxt, bg.getWidth() - margin, margin);
+		Anchor.setPosBottomRightAtSibling(homeico, hometxt, eAnchorPointXY.BOTTOM_LEFT);
 //
 //		// Use layouts for positioning
 //		LayoutLinear resetlayout = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.BOTTOM_RIGHT, eAnchorPointXY.TOP_LEFT);
 //		resetlayout.setItems(resetico, resettxt);
 //		resetlayout.setPosition(bg.getWidth() - margin, bg.getHeight() - margin);
 //		bg.attachChild(resetlayout);
+		bg.attachChild(resetico);
+		bg.attachChild(resettxt);
+		Anchor.setPosBottomLeft(resettxt, margin, margin);
+		Anchor.setPosBottomLeftAtSibling(resetico, resettxt, eAnchorPointXY.BOTTOM_RIGHT);
 
-		mDescription = new Text(margin/2, 40, pDescFont, "", 1000,
+		mDescription = new Text(0, 0, pDescFont, "", 1000,
 				new TextOptions(AutoWrap.WORDS, bg.getWidth() - margin,
 						HorizontalAlign.CENTER, Text.LEADING_DEFAULT),
 				getVertexBufferObjectManager());
 		mDescription.setColor(Consts.COLOR_MENU_TEXT_DESCRIPTION);
 		bg.attachChild(mDescription);
+		Anchor.setPosBottomMiddleAtParent(mDescription, eAnchorPointXY.CENTERED);
 	}
 
 	public void setDescription(String pDescription) {

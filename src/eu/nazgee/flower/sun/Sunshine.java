@@ -12,6 +12,7 @@ import org.andengine.util.modifier.ease.IEaseFunction;
 
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.util.Anchor;
+import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 public class Sunshine extends Entity {
 	// ===========================================================
@@ -41,10 +42,10 @@ public class Sunshine extends Entity {
 		attachChild(mSpriteRayBody);
 		attachChild(mSpriteRayTail);
 
-		Anchor.setPosCenter(mSpriteRayBody, 0, 0);
-		Anchor.setPosCenter(mSpriteRayTail, 0, 0);
+		Anchor.setPosTopMiddleAtParent(mSpriteRayBody, eAnchorPointXY.CENTERED);
+		Anchor.setPosTopMiddleAtParent(mSpriteRayTail, eAnchorPointXY.CENTERED);
 
-		mSpriteRayBody.setScaleCenterY(0);
+		mSpriteRayBody.setScaleCenterY(mSpriteRayBody.getHeight());
 
 		setCurrentRaysLength(0);
 		mSunshineLengthModifier.setAutoUnregisterWhenFinished(false);
@@ -85,7 +86,7 @@ public class Sunshine extends Entity {
 	private void setTarget(float pSkyHeight, Sky pSky) {
 		float me = pSky.getHeightOnSky(this);
 		if (me < pSkyHeight) {
-			pSkyHeight = pSky.getHeightOnScene(0);
+			pSkyHeight = pSky.getHeightOnSky(0);
 		}
 		configureRaysLengthModifier(Math.max(0, me - pSkyHeight));
 	}
@@ -110,7 +111,7 @@ public class Sunshine extends Entity {
 	private void setCurrentRaysLength(final float pNewRaysValue) {
 		final float scale = pNewRaysValue / mSpriteRayBody.getHeight();
 		mSpriteRayBody.setScaleY(scale);
-		mSpriteRayTail.setY(mSpriteRayBody.getY() + pNewRaysValue);
+		mSpriteRayTail.setY(mSpriteRayBody.getY() - pNewRaysValue);
 	}
 
 	// ===========================================================

@@ -133,7 +133,7 @@ public class SceneGame extends SceneLoadable{
 		 * Create new virtual sky- this object is used to calculate how high
 		 * above ground level entities are placed
 		 */
-		mSky = new Sky(getH() - 80);
+		mSky = new Sky(GameBackground.SOLID_GND_HEIGHT);
 
 		/*
 		 * Register touch area listener, which will listen for the touches of
@@ -149,13 +149,14 @@ public class SceneGame extends SceneLoadable{
 		mSun = new Sun(0, 0, mTexturesLibrary.getSun(),
 				mTexturesLibrary.getSunRays(), vbom);
 		attachChild(mSun);
-		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 60, new SunTravelListener());
+		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 10, new SunTravelListener());
 //		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.1f, 0)), 0);
+		camera.setChaseEntity(mSun);
 
 		/*
 		 * Create layer of Clouds
 		 */
-		mCloudLayer = new CloudLayer(0, 0, getW() * 1.5f, getH()/3,
+		mCloudLayer = new CloudLayer(0, getH() * 0.66f, getW() * 1.5f, getH() * 0.33f,
 				getW() * 0.1f, 10, 0.2f, 0.2f, 6, mSky,
 				mTexturesLibrary.getClouds(), mTexturesLibrary.getRainDrop(), 
 				mTexturesLibrary.getRainSplash(),

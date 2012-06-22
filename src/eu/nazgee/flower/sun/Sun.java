@@ -26,6 +26,8 @@ import android.opengl.GLES20;
 import android.util.Log;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.misc.FisheyeShaderProgram;
+import eu.nazgee.util.Anchor;
+import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 
 public class Sun extends Entity {
@@ -65,7 +67,7 @@ public class Sun extends Entity {
 		Log.e("aaa", "w=" + cw + "; ch=" + ch);
 
 
-		Sprite sun = new Sprite(-w/2, -h/2, w, h, pSunTexture, pVertexBufferObjectManager, shdr) {
+		Sprite sun = new Sprite(0, 0, w, h, pSunTexture, pVertexBufferObjectManager, shdr) {
 			private float step = 0;
 			private float seed = 666;
 			private float valfx = 0;
@@ -86,6 +88,7 @@ public class Sun extends Entity {
 		};
 
 		pSun.attachChild(sun);
+		Anchor.setPosCenterAtParent(sun, eAnchorPointXY.CENTERED);
 		sun.registerEntityModifier(new LoopEntityModifier(
 					new RotationByModifier(5, 360)
 				));
@@ -102,6 +105,7 @@ public class Sun extends Entity {
 		Sunshine sunshine = new Sunshine(pSunshineTextures, pVertexBufferObjectManager);
 		pSun.attachChild(sunshine);
 		sunshine.setZIndex(-1);
+		Anchor.setPosCenterAtParent(sunshine, eAnchorPointXY.CENTERED);
 		pSun.sortChildren();
 //		sunshine.setPosition(pSun.mSun.getWidth()/2, pSun.mSun.getHeight()/2);
 
@@ -142,8 +146,8 @@ public class Sun extends Entity {
 						new MoveByModifier(time, W, 0)
 						),
 				new SequenceEntityModifier(
-						new MoveYModifier(time/2, getY(), getY() - H, EaseQuadOut.getInstance()),
-						new MoveYModifier(time/2, getY() - H, getY(), EaseQuadIn.getInstance())
+						new MoveYModifier(time/2, getY(), getY() + H, EaseQuadOut.getInstance()),
+						new MoveYModifier(time/2, getY() + H, getY(), EaseQuadIn.getInstance())
 						)
 				);
 		mTravelModifier.setAutoUnregisterWhenFinished(false);

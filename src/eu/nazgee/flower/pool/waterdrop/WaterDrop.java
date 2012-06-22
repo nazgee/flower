@@ -74,7 +74,7 @@ public class WaterDrop extends Sprite {
 		unregisterEntityModifier(mDropModifier);
 		mDropModifier = new ParallelEntityModifier(
 				new SequenceEntityModifier(
-						new MoveYModifier(time, getY(), getY() + H, EaseQuadIn.getInstance())
+						new MoveYModifier(time, getY(), getY() - H, EaseQuadIn.getInstance())
 						),
 				new SequenceEntityModifier(
 						new FadeInModifier(time*0.2f),

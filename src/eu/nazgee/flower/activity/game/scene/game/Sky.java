@@ -1,8 +1,8 @@
 package eu.nazgee.flower.activity.game.scene.game;
 
-import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
-import org.andengine.util.Constants;
+
+import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 
 public class Sky {
@@ -24,28 +24,22 @@ public class Sky {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public float getHeightOnSky(final Entity pEntity) {
-		final float pos[] = pEntity.getSceneCenterCoordinates();
-		return getHeightOnSky(pos[Constants.VERTEX_INDEX_Y]);
+	public float getHeightOnSky(final IEntity pShape) {
+		return getHeightOnSky(eAnchorPointXY.CENTERED.getSceneY(pShape));
 	}
 
 	public float getHeightOnSkyTop(final IEntity pShape) {
-		final float pos[] = pShape.getSceneCenterCoordinates();
-		return getHeightOnSky(pos[Constants.VERTEX_INDEX_Y] - pShape.getHeight()/2);
+		return getHeightOnSky(eAnchorPointXY.TOP_MIDDLE.getSceneY(pShape));
 	}
 
 	public float getHeightOnSkyBottom(final IEntity pShape) {
-		final float pos[] = pShape.getSceneCenterCoordinates();
-		return getHeightOnSky(pos[Constants.VERTEX_INDEX_Y] + pShape.getHeight()/2);
+		return getHeightOnSky(eAnchorPointXY.BOTTOM_MIDDLE.getSceneY(pShape));
 	}
 
 	public float getHeightOnSky(float pSceneY) {
-		return mGroundLevel - pSceneY; 
+		return pSceneY - mGroundLevel; 
 	}
 
-	public float getHeightOnScene(float pSkyY) {
-		return mGroundLevel - pSkyY; 
-	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
