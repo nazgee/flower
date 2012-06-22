@@ -39,7 +39,6 @@ import eu.nazgee.flower.activity.game.scene.over.MenuGameLost;
 import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop;
 import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop.IShoppingListener;
 import eu.nazgee.flower.activity.game.scene.shop.SeedItem;
-import eu.nazgee.flower.activity.levelselector.ActivityLevelselector;
 import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
 import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.level.GameLevel;
@@ -64,7 +63,6 @@ public class ActivityGame extends SimpleBaseGameActivity {
 
 	MenuItemClickListener mMenuItemClickListener = new MenuItemClickListener();
 	private SceneGame mSceneGame;
-	private SceneSeedsShop mSceneShop;
 	private MenuIngame mMenuIngame;
 	private MenuGameLost mMenuGameOver;
 	private SceneLoader mLoader;
@@ -130,25 +128,8 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		mResources.loadResources(getEngine(), this);
 		mResources.load(getEngine(), this);
 
-		// SCENE: seeds shop
-		mSceneShop = new SceneSeedsShop(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), GameLevel.LEVEL1, getStaticResources().FONT, mResources.ENTITY_DETACH_HANDLER, mTexturesLibrary);
-		mSceneShop.setItemClikedListener(new IItemClikedListener<SeedItem>() {
-			@Override
-			public void onItemClicked(SeedItem pItem) {
-				// play sound? do something?
-			}
-		});
-		mSceneShop.setShoppingListener(new IShoppingListener() {
-			@Override
-			public void onShoppingFinished(List<Seed> pBoughtItems) {
-				mLoader.setChildSceneModalDraw(true); // we do NOT want to see the background scene for the sake of framerate
-				mSceneGame.setGameLevel(mGameLevel);
-				loadSubscene(mSceneGame);
-			}
-		});
-
 		// SCENE: gameplay
-		mSceneGame = new SceneGame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), mResources.ENTITY_DETACH_HANDLER, mSceneShop.getShop(), mTexturesLibrary);
+		mSceneGame = new SceneGame(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getVertexBufferObjectManager(), mResources.ENTITY_DETACH_HANDLER, mTexturesLibrary);
 		mSceneGame.setGameListerner(new IGameListener() {
 			@Override
 			public void onGameFinished() {
@@ -181,7 +162,8 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		 * At first, engine will show "Loading..." scene. mSceneMain will be
 		 * set as active scene right after it will be fully loaded (loading takes place in background). 
 		 */
-		loadScene(mSceneShop);
+		mSceneGame.setGameLevel(mGameLevel);
+		loadScene(mSceneGame);
 		return mLoader.getLoadingScene();
 	}
 
@@ -222,7 +204,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 
 		mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_SET_ACTIVE);
 		mLoader.getLoadingScene().setBackgroundEnabled(true);
-		loadScene(mSceneShop);
+		loadScene(mSceneGame);
 	}
 
 	private void loadSubscene(ILoadableResourceScene pScene) {

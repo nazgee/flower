@@ -26,7 +26,6 @@ import android.content.Context;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.GameScore;
-import eu.nazgee.flower.activity.game.scene.shop.SeedsShop;
 import eu.nazgee.flower.activity.game.sound.LoadableSFX;
 import eu.nazgee.flower.flower.EntityBlossom;
 import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
@@ -69,7 +68,6 @@ public class SceneGame extends SceneLoadable{
 	private final FlowerListener mFlowerListener = new FlowerListener();
 	private final BlossomListener mBlossomListener = new BlossomListener();
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
-	private final SeedsShop mSeedsShop; // TODO change it to list/array/whatever. No need to keep the whole shop here
 	private IGameListener mGameListerner;
 	private final TexturesLibrary mTexturesLibrary;
 	private GameBackground mBG;
@@ -80,13 +78,11 @@ public class SceneGame extends SceneLoadable{
 	// ===========================================================
 	public SceneGame(float W, float H,
 			VertexBufferObjectManager pVertexBufferObjectManager,
-			final EntityDetachRunnablePoolUpdateHandler pEntityDetachRunnablePoolUpdateHandler, final SeedsShop pSeedsShop,
-			TexturesLibrary pTexturesLibrary) {
+			final EntityDetachRunnablePoolUpdateHandler pEntityDetachRunnablePoolUpdateHandler, TexturesLibrary pTexturesLibrary) {
 		super(W, H, pVertexBufferObjectManager);
 		this.mDetacher = pEntityDetachRunnablePoolUpdateHandler;
-		this.mSeedsShop = pSeedsShop;
 		this.mTexturesLibrary = pTexturesLibrary;
-		
+
 		mSFX = new LoadableSFX();
 		mHud = new HudGame(W, H, pVertexBufferObjectManager);
 		getLoader().install(mResources);
@@ -134,7 +130,7 @@ public class SceneGame extends SceneLoadable{
 		mScore.setHUD(mHud);
 		mScore.score.set(0);
 		mScore.flowers.set(0);
-		mScore.seeds.set(mSeedsShop.getSeedsInBasket().size());
+		mScore.seeds.set(getGameLevel().getSeeds().size());
 
 		mPopupPool = new PopupPool(mResources.FONT_POPUP, mDetacher, vbom);
 
@@ -182,8 +178,8 @@ public class SceneGame extends SceneLoadable{
 		/*
 		 * Create some flowers
 		 */
-		for (int i = 0; i < mSeedsShop.getSeedsInBasket().size(); i++) {
-			Seed seed = mSeedsShop.getSeedsInBasket().get(i);
+		for (int i = 0; i < getGameLevel().getSeeds().size(); i++) {
+			Seed seed = getGameLevel().getSeeds().get(i);
 
 			/*
 			 *  Create a flower
