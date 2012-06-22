@@ -17,57 +17,69 @@ public enum GameLevel {
 	/*
 	 * When defined as Enum, levels are singletons 
 	 */
-	LEVEL1(1, 2000, false, Seed.SEED1, Seed.SEED2, Seed.SEED3, Seed.SEED4, Seed.SEED5, Seed.SEED6, Seed.SEED7, Seed.SEED8, Seed.SEED9),
-//	LEVEL1(1, 1000, false, Seed.SEED1, Seed.SEED2, Seed.SEED3),
-	LEVEL2(2, 1000),
-	LEVEL3(3, 1000),
-	LEVEL4(4, 1000, Seed.SEED4),
-	LEVEL5(5, 1000, Seed.SEED5),
-	LEVEL6(6, 1000, Seed.SEED6),
-	LEVEL7(7, 1000, Seed.SEED7, Seed.SEED8, Seed.SEED9),
-	LEVEL8(8, 1000),
-	LEVEL9(9, 1000),
-	LEVEL10(10, 1000, Seed.SEED10, Seed.SEED11),
-	LEVEL11(11, 1000),
-	LEVEL12(12, 1000, Seed.SEED12, Seed.SEED13),
-	LEVEL13(13, 1000),
-	LEVEL14(14, 1000),
-	LEVEL15(15, 1000),
-	LEVEL16(16, 1000),
-	LEVEL17(17, 1000),
-	LEVEL18(18, 1000),
-	LEVEL19(19, 1000),
-	LEVEL20(20, 1000),
-	LEVEL21(21, 1000),
-	LEVEL22(22, 1000),
-	LEVEL23(23, 1000),
-	LEVEL24(24, 1000);
+
+	LEVEL1(1, 1000, 20, false, Seed.SEED1, Seed.SEED2, Seed.SEED3),
+	LEVEL2(2, Seed.SEED4),
+	LEVEL3(3, Seed.SEED5),
+	LEVEL4(4, Seed.SEED6),
+	LEVEL5(5, Seed.SEED7),
+	LEVEL6(6, Seed.SEED8),
+	LEVEL7(7, Seed.SEED9, Seed.SEED10),
+	LEVEL8(8),
+	LEVEL9(9),
+	LEVEL10(10),
+	LEVEL11(11),
+	LEVEL12(12),
+	LEVEL13(13),
+	LEVEL14(14),
+	LEVEL15(15),
+	LEVEL16(16),
+	LEVEL17(17),
+	LEVEL18(18),
+	LEVEL19(19),
+	LEVEL20(20),
+	LEVEL21(21),
+	LEVEL22(22),
+	LEVEL23(23),
+	LEVEL24(24);
 
 	public static final int LEVELS_NUMBER = LEVEL24.id;
+
+	protected static final int CASH_DEFAULT = 1000;
+	protected static final int DAYLIGHT_TIME_DEFAULT = 60;
+	protected static final float LEVEL_WIDTH_DEFAULT = Consts.CAMERA_WIDTH * 2;
 
 	// ===========================================================
 	// Fields
 	// ===========================================================
+	public final int daylight_time;
+	public final float level_width = LEVEL_WIDTH_DEFAULT;
 	public final int id;
 	public final int cash;
 	public final boolean lockedByDefault;
 	public final LevelResourcesBasic resources;
 	public final Seed[] seeds;
 
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	private GameLevel(final int pID, final int pCash) {
-		this(pID, pCash, true);
+		this(pID, pCash, DAYLIGHT_TIME_DEFAULT, true);
 	}
 
-	private GameLevel(final int pID, final int pCash, Seed ... pSeeds) {
-		this(pID, pCash, true, pSeeds);
+	private GameLevel(final int pID, Seed ... pSeeds) {
+		this(pID, CASH_DEFAULT, DAYLIGHT_TIME_DEFAULT, true, pSeeds);
 	}
 
-	private GameLevel(final int pID, final int pCash, boolean pLocked, Seed ... pSeeds) {
+	private GameLevel(final int pID, final int pCash, final int pDalightTime, Seed ... pSeeds) {
+		this(pID, pCash, pDalightTime, true, pSeeds);
+	}
+
+	private GameLevel(final int pID, final int pCash, final int pDalightTime, boolean pLocked, Seed ... pSeeds) {
 		id = pID;
 		cash = pCash;
+		daylight_time = pDalightTime;
 		lockedByDefault = pLocked;
 		resources = new LevelResourcesBasic();
 		seeds = pSeeds;

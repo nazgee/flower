@@ -39,7 +39,7 @@ public class SceneLevelselector extends ScenePagerBasic<GameLevelItem>{
 	// ===========================================================
 	public SceneLevelselector(float W, float H,
 			final Font pFontDesc, VertexBufferObjectManager pVertexBufferObjectManager,
-			final TexturesLibrary pTexturesLibrary, GameLevel level1) {
+			final TexturesLibrary pTexturesLibrary) {
 		super(W, H, pVertexBufferObjectManager, 3, 3, 1, 0.33f);
 		mFontDesc = pFontDesc;
 		mTexturesLibrary = pTexturesLibrary;

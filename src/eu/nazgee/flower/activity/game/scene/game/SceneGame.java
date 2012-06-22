@@ -34,6 +34,7 @@ import eu.nazgee.flower.flower.Flower;
 import eu.nazgee.flower.flower.Flower.IFlowerStateHandler;
 import eu.nazgee.flower.flower.Flower.eLevel;
 import eu.nazgee.flower.flower.Seed;
+import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.pool.cloud.Cloud;
 import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
@@ -72,6 +73,7 @@ public class SceneGame extends SceneLoadable{
 	private IGameListener mGameListerner;
 	private final TexturesLibrary mTexturesLibrary;
 	private GameBackground mBG;
+	private GameLevel mGameLevel;
 
 	// ===========================================================
 	// Constructors
@@ -97,9 +99,15 @@ public class SceneGame extends SceneLoadable{
 	public IGameListener getGameListerner() {
 		return mGameListerner;
 	}
-
 	public void setGameListerner(IGameListener mGameListerner) {
 		this.mGameListerner = mGameListerner;
+	}
+
+	public GameLevel getGameLevel() {
+		return mGameLevel;
+	}
+	public void setGameLevel(GameLevel mGameLevel) {
+		this.mGameLevel = mGameLevel;
 	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
@@ -150,7 +158,7 @@ public class SceneGame extends SceneLoadable{
 		mSun = new Sun(0, 0, mTexturesLibrary.getSun(),
 				mTexturesLibrary.getSunRays(), vbom);
 		attachChild(mSun);
-		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 60, new SunTravelListener());
+		mSun.travel(0, getH()/2, getGameLevel().level_width, getH()/2, getGameLevel().daylight_time, new SunTravelListener());
 //		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.1f, 0)), 0);
 		camera.setChaseEntity(mSun);
 

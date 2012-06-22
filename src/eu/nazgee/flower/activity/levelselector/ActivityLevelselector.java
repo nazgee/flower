@@ -41,7 +41,7 @@ public class ActivityLevelselector extends BaseActivityPager<GameLevelItem>{
 	@Override
 	protected ScenePager<GameLevelItem> populatePagerScene(float w, float h,
 			VertexBufferObjectManager pVertexBufferObjectManager) {
-		ScenePager<GameLevelItem> scene = new SceneLevelselector(w, h, getStaticResources().FONT_DESC, pVertexBufferObjectManager, mTexturesLibrary, GameLevel.LEVEL1);
+		ScenePager<GameLevelItem> scene = new SceneLevelselector(w, h, getStaticResources().FONT_DESC, pVertexBufferObjectManager, mTexturesLibrary);
 		scene.setItemClikedListener(new IItemClikedListener<GameLevelItem>() {
 			@Override
 			public void onItemClicked(GameLevelItem pItem) {

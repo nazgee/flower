@@ -27,6 +27,8 @@ import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
@@ -37,6 +39,7 @@ import eu.nazgee.flower.activity.game.scene.over.MenuGameLost;
 import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop;
 import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop.IShoppingListener;
 import eu.nazgee.flower.activity.game.scene.shop.SeedItem;
+import eu.nazgee.flower.activity.levelselector.ActivityLevelselector;
 import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
 import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.level.GameLevel;
@@ -69,6 +72,9 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	private TexturesLibrary mTexturesLibrary = new TexturesLibrary();
 
 
+	private GameLevel mGameLevel;
+
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -84,6 +90,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 
+
 	@Override
 	public EngineOptions onCreateEngineOptions() {
 //		final SmoothTrackingCamera camera = new SmoothTrackingCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, 0, new SmootherLinear(5), new SmootherEmpty(), new SmootherLinear(5));
@@ -92,6 +99,18 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		engopts.getRenderOptions().setDithering(true);
 		engopts.getAudioOptions().setNeedsSound(true);
 		return engopts;
+	}
+
+	@Override
+	protected void onCreate(Bundle pSavedInstanceState) {
+		super.onCreate(pSavedInstanceState);
+		if (pSavedInstanceState != null) {
+			super.onCreate(pSavedInstanceState);
+			mGameLevel = GameLevel.getLevelById(pSavedInstanceState.getInt(BUNDLE_LEVEL_ID));
+		} else {
+			Log.w(getClass().getSimpleName(), "No bundle was given! Falling back to default game params");
+			mGameLevel = GameLevel.LEVEL1;
+		}
 	}
 
 	@Override
@@ -123,6 +142,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 			@Override
 			public void onShoppingFinished(List<Seed> pBoughtItems) {
 				mLoader.setChildSceneModalDraw(true); // we do NOT want to see the background scene for the sake of framerate
+				mSceneGame.setGameLevel(mGameLevel);
 				loadSubscene(mSceneGame);
 			}
 		});
