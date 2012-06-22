@@ -45,13 +45,13 @@ public class Sunshine extends Entity {
 		Anchor.setPosTopMiddleAtParent(mSpriteRayBody, eAnchorPointXY.CENTERED);
 		Anchor.setPosTopMiddleAtParent(mSpriteRayTail, eAnchorPointXY.CENTERED);
 
-		mSpriteRayBody.setScaleCenterY(mSpriteRayBody.getHeight());
+		mSpriteRayBody.setScaleCenterY(eAnchorPointXY.TOP_MIDDLE.y.ratio);
 
-		setCurrentRaysLength(0);
+		setRayBeamLength(0);
 		mSunshineLengthModifier.setAutoUnregisterWhenFinished(false);
 		registerEntityModifier(mSunshineLengthModifier);
 
-		configureRaysLengthModifier(100);
+		configureRaybeamLengthModifier(100); // just a dummy value o start with
 	}
 
 	// ===========================================================
@@ -88,27 +88,27 @@ public class Sunshine extends Entity {
 		if (me < pSkyHeight) {
 			pSkyHeight = pSky.getHeightOnSky(0);
 		}
-		configureRaysLengthModifier(Math.max(0, me - pSkyHeight));
+		configureRaybeamLengthModifier(Math.max(0, me - pSkyHeight));
 	}
 
-	private void configureRaysLengthModifier(final float pTargetRays) {
-		if (isModifierResetNeeded(pTargetRays)) {
-			mSunshineLengthModifier.reset(EASING_DURATION, getCurrentRaysLength(), pTargetRays);
+	private void configureRaybeamLengthModifier(final float pTargetRays) {
+		if (isRaybeamModifierOffTrack(pTargetRays)) {
+			mSunshineLengthModifier.reset(EASING_DURATION, getRayBeamLength(), pTargetRays);
 		} else {
-			mSunshineLengthModifier.updateTarget(pTargetRays);
+			mSunshineLengthModifier.setTarget(pTargetRays);
 		}
 	}
 
-	private boolean isModifierResetNeeded(final float pNewRaysValue) {
+	private boolean isRaybeamModifierOffTrack(final float pNewRaysValue) {
 		return mSunshineLengthModifier.isFinished() || (EASING_RESET_THRESHOLD < Math.abs(mSunshineLengthModifier.getTarget() - pNewRaysValue));
 	}
 
-	private float getCurrentRaysLength() {
+	private float getRayBeamLength() {
 		final float current = mSpriteRayBody.getScaleY() * mSpriteRayBody.getHeight();
 		return current;
 	}
 
-	private void setCurrentRaysLength(final float pNewRaysValue) {
+	private void setRayBeamLength(final float pNewRaysValue) {
 		final float scale = pNewRaysValue / mSpriteRayBody.getHeight();
 		mSpriteRayBody.setScaleY(scale);
 		mSpriteRayTail.setY(mSpriteRayBody.getY() - pNewRaysValue);
@@ -124,7 +124,7 @@ public class Sunshine extends Entity {
 		public SunshineLengthModifier(float pDuration, float pFromValue,
 				float pToValue, IEaseFunction pEaseFunction) {
 			super(pDuration, pFromValue, pToValue, pEaseFunction);
-			updateTarget(pToValue);
+			setTarget(pToValue);
 		}
 
 		public SunshineLengthModifier(float pDuration, float pFromValue,
@@ -132,30 +132,30 @@ public class Sunshine extends Entity {
 				IEntityModifierListener pEntityModifierListener,
 				IEaseFunction pEaseFunction) {
 			super(pDuration, pFromValue, pToValue, pEntityModifierListener, pEaseFunction);
-			updateTarget(pToValue);
+			setTarget(pToValue);
 		}
 
 		public SunshineLengthModifier(float pDuration, float pFromValue,
 				float pToValue, IEntityModifierListener pEntityModifierListener) {
 			super(pDuration, pFromValue, pToValue, pEntityModifierListener);
-			updateTarget(pToValue);
+			setTarget(pToValue);
 		}
 
 		public SunshineLengthModifier(float pDuration, float pFromValue,
 				float pToValue) {
 			super(pDuration, pFromValue, pToValue);
-			updateTarget(pToValue);
+			setTarget(pToValue);
 		}
 
 		protected SunshineLengthModifier(final SunshineLengthModifier pSunshineLengthModifier) {
 			super(pSunshineLengthModifier);
-			updateTarget(pSunshineLengthModifier.getToValue());
+			setTarget(pSunshineLengthModifier.getToValue());
 		}
 
 		@Override
 		protected void onSetInitialValue(IEntity pItem, float pValue) {
 			Sunshine s = (Sunshine) pItem;
-			s.setCurrentRaysLength(pValue);
+			s.setRayBeamLength(pValue);
 		}
 
 		@Override
@@ -165,7 +165,7 @@ public class Sunshine extends Entity {
 			float span = to - from;
 
 			Sunshine s = (Sunshine) pItem;
-			s.setCurrentRaysLength(from + span * pPercentageDone);
+			s.setRayBeamLength(from + span * pPercentageDone);
 		}
 
 		@Override
@@ -176,10 +176,10 @@ public class Sunshine extends Entity {
 		@Override
 		public void reset(float pDuration, float pFromValue, float pToValue) {
 			super.reset(pDuration, pFromValue, pToValue);
-			updateTarget(pToValue);
+			setTarget(pToValue);
 		}
 
-		public void updateTarget(float pTarget) {
+		public void setTarget(float pTarget) {
 			mRaysTarget = pTarget;
 		}
 
