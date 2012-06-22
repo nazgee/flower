@@ -254,9 +254,10 @@ public class SceneGame extends SceneLoadable{
 	private void handleFlowerSun() {
 		for (Flower flower : mFlowers) {
 			/*
-			 * We are interested in shining only at flowers that are on the ground level 
+			 * We are interested in flowers on the ground level, on wchich sun
+			 * is shining 
 			 */
-			if (mSky.isCloseToGroundBottom(flower, MAX_FLOWER_HEIGHT_WHEN_IDLE) && mSun.isShiningAt(flower)) {
+			if (!mSky.isAboveGroundBottom(flower) && mSun.isShiningAt(flower)) {
 				flower.stateSun();
 			}
 		}

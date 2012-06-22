@@ -65,6 +65,7 @@ public class Flower extends Entity implements ITouchArea{
 		this.mEntitySeed = new EntitySeed(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.seedID), pVertexBufferObjectManager, mColor, pDetacher);
 
 		attachChild(mEntitySeed);
+		setSize(mEntitySeed.getWidth(), mEntitySeed.getHeight());
 
 		mEntityBlossom.setZIndex(ZINDEX_BLOSSOM);
 		mEntitySeed.setZIndex(ZINDEX_SEED);

@@ -52,7 +52,28 @@ public class Sky {
 		return Math.abs(getHeightOnSkyCenter(pEntity)) <= pMaxDistanceFromGround;
 	}
 	public boolean isCloseToGroundBottom(final IEntity pEntity, final float pMaxDistanceFromGround) {
+//		Log.e("close", "pos=(" + pEntity.getX() + ", " + pEntity.getY() + ")"
+//				+ "; size=(" + pEntity.getWidth() + ", " + pEntity.getHeight() + ")"
+//				+ "; max=" + pMaxDistanceFromGround + "; h_bottom=" + getHeightOnSkyBottom(pEntity)
+//				+ "; gnd_scene=" + getGroundLevelOnScene());
 		return Math.abs(getHeightOnSkyBottom(pEntity)) <= Math.abs(pMaxDistanceFromGround);
+	}
+
+	public boolean isAboveGround(final float pSceneY) {
+		return (getHeightOnSky(pSceneY)) > 0;
+	}
+	public boolean isAboveGroundTop(final IEntity pEntity) {
+		return getHeightOnSkyTop(pEntity) > 0;
+	}
+	public boolean isAboveGroundCenter(final IEntity pEntity) {
+		return getHeightOnSkyCenter(pEntity) > 0;
+	}
+	public boolean isAboveGroundBottom(final IEntity pEntity) {
+//		Log.e("above", "pos=(" + pEntity.getX() + ", " + pEntity.getY() + ")"
+//				+ "; size=(" + pEntity.getWidth() + ", " + pEntity.getHeight() + ")"
+//				+ "; max=" + pMaxDistanceFromGround + "; h_bottom=" + getHeightOnSkyBottom(pEntity)
+//				+ "; gnd_scene=" + getGroundLevelOnScene());
+		return getHeightOnSkyBottom(pEntity) > 0;
 	}
 
 	public float getGroundLevelOnScene() {
