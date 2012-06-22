@@ -49,7 +49,7 @@ public class SceneGame extends SceneLoadable{
 	// Constants
 	// ===========================================================
 
-	private static final int MAX_FLOWER_HEIGHT_WHEN_IDLE = Flower.BOTTOM_BELOW_GROUND + 1;
+	private static final int MAX_FLOWER_HEIGHT_WHEN_IDLE = Math.abs(Flower.GROUND_LEVEL_OFFSET) + 1;
 	// ===========================================================
 	// Fields
 	// ===========================================================

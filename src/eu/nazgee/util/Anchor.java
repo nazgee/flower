@@ -1,8 +1,5 @@
 package eu.nazgee.util;
 
-import java.util.LinkedList;
-
-import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.util.Constants;
 
@@ -10,7 +7,7 @@ import android.util.Log;
 
 
 
-public class Anchor extends Entity {
+public class Anchor {
 	// ===========================================================
 	// Constants
 	// ===========================================================

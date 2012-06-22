@@ -43,7 +43,7 @@ public class Sky {
 
 
 	public boolean isCloseToGround(final float pSceneY, final float pMaxDistanceFromGround) {
-		return (pSceneY - getGroundLevelOnScene()) <= pMaxDistanceFromGround;
+		return (getHeightOnSky(pSceneY)) <= pMaxDistanceFromGround;
 	}
 	public boolean isCloseToGroundTop(final IEntity pEntity, final float pMaxDistanceFromGround) {
 		return Math.abs(getHeightOnSkyTop(pEntity)) <= pMaxDistanceFromGround;
@@ -52,7 +52,7 @@ public class Sky {
 		return Math.abs(getHeightOnSkyCenter(pEntity)) <= pMaxDistanceFromGround;
 	}
 	public boolean isCloseToGroundBottom(final IEntity pEntity, final float pMaxDistanceFromGround) {
-		return Math.abs(getHeightOnSkyBottom(pEntity)) <= pMaxDistanceFromGround;
+		return Math.abs(getHeightOnSkyBottom(pEntity)) <= Math.abs(pMaxDistanceFromGround);
 	}
 
 	public float getGroundLevelOnScene() {
