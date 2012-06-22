@@ -22,6 +22,7 @@ import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 
 public class Flower extends Entity implements ITouchArea{
+	public static final int BOTTOM_BELOW_GROUND = 20;
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -152,11 +153,11 @@ public class Flower extends Entity implements ITouchArea{
 	 * @param pSky used to calculate ground level which will be used in the animation
 	 */
 	synchronized public void stateDropFromToGround(final float pX, final float pY, Sky pSky) {
-		stateDropFromTo(pX, pY, pX, pSky.getGroundLevel() + eAnchorPointXY.CENTERED.getObjectY(mEntitySeed) - 20);
+		stateDropFromTo(pX, pY, pX, pSky.getGroundLevelOnScene() + eAnchorPointXY.CENTERED.getObjectY(mEntitySeed) - BOTTOM_BELOW_GROUND);
 	}
 
 	synchronized public void stateDropToGround(Sky pSky) {
-		stateDropTo(getX(), pSky.getGroundLevel() + eAnchorPointXY.CENTERED.getObjectY(mEntitySeed) - 20);
+		stateDropTo(getX(), pSky.getGroundLevelOnScene() + eAnchorPointXY.CENTERED.getObjectY(mEntitySeed) - BOTTOM_BELOW_GROUND);
 	}
 
 	synchronized public void stateDropTo(final float pX_to, final float pY_to) {

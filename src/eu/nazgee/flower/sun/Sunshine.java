@@ -64,12 +64,12 @@ public class Sunshine extends Entity {
 	}
 
 	public void setTargetCenter(Entity pTarget, Sky pSky) {
-		float target = pSky.getHeightOnSky(pTarget);
+		float target = pSky.getHeightOnSkyCenter(pTarget);
 		setTarget(target, pSky);
 	}
 
 	public void setTarget(float pTargetHeightOnSky, Sky pSky) {
-		float myHeightOnSky = pSky.getHeightOnSky(this);
+		float myHeightOnSky = pSky.getHeightOnSkyCenter(this);
 		if (myHeightOnSky < pTargetHeightOnSky) {
 			pTargetHeightOnSky = pSky.getHeightOnSky(0);
 		}
@@ -78,7 +78,9 @@ public class Sunshine extends Entity {
 
 	public boolean isShiningAt(IEntity pTarget) {
 		float pos[] = pTarget.getSceneCenterCoordinates();
-		return mSpriteRayTail.contains(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
+//		pos = mSpriteRayTail.convertSceneCoordinatesToLocalCoordinates(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
+		return mSpriteRayBody.contains(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]) || 
+				mSpriteRayTail.contains(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
 	}
 
 	// ===========================================================

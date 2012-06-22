@@ -49,6 +49,7 @@ public class SceneGame extends SceneLoadable{
 	// Constants
 	// ===========================================================
 
+	private static final int MAX_FLOWER_HEIGHT_WHEN_IDLE = Flower.BOTTOM_BELOW_GROUND + 1;
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -255,7 +256,7 @@ public class SceneGame extends SceneLoadable{
 			/*
 			 * We are interested in shining only at flowers that are on the ground level 
 			 */
-			if (mSky.getHeightOnSky(flower) == 0 && mSun.isShiningAt(flower)) {
+			if (mSky.isCloseToGroundBottom(flower, MAX_FLOWER_HEIGHT_WHEN_IDLE) && mSun.isShiningAt(flower)) {
 				flower.stateSun();
 			}
 		}

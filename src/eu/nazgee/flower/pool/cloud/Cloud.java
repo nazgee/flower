@@ -91,7 +91,7 @@ public class Cloud extends Sprite {
 	}
 
 	public synchronized void drop(WaterDrop pWaterDrop, Sky pSky, IWaterDropListener pWaterDropListener) {
-		final float height = pSky.getHeightOnSky(this);
+		final float height = pSky.getHeightOnSkyCenter(this);
 		attachChild(pWaterDrop);
 		pWaterDrop.fall(getWidth()/2, getHeight()/2, height, pWaterDropListener);
 	}
