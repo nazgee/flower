@@ -241,6 +241,7 @@ public class SceneGame extends SceneLoadable{
 		 * to parent relationship, so detachChildren()/detachSelf() won't work.
 		 * Hud will be unloaded automatically by the loader
 		 */
+		mHud.getCamera().setChaseEntity(null);
 		mHud.getCamera().setHUD(null);
 	}
 
@@ -254,8 +255,8 @@ public class SceneGame extends SceneLoadable{
 	private void handleFlowerSun() {
 		for (Flower flower : mFlowers) {
 			/*
-			 * We are interested in flowers on the ground level, on wchich sun
-			 * is shining 
+			 * We are interested in flowers on the ground level, on which sun
+			 * is currently shining
 			 */
 			if (!mSky.isAboveGroundBottom(flower) && mSun.isShiningAt(flower)) {
 				flower.stateSun();
