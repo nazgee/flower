@@ -152,11 +152,11 @@ public class Flower extends Entity implements ITouchArea{
 	 * @param pSky used to calculate ground level which will be used in the animation
 	 */
 	synchronized public void stateDropFromToGround(final float pX, final float pY, Sky pSky) {
-		stateDropFromTo(pX, pY, pX, pY + pSky.getHeightOnSky(pY));
+		stateDropFromTo(pX, pY, pX, pSky.getGroundLevel() + eAnchorPointXY.CENTERED.getObjectY(mEntitySeed) - 20);
 	}
 
 	synchronized public void stateDropToGround(Sky pSky) {
-		stateDropTo(getX(), getY() + pSky.getHeightOnSky(getY()));
+		stateDropTo(getX(), pSky.getGroundLevel() + eAnchorPointXY.CENTERED.getObjectY(mEntitySeed) - 20);
 	}
 
 	synchronized public void stateDropTo(final float pX_to, final float pY_to) {

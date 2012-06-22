@@ -123,6 +123,10 @@ public class Sun extends Entity {
 		mSunshine.setTargetCenter(pTarget, pSky);
 	}
 
+	public void setRaysTarget(float pHeightOnSky, Sky pSky) {
+		mSunshine.setTarget(pHeightOnSky, pSky);
+	}
+
 	public boolean isShiningAt(IEntity pTarget) {
 		return mSunshine.isShiningAt(pTarget);
 	}

@@ -37,7 +37,11 @@ public class Sky {
 	}
 
 	public float getHeightOnSky(float pSceneY) {
-		return pSceneY - mGroundLevel; 
+		return pSceneY - getGroundLevel(); 
+	}
+
+	public float getGroundLevel() {
+		return mGroundLevel;
 	}
 
 	// ===========================================================

@@ -149,7 +149,7 @@ public class SceneGame extends SceneLoadable{
 		mSun = new Sun(0, 0, mTexturesLibrary.getSun(),
 				mTexturesLibrary.getSunRays(), vbom);
 		attachChild(mSun);
-		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 2, new SunTravelListener());
+		mSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 60, new SunTravelListener());
 //		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.1f, 0)), 0);
 		camera.setChaseEntity(mSun);
 
@@ -209,7 +209,7 @@ public class SceneGame extends SceneLoadable{
 				if (cloud != null) {
 					mSun.setRaysTargetCenter(cloud, mSky);
 				} else {
-					mSun.setRaysTargetTop(mGround, mSky);
+					mSun.setRaysTarget(GameBackground.SOLID_GND_HEIGHT, mSky);
 				}
 
 				handleFlowerSun();
@@ -379,14 +379,14 @@ public class SceneGame extends SceneLoadable{
 
 	private class FlowerTouchRunnable implements Runnable {
 		private final Flower mFlower;
-		private final boolean mUp;
-		public FlowerTouchRunnable(Flower pSprite, boolean pIsUp) {
+		private final boolean mIsBeingDragged;
+		public FlowerTouchRunnable(Flower pSprite, boolean pIsBeingDragged) {
 			mFlower = pSprite;
-			mUp = pIsUp;
+			mIsBeingDragged = pIsBeingDragged;
 		}
 		@Override
 		public void run() {
-			if (mUp) {
+			if (mIsBeingDragged) {
 				mFlower.stateDropToGround(mSky);
 			}
 		}

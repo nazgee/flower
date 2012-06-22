@@ -68,6 +68,14 @@ public class Sunshine extends Entity {
 		setTarget(target, pSky);
 	}
 
+	public void setTarget(float pTargetHeightOnSky, Sky pSky) {
+		float myHeightOnSky = pSky.getHeightOnSky(this);
+		if (myHeightOnSky < pTargetHeightOnSky) {
+			pTargetHeightOnSky = pSky.getHeightOnSky(0);
+		}
+		configureRaybeamLengthModifier(Math.max(0, myHeightOnSky - pTargetHeightOnSky));
+	}
+
 	public boolean isShiningAt(IEntity pTarget) {
 		float pos[] = pTarget.getSceneCenterCoordinates();
 		return mSpriteRayTail.contains(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
@@ -83,13 +91,6 @@ public class Sunshine extends Entity {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	private void setTarget(float pSkyHeight, Sky pSky) {
-		float me = pSky.getHeightOnSky(this);
-		if (me < pSkyHeight) {
-			pSkyHeight = pSky.getHeightOnSky(0);
-		}
-		configureRaybeamLengthModifier(Math.max(0, me - pSkyHeight));
-	}
 
 	private void configureRaybeamLengthModifier(final float pTargetRays) {
 		if (isRaybeamModifierOffTrack(pTargetRays)) {
