@@ -1,7 +1,6 @@
 package eu.nazgee.flower.activity.game.scene.over;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.scene.menu.animator.InstantMenuSceneAnimator;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.text.AutoWrap;
 import org.andengine.entity.text.Text;
@@ -16,7 +15,7 @@ import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.bases.BaseMenu;
 import eu.nazgee.util.Anchor;
 import eu.nazgee.util.Anchor.eAnchorPointXY;
-import eu.nazgee.util.LinearLayout;
+import eu.nazgee.util.EmptyMenuAnimator;
 import eu.nazgee.util.NineSliceSprite;
 
 public class MenuGameLost extends BaseMenu {
@@ -31,7 +30,7 @@ public class MenuGameLost extends BaseMenu {
 
 
 		// make sure that nobody is moving menu items around
-		setMenuSceneAnimator(new InstantMenuSceneAnimator());
+		setMenuSceneAnimator(new EmptyMenuAnimator());
 
 		// Prepare background
 		final float bgw = pCamera.getWidth() * 0.8f;
@@ -59,36 +58,27 @@ public class MenuGameLost extends BaseMenu {
 
 		final float margin = bg.getHeight() * 0.1f;
 
-//		// Use layouts for positioning
-//		LayoutLinear homelayout = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.BOTTOM_LEFT, eAnchorPointXY.TOP_LEFT);
-//		homelayout.setItems(hometxt, homeico);
-//		homelayout.setPosition(margin, bg.getHeight() - margin);
-//		bg.attachChild(homelayout);
+		// Use layouts for positioning
 		bg.attachChild(homeico);
 		bg.attachChild(hometxt);
 		Anchor.setPosBottomRight(hometxt, bg.getWidth() - margin, margin);
 		Anchor.setPosBottomRightAtSibling(homeico, hometxt, eAnchorPointXY.BOTTOM_LEFT);
-//
-//		// Use layouts for positioning
-//		LayoutLinear resetlayout = LayoutLinear.populateHorizontalAlignedCenter(eAnchorPointXY.BOTTOM_RIGHT, eAnchorPointXY.TOP_LEFT);
-//		resetlayout.setItems(resetico, resettxt);
-//		resetlayout.setPosition(bg.getWidth() - margin, bg.getHeight() - margin);
-//		bg.attachChild(resetlayout);
+
+		// Use layouts for positioning
 		bg.attachChild(resetico);
 		bg.attachChild(resettxt);
 		Anchor.setPosBottomLeft(resettxt, margin, margin);
 		Anchor.setPosBottomLeftAtSibling(resetico, resettxt, eAnchorPointXY.BOTTOM_RIGHT);
 
 		mDescription = new Text(0, 0, pDescFont, "", 1000,
-				new TextOptions(AutoWrap.WORDS, bg.getWidth() - margin,
-						HorizontalAlign.CENTER, Text.LEADING_DEFAULT),
+				new TextOptions(AutoWrap.WORDS, bg.getWidth() - margin, HorizontalAlign.CENTER),
 				getVertexBufferObjectManager());
 		mDescription.setColor(Consts.COLOR_MENU_TEXT_DESCRIPTION);
 		bg.attachChild(mDescription);
-		Anchor.setPosBottomMiddleAtParent(mDescription, eAnchorPointXY.CENTERED);
 	}
 
 	public void setDescription(String pDescription) {
 		mDescription.setText(pDescription);
+		Anchor.setPosTopMiddleAtParent(mDescription, eAnchorPointXY.TOP_MIDDLE);
 	}
 }
