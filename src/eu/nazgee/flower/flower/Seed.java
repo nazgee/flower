@@ -19,9 +19,9 @@ public enum Seed {
 	/*
 	 * When defined as Enum, seeds are singletons 
 	 */
-	SEED1(1,	100,	0,	0,	false,	Color.WHITE, Color.RED),
-	SEED2(2,	100,	1,	0,	false, 	Color.WHITE, Color.YELLOW, Color.BLUE, Color.GREEN, Color.RED),
-	SEED3(3,	100,	2,	0,	false, 	Color.WHITE),
+	SEED1(1,	100,	0,	0,	true,	Color.WHITE, Color.RED),
+	SEED2(2,	100,	1,	0,	true, 	Color.WHITE, Color.YELLOW, Color.BLUE, Color.GREEN, Color.RED),
+	SEED3(3,	100,	2,	0,	true, 	Color.WHITE),
 	SEED4(4,	200,	3,	0,	true, 	Color.WHITE, Color.YELLOW),
 	SEED5(5,	200,	4,	0,	true, 	Color.WHITE, Color.YELLOW),
 	SEED6(6,	200,	5,	0,	true, 	Color.WHITE, Color.BLUE),
@@ -145,17 +145,27 @@ public enum Seed {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	private String getLevelPrefix() {
+	public boolean isLocked() {
+		return resources.isLocked();
+	}
+
+	public void unlock(Context c) {
+		if (isLocked()) {
+			resources.setLocked(c, false);
+		}
+	}
+
+	private String getSeedPrefix() {
 		return "seed" + id;
 	}
 	public String getKeyLocked() {
-		return getLevelPrefix() + "locked";
+		return getSeedPrefix() + "locked";
 	}
 	public String getKeyPlanted() {
-		return getLevelPrefix() + "planted";
+		return getSeedPrefix() + "planted";
 	}
 	public String getKeyHarvested() {
-		return getLevelPrefix() + "harvested";
+		return getSeedPrefix() + "harvested";
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes
@@ -193,6 +203,7 @@ public enum Seed {
 			Editor editor = getEditor(c);
 			editor.putBoolean(getKeyLocked(), pLocked);
 			editor.commit();
+			mLocked = pLocked;
 		}
 		public void setScore(Context c, int pScore) {
 			Editor editor = getEditor(c);

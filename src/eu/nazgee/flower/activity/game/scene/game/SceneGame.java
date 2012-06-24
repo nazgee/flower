@@ -54,6 +54,7 @@ public class SceneGame extends SceneLoadable{
 	// ===========================================================
 	// Fields
 	// ===========================================================
+	private Context mContext;
 	private final GameScore mScore = new GameScore(null);
 	private final LoadableSFX mSFX;
 	private final MyResources mResources = new MyResources();
@@ -120,6 +121,7 @@ public class SceneGame extends SceneLoadable{
 
 	@Override
 	public void onLoad(Engine e, Context c) {
+		mContext = c;
 		setBackground(mBG);
 
 		final VertexBufferObjectManager vbom = this.getVertexBufferObjectManager();
@@ -184,6 +186,10 @@ public class SceneGame extends SceneLoadable{
 		 */
 		for (int i = 0; i < getGameLevel().getSeedsAccumulatedSoFar().size(); i++) {
 			Seed seed = getGameLevel().getSeedsAccumulatedSoFar().get(i);
+			if (!seed.resources.isLoaded()) {
+				seed.resources.onLoadResources(e, c);
+				seed.resources.onLoad(e, c);
+			}
 
 			/*
 			 *  Create a flower
@@ -240,6 +246,7 @@ public class SceneGame extends SceneLoadable{
 
 	@Override
 	public void onUnload() {
+		mContext = null;
 		/*
 		 *  We do not need anything of these anymore- kill all children and
 		 *  get rid of anything else that might want to run without any reason 
@@ -324,6 +331,7 @@ public class SceneGame extends SceneLoadable{
 			SceneGame.this.postRunnable(new DeactivateFlowerTouchesRunnable(pFlower));
 			pFlower.setZIndex(ZINDEX_BLOSSOM);
 			sortChildren(false);
+			pFlower.getSeed().unlock(mContext);
 		}
 
 		@Override

@@ -23,6 +23,7 @@ public class HudGame extends BaseHUD {
 	// ===========================================================
 	// Fields
 	// ===========================================================
+	private final Sprite mNewFlowerIcon;
 	private final SmartList<Sprite> mFlowers = new SmartList<Sprite>();
 	private final Animator mFlowerAnimator = new Animator();
 	// ===========================================================
@@ -38,6 +39,12 @@ public class HudGame extends BaseHUD {
 			mFlowers.add(flower);
 			Anchor.setPosTopLeft(flower, 0, H);
 		}
+		final float w = mFlowers.getFirst().getWidth();
+		final float h = mFlowers.getFirst().getHeight();
+		mNewFlowerIcon = new Sprite(0, 0, w, h, pTexturesLibrary.getIconNew(), pVertexBufferObjectManager);
+		attachChild(mNewFlowerIcon);
+		mNewFlowerIcon.setVisible(false);
+		Anchor.setPosTopLeft(mNewFlowerIcon, 0, H);
 	}
 
 	// ===========================================================
@@ -73,11 +80,17 @@ public class HudGame extends BaseHUD {
 			oldFlower.setVisible(false);
 		}
 
-		final Sprite newFlower = mFlowers.get(pFlower.getSeed().blossomID);
-		newFlower.setVisible(true);
-		newFlower.setAlpha(0);
-		newFlower.setColor(pFlower.getBlossomColor());
-		mFlowerAnimator.setEntity(newFlower);
+		final Sprite currentFlower;
+		if (pFlower.getSeed().isLocked()) {
+			currentFlower = mNewFlowerIcon;
+		} else {
+			currentFlower = mFlowers.get(pFlower.getSeed().blossomID);
+		}
+
+		currentFlower.setVisible(true);
+		currentFlower.setAlpha(0);
+		currentFlower.setColor(pFlower.getBlossomColor());
+		mFlowerAnimator.setEntity(currentFlower);
 		mFlowerAnimator.runModifier(new FadeInModifier(FLOWER_TRANSITION_TIME));
 	}
 	// ===========================================================

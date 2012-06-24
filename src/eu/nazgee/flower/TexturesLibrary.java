@@ -111,6 +111,9 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	public ITextureRegion getIconCash() {
 		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.ICONS_CASH_ID);
 	}
+	public ITextureRegion getIconNew() {
+		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.ICONS_NEW_ID);
+	}
 	public ITextureRegion getIconShop() {
 		return mSpritesheetUi.getTexturePackTextureRegionLibrary().get(TexturesUi.ICONS_SHOP_ID);
 	}
