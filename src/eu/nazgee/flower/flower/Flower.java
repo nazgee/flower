@@ -38,6 +38,7 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	private FlowerState mState = new FlowerStateSeed(this);
 	private final EntityBlossomParent mEntityBlossom;
 	private final EntitySeed mEntitySeed;
+	private final Seed mSeed;
 
 	private IEntityModifier mAnimationModifier;
 	private IFlowerStateHandler mFlowerStateHandler;
@@ -50,12 +51,13 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	public Flower(float pX, float pY, final Seed pSeed,
 			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final TexturesLibrary pTexturesLibrary, final EntityDetachRunnablePoolUpdateHandler pDetacher) {
+		mSeed = pSeed;
 		mDetacher = pDetacher;
 
 		this.mColor = pSeed.getRandomColor(MathUtils.RANDOM);
-		this.mEntityBlossom = new EntityBlossomParent(0, 0, pTexturesLibrary.getFlower(pSeed.blossomID), pVertexBufferObjectManager, mColor);
+		this.mEntityBlossom = new EntityBlossomParent(0, 0, pTexturesLibrary.getFlower(pSeed.blossomID), pVertexBufferObjectManager, getBlossomColor());
 		this.mEntitySeed = new EntitySeed(0, 0, pTexturesLibrary.getSeed(pSeed.seedID), pTexturesLibrary.getWateredMarker(),
-				pVertexBufferObjectManager, mColor, pDetacher);
+				pVertexBufferObjectManager, getBlossomColor(), pDetacher);
 
 		attachChild(mEntitySeed);
 		setSize(mEntitySeed.getWidth(), mEntitySeed.getHeight());
@@ -71,6 +73,13 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	public Seed getSeed() {
+		return mSeed;
+	}
+
+	public Color getBlossomColor() {
+		return mColor;
+	}
 
 	public IFlowerStateHandler getFlowerStateHandler() {
 		return mFlowerStateHandler;
@@ -179,12 +188,16 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 		mAnimationModifier = pModifier;
 		registerEntityModifier(pModifier);
 	}
+
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
 	public interface IFlowerStateHandler {
 		public void onBlooming(Flower pFlower);
 		public void onFrying(Flower pFlower);
+		public void onDragging(Flower pFlower);
+		public void onDropped(Flower pFlower);
 	}
 
 	private class StateChangeListener implements IStateChangesListener<Flower> {
@@ -198,10 +211,15 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 				mFlowerStateHandler.onBlooming(Flower.this);
 			} else if (pState instanceof FlowerStateFried) {
 				mFlowerStateHandler.onFrying(Flower.this);
+			} else if (pState instanceof FlowerStateDragged) {
+				mFlowerStateHandler.onDragging(Flower.this);
 			}
 		}
 		@Override
 		public void onStateFinished(State<Flower> pState) {
+			if (pState instanceof FlowerStateDragged) {
+					mFlowerStateHandler.onDropped(Flower.this);
+			}
 		}
 	}
 }

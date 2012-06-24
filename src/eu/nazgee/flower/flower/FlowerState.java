@@ -62,7 +62,24 @@ public class FlowerState extends State<Flower> implements IFlowerState {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+	protected void restart() {
 
+	}
+
+	protected FlowerState createFromInstance(FlowerState pOtherState) {
+		if (pOtherState instanceof FlowerStateSeed) {
+			return new FlowerStateSeed(this);
+		} else if (pOtherState instanceof FlowerStateDragged) {
+			return new FlowerStateDragged(this);
+		} else if (pOtherState instanceof FlowerStateBloomed) {
+			return new FlowerStateBloomed(this);
+		} else if (pOtherState instanceof FlowerStateFried) {
+			return new FlowerStateFried(this);
+		} else if (pOtherState instanceof FlowerStateWatered) {
+			return new FlowerStateWatered(this);
+		}
+		return null;
+	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================

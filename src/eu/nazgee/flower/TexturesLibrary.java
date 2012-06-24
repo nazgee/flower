@@ -17,6 +17,7 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	// Constants
 	// ===========================================================
 
+	public static final int BLOSSOMS_NUMBER = 15;
 	// ===========================================================
 	// Fields
 	// ===========================================================

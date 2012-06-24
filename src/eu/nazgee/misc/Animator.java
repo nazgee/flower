@@ -1,8 +1,9 @@
-package eu.nazgee.flower.flower;
+package eu.nazgee.misc;
 
-import eu.nazgee.flower.activity.game.scene.game.Sky;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.IEntityModifier;
 
-public class FlowerStateDragged extends FlowerState {
+public class Animator {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -10,53 +11,53 @@ public class FlowerStateDragged extends FlowerState {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-
-	private final FlowerState mOldState;
-
+	private IEntity mEntity = null;
+	private IEntityModifier mAnimationModifier;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public FlowerStateDragged(Flower pFlower) {
-		super(pFlower);
-		mOldState = null;
+	public Animator(IEntity mEntity) {
+		this.mEntity = mEntity;
 	}
 
-	public FlowerStateDragged(FlowerState pOther) {
-		super(pOther);
-		mOldState = pOther;
+	public Animator() {
+		this.mEntity = null;
 	}
+
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-
-	@Override
-	public FlowerState drop(Sky pSky) {
-		getItem().animateDropToGround(pSky);
-		onStateFinished();
-		mOldState.restart();
-		return mOldState;
+	public IEntity getEntity() {
+		return mEntity;
 	}
 
-	@Override
-	public FlowerState drag() {
-		return this;
-	}
-
-	@Override
-	protected void onStateStarted() {
-		super.onStateStarted();
-//		Log.w(getClass().getSimpleName(), "drag " + getItem());
+	public synchronized void setEntity(IEntity pNewEntity) {
+		if (mEntity != null) {
+			mEntity.unregisterEntityModifier(mAnimationModifier);
+		}
+		mEntity = pNewEntity;
 	}
 
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 
+
 	// ===========================================================
 	// Methods
 	// ===========================================================
+	public synchronized void runModifier(final IEntityModifier pModifier) {
+		if (mEntity == null)
+			return;
 
+		pModifier.setAutoUnregisterWhenFinished(false);
+		mEntity.unregisterEntityModifier(mAnimationModifier);
+		mEntity.registerEntityModifier(pModifier);
+		mAnimationModifier = pModifier;
+	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+
 }
+

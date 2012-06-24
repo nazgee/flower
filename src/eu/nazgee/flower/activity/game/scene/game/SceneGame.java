@@ -23,6 +23,7 @@ import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.math.MathUtils;
 
 import android.content.Context;
+import android.util.Log;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.GameScore;
@@ -84,7 +85,7 @@ public class SceneGame extends SceneLoadable{
 		this.mTexturesLibrary = pTexturesLibrary;
 
 		mSFX = new LoadableSFX();
-		mHud = new HudGame(W, H, pVertexBufferObjectManager);
+		mHud = new HudGame(W, H, mTexturesLibrary, pVertexBufferObjectManager);
 		getLoader().install(mResources);
 		getLoader().install(mSFX);
 		getLoader().install(mHud);
@@ -340,6 +341,20 @@ public class SceneGame extends SceneLoadable{
 			attachChild(item.getEntity());
 		}
 
+		@Override
+		public void onDragging(Flower pFlower) {
+			mHud.setActiveFlower(pFlower);
+		}
+	
+		@Override
+		public void onDropped(Flower pFlower) {
+			mHud.hideActiveFlower();
+		}
+
+		/**
+		 * This class should be used to post a runnable which will remove Flower from the active flowers list
+		 * @author nazgee
+		 */
 		class DeactivateFlowerTouchesRunnable implements Runnable {
 			private final Flower mFlower;
 
@@ -350,7 +365,6 @@ public class SceneGame extends SceneLoadable{
 			@Override
 			public void run() {
 				mFlowers.remove(mFlower);
-//				mFlower.stateDropTo(mFlower.getX(), getH());
 			}
 		}
 	}
