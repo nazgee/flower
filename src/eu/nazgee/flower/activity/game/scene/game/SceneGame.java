@@ -6,6 +6,7 @@ import java.util.Random;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.entity.Entity;
 import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.Sprite;
@@ -49,7 +50,8 @@ public class SceneGame extends SceneLoadable{
 	// Constants
 	// ===========================================================
 
-	private static final int MAX_FLOWER_HEIGHT_WHEN_IDLE = Math.abs(Flower.GROUND_LEVEL_OFFSET) + 1;
+	private static final int ZINDEX_SEED = 0;
+	private static final int ZINDEX_BLOSSOM = -1;
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -63,6 +65,7 @@ public class SceneGame extends SceneLoadable{
 	private CloudLayer mCloudLayer;
 	private Sprite mGround;
 	private Sun mSun;
+	private Entity mSunTrackingHandle;
 
 	private final LinkedList<Flower> mFlowers = new LinkedList<Flower>();
 	private final FlowerListener mFlowerListener = new FlowerListener();
@@ -123,14 +126,16 @@ public class SceneGame extends SceneLoadable{
 		setBackground(mBG);
 
 		final VertexBufferObjectManager vbom = this.getVertexBufferObjectManager();
-		Random rand = MathUtils.RANDOM;
+		final Random rand = MathUtils.RANDOM;
+		final float levelW = getGameLevel().level_width;
+		
 
 		Camera camera = e.getCamera();
 		camera.setHUD(mHud);
 		mScore.setHUD(mHud);
 		mScore.score.set(0);
 		mScore.flowers.set(0);
-		mScore.seeds.set(getGameLevel().getSeeds().size());
+		mScore.seeds.set(getGameLevel().getSeedsAccumulatedSoFar().size());
 
 		mPopupPool = new PopupPool(mResources.FONT_POPUP, mDetacher, vbom);
 
@@ -154,14 +159,16 @@ public class SceneGame extends SceneLoadable{
 		mSun = new Sun(0, 0, mTexturesLibrary.getSun(),
 				mTexturesLibrary.getSunRays(), vbom);
 		attachChild(mSun);
-		mSun.travel(0, getH()/2, getGameLevel().level_width, getH()/2, getGameLevel().daylight_time, new SunTravelListener());
+		mSun.travel(0, getH()/2, levelW, getH()/2, getGameLevel().daylight_time, new SunTravelListener());
+		mSunTrackingHandle = new Entity(camera.getWidth() * 0.1f, 0);
+		mSun.attachChild(mSunTrackingHandle);
 //		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.1f, 0)), 0);
-		camera.setChaseEntity(mSun);
+		camera.setChaseEntity(mSunTrackingHandle);
 
 		/*
 		 * Create layer of Clouds
 		 */
-		mCloudLayer = new CloudLayer(0, getH() * 0.66f, getW() * 1.5f, getH() * 0.33f,
+		mCloudLayer = new CloudLayer(0, getH() * 0.66f, levelW, getH() * 0.33f,
 				getW() * 0.1f, 10, 0.2f, 0.2f, 6, mSky,
 				mTexturesLibrary.getClouds(), mTexturesLibrary.getRainDrop(), 
 				mTexturesLibrary.getRainSplash(),
@@ -178,8 +185,8 @@ public class SceneGame extends SceneLoadable{
 		/*
 		 * Create some flowers
 		 */
-		for (int i = 0; i < getGameLevel().getSeeds().size(); i++) {
-			Seed seed = getGameLevel().getSeeds().get(i);
+		for (int i = 0; i < getGameLevel().getSeedsAccumulatedSoFar().size(); i++) {
+			Seed seed = getGameLevel().getSeedsAccumulatedSoFar().get(i);
 
 			/*
 			 *  Create a flower
@@ -189,11 +196,17 @@ public class SceneGame extends SceneLoadable{
 			flower.setFlowerStateHandler(mFlowerListener);
 			flower.setBlossomListener(mBlossomListener);
 
-			flower.setPosition(getW() * rand.nextFloat(), getH() * rand.nextFloat());
+			/*
+			 * Make sure flower seed is put somewhere in the level width area
+			 */
+			final float flowerX = flower.getWidth() + rand.nextFloat() * (levelW - 2*flower.getWidth());
+			flower.setPosition(flowerX, getH() * rand.nextFloat());
+
 			/*
 			 * Attach it to the scene, so it gets drawn and updated
 			 */
 			attachChild(flower);
+			flower.setZIndex(ZINDEX_SEED);
 			/*
 			 * Attach it to the list of dragable items
 			 */
@@ -311,7 +324,8 @@ public class SceneGame extends SceneLoadable{
 		@Override
 		public void onBloomed(Flower pFlower) {
 			SceneGame.this.postRunnable(new DeactivateFlowerTouchesRunnable(pFlower));
-			//mSFX.onFlowerBloom();
+			pFlower.setZIndex(ZINDEX_BLOSSOM);
+			sortChildren(false);
 		}
 
 		@Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <texture version="1" file="misc.png" type="bitmap" width="1024" height="1024" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
     <!-- Created with TexturePacker http://texturepacker.com -->
-    <!-- $TexturePacker:SmartUpdate:b57f15b831430803dcb3135488831597$ -->
+    <!-- $TexturePacker:SmartUpdate:c82202dd143420ac7255a2fdd0dc8a92$ -->
     <textureregion id="0" src="ambient/cloud/CL03.png" x="96" y="4" width="233" height="87" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="233" srcheight="87"/>
     <textureregion id="1" src="ambient/cloud/CL03a.png" x="4" y="342" width="233" height="87" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="233" srcheight="87"/>
     <textureregion id="2" src="ambient/cloud/CL10.png" x="189" y="4" width="199" height="83" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="199" srcheight="83"/>
@@ -12,7 +12,7 @@
     <textureregion id="7" src="ambient/tree/01.png" x="97" y="340" width="121" height="150" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="121" srcheight="150"/>
     <textureregion id="8" src="ambient/tree/02.png" x="4" y="778" width="145" height="130" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="145" srcheight="130"/>
     <textureregion id="9" src="ambient/tree/03.png" x="4" y="581" width="191" height="142" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="191" srcheight="142"/>
-    <textureregion id="10" src="flowers/flower0001.png" x="515" y="542" width="96" height="96" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="96" srcheight="96"/>
+    <textureregion id="10" src="flowers/flower0001.png" x="427" y="4" width="96" height="96" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="96" srcheight="96"/>
     <textureregion id="11" src="flowers/flower0002.png" x="404" y="576" width="105" height="105" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="105" srcheight="105"/>
     <textureregion id="12" src="flowers/flower0003.png" x="347" y="325" width="105" height="105" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="105" srcheight="105"/>
     <textureregion id="13" src="flowers/flower0004.png" x="285" y="855" width="121" height="121" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="121" srcheight="121"/>
@@ -28,10 +28,11 @@
     <textureregion id="23" src="flowers/flower0014.png" x="140" y="778" width="141" height="136" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="141" srcheight="136"/>
     <textureregion id="24" src="flowers/flower0015.png" x="152" y="578" width="133" height="127" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="133" srcheight="127"/>
     <textureregion id="25" src="flowers/flower0016.png" x="282" y="717" width="132" height="130" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="132" srcheight="130"/>
-    <textureregion id="26" src="pot/pot.png" x="4" y="929" width="86" height="66" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="86" srcheight="66"/>
-    <textureregion id="27" src="pot/water.png" x="4" y="4" width="86" height="332" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="86" srcheight="332"/>
-    <textureregion id="28" src="seeds/001.png" x="451" y="436" width="100" height="100" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="100" srcheight="100"/>
-    <textureregion id="29" src="sun/ray-tail.png" x="97" y="496" width="90" height="76" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="90" srcheight="76"/>
-    <textureregion id="30" src="sun/ray.png" x="76" y="929" width="71" height="76" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="71" srcheight="76"/>
-    <textureregion id="31" src="sun/sun.png" x="418" y="687" width="96" height="96" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="96" srcheight="96"/>
+    <textureregion id="26" src="marker/watered.png" x="418" y="687" width="100" height="99" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="100" srcheight="99"/>
+    <textureregion id="27" src="pot/pot.png" x="4" y="929" width="86" height="66" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="86" srcheight="66"/>
+    <textureregion id="28" src="pot/water.png" x="4" y="4" width="86" height="332" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="86" srcheight="332"/>
+    <textureregion id="29" src="seeds/001.png" x="451" y="436" width="100" height="100" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="100" srcheight="100"/>
+    <textureregion id="30" src="sun/ray-tail.png" x="97" y="496" width="90" height="76" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="90" srcheight="76"/>
+    <textureregion id="31" src="sun/ray.png" x="76" y="929" width="71" height="76" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="71" srcheight="76"/>
+    <textureregion id="32" src="sun/sun.png" x="515" y="542" width="96" height="96" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="96" srcheight="96"/>
 </texture>

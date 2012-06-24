@@ -1,7 +1,7 @@
 // Definitions for sprite sheet misc
 // Created with www.texturepacker.com
 
-// $TexturePacker:SmartUpdate:b57f15b831430803dcb3135488831597$
+// $TexturePacker:SmartUpdate:c82202dd143420ac7255a2fdd0dc8a92$
 
 package eu.nazgee.flower;
 
@@ -33,10 +33,11 @@ public interface TexturesMisc
 	public static final int FLOWERS_FLOWER0014_ID = 23;
 	public static final int FLOWERS_FLOWER0015_ID = 24;
 	public static final int FLOWERS_FLOWER0016_ID = 25;
-	public static final int POT_POT_ID = 26;
-	public static final int POT_WATER_ID = 27;
-	public static final int SEEDS_001_ID = 28;
-	public static final int SUN_RAY_TAIL_ID = 29;
-	public static final int SUN_RAY_ID = 30;
-	public static final int SUN_SUN_ID = 31;
+	public static final int MARKER_WATERED_ID = 26;
+	public static final int POT_POT_ID = 27;
+	public static final int POT_WATER_ID = 28;
+	public static final int SEEDS_001_ID = 29;
+	public static final int SUN_RAY_TAIL_ID = 30;
+	public static final int SUN_RAY_ID = 31;
+	public static final int SUN_SUN_ID = 32;
 }

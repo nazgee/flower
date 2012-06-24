@@ -21,7 +21,7 @@ public class SeedsShop {
 	// Constructors
 	// ===========================================================
 	public SeedsShop(GameLevel pGameLevel) {
-		this(pGameLevel.getSeeds(), pGameLevel.cash);
+		this(pGameLevel.getSeedsAccumulatedSoFar(), pGameLevel.cash);
 	}
 
 	public SeedsShop(SmartList<Seed> mSeeds, int mCustomerCash) {

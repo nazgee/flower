@@ -18,13 +18,13 @@ public enum GameLevel {
 	 * When defined as Enum, levels are singletons 
 	 */
 
-	LEVEL1(1, 1000, 20, false, Seed.SEED1, Seed.SEED2, Seed.SEED3),
-	LEVEL2(2, Seed.SEED4),
-	LEVEL3(3, Seed.SEED5),
-	LEVEL4(4, Seed.SEED6),
-	LEVEL5(5, Seed.SEED7),
-	LEVEL6(6, Seed.SEED8),
-	LEVEL7(7, Seed.SEED9, Seed.SEED10),
+	LEVEL1(1, 1000, 60, false, new Basket<Seed>().add(Seed.SEED1, 3).add(Seed.SEED2, 3).add(Seed.SEED3, 3)),
+	LEVEL2(2, new Basket<Seed>().add(Seed.SEED4)),
+	LEVEL3(3, new Basket<Seed>().add(Seed.SEED5)),
+	LEVEL4(4, new Basket<Seed>().add(Seed.SEED6)),
+	LEVEL5(5, new Basket<Seed>().add(Seed.SEED7)),
+	LEVEL6(6, new Basket<Seed>().add(Seed.SEED8)),
+	LEVEL7(7, new Basket<Seed>().add(Seed.SEED9).add(Seed.SEED10)),
 	LEVEL8(8),
 	LEVEL9(9),
 	LEVEL10(10),
@@ -47,7 +47,7 @@ public enum GameLevel {
 
 	protected static final int CASH_DEFAULT = 1000;
 	protected static final int DAYLIGHT_TIME_DEFAULT = 60;
-	protected static final float LEVEL_WIDTH_DEFAULT = Consts.CAMERA_WIDTH * 2;
+	protected static final float LEVEL_WIDTH_DEFAULT = Consts.CAMERA_WIDTH;
 
 	// ===========================================================
 	// Fields
@@ -58,25 +58,29 @@ public enum GameLevel {
 	public final int cash;
 	public final boolean lockedByDefault;
 	public final LevelResourcesBasic resources;
-	public final Seed[] seeds;
+	public final Basket<Seed> seeds;
 
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	private GameLevel(final int pID, final int pCash) {
-		this(pID, pCash, DAYLIGHT_TIME_DEFAULT, true);
+		this(pID, pCash, DAYLIGHT_TIME_DEFAULT, true, new Basket<Seed>());
 	}
 
-	private GameLevel(final int pID, Seed ... pSeeds) {
+	private GameLevel(final int pID) {
+		this(pID, new Basket<Seed>());
+	}
+
+	private GameLevel(final int pID, Basket<Seed> pSeeds) {
 		this(pID, CASH_DEFAULT, DAYLIGHT_TIME_DEFAULT, true, pSeeds);
 	}
 
-	private GameLevel(final int pID, final int pCash, final int pDalightTime, Seed ... pSeeds) {
+	private GameLevel(final int pID, final int pCash, final int pDalightTime, Basket<Seed> pSeeds) {
 		this(pID, pCash, pDalightTime, true, pSeeds);
 	}
 
-	private GameLevel(final int pID, final int pCash, final int pDalightTime, boolean pLocked, Seed ... pSeeds) {
+	private GameLevel(final int pID, final int pCash, final int pDalightTime, boolean pLocked, Basket<Seed> pSeeds) {
 		id = pID;
 		cash = pCash;
 		daylight_time = pDalightTime;
@@ -88,13 +92,13 @@ public enum GameLevel {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public SmartList<Seed> getSeeds() {
+	public SmartList<Seed> getSeedsAccumulatedSoFar() {
 		SmartList<Seed> ret = new SmartList<Seed>(id);
 
 		// Current level has it's own collection of seeds, plus seeds from all
 		// previous levels- this builds up a collection that is returned here
 		for (int i = 1; i <= id; i++) {
-			Seed[] new_seeds = getLevelById(i).seeds;
+			SmartList<Seed> new_seeds = getLevelById(i).seeds.getItems();
 			for (Seed seed : new_seeds) {
 				ret.add(seed);
 			}

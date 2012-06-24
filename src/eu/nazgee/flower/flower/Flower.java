@@ -11,14 +11,15 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.math.MathUtils;
-import org.andengine.util.modifier.ease.EaseBounceOut;
 import org.andengine.util.modifier.ease.EaseLinear;
+import org.andengine.util.modifier.ease.EaseQuadIn;
 
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
 import eu.nazgee.util.Anchor;
 import eu.nazgee.util.Anchor.eAnchorPointXY;
+import eu.nazgee.util.Kinematics;
 
 
 public class Flower extends Entity implements ITouchArea{
@@ -62,7 +63,8 @@ public class Flower extends Entity implements ITouchArea{
 
 		this.mColor = pSeed.getRandomColor(MathUtils.RANDOM);
 		this.mEntityBlossom = new EntityBlossomParent(0, 0, pTexturesLibrary.getFlower(pSeed.blossomID), pVertexBufferObjectManager, mColor);
-		this.mEntitySeed = new EntitySeed(0, 0, pTexturesLibrary.mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(pSeed.seedID), pVertexBufferObjectManager, mColor, pDetacher);
+		this.mEntitySeed = new EntitySeed(0, 0, pTexturesLibrary.getSeed(pSeed.seedID), pTexturesLibrary.getWateredMarker(),
+				pVertexBufferObjectManager, mColor, pDetacher);
 
 		attachChild(mEntitySeed);
 		setSize(mEntitySeed.getWidth(), mEntitySeed.getHeight());
@@ -154,12 +156,10 @@ public class Flower extends Entity implements ITouchArea{
 	 * @param pSky used to calculate ground level which will be used in the animation
 	 */
 	synchronized public void stateDropFromToGround(final float pX, final float pY, Sky pSky) {
-//		stateDropFromTo(pX, pY, pX, pSky.getGroundLevelOnScene() + eAnchorPointXY.BOTTOM_MIDDLE.getObjectY(mEntitySeed) + BOTTOM_BELOW_GROUND);
 		stateDropFromTo(pX, pY, pX, pSky.getGroundLevelOnScene() + eAnchorPointXY.BOTTOM_MIDDLE.getOffsetYFromDefault(mEntitySeed) + GROUND_LEVEL_OFFSET);
 	}
 
 	synchronized public void stateDropToGround(Sky pSky) {
-//		stateDropTo(getX(), pSky.getGroundLevelOnScene() + eAnchorPointXY.BOTTOM_MIDDLE.getObjectY(mEntitySeed) + BOTTOM_BELOW_GROUND);
 		stateDropTo(getX(), pSky.getGroundLevelOnScene() + eAnchorPointXY.BOTTOM_MIDDLE.getOffsetYFromDefault(mEntitySeed) + GROUND_LEVEL_OFFSET);
 	}
 
@@ -254,13 +254,13 @@ public class Flower extends Entity implements ITouchArea{
 	}
 
 	private void animateMove(final float pX_from, final float pY_from, final float pX_to, final float pY_to) {
-		final float time = 1;
+		final float time = Kinematics.time(Kinematics.GRAVITY_SEED_ACCEL, Math.abs(pY_from - pY_to));
 		setPosition(pX_from, pY_from);
 		unregisterEntityModifier(mDropModifier);
 
 		mDropModifier = new ParallelEntityModifier(
 					new MoveXModifier(time, pX_from, pX_to, EaseLinear.getInstance()),
-					new MoveYModifier(time, pY_from, pY_to, EaseBounceOut.getInstance())
+					new MoveYModifier(time, pY_from, pY_to, EaseQuadIn.getInstance())
 				);
 		mDropModifier.setAutoUnregisterWhenFinished(false);
 		registerEntityModifier(mDropModifier);

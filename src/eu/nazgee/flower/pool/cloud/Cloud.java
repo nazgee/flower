@@ -72,6 +72,7 @@ public class Cloud extends Sprite {
 	synchronized public void travel(final float pX, final float pY,
 			final float W, final float time, CloudListener pTravelListener) {
 
+		setAlpha(0);
 		mCloudListener = pTravelListener;
 		Anchor.setPosCenter(this, pX, pY);
 		unregisterEntityModifier(mTravelModifier);

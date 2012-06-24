@@ -24,7 +24,7 @@ public class WaterDrop extends Sprite {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-	static float GRAVITY_ACCEL = 250;
+	
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -68,7 +68,7 @@ public class WaterDrop extends Sprite {
 	 * @param pWaterDropListener
 	 */
 	public synchronized void fall(final float pX, final float pY, final float H, IWaterDropListener pWaterDropListener) {
-		final float time = Kinematics.time(GRAVITY_ACCEL, H);
+		final float time = Kinematics.time(Kinematics.GRAVITY_WATER_ACCEL, H);
 		mWaterDropListener = pWaterDropListener;
 		Anchor.setPosCenter(this, pX, pY);
 		unregisterEntityModifier(mDropModifier);
