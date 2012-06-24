@@ -22,7 +22,7 @@ import eu.nazgee.util.Anchor.eAnchorPointXY;
 import eu.nazgee.util.Kinematics;
 
 
-public class Flower extends Entity implements ITouchArea{
+public class Flower extends Entity implements ITouchArea, IFlowerState{
 	public static final int GROUND_LEVEL_OFFSET = -20;
 	// ===========================================================
 	// Constants
@@ -38,6 +38,7 @@ public class Flower extends Entity implements ITouchArea{
 	// ===========================================================
 	// Fields
 	// ===========================================================
+	private IFlowerState mState;
 	private int mWaterLevel;
 	private int mSunLevel;
 	private boolean isBloomed = false;
@@ -149,6 +150,30 @@ public class Flower extends Entity implements ITouchArea{
 	// ===========================================================
 	// Methods
 	// ===========================================================
+	@Override
+	public IFlowerState water() {
+		mState = mState.water();
+		return mState;
+	}
+
+	@Override
+	public IFlowerState sun() {
+		mState = mState.sun();
+		return mState;
+	}
+
+	@Override
+	public IFlowerState drag() {
+		mState = mState.drag();
+		return mState;
+	}
+
+	@Override
+	public IFlowerState drop() {
+		mState = mState.drop();
+		return mState;
+	}
+
 	/**
 	 * Animates dropping Flower to the ground from the given position
 	 * @param pX
@@ -237,7 +262,7 @@ public class Flower extends Entity implements ITouchArea{
 		}
 	}
 
-	private void animateBloom() {
+	public void animateBloom() {
 		attachChild(mEntityBlossom);	// blossom was not attached yet, for performance reasons
 		Anchor.setPosCenterAtParent(mEntityBlossom, eAnchorPointXY.CENTERED);
 
@@ -245,15 +270,15 @@ public class Flower extends Entity implements ITouchArea{
 		mEntitySeed.animateGrowthAndDetachSelf();
 	}
 
-	private void animateFry() {
+	public void animateFry() {
 		mEntitySeed.animateFry();
 	}
 
-	private void animateWater() {
+	public void animateWater() {
 		mEntitySeed.animateWater();
 	}
 
-	private void animateMove(final float pX_from, final float pY_from, final float pX_to, final float pY_to) {
+	public void animateMove(final float pX_from, final float pY_from, final float pX_to, final float pY_to) {
 		final float time = Kinematics.time(Kinematics.GRAVITY_SEED_ACCEL, Math.abs(pY_from - pY_to));
 		setPosition(pX_from, pY_from);
 		unregisterEntityModifier(mDropModifier);
@@ -275,5 +300,6 @@ public class Flower extends Entity implements ITouchArea{
 		public void onWaterLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew);
 		public void onSunLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew);
 	}
+
 
 }
