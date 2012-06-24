@@ -1,7 +1,7 @@
 package eu.nazgee.misc;
 
 
-public abstract class State<T> {
+public class State<T> {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -10,11 +10,13 @@ public abstract class State<T> {
 	// Fields
 	// ===========================================================
 	private final T mItem;
+	private IStateChangesListener<T> mStateChangeListener;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	public State(State<T> pOtherState) {
-		mItem = pOtherState.getItem();
+		mItem = pOtherState.mItem;
+		mStateChangeListener = pOtherState.mStateChangeListener;
 		pOtherState.onStateFinished();
 		onStateStarted();
 	}
@@ -34,22 +36,49 @@ public abstract class State<T> {
 	public T getItem() {
 		return mItem;
 	}
+	/**
+	 * Gets a current listener listening for state transitions
+	 * @return
+	 */
+	public IStateChangesListener<T> getStateChangeListener() {
+		return mStateChangeListener;
+	}
+	/**
+	 * Sets a listener listening for state transitions
+	 * @return
+	 */
+	public void setStateChangeListener(IStateChangesListener<T> mStateChangeListener) {
+		this.mStateChangeListener = mStateChangeListener;
+	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	/**
 	 * Gets called whenever a state transition occurs and {@link State} is not active anymore
 	 */
-	abstract protected void onStateFinished();
+	protected void onStateFinished() {
+		if (mStateChangeListener != null) {
+			mStateChangeListener.onStateFinished(this);
+		}
+	}
 	/**
 	 * Gets called whenever a state transition occurs and {@link State} becomes active
 	 */
-	abstract protected void onStateStarted();
+	protected void onStateStarted() {
+		if (mStateChangeListener != null) {
+			mStateChangeListener.onStateStarted(this);
+		}
+	}
 	// ===========================================================
 	// Methods
 	// ===========================================================
 
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	public interface IStateChangesListener<T> {
+		public void onStateStarted(State<T> pState);
+		public void onStateFinished(State<T> pState);
+	}
 }

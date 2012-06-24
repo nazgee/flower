@@ -1,9 +1,8 @@
 package eu.nazgee.flower.flower;
 
 import eu.nazgee.flower.activity.game.scene.game.Sky;
-import eu.nazgee.misc.State;
 
-public class FlowerState extends State<Flower> implements IFlowerState {
+public class FlowerStateDragged extends FlowerState {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -12,51 +11,33 @@ public class FlowerState extends State<Flower> implements IFlowerState {
 	// Fields
 	// ===========================================================
 
+	private final FlowerState mOldState;
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	protected FlowerState(Flower pItem) {
-		super(pItem);
+	public FlowerStateDragged(Flower pFlower) {
+		super(pFlower);
+		mOldState = null;
 	}
-	protected FlowerState(State<Flower> pOtherState) {
-		super(pOtherState);
+
+	public FlowerStateDragged(FlowerState pOther) {
+		super(pOther);
+		mOldState = pOther;
 	}
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
 
+	@Override
+	public FlowerState drop(Sky pSky) {
+		getItem().animateDropToGround(pSky);
+		return mOldState;
+	}
+
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
-	@Override
-	protected void onStateFinished() {
-		super.onStateFinished();
-	}
-
-	@Override
-	protected void onStateStarted() {	
-		super.onStateStarted();
-	}
-
-	@Override
-	public FlowerState water() {
-		return this;
-	}
-
-	@Override
-	public FlowerState sun() {
-		return this;
-	}
-
-	@Override
-	public FlowerState drag() {
-		return new FlowerStateDragged(this);
-	}
-
-	@Override
-	public FlowerState drop(Sky pSky) {
-		return this;
-	}
 
 	// ===========================================================
 	// Methods
@@ -65,5 +46,4 @@ public class FlowerState extends State<Flower> implements IFlowerState {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-
 }

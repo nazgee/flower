@@ -27,12 +27,12 @@ public class FlowerStateSeed extends FlowerState {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public IFlowerState water() {
+	public FlowerState water() {
 		return new FlowerStateWatered(this);
 	}
 
 	@Override
-	public IFlowerState sun() {
+	public FlowerState sun() {
 		return new FlowerStateFried(this);
 	}
 	// ===========================================================

@@ -17,6 +17,8 @@ import org.andengine.util.modifier.ease.EaseQuadIn;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
+import eu.nazgee.misc.State;
+import eu.nazgee.misc.State.IStateChangesListener;
 import eu.nazgee.util.Anchor;
 import eu.nazgee.util.Anchor.eAnchorPointXY;
 import eu.nazgee.util.Kinematics;
@@ -30,26 +32,15 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	private static final int ZINDEX_BLOSSOM = 0;
 	private static final int ZINDEX_SEED = -1;
 
-	public enum eLevel {
-		LOW,
-		NORMAL,
-		HIGH
-	}
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private IFlowerState mState;
-	private int mWaterLevel;
-	private int mSunLevel;
-	private boolean isBloomed = false;
-	private boolean isFried = false;
-
+	private FlowerState mState = new FlowerStateSeed(this);
 	private final EntityBlossomParent mEntityBlossom;
 	private final EntitySeed mEntitySeed;
 
-	private IEntityModifier mDropModifier;
+	private IEntityModifier mAnimationModifier;
 	private IFlowerStateHandler mFlowerStateHandler;
-	private final Seed mSeed;
 	private final Color mColor;
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 	// ===========================================================
@@ -59,7 +50,6 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	public Flower(float pX, float pY, final Seed pSeed,
 			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final TexturesLibrary pTexturesLibrary, final EntityDetachRunnablePoolUpdateHandler pDetacher) {
-		mSeed = pSeed;
 		mDetacher = pDetacher;
 
 		this.mColor = pSeed.getRandomColor(MathUtils.RANDOM);
@@ -75,6 +65,7 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 
 		Anchor.setPosCenterAtParent(mEntitySeed, eAnchorPointXY.CENTERED);
 
+		mState.setStateChangeListener(new StateChangeListener());
 		sortChildren();
 	}
 	// ===========================================================
@@ -97,42 +88,6 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 		return mEntityBlossom.getBlossomListener();
 	}
 
-	public Seed getSeed() {
-		return mSeed;
-	}
-	public eLevel getLevelSun() {
-		return getLevel(0, 2, mSunLevel);
-	}
-
-	public eLevel getLevelWater() {
-		return getLevel(0, 2, mWaterLevel);
-	}
-
-	private eLevel getLevel(int low, int high, int value) {
-		if (value <= low)
-			return eLevel.LOW;
-
-		if (value >= high)
-			return eLevel.HIGH;
-
-		return eLevel.NORMAL;
-	}
-
-	public boolean isBloomed() {
-		return isBloomed;
-	}
-
-	private void setBloomed(boolean isBloomed) {
-		this.isBloomed = isBloomed;
-	}
-
-	public boolean isFried() {
-		return isFried;
-	}
-
-	private void setFried(boolean isFried) {
-		this.isFried = isFried;
-	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
@@ -169,8 +124,8 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	}
 
 	@Override
-	public IFlowerState drop() {
-		mState = mState.drop();
+	public IFlowerState drop(Sky pSky) {
+		mState = mState.drop(pSky);
 		return mState;
 	}
 
@@ -180,86 +135,16 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	 * @param pY
 	 * @param pSky used to calculate ground level which will be used in the animation
 	 */
-	synchronized public void stateDropFromToGround(final float pX, final float pY, Sky pSky) {
-		stateDropFromTo(pX, pY, pX, pSky.getGroundLevelOnScene() + eAnchorPointXY.BOTTOM_MIDDLE.getOffsetYFromDefault(mEntitySeed) + GROUND_LEVEL_OFFSET);
+	public void animateDropFromToGround(final float pX, final float pY, Sky pSky) {
+		animateMove(pX, pY, pX, pSky.getGroundLevelOnScene() + eAnchorPointXY.BOTTOM_MIDDLE.getOffsetYFromDefault(mEntitySeed) + GROUND_LEVEL_OFFSET);
 	}
 
-	synchronized public void stateDropToGround(Sky pSky) {
-		stateDropTo(getX(), pSky.getGroundLevelOnScene() + eAnchorPointXY.BOTTOM_MIDDLE.getOffsetYFromDefault(mEntitySeed) + GROUND_LEVEL_OFFSET);
+	public void animateDropTo(final float pX_to, final float pY_to) {
+		animateMove(getX(), getY(), pX_to, pY_to);
 	}
 
-	synchronized public void stateDropTo(final float pX_to, final float pY_to) {
-		stateDropFromTo(getX(), getY(), pX_to, pY_to);
-	}
-
-	synchronized public void stateDropFromTo(final float pX_from, final float pY_from, final float pX_to, final float pY_to) {
-		animateMove(pX_from, pY_from, pX_to, pY_to);
-	}
-
-
-	/**
-	 * Increases the sunlight level to which the flower was exposed. Results
-	 * in blooming, if flower was watered well enough.
-	 */
-	public void stateSun() {
-		if (isBloomed() || isFried()) {
-			return;
-		}
-
-		eLevel old = getLevelSun();
-		mSunLevel++;
-
-		switch (getLevelWater()) {
-		case LOW:
-			animateFry();
-			setFried(true);
-			if (mFlowerStateHandler != null) {
-				mFlowerStateHandler.onFried(this);
-			}
-			break;
-		case NORMAL:
-		case HIGH: {
-			switch (getLevelSun()) {
-			case LOW:
-			case NORMAL:
-			case HIGH:
-				animateBloom();
-				setBloomed(true);
-				if (mFlowerStateHandler != null) {
-					mFlowerStateHandler.onBloomed(this);
-				}
-			}
-		}
-		}
-
-		if (mFlowerStateHandler != null && old != getLevelSun()) {
-			mFlowerStateHandler.onSunLevelChanged(this, old, getLevelSun());
-		}
-	}
-
-	/**
-	 * Increases the water level of the flower
-	 */
-	public void stateWater() {
-		if (isBloomed() || isFried()) {
-			return;
-		}
-
-		eLevel old = getLevelWater();
-		mWaterLevel++;
-
-		switch (getLevelWater()) {
-		case LOW:
-		break;
-		case NORMAL:
-			animateWater();
-		break;
-		case HIGH:
-		}
-
-		if (mFlowerStateHandler != null && old != getLevelWater()) {
-			mFlowerStateHandler.onWaterLevelChanged(this, old, getLevelWater());
-		}
+	public void animateDropToGround(Sky pSky) {
+		animateDropTo(getX(), pSky.getGroundLevelOnScene() + eAnchorPointXY.BOTTOM_MIDDLE.getOffsetYFromDefault(mEntitySeed) + GROUND_LEVEL_OFFSET);
 	}
 
 	public void animateBloom() {
@@ -281,25 +166,42 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	public void animateMove(final float pX_from, final float pY_from, final float pX_to, final float pY_to) {
 		final float time = Kinematics.time(Kinematics.GRAVITY_SEED_ACCEL, Math.abs(pY_from - pY_to));
 		setPosition(pX_from, pY_from);
-		unregisterEntityModifier(mDropModifier);
 
-		mDropModifier = new ParallelEntityModifier(
-					new MoveXModifier(time, pX_from, pX_to, EaseLinear.getInstance()),
-					new MoveYModifier(time, pY_from, pY_to, EaseQuadIn.getInstance())
-				);
-		mDropModifier.setAutoUnregisterWhenFinished(false);
-		registerEntityModifier(mDropModifier);
+		setAnimationModifier(new ParallelEntityModifier(
+				new MoveXModifier(time, pX_from, pX_to, EaseLinear.getInstance()),
+				new MoveYModifier(time, pY_from, pY_to, EaseQuadIn.getInstance())
+			));
 	}
 
+	synchronized private void setAnimationModifier(final IEntityModifier pModifier) {
+		pModifier.setAutoUnregisterWhenFinished(false);
+		unregisterEntityModifier(mAnimationModifier);
+		mAnimationModifier = pModifier;
+		registerEntityModifier(pModifier);
+	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
 	public interface IFlowerStateHandler {
-		public void onBloomed(Flower pFlower);
-		public void onFried(Flower pFlower);
-		public void onWaterLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew);
-		public void onSunLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew);
+		public void onBlooming(Flower pFlower);
+		public void onFrying(Flower pFlower);
 	}
 
+	private class StateChangeListener implements IStateChangesListener<Flower> {
+		@Override
+		public void onStateStarted(State<Flower> pState) {
+			if (mFlowerStateHandler == null) {
+				return;
+			}
 
+			if (pState instanceof FlowerStateBloomed) {
+				mFlowerStateHandler.onBlooming(Flower.this);
+			} else if (pState instanceof FlowerStateFried) {
+				mFlowerStateHandler.onFrying(Flower.this);
+			}
+		}
+		@Override
+		public void onStateFinished(State<Flower> pState) {
+		}
+	}
 }

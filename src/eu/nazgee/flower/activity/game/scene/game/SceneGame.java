@@ -9,7 +9,6 @@ import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.Entity;
 import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.ITouchArea;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -32,7 +31,6 @@ import eu.nazgee.flower.flower.EntityBlossom;
 import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
 import eu.nazgee.flower.flower.Flower;
 import eu.nazgee.flower.flower.Flower.IFlowerStateHandler;
-import eu.nazgee.flower.flower.Flower.eLevel;
 import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.pool.cloud.Cloud;
@@ -63,7 +61,6 @@ public class SceneGame extends SceneLoadable{
 	private PopupPool mPopupPool;
 	private Sky mSky;
 	private CloudLayer mCloudLayer;
-	private Sprite mGround;
 	private Sun mSun;
 	private Entity mSunTrackingHandle;
 
@@ -118,7 +115,6 @@ public class SceneGame extends SceneLoadable{
 		 * to the sprite representing ground level
 		 */
 		mBG = new GameBackground(e.getCamera(), mTexturesLibrary, getVertexBufferObjectManager());
-		mGround = mBG.getGroundSprite();
 	}
 
 	@Override
@@ -160,9 +156,9 @@ public class SceneGame extends SceneLoadable{
 				mTexturesLibrary.getSunRays(), vbom);
 		attachChild(mSun);
 		mSun.travel(0, getH()/2, levelW, getH()/2, getGameLevel().daylight_time, new SunTravelListener());
-		mSunTrackingHandle = new Entity(camera.getWidth() * 0.1f, 0);
+		mSunTrackingHandle = new Entity(camera.getWidth() * 0.2f, 0);
 		mSun.attachChild(mSunTrackingHandle);
-//		camera.setTracking(mSun, new TrackVector(new Vector2(camera.getWidth() * 0.1f, 0)), 0);
+
 		camera.setChaseEntity(mSunTrackingHandle);
 
 		/*
@@ -212,7 +208,8 @@ public class SceneGame extends SceneLoadable{
 			 */
 			mFlowers.add(flower);
 			registerTouchArea(flower);
-			postRunnable(new FlowerTouchRunnable(flower, true));
+			flower.drag();
+			flower.drop(mSky);
 		}
 
 		/*
@@ -276,7 +273,7 @@ public class SceneGame extends SceneLoadable{
 			 * is currently shining
 			 */
 			if (!mSky.isAboveGroundBottom(flower) && mSun.isShiningAt(flower)) {
-				flower.stateSun();
+				flower.sun();
 			}
 		}
 	}
@@ -284,8 +281,8 @@ public class SceneGame extends SceneLoadable{
 	private void handleFlowerRain(WaterDrop pWaterDrop) {
 		float pos[] = pWaterDrop.getSceneCenterCoordinates();
 		for (Flower flower : mFlowers) {
-			if (flower.contains(pos[0], pos[1]) && (flower.getLevelWater() == eLevel.LOW)) {
-				flower.stateWater();
+			if (flower.contains(pos[0], pos[1])) {
+				flower.water();
 				break; // only one flower gets watered
 			}
 		}
@@ -322,14 +319,14 @@ public class SceneGame extends SceneLoadable{
 
 	private class FlowerListener implements IFlowerStateHandler {
 		@Override
-		public void onBloomed(Flower pFlower) {
+		public void onBlooming(Flower pFlower) {
 			SceneGame.this.postRunnable(new DeactivateFlowerTouchesRunnable(pFlower));
 			pFlower.setZIndex(ZINDEX_BLOSSOM);
 			sortChildren(false);
 		}
 
 		@Override
-		public void onFried(Flower pFlower) {
+		public void onFrying(Flower pFlower) {
 			SceneGame.this.postRunnable(new DeactivateFlowerTouchesRunnable(pFlower));
 			mSFX.onFlowerFry();
 			mScore.seeds.dec(1);
@@ -341,14 +338,6 @@ public class SceneGame extends SceneLoadable{
 			item.getEntity().put(pFlower, "fried!");
 			item.getEntity().fxPop(1f);
 			attachChild(item.getEntity());
-		}
-
-		@Override
-		public void onWaterLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew) {
-		}
-
-		@Override
-		public void onSunLevelChanged(Flower pFlower, eLevel pOld, eLevel pNew) {
 		}
 
 		class DeactivateFlowerTouchesRunnable implements Runnable {
@@ -389,27 +378,14 @@ public class SceneGame extends SceneLoadable{
 				Flower flower = (Flower) pTouchArea;
 				flower.setPosition(pSceneTouchEvent.getX(), pSceneTouchEvent.getY() + Consts.TOUCH_OFFSET_Y);
 
-				if (pSceneTouchEvent.isActionUp() || pSceneTouchEvent.isActionDown()) {
-					SceneGame.this.postRunnable(new FlowerTouchRunnable(flower, pSceneTouchEvent.isActionUp()));
+				if (pSceneTouchEvent.isActionDown()) {
+					flower.drag();
+				} else if (pSceneTouchEvent.isActionUp()) {
+					flower.drop(mSky);
 				}
 				return true;
 			}
 			return false;
-		}
-	}
-
-	private class FlowerTouchRunnable implements Runnable {
-		private final Flower mFlower;
-		private final boolean mIsBeingDragged;
-		public FlowerTouchRunnable(Flower pSprite, boolean pIsBeingDragged) {
-			mFlower = pSprite;
-			mIsBeingDragged = pIsBeingDragged;
-		}
-		@Override
-		public void run() {
-			if (mIsBeingDragged) {
-				mFlower.stateDropToGround(mSky);
-			}
 		}
 	}
 

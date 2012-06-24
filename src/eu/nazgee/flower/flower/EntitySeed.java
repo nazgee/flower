@@ -18,7 +18,9 @@ import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseBounceIn;
 import org.andengine.util.modifier.ease.EaseBounceOut;
+import org.andengine.util.modifier.ease.EaseElasticOut;
 import org.andengine.util.modifier.ease.EaseQuadOut;
+import org.andengine.util.modifier.ease.EaseQuartInOut;
 import org.andengine.util.modifier.ease.EaseSineOut;
 
 import android.util.Log;
@@ -35,7 +37,6 @@ public class EntitySeed extends Sprite {
 	// ===========================================================
 	private IEntityModifier mSeedAnimator;
 	private IEntityModifier mWaterMarkAnimator;
-	private final Color mColor;
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 	private final Sprite mWaterMark;
 
@@ -47,7 +48,6 @@ public class EntitySeed extends Sprite {
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			final Color pColor, final EntityDetachRunnablePoolUpdateHandler pDetacher) {
 		super(pX, pY, pWidth, pHeight, pSeedTexture, pVertexBufferObjectManager);
-		mColor = pColor;
 		mDetacher = pDetacher;
 		mWaterMark = new Sprite(0, 0, pWaterMarkerTexture, pVertexBufferObjectManager);
 	}
@@ -57,7 +57,6 @@ public class EntitySeed extends Sprite {
 			VertexBufferObjectManager pVertexBufferObjectManager,
 			final Color pColor, final EntityDetachRunnablePoolUpdateHandler pDetacher) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
-		mColor = pColor;
 		mDetacher = pDetacher;
 		mWaterMark = new Sprite(0, 0, pWaterMarkerTexture, pVertexBufferObjectManager);
 	}
@@ -109,15 +108,6 @@ public class EntitySeed extends Sprite {
 	private void animateWater(final float pTime) {
 		Log.d(getClass().getSimpleName(), "animateWater();");
 
-//		setModifier(new ParallelEntityModifier(
-//				new SequenceEntityModifier(
-//						new ColorModifier(pTime, Color.GREEN, mColor)
-//						),
-//				new SequenceEntityModifier(
-//						new ScaleModifier(pTime, 0, 1f, EaseElasticOut.getInstance())
-//						)
-//				));
-
 		attachChild(mWaterMark);
 		mWaterMark.setZIndex(ZINDEX_WATERMARK);
 		mWaterMark.setScale(0);
@@ -136,7 +126,10 @@ public class EntitySeed extends Sprite {
 		Log.d(getClass().getSimpleName(), "animateGrowth();");
 
 		setModifier(new FadeOutModifier(pTime));
-		setWaterMarkModifier(new ScaleModifier(pTime, 1, 0, EaseBounceIn.getInstance()));
+		setWaterMarkModifier(new ParallelEntityModifier(
+				new ScaleModifier(pTime, 1, 2, EaseElasticOut.getInstance()),
+				new FadeOutModifier(pTime, EaseQuartInOut.getInstance())
+				));
 	}
 
 	synchronized private void setModifier(final IEntityModifier pModifier) {

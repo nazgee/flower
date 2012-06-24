@@ -33,7 +33,7 @@ public class FlowerStateWatered extends FlowerState {
 	}
 
 	@Override
-	public IFlowerState sun() {
+	public FlowerState sun() {
 		return new FlowerStateBloomed(this);
 	}
 	// ===========================================================
