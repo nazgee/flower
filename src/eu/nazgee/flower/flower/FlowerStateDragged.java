@@ -1,5 +1,6 @@
 package eu.nazgee.flower.flower;
 
+import android.util.Log;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 
 public class FlowerStateDragged extends FlowerState {
@@ -32,7 +33,19 @@ public class FlowerStateDragged extends FlowerState {
 	@Override
 	public FlowerState drop(Sky pSky) {
 		getItem().animateDropToGround(pSky);
+//		Log.w(getClass().getSimpleName(), "drop " + getItem());
 		return mOldState;
+	}
+
+	@Override
+	public FlowerState drag() {
+		return this;
+	}
+
+	@Override
+	protected void onStateStarted() {
+		super.onStateStarted();
+//		Log.w(getClass().getSimpleName(), "drag " + getItem());
 	}
 
 	// ===========================================================

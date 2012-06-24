@@ -377,10 +377,8 @@ public class SceneGame extends SceneLoadable{
 			if (mFlowers.contains(pTouchArea)) {
 				Flower flower = (Flower) pTouchArea;
 				flower.setPosition(pSceneTouchEvent.getX(), pSceneTouchEvent.getY() + Consts.TOUCH_OFFSET_Y);
-
-				if (pSceneTouchEvent.isActionDown()) {
-					flower.drag();
-				} else if (pSceneTouchEvent.isActionUp()) {
+				flower.drag();
+				if (pSceneTouchEvent.isActionUp()) {
 					flower.drop(mSky);
 				}
 				return true;
