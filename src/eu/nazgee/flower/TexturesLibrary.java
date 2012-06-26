@@ -70,6 +70,10 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	public ITextureRegion getRainbow() {
 		return mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.AMBIENT_RAINBOW_ID);
 	}
+	public ITiledTextureRegion getButterfly() {
+		ITextureRegion butt = mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.AMBIENT_BUTTERFLY_ID);
+		return TiledTextureRegion.create(butt.getTexture(), (int)butt.getTextureX(), (int)butt.getTextureY(), (int)butt.getWidth(), (int)butt.getHeight(), 4, 2, butt.isRotated());
+	}
 
 	public ITextureRegion getSky() {
 		return mSpritesheetParalax.getTexturePackTextureRegionLibrary().get(TexturesParalax.SKY_ID);

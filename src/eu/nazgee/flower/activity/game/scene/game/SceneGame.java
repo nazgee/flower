@@ -23,7 +23,6 @@ import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.math.MathUtils;
 
 import android.content.Context;
-import android.util.Log;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.GameScore;
@@ -39,13 +38,11 @@ import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
-import eu.nazgee.flower.rainbow.Rainbow;
+import eu.nazgee.flower.rainbow.Butterfly;
 import eu.nazgee.flower.sun.Sun;
 import eu.nazgee.flower.sun.Sun.TravelListener;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.SceneLoadable;
-import eu.nazgee.util.Anchor;
-import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 public class SceneGame extends SceneLoadable{
 	// ===========================================================
@@ -336,6 +333,10 @@ public class SceneGame extends SceneLoadable{
 			sortChildren(false);
 			if (pFlower.getSeed().unlock(mContext)) {
 				pFlower.rainbow(mTexturesLibrary.getRainbow(), mTexturesLibrary.getFontPopUp(), "new\nflower\nfound!", Color.PINK);
+			} else {
+				Butterfly butt = new Butterfly(0, 0, mTexturesLibrary.getButterfly(), getVertexBufferObjectManager());
+				attachChild(butt);
+				butt.animate(pFlower.getX(), pFlower.getY());
 			}
 		}
 
