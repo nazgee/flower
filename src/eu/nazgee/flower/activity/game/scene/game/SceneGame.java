@@ -1,7 +1,6 @@
 package eu.nazgee.flower.activity.game.scene.game;
 
 import java.util.LinkedList;
-import java.util.Random;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
@@ -27,13 +26,13 @@ import eu.nazgee.flower.flower.Flower;
 import eu.nazgee.flower.flower.Flower.IFlowerListener;
 import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.level.GameLevel;
+import eu.nazgee.flower.pool.butterfly.Butterfly;
 import eu.nazgee.flower.pool.butterfly.ButterflyPool;
-import eu.nazgee.flower.pool.butterfly.ButterflyPool.ButterflyItem;
 import eu.nazgee.flower.pool.cloud.Cloud;
 import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
+import eu.nazgee.flower.pool.rainbow.Rainbow;
 import eu.nazgee.flower.pool.rainbow.RainbowPool;
-import eu.nazgee.flower.pool.rainbow.RainbowPool.RainbowItem;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
 import eu.nazgee.flower.sun.Sun;
@@ -47,8 +46,12 @@ public class SceneGame extends SceneLoadable{
 	// Constants
 	// ===========================================================
 
+	private static final int ZINDEX_CLOUD = 3;
+	private static final int ZINDEX_SUN = 2;
+	private static final int ZINDEX_BUTTERFLY = 1;
 	private static final int ZINDEX_SEED = 0;
 	private static final int ZINDEX_BLOSSOM = -1;
+	private static final int ZINDEX_RAINBOW = -2;
 
 	private static final int BUTTERFLIES_NUMBER = 3;
 	// ===========================================================
@@ -166,6 +169,7 @@ public class SceneGame extends SceneLoadable{
 		mSun = new Sun(0, 0, mTexturesLibrary.getSun(),
 				mTexturesLibrary.getSunRays(), vbom);
 		attachChild(mSun);
+		mSun.setZIndex(ZINDEX_SUN);
 		mSun.travel(0, getH()/2, levelW, getH()/2, getGameLevel().daylight_time, new SunListener());
 		mSunTrackingHandle = new Entity(camera.getWidth() * 0.2f, 0);
 		mSun.attachChild(mSunTrackingHandle);
@@ -182,6 +186,7 @@ public class SceneGame extends SceneLoadable{
 				mDetacher,
 				vbom);
 		attachChild(mCloudLayer);
+		mCloudLayer.setZIndex(ZINDEX_CLOUD);
 		mCloudLayer.setWaterDropListener(new IWaterDropListener() {
 			@Override
 			public void onHitTheGround(WaterDrop pWaterDrop) {
@@ -349,20 +354,24 @@ public class SceneGame extends SceneLoadable{
 				/*
 				 * Create a rainbow
 				 */
-				RainbowItem item = mRainbowPool.obtainPoolItem();
-				attachChild(item.getEntity());
-				Anchor.setPosBottomMiddleAtSibling(item.getEntity(), pFlower, eAnchorPointXY.CENTERED);
-				item.getEntity().fxPopOutWithText( mTexturesLibrary.getFontPopUp(), "new\nflower\nfound!", Color.PINK);
+				Rainbow item = mRainbowPool.obtainPoolItem().getEntity();
+				attachChild(item);
+				item.setZIndex(ZINDEX_RAINBOW);
+				Anchor.setPosBottomMiddleAtSibling(item, pFlower, eAnchorPointXY.CENTERED);
+				item.fxPopOutWithText( mTexturesLibrary.getFontPopUp(), "new\nflower\nfound!", Color.PINK);
+				sortChildren(false);
 			} else {
 				/*
 				 * Create butterflies
 				 */
 				for (int i=0; i<BUTTERFLIES_NUMBER; i++) {
-					ButterflyItem item = mButterflyPool.obtainPoolItem();
-					attachChild(item.getEntity());
-					item.getEntity().setPosition(x, y);
-					item.getEntity().fxFlyAround(x, y);
+					Butterfly item = mButterflyPool.obtainPoolItem().getEntity();
+					attachChild(item);
+					item.setZIndex(ZINDEX_BUTTERFLY);
+					item.setPosition(x, y);
+					item.fxFlyAround(x, y);
 				}
+				sortChildren(false);
 			}
 		}
 
