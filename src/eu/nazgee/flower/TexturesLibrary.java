@@ -4,9 +4,16 @@ import org.andengine.engine.Engine;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePack;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackLoader;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.font.FontManager;
+import org.andengine.opengl.texture.TextureManager;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
 
 import android.content.Context;
@@ -21,6 +28,9 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	// ===========================================================
 	// Fields
 	// ===========================================================
+	private Font mFontPopUp;
+	private BitmapTextureAtlas mFontAtlas;
+
 	private TexturePack mSpritesheetParalax;
 	public TexturePack mSpritesheetMisc;
 	private TexturePack mSpritesheetUi;
@@ -34,6 +44,10 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	public Font getFontPopUp() {
+		return mFontPopUp;
+	}
+
 	public EntitiesFactory getFactory() {
 		return mEntitiesFactory;
 	}
@@ -53,6 +67,10 @@ public class TexturesLibrary extends LoadableResourceSimple{
 		return mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.MARKER_WATERED_ID);
 	}
 
+	public ITextureRegion getRainbow() {
+		return mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.AMBIENT_RAINBOW_ID);
+	}
+
 	public ITextureRegion getSky() {
 		return mSpritesheetParalax.getTexturePackTextureRegionLibrary().get(TexturesParalax.SKY_ID);
 	}
@@ -68,7 +86,6 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	public ITextureRegion getParalaxBack4() {
 		return mSpritesheetParalax.getTexturePackTextureRegionLibrary().get(TexturesParalax.BACK4_ID);
 	}
-
 	public ITextureRegion getParalaxGround() {
 		return mSpritesheetParalax.getTexturePackTextureRegionLibrary().get(TexturesParalax.GROUND_ID);
 	}
@@ -161,7 +178,6 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	@Override
 	public void onLoad(Engine e, Context c) {
 		// Load spritesheets
-
 		try {
 			mSpritesheetParalax = new TexturePackLoader(e.getTextureManager(), "gfx/spritesheets/").loadFromAsset(c.getAssets(), "paralax.xml");
 			mSpritesheetParalax.loadTexture();
@@ -169,7 +185,7 @@ public class TexturesLibrary extends LoadableResourceSimple{
 		} catch (final TexturePackParseException ex) {
 			Debug.e(ex);
 		}
-
+		// Load spritesheets
 		try {
 			mSpritesheetMisc = new TexturePackLoader(e.getTextureManager(), "gfx/spritesheets/").loadFromAsset(c.getAssets(), "misc.xml");
 			mSpritesheetMisc.loadTexture();
@@ -177,7 +193,7 @@ public class TexturesLibrary extends LoadableResourceSimple{
 		} catch (final TexturePackParseException ex) {
 			Debug.e(ex);
 		}
-
+		// Load spritesheets
 		try {
 			mSpritesheetUi = new TexturePackLoader(e.getTextureManager(), "gfx/spritesheets/").loadFromAsset(c.getAssets(), "ui.xml");
 			mSpritesheetUi.loadTexture();
@@ -185,11 +201,21 @@ public class TexturesLibrary extends LoadableResourceSimple{
 		} catch (final TexturePackParseException ex) {
 			Debug.e(ex);
 		}
+
+		// Load fonts
+		final TextureManager textureManager = e.getTextureManager();
+		final FontManager fontManager = e.getFontManager();
+
+		mFontAtlas = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
+		mFontPopUp = FontFactory.createFromAsset(fontManager, mFontAtlas, c.getAssets(), Consts.HUD_FONT, Consts.CAMERA_HEIGHT*0.08f, true, Color.WHITE.getARGBPackedInt());
+		mFontPopUp.load();
 	}
 
 	@Override
 	public void onUnload() {
 		mSpritesheetParalax.unloadTexture();
+		mFontPopUp.unload();
+		mFontAtlas.unload();
 	}
 	// ===========================================================
 	// Methods

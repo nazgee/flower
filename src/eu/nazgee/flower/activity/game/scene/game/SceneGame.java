@@ -39,10 +39,13 @@ import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
+import eu.nazgee.flower.rainbow.Rainbow;
 import eu.nazgee.flower.sun.Sun;
 import eu.nazgee.flower.sun.Sun.TravelListener;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.SceneLoadable;
+import eu.nazgee.util.Anchor;
+import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 public class SceneGame extends SceneLoadable{
 	// ===========================================================
@@ -331,7 +334,9 @@ public class SceneGame extends SceneLoadable{
 			SceneGame.this.postRunnable(new DeactivateFlowerTouchesRunnable(pFlower));
 			pFlower.setZIndex(ZINDEX_BLOSSOM);
 			sortChildren(false);
-			pFlower.getSeed().unlock(mContext);
+			if (pFlower.getSeed().unlock(mContext)) {
+				pFlower.rainbow(mTexturesLibrary.getRainbow(), mTexturesLibrary.getFontPopUp(), "new\nflower\nfound!", Color.PINK);
+			}
 		}
 
 		@Override

@@ -1,5 +1,6 @@
 package eu.nazgee.flower.activity.game.scene.game;
 
+import org.andengine.engine.Engine;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.modifier.FadeOutModifier;
@@ -8,6 +9,9 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.list.SmartList;
 import org.andengine.util.modifier.IModifier;
+
+import android.content.Context;
+import android.util.Log;
 
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.bases.BaseHUD;
@@ -34,7 +38,6 @@ public class HudGame extends BaseHUD {
 		super(W, H, 3, pVertexBufferObjectManager);
 		for (int i = 0; i < TexturesLibrary.BLOSSOMS_NUMBER; i++) {
 			final Sprite flower = new Sprite(0, 0, pTexturesLibrary.getFlower(i), pVertexBufferObjectManager);
-			attachChild(flower);
 			flower.setVisible(false);
 			mFlowers.add(flower);
 			Anchor.setPosTopLeft(flower, 0, H);
@@ -50,6 +53,14 @@ public class HudGame extends BaseHUD {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+	@Override
+	public void onLoad(Engine e, Context c) {
+		super.onLoad(e, c);
+		for (Sprite flower : mFlowers) {
+			attachChild(flower);
+		}
+	}
+
 	public void setTextScore(CharSequence pText) {
 		setTextLine(0, pText);
 	}
@@ -75,6 +86,8 @@ public class HudGame extends BaseHUD {
 	}
 
 	public void setActiveFlower(final Flower pFlower) {
+		Log.e(getClass().getSimpleName(), "Setting new active flower");
+
 		final IEntity oldFlower = mFlowerAnimator.getEntity();
 		if (oldFlower != null) {
 			oldFlower.setVisible(false);

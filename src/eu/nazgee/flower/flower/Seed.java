@@ -149,10 +149,17 @@ public enum Seed {
 		return resources.isLocked();
 	}
 
-	public void unlock(Context c) {
+	/**
+	 * Unlocks given seed if it was locked, does nothing it already was unlocked
+	 * @param c
+	 * @return true if seed was just unlocked; false if seed was already unlocked
+	 */
+	public boolean unlock(Context c) {
 		if (isLocked()) {
 			resources.setLocked(c, false);
+			return true;
 		}
+		return false;
 	}
 
 	private String getSeedPrefix() {
