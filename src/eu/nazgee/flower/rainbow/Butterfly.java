@@ -16,7 +16,7 @@ public class Butterfly extends AnimatedSprite {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-	private static final float ANIMATION_TIME = 1;
+	private static final float ANIMATION_TIME = 3;
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -35,9 +35,8 @@ public class Butterfly extends AnimatedSprite {
 			public void onUpdate(float pSecondsElapsed) {
 				final float dX = getX() - lastX;
 				final float dY = getY() - lastY;
-				final float len = MathUtils.length(dX, dY);
 				final float angle = MathUtils.atan2(dY, dX);
-				setRotation(MathUtils.radToDeg(-angle));
+				setRotation(MathUtils.radToDeg(angle));
 				lastX = getX();
 				lastY = getY();
 			}
@@ -64,12 +63,12 @@ public class Butterfly extends AnimatedSprite {
 		float startY = pY;
 		IEntityModifier mods[] = new IEntityModifier[5];
 		for (int i = 0; i < mods.length; i++) {
-			float cnt1X = MathUtils.random(pX - offset, pY + offset);
-			float cnt1Y = MathUtils.random(pX - offset, pY + offset);
-			float cnt2X = MathUtils.random(pX - offset, pY + offset);
-			float cnt2Y = MathUtils.random(pX - offset, pY + offset);
-			float endX = MathUtils.random(pX - offset, pY + offset);
-			float endY = MathUtils.random(pX - offset, pY + offset);
+			float cnt1X = MathUtils.random(pX - offset, pX + offset);
+			float cnt1Y = MathUtils.random(pY - offset, pY + offset);
+			float cnt2X = MathUtils.random(pX - offset, pX + offset);
+			float cnt2Y = MathUtils.random(pY - offset, pY + offset);
+			float endX = MathUtils.random(pX - offset, pX + offset);
+			float endY = MathUtils.random(pY - offset, pY + offset);
 			mods[i] = new CubicBezierCurveMoveModifier(ANIMATION_TIME, startX, startY, cnt1X, cnt1Y, cnt2X, cnt2Y, endX, endY);
 			startX = endX;
 			startY = endY;
