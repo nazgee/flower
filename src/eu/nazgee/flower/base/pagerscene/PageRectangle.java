@@ -15,14 +15,14 @@ public class PageRectangle<T extends IEntity> extends Rectangle implements IPage
 	// Fields
 	// ===========================================================
 
-	private LinkedList<T> mItems = new LinkedList<T>();
+	private final LinkedList<T> mItems = new LinkedList<T>();
 	private final ILayout mLayout;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public PageRectangle(float pX, float pY, float pWidth, float pHeight,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			ILayout pLayout) {
+	public PageRectangle(final float pX, final float pY, final float pWidth, final float pHeight,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
+			final ILayout pLayout) {
 		super(pX, pY, pWidth, pHeight, pVertexBufferObjectManager);
 		mLayout = pLayout;
 	}
@@ -31,13 +31,13 @@ public class PageRectangle<T extends IEntity> extends Rectangle implements IPage
 	// ===========================================================
 
 	@Override
-	public void setItems(LinkedList<T> pItems) {
-		for (T item : mItems) {
+	public void setItems(final LinkedList<T> pItems) {
+		for (final T item : mItems) {
 			detachChild(item);
 		}
 		mItems.clear();
 		mLayout.layoutItems(pItems);
-		for (T item : pItems) {
+		for (final T item : pItems) {
 			attachChild(item);
 			item.attachChild(new Rectangle(0, 0, 5, 5, getVertexBufferObjectManager()));
 			attachChild(new Rectangle(item.getX(), item.getY(), 5, 5, getVertexBufferObjectManager()));

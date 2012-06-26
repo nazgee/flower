@@ -17,18 +17,18 @@ public class Sky {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public Sky(float mGroundLevel) {
+	public Sky(final float mGroundLevel) {
 		this.mGroundLevel = mGroundLevel;
 	}
 
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public float getHeightOnSky(float pSceneY) {
-		return pSceneY - getGroundLevelOnScene(); 
+	public float getHeightOnSky(final float pSceneY) {
+		return pSceneY - getGroundLevelOnScene();
 	}
 
-	public float getHeightOnSky(final IEntity pShape, eAnchorPointXY pAnchor) {
+	public float getHeightOnSky(final IEntity pShape, final eAnchorPointXY pAnchor) {
 		return getHeightOnSky(pAnchor.getSceneY(pShape));
 	}
 	public float getHeightOnSkyTop(final IEntity pShape) {

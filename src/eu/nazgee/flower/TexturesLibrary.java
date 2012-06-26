@@ -34,7 +34,7 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	private TexturePack mSpritesheetParalax;
 	public TexturePack mSpritesheetMisc;
 	private TexturePack mSpritesheetUi;
-	private EntitiesFactory mEntitiesFactory = new EntitiesFactory(this);
+	private final EntitiesFactory mEntitiesFactory = new EntitiesFactory(this);
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -53,13 +53,13 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	}
 
 
-	public ITextureRegion getTree(int pTreeNumber) {
+	public ITextureRegion getTree(final int pTreeNumber) {
 		return mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.AMBIENT_TREE_01_ID + pTreeNumber);
 	}
-	public ITextureRegion getFlower(int pFlowerNumber) {
+	public ITextureRegion getFlower(final int pFlowerNumber) {
 		return mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.FLOWERS_FLOWER0001_ID + pFlowerNumber);
 	}
-	public ITextureRegion getSeed(int pSeedNumber) {
+	public ITextureRegion getSeed(final int pSeedNumber) {
 		return mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.SEEDS_001_ID + pSeedNumber);
 	}
 
@@ -71,7 +71,7 @@ public class TexturesLibrary extends LoadableResourceSimple{
 		return mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.AMBIENT_RAINBOW_ID);
 	}
 	public ITiledTextureRegion getButterfly() {
-		ITextureRegion regions[] = new ITextureRegion[8];
+		final ITextureRegion regions[] = new ITextureRegion[8];
 		for (int i = 0; i < regions.length; i++) {
 			regions[i] = mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.AMBIENT_BUTTERFLY_01_ID + i);
 		}
@@ -179,11 +179,11 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public void onLoadResources(Engine e, Context c) {
+	public void onLoadResources(final Engine e, final Context c) {
 	}
 
 	@Override
-	public void onLoad(Engine e, Context c) {
+	public void onLoad(final Engine e, final Context c) {
 		// Load spritesheets
 		try {
 			mSpritesheetParalax = new TexturePackLoader(e.getTextureManager(), "gfx/spritesheets/").loadFromAsset(c.getAssets(), "paralax.xml");

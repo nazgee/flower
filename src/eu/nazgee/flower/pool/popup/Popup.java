@@ -26,9 +26,9 @@ public class Popup extends Text {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-	public Popup(float pX, float pY, IFont pFont, CharSequence pText,
-			int pCharactersMaximum, TextOptions pTextOptions,
-			VertexBufferObjectManager pVertexBufferObjectManager, PopupItem popupItem) {
+	public Popup(final float pX, final float pY, final IFont pFont, final CharSequence pText,
+			final int pCharactersMaximum, final TextOptions pTextOptions,
+			final VertexBufferObjectManager pVertexBufferObjectManager, final PopupItem popupItem) {
 		super(pX, pY, pFont, pText, pCharactersMaximum, pTextOptions,
 				pVertexBufferObjectManager);
 		mPopupItem = popupItem;
@@ -69,27 +69,27 @@ public class Popup extends Text {
 		runModifier(populateModifierDefaultMoveBy(time, pX - getX(), pY - getY()));
 	}
 
-	public void fxMoveTo(final float time, IEntity pWhere) {
-		float pos[] = pWhere.getSceneCenterCoordinates();
+	public void fxMoveTo(final float time, final IEntity pWhere) {
+		final float pos[] = pWhere.getSceneCenterCoordinates();
 		fxMoveTo(time, pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
 	}
 
-	public void put(IEntity pWhere, CharSequence pCharSequence) {
-		float pos[] = pWhere.getSceneCenterCoordinates();
+	public void put(final IEntity pWhere, final CharSequence pCharSequence) {
+		final float pos[] = pWhere.getSceneCenterCoordinates();
 		put(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y], pCharSequence);
 	}
 
-	public void put(final float pX, final float pY, CharSequence pCharSequence) {
+	public void put(final float pX, final float pY, final CharSequence pCharSequence) {
 		Anchor.setPosCenter(this, pX, pY);
 		setText(pCharSequence);
 	}
 
 	/**
 	 * Places a popup in a given location.
-	 * 
+	 *
 	 * @note PopupItem of this Popup WILL be automagically recycled after
 	 * animation end. NO need to call scheduleDetachAndRecycle() manually on it!
-	 * 
+	 *
 	 * @param pX
 	 * @param pY
 	 * @param pCharSequence
@@ -146,10 +146,10 @@ public class Popup extends Text {
 
 	private class EffectModifierListener implements IModifierListener<IEntity> {
 		@Override
-		public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+		public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {
 		}
 		@Override
-		public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+		public void onModifierFinished(final IModifier<IEntity> pModifier, final IEntity pItem) {
 			mPopupItem.scheduleDetachAndRecycle();
 		}
 	}

@@ -31,8 +31,6 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	// ===========================================================
 	private static final int ZINDEX_BLOSSOM = 0;
 	private static final int ZINDEX_SEED = -1;
-	private static final int ZINDEX_RAINBOW = -2;
-
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -44,17 +42,10 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	private IEntityModifier mAnimationModifier;
 	private IFlowerListener mFlowerStateHandler;
 	private final Color mColor;
-	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
-	// ===========================================================
-	// Constructors
-	// ===========================================================
-
-	public Flower(float pX, float pY, final Seed pSeed,
+	public Flower(final float pX, final float pY, final Seed pSeed,
 			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final TexturesLibrary pTexturesLibrary, final EntityDetachRunnablePoolUpdateHandler pDetacher) {
 		mSeed = pSeed;
-		mDetacher = pDetacher;
-
 		this.mColor = pSeed.getRandomColor(MathUtils.RANDOM);
 		this.mEntityBlossom = new EntityBlossomParent(0, 0, pTexturesLibrary.getFlower(pSeed.blossomID), pVertexBufferObjectManager, getBlossomColor());
 		this.mEntitySeed = new EntitySeed(0, 0, pTexturesLibrary.getSeed(pSeed.seedID), pTexturesLibrary.getWateredMarker(),
@@ -86,7 +77,7 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 		return mFlowerStateHandler;
 	}
 
-	public void setFlowerStateHandler(IFlowerListener pFlowerStateHandler) {
+	public void setFlowerStateHandler(final IFlowerListener pFlowerStateHandler) {
 		mFlowerStateHandler = pFlowerStateHandler;
 	}
 
@@ -102,13 +93,13 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public boolean contains(float pX, float pY) {
+	public boolean contains(final float pX, final float pY) {
 		return mEntitySeed.contains(pX, pY);
 	}
 
 	@Override
-	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-			float pTouchAreaLocalX, float pTouchAreaLocalY) {
+	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
+			final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 		return mEntitySeed.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 	}
 
@@ -134,7 +125,7 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	}
 
 	@Override
-	public IFlowerState drop(Sky pSky) {
+	public IFlowerState drop(final Sky pSky) {
 		mState = mState.drop(pSky);
 		return mState;
 	}
@@ -145,7 +136,7 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	 * @param pY
 	 * @param pSky used to calculate ground level which will be used in the animation
 	 */
-	public void animateDropFromToGround(final float pX, final float pY, Sky pSky) {
+	public void animateDropFromToGround(final float pX, final float pY, final Sky pSky) {
 		animateMove(pX, pY, pX, pSky.getGroundLevelOnScene() + eAnchorPointXY.BOTTOM_MIDDLE.getOffsetYFromDefault(mEntitySeed) + GROUND_LEVEL_OFFSET);
 	}
 
@@ -153,7 +144,7 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 		animateMove(getX(), getY(), pX_to, pY_to);
 	}
 
-	public void animateDropToGround(Sky pSky) {
+	public void animateDropToGround(final Sky pSky) {
 		animateDropTo(getX(), pSky.getGroundLevelOnScene() + eAnchorPointXY.BOTTOM_MIDDLE.getOffsetYFromDefault(mEntitySeed) + GROUND_LEVEL_OFFSET);
 	}
 
@@ -203,7 +194,7 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 
 	private class StateChangeListener implements IStateChangesListener<Flower> {
 		@Override
-		public void onStateStarted(State<Flower> pState) {
+		public void onStateStarted(final State<Flower> pState) {
 			if (mFlowerStateHandler == null) {
 				return;
 			}
@@ -217,7 +208,7 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 			}
 		}
 		@Override
-		public void onStateFinished(State<Flower> pState) {
+		public void onStateFinished(final State<Flower> pState) {
 			if (pState instanceof FlowerStateDragged) {
 					mFlowerStateHandler.onDropped(Flower.this);
 			}

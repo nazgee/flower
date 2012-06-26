@@ -10,7 +10,7 @@ abstract public class PooledEntityItem<T extends Entity> extends PoolItem {
 	protected T mEntity;
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 
-	public PooledEntityItem(EntityDetachRunnablePoolUpdateHandler mDetacher) {
+	public PooledEntityItem(final EntityDetachRunnablePoolUpdateHandler mDetacher) {
 		this.mDetacher = mDetacher;
 	}
 
@@ -27,7 +27,7 @@ abstract public class PooledEntityItem<T extends Entity> extends PoolItem {
 
 	private class DetachCallback implements Callback<IEntity> {
 		@Override
-		public void onCallback(IEntity pCallbackValue) {
+		public void onCallback(final IEntity pCallbackValue) {
 			recycle();
 		}
 	}

@@ -19,8 +19,8 @@ public class Sunshine extends Entity {
 	// Constants
 	// ===========================================================
 
-	private float EASING_DURATION = 0.8f;
-	private float EASING_RESET_THRESHOLD = 50;
+	private final float EASING_DURATION = 0.8f;
+	private final float EASING_RESET_THRESHOLD = 50;
 
 	// ===========================================================
 	// Fields
@@ -29,13 +29,13 @@ public class Sunshine extends Entity {
 	private final Sprite mSpriteRayBody;
 	private final Sprite mSpriteRayTail;
 
-	private SunshineLengthModifier mSunshineLengthModifier = new SunshineLengthModifier(0, 0, 0, EaseBounceOut.getInstance());
+	private final SunshineLengthModifier mSunshineLengthModifier = new SunshineLengthModifier(0, 0, 0, EaseBounceOut.getInstance());
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public Sunshine (final ITiledTextureRegion pTiledTextureRegion, VertexBufferObjectManager pVBO) {
+	public Sunshine (final ITiledTextureRegion pTiledTextureRegion, final VertexBufferObjectManager pVBO) {
 		mSpriteRayBody = new Sprite(0, 0, pTiledTextureRegion.getTextureRegion(0), pVBO);
 		mSpriteRayTail = new Sprite(0, 0, pTiledTextureRegion.getTextureRegion(1), pVBO);
 
@@ -58,28 +58,28 @@ public class Sunshine extends Entity {
 	// Getter & Setter
 	// ===========================================================
 
-	public void setTargetTop(IEntity pTarget, Sky pSky) {
-		float target = pSky.getHeightOnSkyTop(pTarget);
+	public void setTargetTop(final IEntity pTarget, final Sky pSky) {
+		final float target = pSky.getHeightOnSkyTop(pTarget);
 		setTarget(target, pSky);
 	}
 
-	public void setTargetCenter(Entity pTarget, Sky pSky) {
-		float target = pSky.getHeightOnSkyCenter(pTarget);
+	public void setTargetCenter(final Entity pTarget, final Sky pSky) {
+		final float target = pSky.getHeightOnSkyCenter(pTarget);
 		setTarget(target, pSky);
 	}
 
-	public void setTarget(float pTargetHeightOnSky, Sky pSky) {
-		float myHeightOnSky = pSky.getHeightOnSkyCenter(this);
+	public void setTarget(float pTargetHeightOnSky, final Sky pSky) {
+		final float myHeightOnSky = pSky.getHeightOnSkyCenter(this);
 		if (myHeightOnSky < pTargetHeightOnSky) {
 			pTargetHeightOnSky = pSky.getHeightOnSky(0);
 		}
 		configureRaybeamLengthModifier(Math.max(0, myHeightOnSky - pTargetHeightOnSky));
 	}
 
-	public boolean isShiningAt(IEntity pTarget) {
-		float pos[] = pTarget.getSceneCenterCoordinates();
+	public boolean isShiningAt(final IEntity pTarget) {
+		final float pos[] = pTarget.getSceneCenterCoordinates();
 //		pos = mSpriteRayTail.convertSceneCoordinatesToLocalCoordinates(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
-		return mSpriteRayBody.contains(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]) || 
+		return mSpriteRayBody.contains(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]) ||
 				mSpriteRayTail.contains(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
 	}
 
@@ -87,7 +87,7 @@ public class Sunshine extends Entity {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	protected void onManagedUpdate(float pSecondsElapsed) {
+	protected void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
 	}
 	// ===========================================================
@@ -124,28 +124,28 @@ public class Sunshine extends Entity {
 	private class SunshineLengthModifier extends SingleValueSpanEntityModifier {
 		private float mRaysTarget;
 
-		public SunshineLengthModifier(float pDuration, float pFromValue,
-				float pToValue, IEaseFunction pEaseFunction) {
+		public SunshineLengthModifier(final float pDuration, final float pFromValue,
+				final float pToValue, final IEaseFunction pEaseFunction) {
 			super(pDuration, pFromValue, pToValue, pEaseFunction);
 			setTarget(pToValue);
 		}
 
-		public SunshineLengthModifier(float pDuration, float pFromValue,
-				float pToValue,
-				IEntityModifierListener pEntityModifierListener,
-				IEaseFunction pEaseFunction) {
+		public SunshineLengthModifier(final float pDuration, final float pFromValue,
+				final float pToValue,
+				final IEntityModifierListener pEntityModifierListener,
+				final IEaseFunction pEaseFunction) {
 			super(pDuration, pFromValue, pToValue, pEntityModifierListener, pEaseFunction);
 			setTarget(pToValue);
 		}
 
-		public SunshineLengthModifier(float pDuration, float pFromValue,
-				float pToValue, IEntityModifierListener pEntityModifierListener) {
+		public SunshineLengthModifier(final float pDuration, final float pFromValue,
+				final float pToValue, final IEntityModifierListener pEntityModifierListener) {
 			super(pDuration, pFromValue, pToValue, pEntityModifierListener);
 			setTarget(pToValue);
 		}
 
-		public SunshineLengthModifier(float pDuration, float pFromValue,
-				float pToValue) {
+		public SunshineLengthModifier(final float pDuration, final float pFromValue,
+				final float pToValue) {
 			super(pDuration, pFromValue, pToValue);
 			setTarget(pToValue);
 		}
@@ -156,18 +156,18 @@ public class Sunshine extends Entity {
 		}
 
 		@Override
-		protected void onSetInitialValue(IEntity pItem, float pValue) {
-			Sunshine s = (Sunshine) pItem;
+		protected void onSetInitialValue(final IEntity pItem, final float pValue) {
+			final Sunshine s = (Sunshine) pItem;
 			s.setRayBeamLength(pValue);
 		}
 
 		@Override
-		protected void onSetValue(IEntity pItem, float pPercentageDone, float pValue) {
-			float from = getFromValue();
-			float to = getTarget();
-			float span = to - from;
+		protected void onSetValue(final IEntity pItem, final float pPercentageDone, final float pValue) {
+			final float from = getFromValue();
+			final float to = getTarget();
+			final float span = to - from;
 
-			Sunshine s = (Sunshine) pItem;
+			final Sunshine s = (Sunshine) pItem;
 			s.setRayBeamLength(from + span * pPercentageDone);
 		}
 
@@ -177,12 +177,12 @@ public class Sunshine extends Entity {
 		}
 
 		@Override
-		public void reset(float pDuration, float pFromValue, float pToValue) {
+		public void reset(final float pDuration, final float pFromValue, final float pToValue) {
 			super.reset(pDuration, pFromValue, pToValue);
 			setTarget(pToValue);
 		}
 
-		public void setTarget(float pTarget) {
+		public void setTarget(final float pTarget) {
 			mRaysTarget = pTarget;
 		}
 

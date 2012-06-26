@@ -31,7 +31,7 @@ public class GameLevelItem extends Entity implements ITouchArea{
 	// Constructors
 	// ===========================================================
 	public GameLevelItem(final GameLevel pLevel, final Font pFont, final EntitiesFactory pFactory,
-			final float W, final float H, VertexBufferObjectManager pVBOM) {
+			final float W, final float H, final VertexBufferObjectManager pVBOM) {
 		super(0, 0, W, H);
 		mLevel = pLevel;
 
@@ -53,18 +53,18 @@ public class GameLevelItem extends Entity implements ITouchArea{
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public boolean contains(float pX, float pY) {
+	public boolean contains(final float pX, final float pY) {
 		return mFrame.contains(pX, pY);
 	}
 
 	@Override
-	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-			float pTouchAreaLocalX, float pTouchAreaLocalY) {
+	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
+			final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 		return mFrame.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 	}
 
 	@Override
-	public boolean isCulled(Camera pCamera) {
+	public boolean isCulled(final Camera pCamera) {
 		return mFrame.isCulled(pCamera);
 	}
 
@@ -76,7 +76,7 @@ public class GameLevelItem extends Entity implements ITouchArea{
 		super.setAlpha(0);
 		super.callOnChildren(new IEntityParameterCallable() {
 			@Override
-			public void call(IEntity pEntity) {
+			public void call(final IEntity pEntity) {
 				pEntity.setAlpha(pAlpha);
 			}
 		});

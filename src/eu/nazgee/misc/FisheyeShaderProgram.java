@@ -16,13 +16,13 @@ public class FisheyeShaderProgram extends ShaderProgram {
 
 	private static FisheyeShaderProgram INSTANCE;
 
-	public static final String VERTEXSHADER = 
+	public static final String VERTEXSHADER =
 	"uniform mat4 " + ShaderProgramConstants.UNIFORM_MODELVIEWPROJECTIONMATRIX + ";\n" +
 	"attribute vec4 " + ShaderProgramConstants.ATTRIBUTE_POSITION  + ";\n" +
 	"attribute vec2 " + ShaderProgramConstants.ATTRIBUTE_TEXTURECOORDINATES + ";\n" +
 	"varying vec2 " + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + ";\n" +
 	"void main() {\n" +
-	"	" + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " = "+ ShaderProgramConstants.ATTRIBUTE_TEXTURECOORDINATES + ";\n" + 
+	"	" + ShaderProgramConstants.VARYING_TEXTURECOORDINATES + " = "+ ShaderProgramConstants.ATTRIBUTE_TEXTURECOORDINATES + ";\n" +
 	"	" + "gl_Position = " + ShaderProgramConstants.UNIFORM_MODELVIEWPROJECTIONMATRIX + " * " + ShaderProgramConstants.ATTRIBUTE_POSITION + ";\n" +
 	"}";
 

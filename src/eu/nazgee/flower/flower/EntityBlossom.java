@@ -33,31 +33,31 @@ public class EntityBlossom extends Sprite {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public EntityBlossom(float pX, float pY,
-			ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager,
+	public EntityBlossom(final float pX, final float pY,
+			final ITextureRegion pTextureRegion,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final Color pColor) {
 		this(pX, pY, pTextureRegion.getWidth(), pTextureRegion.getHeight(), pTextureRegion, pVertexBufferObjectManager, pColor, 0);
 	}
 
-	public EntityBlossom(float pX, float pY,
-			ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			final Color pColor, int pBlossomID) {
+	public EntityBlossom(final float pX, final float pY,
+			final ITextureRegion pTextureRegion,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
+			final Color pColor, final int pBlossomID) {
 		this(pX, pY, pTextureRegion.getWidth(), pTextureRegion.getHeight(), pTextureRegion, pVertexBufferObjectManager, pColor, pBlossomID);
 	}
 
-	public EntityBlossom(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager,
+	public EntityBlossom(final float pX, final float pY, final float pWidth, final float pHeight,
+			final ITextureRegion pTextureRegion,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final Color pColor) {
 		this(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager, pColor, 0);
 	}
 
-	public EntityBlossom(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			final Color pColor, int pBlossomID) {
+	public EntityBlossom(final float pX, final float pY, final float pWidth, final float pHeight,
+			final ITextureRegion pTextureRegion,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
+			final Color pColor, final int pBlossomID) {
 		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager);
 		this.mColor = pColor;
 		this.mBlossomID = pBlossomID;
@@ -111,16 +111,16 @@ public class EntityBlossom extends Sprite {
 
 		bloomer.addModifierListener(new IModifierListener<IEntity>() {
 			@Override
-			public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+			public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {
 				if (getBlossomListener() != null) {
 					getBlossomListener().onBlooming(EntityBlossom.this);
-				} 
+				}
 			}
 			@Override
-			public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+			public void onModifierFinished(final IModifier<IEntity> pModifier, final IEntity pItem) {
 				if (getBlossomListener() != null) {
 					getBlossomListener().onBloomed(EntityBlossom.this);
-				} 
+				}
 			}
 		});
 		registerEntityModifier(this.mBloomAnimator);

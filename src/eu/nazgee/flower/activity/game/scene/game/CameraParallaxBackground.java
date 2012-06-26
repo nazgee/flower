@@ -17,13 +17,13 @@ public class CameraParallaxBackground extends ParallaxBackground {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public CameraParallaxBackground(float pRed, float pGreen, float pBlue,
-			Camera pCamera) {
+	public CameraParallaxBackground(final float pRed, final float pGreen, final float pBlue,
+			final Camera pCamera) {
 		this(pRed, pGreen, pBlue, pCamera, 1);
 	}
 
-	public CameraParallaxBackground(float pRed, float pGreen, float pBlue,
-			Camera pCamera, final float pCameraFactor) {
+	public CameraParallaxBackground(final float pRed, final float pGreen, final float pBlue,
+			final Camera pCamera, final float pCameraFactor) {
 		super(pRed, pGreen, pBlue);
 		mCamera = pCamera;
 		mCameraFactor = pCameraFactor;
@@ -31,9 +31,9 @@ public class CameraParallaxBackground extends ParallaxBackground {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	
+
 	@Override
-	public void onUpdate(float pSecondsElapsed) {
+	public void onUpdate(final float pSecondsElapsed) {
 		final float camx = mCamera.getCenterX();
 		setParallaxValue(camx * mCameraFactor);
 
@@ -43,7 +43,7 @@ public class CameraParallaxBackground extends ParallaxBackground {
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
-	
+
 	// ===========================================================
 	// Methods
 	// ===========================================================

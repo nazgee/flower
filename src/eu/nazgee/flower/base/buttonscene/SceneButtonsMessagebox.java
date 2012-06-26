@@ -75,7 +75,7 @@
 //	@Override
 //	public void onLoadResources(Engine e, Context c) {
 //		// TODO Auto-generated method stub
-//		
+//
 //	}
 //
 //	@Override
@@ -96,7 +96,7 @@
 //				new TextOptions(AutoWrap.WORDS, getW() * 0.9f, HorizontalAlign.CENTER,Text.LEADING_DEFAULT),
 //				getVertexBufferObjectManager());
 //		attachChild(text);
-//		text.setPosition((getW() - text.getWidth())/2, 
+//		text.setPosition((getW() - text.getWidth())/2,
 //				(getH()	- BUTTON_HEIGHT - text.getHeight()) / 2);
 //
 //		sortChildren(false);

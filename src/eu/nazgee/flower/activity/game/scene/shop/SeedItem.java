@@ -38,7 +38,7 @@ public class SeedItem extends Entity implements ITouchArea{
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public SeedItem(Seed pSeed, final float W, final float H, Font pFont, EntitiesFactory pFactory, VertexBufferObjectManager pVBOM, TexturesLibrary pTexturesLibrary) {
+	public SeedItem(final Seed pSeed, final float W, final float H, final Font pFont, final EntitiesFactory pFactory, final VertexBufferObjectManager pVBOM, final TexturesLibrary pTexturesLibrary) {
 		super(0, 0, W, H);
 		this.mSeed = pSeed;
 
@@ -53,12 +53,12 @@ public class SeedItem extends Entity implements ITouchArea{
 		 * Prepare and attach lock icon if item is locked
 		 */
 		if (mSeed.resources.isLocked()) {
-			Sprite locked = new Sprite(0, 0, pTexturesLibrary.getIconLocked(), pVBOM);
+			final Sprite locked = new Sprite(0, 0, pTexturesLibrary.getIconLocked(), pVBOM);
 			locked.setZIndex(ZINDEX_LOCK);
 			attachChild(locked);
 			Anchor.setPosCenterAtParent(locked, eAnchorPointXY.CENTERED);
 		} else {
-			/* 
+			/*
 			 * Prepare blossom Sprites
 			 */
 			this.mSpriteBlossoms = new Sprite[pSeed.col_plant.length];
@@ -66,16 +66,16 @@ public class SeedItem extends Entity implements ITouchArea{
 				mSpriteBlossoms[i] = new Sprite(0, 0, pTexturesLibrary.getFlower(pSeed.blossomID), pVBOM);
 				mSpriteBlossoms[i].setColor(pSeed.col_plant[i]);
 			}
-	
-			/* 
+
+			/*
 			 * Layout and attach blossoms in a line of appropriate width,
 			 * and with an anchor pointe set to TOP-MIDDLE
 			 */
-			LinearLayout blossoms = new LinearLayout(mSpriteFrame.getWidth(), mSpriteFrame.getHeight()/2, eDirection.DIR_HORIZONTAL);
+			final LinearLayout blossoms = new LinearLayout(mSpriteFrame.getWidth(), mSpriteFrame.getHeight()/2, eDirection.DIR_HORIZONTAL);
 			blossoms.setItems(false, mSpriteBlossoms);
 			mSpriteFrame.attachChild(blossoms);
 			Anchor.setPosTopMiddleAtParent(blossoms, eAnchorPointXY.TOP_MIDDLE);
-	
+
 			/*
 			 * Prepare text with seed's price
 			 */
@@ -95,22 +95,22 @@ public class SeedItem extends Entity implements ITouchArea{
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public boolean contains(float pX, float pY) {
+	public boolean contains(final float pX, final float pY) {
 		return mSpriteFrame.contains(pX, pY);
 	}
 
 	@Override
-	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-			float pTouchAreaLocalX, float pTouchAreaLocalY) {
+	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
+			final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 		return mSpriteFrame.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
-	} 
+	}
 
 	@Override
-	public boolean isCulled(Camera pCamera) {
+	public boolean isCulled(final Camera pCamera) {
 		return mSpriteFrame.isCulled(pCamera);
 	}
 
-	protected void registerExclusiveModifier(IEntityModifier pModifier) {
+	protected void registerExclusiveModifier(final IEntityModifier pModifier) {
 		unregisterEntityModifier(mModifier);
 		pModifier.setAutoUnregisterWhenFinished(false);
 		registerEntityModifier(pModifier);
@@ -131,7 +131,7 @@ public class SeedItem extends Entity implements ITouchArea{
 		super.setAlpha(0);
 		super.callOnChildren(new IEntityParameterCallable() {
 			@Override
-			public void call(IEntity pEntity) {
+			public void call(final IEntity pEntity) {
 				pEntity.setAlpha(pAlpha);
 			}
 		});

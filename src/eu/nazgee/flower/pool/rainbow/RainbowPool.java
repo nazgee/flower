@@ -13,7 +13,7 @@ public class RainbowPool extends Pool<RainbowItem> {
 	private final VertexBufferObjectManager mVertexBufferObjectManager;
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 
-	public RainbowPool(ITextureRegion pButterflyTextureRegion, EntityDetachRunnablePoolUpdateHandler pDetacher, VertexBufferObjectManager pVertexBufferObjectManager) {
+	public RainbowPool(final ITextureRegion pButterflyTextureRegion, final EntityDetachRunnablePoolUpdateHandler pDetacher, final VertexBufferObjectManager pVertexBufferObjectManager) {
 		mTextureRegion = pButterflyTextureRegion;
 		mVertexBufferObjectManager = pVertexBufferObjectManager;
 		mDetacher = pDetacher;
@@ -25,7 +25,7 @@ public class RainbowPool extends Pool<RainbowItem> {
 	}
 
 	public static class RainbowItem extends PooledEntityItem<Rainbow> {
-		public RainbowItem(ITextureRegion pTextureRegion, EntityDetachRunnablePoolUpdateHandler pDetacher, VertexBufferObjectManager pVertexBufferObjectManager) {
+		public RainbowItem(final ITextureRegion pTextureRegion, final EntityDetachRunnablePoolUpdateHandler pDetacher, final VertexBufferObjectManager pVertexBufferObjectManager) {
 			super(pDetacher);
 			mEntity = new Rainbow(0, 0, pTextureRegion, pVertexBufferObjectManager, this);
 		}

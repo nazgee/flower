@@ -1,7 +1,6 @@
 package eu.nazgee.flower.activity.game.scene.shop;
 
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -31,8 +30,8 @@ public class HudShop extends BaseHUD {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public HudShop(float W, float H,
-			VertexBufferObjectManager pVertexBufferObjectManager, TexturesLibrary pTexturesLibrary) {
+	public HudShop(final float W, final float H,
+			final VertexBufferObjectManager pVertexBufferObjectManager, final TexturesLibrary pTexturesLibrary) {
 		super(W, H, 2, pVertexBufferObjectManager);
 		this.mTexturesLibrary = pTexturesLibrary;
 	}
@@ -49,9 +48,9 @@ public class HudShop extends BaseHUD {
 	// ===========================================================
 
 	@Override
-	public void onLoad(Engine e, Context c) {
+	public void onLoad(final Engine e, final Context c) {
 		super.onLoad(e, c);
-		Camera camera = e.getCamera();
+		e.getCamera();
 
 		/*
 		 * Prepare background
@@ -75,7 +74,7 @@ public class HudShop extends BaseHUD {
 		 */
 		final float icons_height = getTextCash().getHeight() * 0.7f;
 		final float margin = 15;
-		Sprite cash = new Sprite(0, 0, icons_height, icons_height, mTexturesLibrary.getIconCash(), getVertexBufferObjectManager());
+		final Sprite cash = new Sprite(0, 0, icons_height, icons_height, mTexturesLibrary.getIconCash(), getVertexBufferObjectManager());
 		detachChild(getTextCash());
 		bg.attachChild(getTextCash());
 		bg.attachChild(cash);
@@ -85,14 +84,14 @@ public class HudShop extends BaseHUD {
 		/*
 		 * Prepare basket icon
 		 */
-		Sprite basket = new Sprite(0, 0, icons_height, icons_height, mTexturesLibrary.getIconShop(), getVertexBufferObjectManager());
+		final Sprite basket = new Sprite(0, 0, icons_height, icons_height, mTexturesLibrary.getIconShop(), getVertexBufferObjectManager());
 		detachChild(getTextBasket());
 		bg.attachChild(getTextBasket());
 		bg.attachChild(basket);
 		Anchor.setPosTopMiddleAtSibling(basket, cash, eAnchorPointXY.BOTTOM_MIDDLE);
 		Anchor.setPosCenterRightAtSibling(getTextBasket(), basket, eAnchorPointXY.CENTERED_LEFT);
 
-		
+
 
 //		final float gradW = camera.getWidth() * (1 - SceneLevelselector.PAGE_WIDTH_EFFECTIVE);
 //		GradientRectangle grad = new GradientRectangle(camera.getWidth() - gradW, 0, gradW, camera.getHeight(), 5, getVertexBufferObjectManager());
@@ -118,10 +117,10 @@ public class HudShop extends BaseHUD {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	public void setTextBasket(CharSequence pText) {
+	public void setTextBasket(final CharSequence pText) {
 		setTextLine(TEXT_LINE_BASKET, pText);
 	}
-	public void setTextCash(CharSequence pText) {
+	public void setTextCash(final CharSequence pText) {
 		setTextLine(TEXT_LINE_CASH, pText);
 	}
 	public Text getTextCash() {

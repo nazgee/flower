@@ -15,7 +15,7 @@ public enum GameLevel {
 	// Constants
 	// ===========================================================
 	/*
-	 * When defined as Enum, levels are singletons 
+	 * When defined as Enum, levels are singletons
 	 */
 
 	LEVEL1(1, 1000, 60, false, new Basket<Seed>().add(Seed.SEED1, 3).add(Seed.SEED2, 3).add(Seed.SEED3, 3)),
@@ -72,15 +72,15 @@ public enum GameLevel {
 		this(pID, new Basket<Seed>());
 	}
 
-	private GameLevel(final int pID, Basket<Seed> pSeeds) {
+	private GameLevel(final int pID, final Basket<Seed> pSeeds) {
 		this(pID, CASH_DEFAULT, DAYLIGHT_TIME_DEFAULT, true, pSeeds);
 	}
 
-	private GameLevel(final int pID, final int pCash, final int pDalightTime, Basket<Seed> pSeeds) {
+	private GameLevel(final int pID, final int pCash, final int pDalightTime, final Basket<Seed> pSeeds) {
 		this(pID, pCash, pDalightTime, true, pSeeds);
 	}
 
-	private GameLevel(final int pID, final int pCash, final int pDalightTime, boolean pLocked, Basket<Seed> pSeeds) {
+	private GameLevel(final int pID, final int pCash, final int pDalightTime, final boolean pLocked, final Basket<Seed> pSeeds) {
 		id = pID;
 		cash = pCash;
 		daylight_time = pDalightTime;
@@ -93,13 +93,13 @@ public enum GameLevel {
 	// Getter & Setter
 	// ===========================================================
 	public SmartList<Seed> getSeedsAccumulatedSoFar() {
-		SmartList<Seed> ret = new SmartList<Seed>(id);
+		final SmartList<Seed> ret = new SmartList<Seed>(id);
 
 		// Current level has it's own collection of seeds, plus seeds from all
 		// previous levels- this builds up a collection that is returned here
 		for (int i = 1; i <= id; i++) {
-			SmartList<Seed> new_seeds = getLevelById(i).seeds.getItems();
-			for (Seed seed : new_seeds) {
+			final SmartList<Seed> new_seeds = getLevelById(i).seeds.getItems();
+			for (final Seed seed : new_seeds) {
 				ret.add(seed);
 			}
 		}
@@ -180,7 +180,7 @@ public enum GameLevel {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	
+
 	public class LevelResourcesBasic extends LoadableResourceSimple {
 
 		// ===========================================================
@@ -205,13 +205,13 @@ public enum GameLevel {
 		public int getScore() {
 			return mScore;
 		}
-		public void setLocked(Context c, boolean pLocked) {
-			Editor editor = getEditor(c);
+		public void setLocked(final Context c, final boolean pLocked) {
+			final Editor editor = getEditor(c);
 			editor.putBoolean(getKeyLocked(), pLocked);
 			editor.commit();
 		}
-		public void setScore(Context c, int pScore) {
-			Editor editor = getEditor(c);
+		public void setScore(final Context c, final int pScore) {
+			final Editor editor = getEditor(c);
 			editor.putInt(getKeyScore(), pScore);
 			editor.commit();
 		}
@@ -219,12 +219,12 @@ public enum GameLevel {
 		// Methods for/from SuperClass/Interfaces
 		// ===========================================================
 		@Override
-		public void onLoadResources(Engine e, Context c) {
+		public void onLoadResources(final Engine e, final Context c) {
 		}
 
 		@Override
-		public void onLoad(Engine e, Context c) {
-			SharedPreferences prefs = c.getSharedPreferences(Consts.LEVEL_PREFS_FILE, 0);
+		public void onLoad(final Engine e, final Context c) {
+			final SharedPreferences prefs = c.getSharedPreferences(Consts.LEVEL_PREFS_FILE, 0);
 			mLocked = prefs.getBoolean(getKeyLocked(), lockedByDefault);
 			mScore = prefs.getInt(getKeyScore(), 0);
 		}
@@ -235,7 +235,7 @@ public enum GameLevel {
 		// ===========================================================
 		// Methods
 		// ===========================================================
-		private Editor getEditor(Context c) {
+		private Editor getEditor(final Context c) {
 			 return c.getSharedPreferences(Consts.LEVEL_PREFS_FILE, 0).edit();
 		}
 		// ===========================================================

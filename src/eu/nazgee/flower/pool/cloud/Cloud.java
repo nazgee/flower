@@ -31,14 +31,14 @@ public class Cloud extends Sprite {
 	// ===========================================================
 	private IEntityModifier mTravelModifier;
 	private CloudListener mCloudListener;
-	private CloudModifierListener mCloudModifierListener = new CloudModifierListener();
+	private final CloudModifierListener mCloudModifierListener = new CloudModifierListener();
 	private final CloudItem mCloudItem;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public Cloud(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager, CloudItem cloudItem) {
+	public Cloud(final float pX, final float pY, final ITextureRegion pTextureRegion,
+			final VertexBufferObjectManager pVertexBufferObjectManager, final CloudItem cloudItem) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		mCloudItem = cloudItem;
 	}
@@ -59,10 +59,10 @@ public class Cloud extends Sprite {
 	// ===========================================================
 	/**
 	 * Places a moving cloud in a given location.
-	 * 
+	 *
 	 * @note CloudItem of this Cloud WILL be automagically recycled after
 	 * animation end. NO need to call scheduleDetachAndRecycle() manually on it
-	 * 
+	 *
 	 * @param pX
 	 * @param pY
 	 * @param W
@@ -70,7 +70,7 @@ public class Cloud extends Sprite {
 	 * @param pTravelListener
 	 */
 	synchronized public void travel(final float pX, final float pY,
-			final float W, final float time, CloudListener pTravelListener) {
+			final float W, final float time, final CloudListener pTravelListener) {
 
 		setAlpha(0);
 		mCloudListener = pTravelListener;
@@ -91,7 +91,7 @@ public class Cloud extends Sprite {
 		registerEntityModifier(mTravelModifier);
 	}
 
-	public synchronized void drop(WaterDrop pWaterDrop, Sky pSky, IWaterDropListener pWaterDropListener) {
+	public synchronized void drop(final WaterDrop pWaterDrop, final Sky pSky, final IWaterDropListener pWaterDropListener) {
 		final float height = pSky.getHeightOnSkyCenter(this);
 		attachChild(pWaterDrop);
 		pWaterDrop.fall(getWidth()/2, getHeight()/2, height, pWaterDropListener);
@@ -102,10 +102,10 @@ public class Cloud extends Sprite {
 
 	private class CloudModifierListener implements IModifierListener<IEntity> {
 		@Override
-		public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+		public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {
 		}
 		@Override
-		public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+		public void onModifierFinished(final IModifier<IEntity> pModifier, final IEntity pItem) {
 			synchronized (Cloud.this) {
 				if (mCloudListener != null) {
 					mCloudListener.onFinished(Cloud.this);

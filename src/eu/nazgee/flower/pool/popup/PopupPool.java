@@ -18,7 +18,7 @@ public class PopupPool extends Pool<PopupItem> {
 	private final VertexBufferObjectManager mVertexBufferObjectManager;
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 
-	public PopupPool(Font pFont, EntityDetachRunnablePoolUpdateHandler pDetacher, VertexBufferObjectManager pVertexBufferObjectManager) {
+	public PopupPool(final Font pFont, final EntityDetachRunnablePoolUpdateHandler pDetacher, final VertexBufferObjectManager pVertexBufferObjectManager) {
 		mFont = pFont;
 		mVertexBufferObjectManager = pVertexBufferObjectManager;
 		mDetacher = pDetacher;
@@ -30,7 +30,7 @@ public class PopupPool extends Pool<PopupItem> {
 	}
 
 	public static class PopupItem extends PooledEntityItem<Popup> {
-		public PopupItem(Font pFont, EntityDetachRunnablePoolUpdateHandler pDetacher, VertexBufferObjectManager pVertexBufferObjectManager) {
+		public PopupItem(final Font pFont, final EntityDetachRunnablePoolUpdateHandler pDetacher, final VertexBufferObjectManager pVertexBufferObjectManager) {
 			super(pDetacher);
 			mEntity = new Popup(0, 0, pFont, "", 25,
 					new TextOptions(AutoWrap.LETTERS, 500, HorizontalAlign.CENTER, Text.LEADING_DEFAULT),

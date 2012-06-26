@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.TexturesMisc;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
 public enum Seed {
@@ -17,7 +16,7 @@ public enum Seed {
 	// Constants
 	// ===========================================================
 	/*
-	 * When defined as Enum, seeds are singletons 
+	 * When defined as Enum, seeds are singletons
 	 */
 	SEED1(1,	100,	0,	0,	true,	Color.WHITE, Color.RED),
 	SEED2(2,	100,	1,	0,	true, 	Color.WHITE, Color.YELLOW, Color.BLUE, Color.GREEN, Color.RED),
@@ -64,11 +63,11 @@ public enum Seed {
 		this(pID, pCost, pBlossomID, pSeedID, true);
 	}
 
-	private Seed(final int pID, final int pCost, final int pBlossomID, final int pSeedID, boolean pLockedByDefault) {
+	private Seed(final int pID, final int pCost, final int pBlossomID, final int pSeedID, final boolean pLockedByDefault) {
 		this(pID, pCost, pBlossomID, pSeedID, pLockedByDefault, Color.WHITE);
 	}
 
-	private Seed(final int pID, final int pCost, final int pBlossomID, final int pSeedID, boolean pLockedByDefault, Color ... pColors) {
+	private Seed(final int pID, final int pCost, final int pBlossomID, final int pSeedID, final boolean pLockedByDefault, final Color ... pColors) {
 		id = pID;
 		cost = pCost;
 		seedID = pSeedID;
@@ -80,7 +79,7 @@ public enum Seed {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public Color getRandomColor(Random pRandom) {
+	public Color getRandomColor(final Random pRandom) {
 		return col_plant[pRandom.nextInt(col_plant.length)];
 	}
 
@@ -154,7 +153,7 @@ public enum Seed {
 	 * @param c
 	 * @return true if seed was just unlocked; false if seed was already unlocked
 	 */
-	public boolean unlock(Context c) {
+	public boolean unlock(final Context c) {
 		if (isLocked()) {
 			resources.setLocked(c, false);
 			return true;
@@ -177,7 +176,7 @@ public enum Seed {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	
+
 	public class SeedResourcesBasic extends LoadableResourceSimple {
 
 		// ===========================================================
@@ -206,14 +205,14 @@ public enum Seed {
 		public int getHarvested() {
 			return mHarvested;
 		}
-		public void setLocked(Context c, boolean pLocked) {
-			Editor editor = getEditor(c);
+		public void setLocked(final Context c, final boolean pLocked) {
+			final Editor editor = getEditor(c);
 			editor.putBoolean(getKeyLocked(), pLocked);
 			editor.commit();
 			mLocked = pLocked;
 		}
-		public void setScore(Context c, int pScore) {
-			Editor editor = getEditor(c);
+		public void setScore(final Context c, final int pScore) {
+			final Editor editor = getEditor(c);
 			editor.putInt(getKeyPlanted(), pScore);
 			editor.commit();
 		}
@@ -221,12 +220,12 @@ public enum Seed {
 		// Methods for/from SuperClass/Interfaces
 		// ===========================================================
 		@Override
-		public void onLoadResources(Engine e, Context c) {
+		public void onLoadResources(final Engine e, final Context c) {
 		}
 
 		@Override
-		public void onLoad(Engine e, Context c) {
-			SharedPreferences prefs = c.getSharedPreferences(Consts.SEEDS_PREFS_FILE, 0);
+		public void onLoad(final Engine e, final Context c) {
+			final SharedPreferences prefs = c.getSharedPreferences(Consts.SEEDS_PREFS_FILE, 0);
 			mLocked = prefs.getBoolean(getKeyLocked(), lockedByDefault);
 			mPlanted = prefs.getInt(getKeyPlanted(), 0);
 			mHarvested = prefs.getInt(getKeyHarvested(), 0);
@@ -238,7 +237,7 @@ public enum Seed {
 		// ===========================================================
 		// Methods
 		// ===========================================================
-		private Editor getEditor(Context c) {
+		private Editor getEditor(final Context c) {
 			 return c.getSharedPreferences(Consts.SEEDS_PREFS_FILE, 0).edit();
 		}
 		// ===========================================================

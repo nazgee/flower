@@ -36,12 +36,12 @@ public class BaseHUD extends HUDLoadable {
 
 	protected HudResources mResources = new HudResources();
 	private Text mTextFPS;
-	private Text mTextLines[];
+	private final Text mTextLines[];
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public BaseHUD(float W, float H, int pTexLinesCount,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+	public BaseHUD(final float W, final float H, final int pTexLinesCount,
+			final VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, pVertexBufferObjectManager);
 		this.mTextLines = new Text[pTexLinesCount];
 		getLoader().install(mResources);
@@ -54,11 +54,11 @@ public class BaseHUD extends HUDLoadable {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public void onLoadResources(Engine e, Context c) {
+	public void onLoadResources(final Engine e, final Context c) {
 	}
 
 	@Override
-	public void onLoad(Engine e, Context c) {
+	public void onLoad(final Engine e, final Context c) {
 		mTextFPS = new Text(0, 0, mResources.FONT_HUD, "fps:59,08", 20, getVertexBufferObjectManager());
 		attachChild(mTextFPS);
 		Anchor.setPosTopLeft(mTextFPS, 100, e.getCamera().getHeight());
@@ -92,7 +92,7 @@ public class BaseHUD extends HUDLoadable {
 	public void onUnload() {
 		/*
 		 *  We do not need anything of these anymore- kill all children and
-		 *  get rid of anything else that might want to run without any reason 
+		 *  get rid of anything else that might want to run without any reason
 		 */
 		detachChildren();
 		clearEntityModifiers();
@@ -101,11 +101,11 @@ public class BaseHUD extends HUDLoadable {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	protected void setTextLine(int pLine, CharSequence pText) {
+	protected void setTextLine(final int pLine, final CharSequence pText) {
 		mTextLines[pLine].setText(pText);
 	}
 
-	protected Text getTextLine(int pLine) {
+	protected Text getTextLine(final int pLine) {
 		return mTextLines[pLine];
 	}
 
@@ -116,11 +116,11 @@ public class BaseHUD extends HUDLoadable {
 		public volatile Font FONT_HUD;
 
 		@Override
-		public void onLoadResources(Engine e, Context c) {
+		public void onLoadResources(final Engine e, final Context c) {
 		}
 
 		@Override
-		public void onLoad(Engine e, Context c) {
+		public void onLoad(final Engine e, final Context c) {
 			final TextureManager textureManager = e.getTextureManager();
 			final FontManager fontManager = e.getFontManager();
 

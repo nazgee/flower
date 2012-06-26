@@ -9,31 +9,34 @@ import eu.nazgee.flower.score.Value;
 public class GameScore extends Score {
 	private HudGame mHud;
 
-	public GameScore(HudGame mHud) {
+	public GameScore(final HudGame mHud) {
 		this.setHUD(mHud);
 		score.setCallbackOnChanged(new Callback<Value>() {
 			@Override
-			public void onCallback(Value pCallbackValue) {
-				if (getHUD() == null)
+			public void onCallback(final Value pCallbackValue) {
+				if (getHUD() == null) {
 					return;
+				}
 				getHUD().setTextScore(pCallbackValue.get() + "$");
 			}
 		});
 
 		seeds.setCallbackOnChanged(new Callback<Value>() {
 			@Override
-			public void onCallback(Value pCallbackValue) {
-				if (getHUD() == null)
+			public void onCallback(final Value pCallbackValue) {
+				if (getHUD() == null) {
 					return;
+				}
 				getHUD().setTextSeeds("seeds:  " + pCallbackValue.get());
 			}
 		});
 
 		flowers.setCallbackOnChanged(new Callback<Value>() {
 			@Override
-			public void onCallback(Value pCallbackValue) {
-				if (getHUD() == null)
+			public void onCallback(final Value pCallbackValue) {
+				if (getHUD() == null) {
 					return;
+				}
 				getHUD().setTextFlowers("flowers:  " + pCallbackValue.get());
 			}
 		});
@@ -43,7 +46,7 @@ public class GameScore extends Score {
 		return mHud;
 	}
 
-	public void setHUD(HudGame mHud) {
+	public void setHUD(final HudGame mHud) {
 		this.mHud = mHud;
 	}
 }

@@ -39,8 +39,8 @@ public class Butterfly extends AnimatedSprite {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public Butterfly(float pX, float pY, ITiledTextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager, final ButterflyItem pPoolItem) {
+	public Butterfly(final float pX, final float pY, final ITiledTextureRegion pTextureRegion,
+			final VertexBufferObjectManager pVertexBufferObjectManager, final ButterflyItem pPoolItem) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		mPoolItem = pPoolItem;
 		setScaleCenter(eAnchorPointXY.BOTTOM_MIDDLE.x.ratio, eAnchorPointXY.BOTTOM_MIDDLE.y.ratio);
@@ -71,12 +71,12 @@ public class Butterfly extends AnimatedSprite {
 		float startY = pY;
 		float cnt1X = MathUtils.random(pX - offset, pX + offset);
 		float cnt1Y = MathUtils.random(pY - offset, pY + offset);
-		IEntityModifier bezziers[] = new IEntityModifier[5];
+		final IEntityModifier bezziers[] = new IEntityModifier[5];
 		for (int i = 0; i < bezziers.length; i++) {
-			float cnt2X = MathUtils.random(pX - offset, pX + offset);
-			float cnt2Y = MathUtils.random(pY - offset, pY + offset);
-			float endX = MathUtils.random(pX - offset, pX + offset);
-			float endY = MathUtils.random(pY - offset, pY + offset);
+			final float cnt2X = MathUtils.random(pX - offset, pX + offset);
+			final float cnt2Y = MathUtils.random(pY - offset, pY + offset);
+			final float endX = MathUtils.random(pX - offset, pX + offset);
+			final float endY = MathUtils.random(pY - offset, pY + offset);
 			bezziers[i] = new CubicBezierCurveMoveModifier(CURVE_TIME,
 					startX, startY,
 					cnt1X, cnt1Y,
@@ -84,13 +84,13 @@ public class Butterfly extends AnimatedSprite {
 					endX, endY);
 			startX = endX;
 			startY = endY;
-			float p = MathUtils.random(-0.5f, 0.5f);
+			final float p = MathUtils.random(-0.5f, 0.5f);
 			cnt1X = (endX - p * cnt2X) / (1 - p);
 			cnt1Y = (endY - p * cnt2Y) / (1 - p);
 		}
 
 		// register bezzier path
-		IEntityModifier mod = new ParallelEntityModifier(
+		final IEntityModifier mod = new ParallelEntityModifier(
 				new SequenceEntityModifier(
 						new FadeInModifier(CURVE_TIME/2),
 						new DelayModifier(bezziers.length * CURVE_TIME - CURVE_TIME),
@@ -105,11 +105,11 @@ public class Butterfly extends AnimatedSprite {
 	// ===========================================================
 	private class LifetimeLisetner implements IModifierListener<IEntity> {
 		@Override
-		public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+		public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {
 		}
-		
+
 		@Override
-		public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+		public void onModifierFinished(final IModifier<IEntity> pModifier, final IEntity pItem) {
 			synchronized (Butterfly.this) {
 				mPoolItem.scheduleDetachAndRecycle();
 			}
@@ -119,7 +119,7 @@ public class Butterfly extends AnimatedSprite {
 		float lastX;
 		float lastY;
 		@Override
-		public void onUpdate(float pSecondsElapsed) {
+		public void onUpdate(final float pSecondsElapsed) {
 			final float dX = getX() - lastX;
 			final float dY = getY() - lastY;
 			float angle = MathUtils.atan2(dY, dX);

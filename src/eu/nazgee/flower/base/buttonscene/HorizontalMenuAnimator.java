@@ -81,7 +81,7 @@
 //				baseX = (pCameraWidth - overallWidth) * 0.5f;
 //				break;
 //		}
-//	
+//
 //		float offsetX = 0;
 //		final int menuItemCount = pMenuItems.size();
 //		for(int i = 0; i < menuItemCount; i++) {

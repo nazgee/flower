@@ -18,7 +18,7 @@ public class CloudPool extends Pool<CloudItem> {
 	private final VertexBufferObjectManager mVertexBufferObjectManager;
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 
-	public CloudPool(ITiledTextureRegion pCloudTextureRegions, EntityDetachRunnablePoolUpdateHandler pDetacher, VertexBufferObjectManager pVertexBufferObjectManager) {
+	public CloudPool(final ITiledTextureRegion pCloudTextureRegions, final EntityDetachRunnablePoolUpdateHandler pDetacher, final VertexBufferObjectManager pVertexBufferObjectManager) {
 		mCloudTextureRegions = pCloudTextureRegions;
 		mDetacher = pDetacher;
 		mVertexBufferObjectManager = pVertexBufferObjectManager;
@@ -26,12 +26,12 @@ public class CloudPool extends Pool<CloudItem> {
 
 	@Override
 	protected CloudItem onAllocatePoolItem() {
-		ITextureRegion cloudtex = mCloudTextureRegions.getTextureRegion(rand.nextInt(mCloudTextureRegions.getTileCount()));
+		final ITextureRegion cloudtex = mCloudTextureRegions.getTextureRegion(rand.nextInt(mCloudTextureRegions.getTileCount()));
 		return new CloudItem(cloudtex, mDetacher, mVertexBufferObjectManager);
 	}
 
 	public static class CloudItem extends PooledEntityItem<Cloud> {
-		public CloudItem(ITextureRegion pTextureCloud, EntityDetachRunnablePoolUpdateHandler pDetacher, VertexBufferObjectManager pVertexBufferObjectManager) {
+		public CloudItem(final ITextureRegion pTextureCloud, final EntityDetachRunnablePoolUpdateHandler pDetacher, final VertexBufferObjectManager pVertexBufferObjectManager) {
 			super(pDetacher);
 			mEntity = new Cloud(0, 0, pTextureCloud, pVertexBufferObjectManager, this);
 		}

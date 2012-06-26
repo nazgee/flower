@@ -26,7 +26,7 @@ public class ArrayLayout implements ILayout {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public ArrayLayout(int mRows, int mCols, float mW, float mH) {
+	public ArrayLayout(final int mRows, final int mCols, final float mW, final float mH) {
 		super();
 		this.mRows = mRows;
 		this.mCols = mCols;
@@ -37,7 +37,7 @@ public class ArrayLayout implements ILayout {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public void layoutItems(LinkedList<? extends IEntity> pItems) {
+	public void layoutItems(final LinkedList<? extends IEntity> pItems) {
 		final int items = pItems.size();
 		int i = 0;
 

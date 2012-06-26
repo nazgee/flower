@@ -24,7 +24,7 @@ public class GameBackground extends CameraParallaxBackground {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public GameBackground(final Camera pCamera, TexturesLibrary pTexturesLibrary, VertexBufferObjectManager pVBOM) {
+	public GameBackground(final Camera pCamera, final TexturesLibrary pTexturesLibrary, final VertexBufferObjectManager pVBOM) {
 		super(0, 0, 0, pCamera);
 
 		final float y_bottom =	0;
@@ -115,10 +115,11 @@ public class GameBackground extends CameraParallaxBackground {
 		// ===========================================================
 		// Methods
 		// ===========================================================
+		@Override
 		public void onDraw(final GLState pGLState, final Camera pCamera, final float pParallaxValue) {
 			pGLState.pushModelViewGLMatrix();
 			{
-				float widthRange = pCamera.getWidth();
+				final float widthRange = pCamera.getWidth();
 
 				final float shapeWidthScaled = mAreaShape.getWidthScaled() * mScatterRatio;
 				float baseOffset = (pParallaxValue * mParallaxFactor) % shapeWidthScaled;

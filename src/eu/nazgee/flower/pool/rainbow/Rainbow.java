@@ -37,8 +37,8 @@ public class Rainbow extends Sprite {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public Rainbow(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager, final RainbowItem pPoolItem) {
+	public Rainbow(final float pX, final float pY, final ITextureRegion pTextureRegion,
+			final VertexBufferObjectManager pVertexBufferObjectManager, final RainbowItem pPoolItem) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		mPoolItem = pPoolItem;
 		setScaleCenter(eAnchorPointXY.BOTTOM_MIDDLE.x.ratio, eAnchorPointXY.BOTTOM_MIDDLE.y.ratio);
@@ -58,7 +58,7 @@ public class Rainbow extends Sprite {
 		detachChildren();
 		setScale(0);
 		setAlpha(1);
-		IEntityModifier mod = new SequenceEntityModifier(
+		final IEntityModifier mod = new SequenceEntityModifier(
 				new ScaleModifier(ANIMATION_TIME, 0, 1, EaseElasticOut.getInstance()),
 				new DelayModifier(LIFE_TIME - 2 * ANIMATION_TIME),
 				new FadeOutModifier(ANIMATION_TIME)
@@ -69,7 +69,7 @@ public class Rainbow extends Sprite {
 
 	public void fxPopOutWithText(final Font pFont, final String pText, final Color pColor) {
 		fxPopOut();
-		Text text = new Text(0, 0, pFont, pText, getVertexBufferObjectManager());
+		final Text text = new Text(0, 0, pFont, pText, getVertexBufferObjectManager());
 		text.setColor(pColor);
 		attachChild(text);
 		Anchor.setPosTopMiddleAtParent(text, eAnchorPointXY.TOP_MIDDLE);
@@ -78,18 +78,18 @@ public class Rainbow extends Sprite {
 				new DelayModifier(ANIMATION_TIME),
 				new FadeOutModifier(ANIMATION_TIME)
 				));
-		
+
 	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
 	private class RainbowLifetimeListener implements IModifierListener<IEntity> {
 		@Override
-		public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+		public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {
 		}
-		
+
 		@Override
-		public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+		public void onModifierFinished(final IModifier<IEntity> pModifier, final IEntity pItem) {
 			synchronized (Rainbow.this) {
 				mPoolItem.scheduleDetachAndRecycle();
 			}

@@ -6,9 +6,9 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 
 public class PageRectangleTransparent<T extends IEntity> extends PageRectangle<T> {
-	public PageRectangleTransparent(float pX, float pY, float pWidth, float pHeight,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			ILayout pLayout) {
+	public PageRectangleTransparent(final float pX, final float pY, final float pWidth, final float pHeight,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
+			final ILayout pLayout) {
 		super(pX, pY, pWidth, pHeight, pVertexBufferObjectManager, pLayout);
 		setAlpha(0);
 	}
@@ -18,7 +18,7 @@ public class PageRectangleTransparent<T extends IEntity> extends PageRectangle<T
 		super.setAlpha(0);
 		super.callOnChildren(new IEntityParameterCallable() {
 			@Override
-			public void call(IEntity pEntity) {
+			public void call(final IEntity pEntity) {
 				pEntity.setAlpha(pAlpha);
 			}
 		});

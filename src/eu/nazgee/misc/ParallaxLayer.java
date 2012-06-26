@@ -61,14 +61,14 @@ public class ParallaxLayer extends Shape {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public void onManagedDraw(GLState pGLState, Camera pCamera) {
+	public void onManagedDraw(final GLState pGLState, final Camera pCamera) {
 		super.preDraw(pGLState, pCamera);
 
 		final float parallaxValue = this.mAutoParallaxValue;
 		final float parallaxScrollValue = this.mParallaxScrollValue;
 		final ArrayList<ParallaxLayerEntity> parallaxEntities = this.mParallaxEntities;
 
-		int entitiesCount = mParallaxEntities.size();
+		final int entitiesCount = mParallaxEntities.size();
 		for (int i = 0; i < entitiesCount; i++) {
 			if (parallaxEntities.get(i).isScrollable()) {
 				parallaxEntities.get(i).onDraw(pGLState, pCamera, parallaxScrollValue, getWidth());
@@ -79,9 +79,9 @@ public class ParallaxLayer extends Shape {
 	}
 
 	@Override
-	protected void onManagedUpdate(float pSecondsElapsed) {
+	protected void onManagedUpdate(final float pSecondsElapsed) {
 
-		/*  
+		/*
 		 * React for camera movement
 		 */
 		if (mIsScrollable && mCameraPreviousX != this.mCamera.getCenterX()) {
@@ -104,7 +104,7 @@ public class ParallaxLayer extends Shape {
 
 	@Override
 	protected void onUpdateVertices() {
-		// we are not drawing anything - our entities are		
+		// we are not drawing anything - our entities are
 	}
 
 	// ===========================================================

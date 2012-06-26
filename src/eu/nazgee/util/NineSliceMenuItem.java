@@ -10,7 +10,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 /**
  * (c) Zynga 2012
- * 
+ *
  * @author Nicolas Gramlich <ngramlich@zynga.com>
  * @since 16:50:42 - 25.04.2012
  */
@@ -40,27 +40,27 @@ public class NineSliceMenuItem extends NineSliceSprite implements IMenuItem {
 	// ===========================================================
 
 
-	public NineSliceMenuItem(final int pID, float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pTextureRegion, float pInsetLeft, float pInsetTop,
-			float pInsetRight, float pInsetBottom,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+	public NineSliceMenuItem(final int pID, final float pX, final float pY, final float pWidth, final float pHeight,
+			final ITextureRegion pTextureRegion, final float pInsetLeft, final float pInsetTop,
+			final float pInsetRight, final float pInsetBottom,
+			final VertexBufferObjectManager pVertexBufferObjectManager) {
 			this(pID, pX, pY, pWidth, pHeight, pTextureRegion, pInsetLeft, pInsetTop,
 				pInsetRight, pInsetBottom, pVertexBufferObjectManager, PositionColorTextureCoordinatesShaderProgram.getInstance());
 	}
 
-	public NineSliceMenuItem(final int pID, float pX, float pY,
-			ITextureRegion pTextureRegion, float pInsetLeft, float pInsetTop,
-			float pInsetRight, float pInsetBottom,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			ShaderProgram pShaderProgram) {
+	public NineSliceMenuItem(final int pID, final float pX, final float pY,
+			final ITextureRegion pTextureRegion, final float pInsetLeft, final float pInsetTop,
+			final float pInsetRight, final float pInsetBottom,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
+			final ShaderProgram pShaderProgram) {
 			this(pID, pX, pY, pTextureRegion.getWidth(), pTextureRegion.getHeight(), pTextureRegion, pInsetLeft, pInsetTop, pInsetRight, pInsetBottom,
 				pVertexBufferObjectManager, pShaderProgram);
 	}
 
-	public NineSliceMenuItem(final int pID, float pX, float pY,
-			ITextureRegion pTextureRegion, float pInsetLeft, float pInsetTop,
-			float pInsetRight, float pInsetBottom,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+	public NineSliceMenuItem(final int pID, final float pX, final float pY,
+			final ITextureRegion pTextureRegion, final float pInsetLeft, final float pInsetTop,
+			final float pInsetRight, final float pInsetBottom,
+			final VertexBufferObjectManager pVertexBufferObjectManager) {
 			this(pID, pX, pY, pTextureRegion.getWidth(), pTextureRegion.getHeight(), pTextureRegion, pInsetLeft, pInsetTop, pInsetRight, pInsetBottom, pVertexBufferObjectManager, PositionColorTextureCoordinatesShaderProgram.getInstance());
 	}
 
@@ -73,7 +73,7 @@ public class NineSliceMenuItem extends NineSliceSprite implements IMenuItem {
 		super(pX, pY, pWidth, pHeight, pTextureRegion, pInsetLeft, pInsetTop, pInsetRight, pInsetBottom,
 				pVertexBufferObjectManager);
 		mID = pID;
-		
+
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class NineSliceMenuItem extends NineSliceSprite implements IMenuItem {
 
 
 	@Override
-	public void setBlendingEnabled(boolean pBlendingEnabled) {
+	public void setBlendingEnabled(final boolean pBlendingEnabled) {
 		mSpriteBatch.setBlendingEnabled(pBlendingEnabled);
 	}
 
@@ -115,20 +115,20 @@ public class NineSliceMenuItem extends NineSliceSprite implements IMenuItem {
 
 
 	@Override
-	public void setBlendFunctionSource(int pBlendFunctionSource) {
+	public void setBlendFunctionSource(final int pBlendFunctionSource) {
 		mSpriteBatch.setBlendFunctionSource(pBlendFunctionSource);
 	}
 
 
 	@Override
-	public void setBlendFunctionDestination(int pBlendFunctionDestination) {
+	public void setBlendFunctionDestination(final int pBlendFunctionDestination) {
 		mSpriteBatch.setBlendFunctionDestination(pBlendFunctionDestination);
 	}
 
 
 	@Override
-	public void setBlendFunction(int pBlendFunctionSource,
-			int pBlendFunctionDestination) {
+	public void setBlendFunction(final int pBlendFunctionSource,
+			final int pBlendFunctionDestination) {
 		mSpriteBatch.setBlendFunction(pBlendFunctionSource, pBlendFunctionDestination);
 	}
 
@@ -152,7 +152,7 @@ public class NineSliceMenuItem extends NineSliceSprite implements IMenuItem {
 
 
 	@Override
-	public void setShaderProgram(ShaderProgram pShaderProgram) {
+	public void setShaderProgram(final ShaderProgram pShaderProgram) {
 		// we are not drawing anything- batch does it for us
 	}
 

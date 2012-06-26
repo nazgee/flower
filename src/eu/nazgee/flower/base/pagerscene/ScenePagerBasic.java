@@ -20,9 +20,9 @@ abstract public class ScenePagerBasic<T extends IEntity> extends ScenePager<T> {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public ScenePagerBasic(float W, float H,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			int pColums, int pRows, float pEffectivePageWidthRatio, float pPageFlipRatio) {
+	public ScenePagerBasic(final float W, final float H,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
+			final int pColums, final int pRows, final float pEffectivePageWidthRatio, final float pPageFlipRatio) {
 		super(W, H, pVertexBufferObjectManager, (int) (W * pEffectivePageWidthRatio * pPageFlipRatio));
 
 		COLS = pColums;
@@ -52,7 +52,7 @@ abstract public class ScenePagerBasic<T extends IEntity> extends ScenePager<T> {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	protected void attachPage(IPage<T> pPage, int pPageNumber) {
+	protected void attachPage(final IPage<T> pPage, final int pPageNumber) {
 		attachChild(pPage);
 		Anchor.setPosBottomLeft(pPage, pPageNumber * getEffectiveWidth(), 0);
 	}

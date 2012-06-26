@@ -24,7 +24,6 @@ import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
-import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 
@@ -38,7 +37,7 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 	private final HudShop mHUD;
 	private final Font mDescFont;
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
-	private PopupPool mPopupPool;
+	private final PopupPool mPopupPool;
 
 	private GameBackground mBG;
 	private IShoppingListener mShoppingListener;
@@ -47,9 +46,9 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public SceneSeedsShop(float W, float H,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			GameLevel pGameLevel, final Font pDescFont,
+	public SceneSeedsShop(final float W, final float H,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
+			final GameLevel pGameLevel, final Font pDescFont,
 			final EntityDetachRunnablePoolUpdateHandler pDetacher,
 			final TexturesLibrary pTexturesLibrary) {
 		super(W, H, pVertexBufferObjectManager, 2, 2, 0.66f, 0.33f);
@@ -73,7 +72,7 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 
 		// Install all the seeds resources (this is needed, as long as seeds will
 		// be considered as needing resources)
-		for (Seed seed : this.mShop.getSeedsInShop()) {
+		for (final Seed seed : this.mShop.getSeedsInShop()) {
 			getLoader().install(seed.resources);
 		}
 
@@ -94,7 +93,7 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 		return mShoppingListener;
 	}
 
-	public void setShoppingListener(IShoppingListener pShoppingListener) {
+	public void setShoppingListener(final IShoppingListener pShoppingListener) {
 		this.mShoppingListener = pShoppingListener;
 	}
 	// ===========================================================
@@ -102,12 +101,12 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 	// ===========================================================
 
 	@Override
-	protected void callClickListener(SeedItem pItem) {
+	protected void callClickListener(final SeedItem pItem) {
 		if (!pItem.getSeed().resources.isLocked()) {
 			if (mShop.addToBasket(pItem.getSeed())) {
 				updateHUDBasket();
 				updateHUDCash();
-				PopupItem popup = mPopupPool.obtainPoolItem();
+				final PopupItem popup = mPopupPool.obtainPoolItem();
 				popup.getEntity().put(pItem, "$" + pItem.getSeed().cost);
 				popup.getEntity().fxMoveTo(0.75f, mHUD.getTextCash());
 				attachChild(popup.getEntity());
@@ -123,13 +122,13 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 	}
 
 	@Override
-	public void onLoadResources(Engine e, Context c) {
+	public void onLoadResources(final Engine e, final Context c) {
 		super.onLoadResources(e, c);
 		mBG = new GameBackground(e.getCamera(), mTexturesLibrary, getVertexBufferObjectManager());
 	}
 
 	@Override
-	public void onLoad(Engine e, Context c) {
+	public void onLoad(final Engine e, final Context c) {
 		super.onLoad(e, c);
 		setPageMover(new PageMoverCameraZoom<SeedItem>(0.75f, (SmoothCamera) e.getCamera(), getEffectiveWidth()));
 		setBackground(mBG);
@@ -141,12 +140,12 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 		// HUD buttons clicks
 		this.mHUD.getButtonDone().setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(ButtonSprite pButtonSprite, float pTouchAreaLocalX,
-					float pTouchAreaLocalY) {
+			public void onClick(final ButtonSprite pButtonSprite, final float pTouchAreaLocalX,
+					final float pTouchAreaLocalY) {
 				if (null != getShoppingListener()) {
 					getShoppingListener().onShoppingFinished(null);
 				}
-				
+
 			}
 		});
 	}
@@ -158,15 +157,15 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 	}
 
 	@Override
-	protected SeedItem populateItem(int pItem, int pItemOnPage, int pPage) {
-		Seed seed = this.mShop.getSeedsInShop().get(pItem);
-		SeedItem item = new SeedItem(seed, getFrameW(), getFrameH(), mDescFont, mTexturesLibrary.getFactory(), getVertexBufferObjectManager(), mTexturesLibrary);
+	protected SeedItem populateItem(final int pItem, final int pItemOnPage, final int pPage) {
+		final Seed seed = this.mShop.getSeedsInShop().get(pItem);
+		final SeedItem item = new SeedItem(seed, getFrameW(), getFrameH(), mDescFont, mTexturesLibrary.getFactory(), getVertexBufferObjectManager(), mTexturesLibrary);
 		return item;
 	}
 
 	@Override
-	protected IPage<SeedItem> populatePage(int pPageNumber) {
-		IPage<SeedItem> page = new PageRectangleTransparent<SeedItem>(0, 0, getEffectiveWidth(), getH(), 
+	protected IPage<SeedItem> populatePage(final int pPageNumber) {
+		final IPage<SeedItem> page = new PageRectangleTransparent<SeedItem>(0, 0, getEffectiveWidth(), getH(),
 				getVertexBufferObjectManager(),
 				new ArrayLayout(getCols(), getRrows(), getEffectiveWidth(), getH()));
 		return page;

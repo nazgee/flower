@@ -3,9 +3,8 @@ package eu.nazgee.flower.base.pagerscene;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.IEntity;
 
-import eu.nazgee.flower.Consts;
-
 import android.util.Log;
+import eu.nazgee.flower.Consts;
 
 
 public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
@@ -26,7 +25,7 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public PageMoverCamera(SmoothCamera mCamera, float pStepPerPage) {
+	public PageMoverCamera(final SmoothCamera mCamera, final float pStepPerPage) {
 		super();
 		this.mCamera = mCamera;
 		this.mStepPerPage = pStepPerPage;
@@ -38,7 +37,7 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 		return mPagesAlignment;
 	}
 
-	public void setPageAlignment(ePageAlignment pPageAlignment) {
+	public void setPageAlignment(final ePageAlignment pPageAlignment) {
 		this.mPagesAlignment = pPageAlignment;
 	}
 
@@ -50,14 +49,14 @@ public class PageMoverCamera<T extends IEntity> implements IPageMover<T> {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public void onProgressSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, float pSwipeDistanceTotal,
-			float pSwipeDistanceDelta) {
+	public void onProgressSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, final float pSwipeDistanceTotal,
+			final float pSwipeDistanceDelta) {
 		Log.d(getClass().getSimpleName(), "onProgressSwipe(); pSwipeDistanceDelta=" + pSwipeDistanceDelta);
 		mCamera.setCenterDirect(mCamera.getCenterX() - pSwipeDistanceDelta, mCamera.getHeight()/2);
 	}
 
 	@Override
-	public void onCompletedSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, int pNewPageIndex, int pOldPageIndex) {
+	public void onCompletedSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, final int pNewPageIndex, final int pOldPageIndex) {
 //		Log.d(getClass().getSimpleName(), "onCompletedSwipe(); pNewPageIndex=" + pNewPageIndex + "; mStepPerPage=" + getStepPerPage());
 
 		float offset = 0;

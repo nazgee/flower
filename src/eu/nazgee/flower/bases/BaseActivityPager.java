@@ -61,16 +61,16 @@ public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGame
 	abstract protected ScenePager<T> populatePagerScene(final float w, final float h, final VertexBufferObjectManager pVertexBufferObjectManager);
 
 	@Override
-	protected void onCreate(Bundle pSavedInstanceState) {
+	protected void onCreate(final Bundle pSavedInstanceState) {
 		super.onCreate(pSavedInstanceState);
 	}
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
 //		final SmoothTrackingCamera camera = new SmoothTrackingCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, 0, new SmootherLinear(5), new SmootherEmpty(), new SmootherLinear(5));
-		Camera camera = new SmoothCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, Consts.CAMERA_WIDTH * 3, Consts.CAMERA_HEIGHT * 3, 1);
+		final Camera camera = new SmoothCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, Consts.CAMERA_WIDTH * 3, Consts.CAMERA_HEIGHT * 3, 1);
 
-		EngineOptions engopts = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
+		final EngineOptions engopts = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED,
 				new FillResolutionPolicy(), camera);
 		engopts.getRenderOptions().setDithering(true);
 		return engopts;
@@ -89,7 +89,7 @@ public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGame
 	@Override
 	protected Scene onCreateScene() {
 		mEngine.registerUpdateHandler(new FPSLogger());
-		Camera camera = getEngine().getCamera();
+		final Camera camera = getEngine().getCamera();
 
 		mScenePager = populatePagerScene(camera.getWidth(), camera.getHeight(), getVertexBufferObjectManager());
 		mScenePager.loadResources(getEngine(), this);
@@ -101,8 +101,9 @@ public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGame
 	@Override
 	public void onDestroyResources() throws IOException {
 		super.onDestroyResources();
-		if (mScenePager != null)
+		if (mScenePager != null) {
 			mScenePager.unload();
+		}
 
 		mResources.unload();
 	}
@@ -118,11 +119,11 @@ public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGame
 		public Font FONT_DESC;
 
 		@Override
-		public void onLoadResources(Engine e, Context c) {
+		public void onLoadResources(final Engine e, final Context c) {
 		}
 
 		@Override
-		public void onLoad(Engine e, Context c) {
+		public void onLoad(final Engine e, final Context c) {
 			e.unregisterUpdateHandler(ENTITY_DETACH_HANDLER);
 
 			ENTITY_DETACH_HANDLER = new EntityDetachRunnablePoolUpdateHandler();

@@ -14,14 +14,11 @@ public class PageMoverCameraZoom<T extends IEntity> extends PageMoverCamera<T> {
 	// Fields
 	// ===========================================================
 
-	private final float mScaleWhenOffscreen;
-
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public PageMoverCameraZoom(final float pScaleWhenOffscreen, SmoothCamera mCamera, float pStepPerPage) {
+	public PageMoverCameraZoom(final float pScaleWhenOffscreen, final SmoothCamera mCamera, final float pStepPerPage) {
 		super(mCamera, pStepPerPage);
-		this.mScaleWhenOffscreen = pScaleWhenOffscreen;
 	}
 	// ===========================================================
 	// Getter & Setter
@@ -31,8 +28,8 @@ public class PageMoverCameraZoom<T extends IEntity> extends PageMoverCamera<T> {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public void onProgressSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, float pSwipeDistanceTotal,
-			float pSwipeDistanceDelta) {
+	public void onProgressSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, final float pSwipeDistanceTotal,
+			final float pSwipeDistanceDelta) {
 		super.onProgressSwipe(pScenePager, pCurrentPage, pSwipeDistanceTotal, pSwipeDistanceDelta);
 
 		final float value = MathUtils.bringToBounds(0, 1, 1 - Math.abs(pSwipeDistanceTotal) / getStepPerPage());
@@ -41,8 +38,8 @@ public class PageMoverCameraZoom<T extends IEntity> extends PageMoverCamera<T> {
 	}
 
 	@Override
-	public void onCompletedSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, int pNewPageIndex,
-			int pOldPageIndex) {
+	public void onCompletedSwipe(final ScenePager<T> pScenePager, final IPage<T> pCurrentPage, final int pNewPageIndex,
+			final int pOldPageIndex) {
 		super.onCompletedSwipe(pScenePager, pCurrentPage, pNewPageIndex, pOldPageIndex);
 		setPageState(pScenePager, pCurrentPage, 1, 0);
 	}
@@ -50,7 +47,7 @@ public class PageMoverCameraZoom<T extends IEntity> extends PageMoverCamera<T> {
 	// Methods
 	// ===========================================================
 	/**
-	 * 
+	 *
 	 * @param pScenePager
 	 * @param pPage
 	 * @param pValue accepted range is (1=page is in screen center) ... (0=page is offscreen)
@@ -75,9 +72,10 @@ public class PageMoverCameraZoom<T extends IEntity> extends PageMoverCamera<T> {
 		setPageState(pNext, 1-pValue, pDirection, 1);	// next page
 	}
 
-	protected void setPageState(final IPage<T> pPage, final float pValue, final float pDirection, int index) {
-		if (pPage == null)
+	protected void setPageState(final IPage<T> pPage, final float pValue, final float pDirection, final int index) {
+		if (pPage == null) {
 			return;
+		}
 
 		pPage.setAlpha(MathUtils.bringToBounds(0.5f, 1, pValue));
 

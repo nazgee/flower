@@ -19,8 +19,8 @@ public class HudLevelselector extends BaseHUD {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public HudLevelselector(float W, float H,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+	public HudLevelselector(final float W, final float H,
+			final VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, 0, pVertexBufferObjectManager);
 	}
 
@@ -33,7 +33,7 @@ public class HudLevelselector extends BaseHUD {
 	// ===========================================================
 
 	@Override
-	public void onLoad(Engine e, Context c) {
+	public void onLoad(final Engine e, final Context c) {
 		super.onLoad(e, c);
 	}
 

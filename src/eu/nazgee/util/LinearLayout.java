@@ -31,10 +31,10 @@ public class LinearLayout extends Entity {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	private float getItemSizeMain(IEntity pEntity) {
+	private float getItemSizeMain(final IEntity pEntity) {
 		return (mDirection == eDirection.DIR_HORIZONTAL) ? pEntity.getWidth() : pEntity.getHeight();
 	}
-	private float getItemSizeExtra(IEntity pEntity) {
+	private float getItemSizeExtra(final IEntity pEntity) {
 		return (mDirection != eDirection.DIR_HORIZONTAL) ? pEntity.getWidth() : pEntity.getHeight();
 	}
 	private float getLayoutSizeMain() {
@@ -44,7 +44,7 @@ public class LinearLayout extends Entity {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 
-	public void setItems(final boolean pStretch, IEntity... pItems) {
+	public void setItems(final boolean pStretch, final IEntity... pItems) {
 		// get rid of old items
 		mItems.clear();
 		detachChildren();
@@ -52,7 +52,7 @@ public class LinearLayout extends Entity {
 		// attach new items
 		float totalSize = 0;
 		float maxSize = 0;
-		for (IEntity item : pItems) {
+		for (final IEntity item : pItems) {
 			mItems.add(item);
 			attachChild(item);
 
@@ -60,12 +60,12 @@ public class LinearLayout extends Entity {
 			maxSize = Math.max(maxSize, getItemSizeExtra(item));
 		}
 
-		boolean squeezingNeeded = pStretch || (getLayoutSizeMain() < totalSize);
+		final boolean squeezingNeeded = pStretch || (getLayoutSizeMain() < totalSize);
 
 		if (squeezingNeeded && pItems.length > 1) {
 			final IEntity last = pItems[pItems.length-1];
 			final float lastItemSize = getItemSizeMain(last);
-	
+
 			final float scale = (getLayoutSizeMain() - lastItemSize) / (totalSize - lastItemSize);
 			setItemsPositions(getLayoutSizeMain(), scale);
 		} else {
@@ -76,14 +76,14 @@ public class LinearLayout extends Entity {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	protected void setItemsPositions(float pSize, final float pPositionScale) {
+	protected void setItemsPositions(final float pSize, final float pPositionScale) {
 
 		final float basePosition = 0;
 
 //		Log.e("aaa", "W=" + W + "; baseX=" + baseX + "; scale=" + mPositionScale + "; count=" + mItems.size());
 
 		float offset = 0;
-		for (IEntity item : mItems) {
+		for (final IEntity item : mItems) {
 			final float pos = basePosition + offset * pPositionScale;
 			offset += getItemSizeMain(item);
 

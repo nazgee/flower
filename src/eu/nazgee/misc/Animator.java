@@ -16,7 +16,7 @@ public class Animator {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public Animator(IEntity mEntity) {
+	public Animator(final IEntity mEntity) {
 		this.mEntity = mEntity;
 	}
 
@@ -31,7 +31,7 @@ public class Animator {
 		return mEntity;
 	}
 
-	public synchronized void setEntity(IEntity pNewEntity) {
+	public synchronized void setEntity(final IEntity pNewEntity) {
 		if (mEntity != null) {
 			mEntity.unregisterEntityModifier(mAnimationModifier);
 		}
@@ -47,8 +47,9 @@ public class Animator {
 	// Methods
 	// ===========================================================
 	public synchronized void runModifier(final IEntityModifier pModifier) {
-		if (mEntity == null)
+		if (mEntity == null) {
 			return;
+		}
 
 		pModifier.setAutoUnregisterWhenFinished(false);
 		mEntity.unregisterEntityModifier(mAnimationModifier);

@@ -40,15 +40,15 @@ public class Sun extends Entity {
 	// ===========================================================
 	private IEntityModifier mTravelModifier;
 	private ISunListener mTravelListener;
-	private MyModifierListener mMyModifierListener = new MyModifierListener();
+	private final MyModifierListener mMyModifierListener = new MyModifierListener();
 	private final Sunshine mSunshine;
 	private final Sprite mSun;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public Sun(float pX, float pY, ITextureRegion pTextureRegion,
-			ITiledTextureRegion pSunshineTextures,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+	public Sun(final float pX, final float pY, final ITextureRegion pTextureRegion,
+			final ITiledTextureRegion pSunshineTextures,
+			final VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY);
 
 		mSun = initSun(this, pTextureRegion.getWidth(), pTextureRegion.getHeight(), pTextureRegion, pVertexBufferObjectManager);
@@ -58,8 +58,8 @@ public class Sun extends Entity {
 	/**
 	 * Creates a SunSprite, and attach it to the Sun
 	 */
-	private static Sprite initSun(final Sun pSun, final float w, final float h, final ITextureRegion pSunTexture, VertexBufferObjectManager pVertexBufferObjectManager) {
-		ShaderProgram shdr = FisheyeShaderProgram.getInstance();
+	private static Sprite initSun(final Sun pSun, final float w, final float h, final ITextureRegion pSunTexture, final VertexBufferObjectManager pVertexBufferObjectManager) {
+		final ShaderProgram shdr = FisheyeShaderProgram.getInstance();
 		final float cw = (pSunTexture.getU2() - pSunTexture.getU());
 		final float ch = (pSunTexture.getV2() - pSunTexture.getV());
 		final float cx = pSunTexture.getU() + cw/2;
@@ -67,7 +67,7 @@ public class Sun extends Entity {
 		Log.e("aaa", "w=" + cw + "; ch=" + ch);
 
 
-		Sprite sun = new Sprite(0, 0, w, h, pSunTexture, pVertexBufferObjectManager, shdr) {
+		final Sprite sun = new Sprite(0, 0, w, h, pSunTexture, pVertexBufferObjectManager, shdr) {
 			private float step = 0;
 			private float seed = 666;
 			private float valfx = 0;
@@ -101,8 +101,8 @@ public class Sun extends Entity {
 	/**
 	 * Creates a Sunshine, and attach it to the Sun
 	 */
-	private static Sunshine initSunshine(final Sun pSun, ITiledTextureRegion pSunshineTextures, VertexBufferObjectManager pVertexBufferObjectManager) {
-		Sunshine sunshine = new Sunshine(pSunshineTextures, pVertexBufferObjectManager);
+	private static Sunshine initSunshine(final Sun pSun, final ITiledTextureRegion pSunshineTextures, final VertexBufferObjectManager pVertexBufferObjectManager) {
+		final Sunshine sunshine = new Sunshine(pSunshineTextures, pVertexBufferObjectManager);
 		pSun.attachChild(sunshine);
 		sunshine.setZIndex(-1);
 		Anchor.setPosCenterAtParent(sunshine, eAnchorPointXY.CENTERED);
@@ -115,19 +115,19 @@ public class Sun extends Entity {
 	// Getter & Setter
 	// ===========================================================
 
-	public void setRaysTargetTop(IEntity pTarget, Sky pSky) {
+	public void setRaysTargetTop(final IEntity pTarget, final Sky pSky) {
 		mSunshine.setTargetTop(pTarget, pSky);
 	}
 
-	public void setRaysTargetCenter(Entity pTarget, Sky pSky) {
+	public void setRaysTargetCenter(final Entity pTarget, final Sky pSky) {
 		mSunshine.setTargetCenter(pTarget, pSky);
 	}
 
-	public void setRaysTarget(float pHeightOnSky, Sky pSky) {
+	public void setRaysTarget(final float pHeightOnSky, final Sky pSky) {
 		mSunshine.setTarget(pHeightOnSky, pSky);
 	}
 
-	public boolean isShiningAt(IEntity pTarget) {
+	public boolean isShiningAt(final IEntity pTarget) {
 		return mSunshine.isShiningAt(pTarget);
 	}
 
@@ -141,7 +141,7 @@ public class Sun extends Entity {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	synchronized public void travel(final float pX, final float pY, final float W, final float H, final float time, ISunListener pTravelListener) {
+	synchronized public void travel(final float pX, final float pY, final float W, final float H, final float time, final ISunListener pTravelListener) {
 		mTravelListener = pTravelListener;
 		setPosition(pX, pY);
 		unregisterEntityModifier(mTravelModifier);
@@ -163,7 +163,7 @@ public class Sun extends Entity {
 	// ===========================================================
 	private class MyModifierListener implements IModifierListener<IEntity> {
 		@Override
-		public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+		public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {
 			synchronized (Sun.this) {
 				if (mTravelListener != null) {
 					mTravelListener.onStarted(Sun.this);
@@ -171,7 +171,7 @@ public class Sun extends Entity {
 			}
 		}
 		@Override
-		public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+		public void onModifierFinished(final IModifier<IEntity> pModifier, final IEntity pItem) {
 			synchronized (Sun.this) {
 				if (mTravelListener != null) {
 					mTravelListener.onFinished(Sun.this);

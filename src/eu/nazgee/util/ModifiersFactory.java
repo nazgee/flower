@@ -22,7 +22,7 @@ public class ModifiersFactory {
 	// Constructors
 	// ===========================================================
 	private ModifiersFactory() {
-		
+
 	}
 	// ===========================================================
 	// Getter & Setter
@@ -39,9 +39,9 @@ public class ModifiersFactory {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	public static IEntityModifier shakeYourHead(int mCount, float mDuration,
-			float mAngle) {
-		IEntityModifier mod = new LoopEntityModifier(
+	public static IEntityModifier shakeYourHead(final int mCount, final float mDuration,
+			final float mAngle) {
+		final IEntityModifier mod = new LoopEntityModifier(
 				new SequenceEntityModifier(
 						new RotationModifier(mDuration/4, 0,        -mAngle/2, EaseStrongOut.getInstance()),
 						new RotationModifier(mDuration/2, -mAngle/2, mAngle,    EaseStrongInOut.getInstance()),
@@ -50,9 +50,9 @@ public class ModifiersFactory {
 		return mod;
 	}
 
-	public static IEntityModifier nodYourHead(int mCount, float mDuration,
-			float mFrom, float mTo) {
-		IEntityModifier mod = new LoopEntityModifier(
+	public static IEntityModifier nodYourHead(final int mCount, final float mDuration,
+			final float mFrom, final float mTo) {
+		final IEntityModifier mod = new LoopEntityModifier(
 				new SequenceEntityModifier(
 						new ScaleModifier(mDuration/2, mFrom, mTo, EaseStrongOut.getInstance()),
 						new ScaleModifier(mDuration/2, mTo, mFrom, EaseStrongOut.getInstance())

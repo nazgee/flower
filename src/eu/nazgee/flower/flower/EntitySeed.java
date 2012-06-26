@@ -16,7 +16,6 @@ import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
-import org.andengine.util.modifier.ease.EaseBounceIn;
 import org.andengine.util.modifier.ease.EaseBounceOut;
 import org.andengine.util.modifier.ease.EaseElasticOut;
 import org.andengine.util.modifier.ease.EaseQuadOut;
@@ -43,18 +42,18 @@ public class EntitySeed extends Sprite {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public EntitySeed(float pX, float pY, float pWidth, float pHeight,
-			ITextureRegion pSeedTexture, ITextureRegion pWaterMarkerTexture,
-			VertexBufferObjectManager pVertexBufferObjectManager,
+	public EntitySeed(final float pX, final float pY, final float pWidth, final float pHeight,
+			final ITextureRegion pSeedTexture, final ITextureRegion pWaterMarkerTexture,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final Color pColor, final EntityDetachRunnablePoolUpdateHandler pDetacher) {
 		super(pX, pY, pWidth, pHeight, pSeedTexture, pVertexBufferObjectManager);
 		mDetacher = pDetacher;
 		mWaterMark = new Sprite(0, 0, pWaterMarkerTexture, pVertexBufferObjectManager);
 	}
 
-	public EntitySeed(float pX, float pY,
-			ITextureRegion pTextureRegion, ITextureRegion pWaterMarkerTexture,
-			VertexBufferObjectManager pVertexBufferObjectManager,
+	public EntitySeed(final float pX, final float pY,
+			final ITextureRegion pTextureRegion, final ITextureRegion pWaterMarkerTexture,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final Color pColor, final EntityDetachRunnablePoolUpdateHandler pDetacher) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		mDetacher = pDetacher;
@@ -75,10 +74,10 @@ public class EntitySeed extends Sprite {
 		animateGrowth(1);
 		mSeedAnimator.addModifierListener(new IModifierListener<IEntity>() {
 			@Override
-			public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+			public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {
 			}
 			@Override
-			public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+			public void onModifierFinished(final IModifier<IEntity> pModifier, final IEntity pItem) {
 				mDetacher.scheduleDetach(pItem);
 			}
 		});

@@ -13,7 +13,7 @@ public class ButterflyPool extends Pool<ButterflyItem> {
 	private final VertexBufferObjectManager mVertexBufferObjectManager;
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 
-	public ButterflyPool(ITiledTextureRegion pButterflyTextureRegion, EntityDetachRunnablePoolUpdateHandler pDetacher, VertexBufferObjectManager pVertexBufferObjectManager) {
+	public ButterflyPool(final ITiledTextureRegion pButterflyTextureRegion, final EntityDetachRunnablePoolUpdateHandler pDetacher, final VertexBufferObjectManager pVertexBufferObjectManager) {
 		mTextureRegion = pButterflyTextureRegion;
 		mVertexBufferObjectManager = pVertexBufferObjectManager;
 		mDetacher = pDetacher;
@@ -25,7 +25,7 @@ public class ButterflyPool extends Pool<ButterflyItem> {
 	}
 
 	public static class ButterflyItem extends PooledEntityItem<Butterfly> {
-		public ButterflyItem(ITiledTextureRegion pTextureRegion, EntityDetachRunnablePoolUpdateHandler pDetacher, VertexBufferObjectManager pVertexBufferObjectManager) {
+		public ButterflyItem(final ITiledTextureRegion pTextureRegion, final EntityDetachRunnablePoolUpdateHandler pDetacher, final VertexBufferObjectManager pVertexBufferObjectManager) {
 			super(pDetacher);
 			mEntity = new Butterfly(0, 0, pTextureRegion, pVertexBufferObjectManager, this);
 		}

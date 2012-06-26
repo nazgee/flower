@@ -1,7 +1,6 @@
 package eu.nazgee.flower.activity.game;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.SmoothCamera;
@@ -36,11 +35,6 @@ import eu.nazgee.flower.activity.game.scene.game.SceneGame;
 import eu.nazgee.flower.activity.game.scene.game.SceneGame.IGameListener;
 import eu.nazgee.flower.activity.game.scene.ingame.MenuIngame;
 import eu.nazgee.flower.activity.game.scene.over.MenuGameLost;
-import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop;
-import eu.nazgee.flower.activity.game.scene.shop.SceneSeedsShop.IShoppingListener;
-import eu.nazgee.flower.activity.game.scene.shop.SeedItem;
-import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
-import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.game.utils.loadable.ILoadableResourceScene;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
@@ -67,7 +61,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	private MenuGameLost mMenuGameOver;
 	private SceneLoader mLoader;
 	private final MyResources mResources = new MyResources();
-	private TexturesLibrary mTexturesLibrary = new TexturesLibrary();
+	private final TexturesLibrary mTexturesLibrary = new TexturesLibrary();
 
 
 	private GameLevel mGameLevel;
@@ -93,14 +87,14 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	public EngineOptions onCreateEngineOptions() {
 //		final SmoothTrackingCamera camera = new SmoothTrackingCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, 0, new SmootherLinear(5), new SmootherEmpty(), new SmootherLinear(5));
 		final SmoothCamera camera = new SmoothCamera(0, 0, Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, Consts.CAMERA_WIDTH * 3, 0, 100);
-		EngineOptions engopts = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT), camera);
+		final EngineOptions engopts = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT), camera);
 		engopts.getRenderOptions().setDithering(true);
 		engopts.getAudioOptions().setNeedsSound(true);
 		return engopts;
 	}
 
 	@Override
-	protected void onCreate(Bundle pSavedInstanceState) {
+	protected void onCreate(final Bundle pSavedInstanceState) {
 		super.onCreate(pSavedInstanceState);
 		if (pSavedInstanceState != null) {
 			super.onCreate(pSavedInstanceState);
@@ -148,7 +142,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		mMenuGameOver.setDescription("this is a game over scene stub");
 
 		// Create "Loading..." scene that will be used for all loading-related activities
-		SceneLoading loadingScene = new SceneLoading(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getStaticResources().FONT, "Loading...", getVertexBufferObjectManager());
+		final SceneLoading loadingScene = new SceneLoading(Consts.CAMERA_WIDTH, Consts.CAMERA_HEIGHT, getStaticResources().FONT, "Loading...", getVertexBufferObjectManager());
 
 		mLoader = new SceneLoader(loadingScene);
 		mLoader.setLoadingSceneHandling(eLoadingSceneHandling.SCENE_DONT_TOUCH).setLoadingSceneUnload(false);
@@ -160,7 +154,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 
 		/*
 		 * At first, engine will show "Loading..." scene. mSceneMain will be
-		 * set as active scene right after it will be fully loaded (loading takes place in background). 
+		 * set as active scene right after it will be fully loaded (loading takes place in background).
 		 */
 		mSceneGame.setGameLevel(mGameLevel);
 		loadScene(mSceneGame);
@@ -168,11 +162,11 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
 		if ((keyCode == KeyEvent.KEYCODE_MENU || keyCode == KeyEvent.KEYCODE_BACK)
 				&& event.getAction() == KeyEvent.ACTION_DOWN) {
 
-			Scene youngest = SceneLoader.getYoungestScene(getEngine().getScene());
+			final Scene youngest = SceneLoader.getYoungestScene(getEngine().getScene());
 
 			if (youngest == mMenuGameOver || youngest == mMenuGameOver) {
 				return false;
@@ -207,7 +201,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		loadScene(mSceneGame);
 	}
 
-	private void loadSubscene(ILoadableResourceScene pScene) {
+	private void loadSubscene(final ILoadableResourceScene pScene) {
 		if (pScene == null) {
 			SceneLoader.unloadYoungestChildSceneCallBack(getEngine().getScene());
 		} else {
@@ -215,12 +209,12 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		}
 	}
 
-	private void loadScene(ILoadableResourceScene pScene) {
+	private void loadScene(final ILoadableResourceScene pScene) {
 		mLoader.loadScene(pScene, getEngine(), this, new ISceneLoaderListener() {
 			@Override
-			public void onSceneLoaded(Scene pScene) {
+			public void onSceneLoaded(final Scene pScene) {
 				/*
-				 * Only the top scene scene has to be loaded with SCENE_DONT_TOUCH. 
+				 * Only the top scene scene has to be loaded with SCENE_DONT_TOUCH.
 				 * Other scenes should be loaded with SCENE_SET_ACTIVE or SCENE_SET_CHILD
 				 * to make "Loading..." scene visible
 				 */
@@ -237,11 +231,11 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		public Font FONT;
 
 		@Override
-		public void onLoadResources(Engine e, Context c) {
+		public void onLoadResources(final Engine e, final Context c) {
 		}
 
 		@Override
-		public void onLoad(Engine e, Context c) {
+		public void onLoad(final Engine e, final Context c) {
 			e.unregisterUpdateHandler(ENTITY_DETACH_HANDLER);
 
 			ENTITY_DETACH_HANDLER = new EntityDetachRunnablePoolUpdateHandler();
@@ -263,8 +257,8 @@ public class ActivityGame extends SimpleBaseGameActivity {
 
 	private class MenuItemClickListener implements IOnMenuItemClickListener {
 		@Override
-		public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem,
-				float pMenuItemLocalX, float pMenuItemLocalY) {
+		public boolean onMenuItemClicked(final MenuScene pMenuScene, final IMenuItem pMenuItem,
+				final float pMenuItemLocalX, final float pMenuItemLocalY) {
 			if (pMenuScene == mMenuIngame) {
 				switch (pMenuItem.getID()) {
 				case MenuIngame.MENU_GO_MAIN:

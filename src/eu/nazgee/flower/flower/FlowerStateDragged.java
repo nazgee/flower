@@ -16,12 +16,12 @@ public class FlowerStateDragged extends FlowerState {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public FlowerStateDragged(Flower pFlower) {
+	public FlowerStateDragged(final Flower pFlower) {
 		super(pFlower);
 		mOldState = null;
 	}
 
-	public FlowerStateDragged(FlowerState pOther) {
+	public FlowerStateDragged(final FlowerState pOther) {
 		super(pOther);
 		mOldState = pOther;
 	}
@@ -30,7 +30,7 @@ public class FlowerStateDragged extends FlowerState {
 	// ===========================================================
 
 	@Override
-	public FlowerState drop(Sky pSky) {
+	public FlowerState drop(final Sky pSky) {
 		getItem().animateDropToGround(pSky);
 		onStateFinished();
 		mOldState.restart();

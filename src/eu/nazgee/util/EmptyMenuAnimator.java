@@ -34,9 +34,11 @@ public class EmptyMenuAnimator extends MenuSceneAnimator {
 	public void resetMenuSceneAnimations(final MenuScene pMenuScene) {
 	}
 
+	@Override
 	protected void onMenuItemPositionBuilt(final MenuScene pMenuScene, final int pIndex, final IMenuItem pMenuItem, final float pX, final float pY) {
 	}
 
+	@Override
 	protected void onMenuItemPositionReset(final MenuScene pMenuScene, final int pIndex, final IMenuItem pMenuItem, final float pX, final float pY) {
 	}
 

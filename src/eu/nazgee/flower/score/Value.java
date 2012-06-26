@@ -5,19 +5,19 @@ import org.andengine.util.math.MathUtils;
 
 public class Value {
 	private int mValue;
-	private int mMax;
-	private int mMin;
+	private final int mMax;
+	private final int mMin;
 	private Callback<Value> mCallback;
 
 	public Value() {
 		this(0, Integer.MAX_VALUE, 0);
 	}
 
-	public Value(int mValue) {
+	public Value(final int mValue) {
 		this(mValue, Integer.MAX_VALUE, 0);
 	}
 
-	public Value(int mValue, int max, int min) {
+	public Value(final int mValue, final int max, final int min) {
 		this.set(mValue);
 		mMax = max;
 		mMin = min;
@@ -27,20 +27,20 @@ public class Value {
 		return mValue;
 	}
 
-	public void set(int pValue) {
+	public void set(final int pValue) {
 		this.mValue = pValue;
 		clamp();
 		triggerCallback();
 	}
 
-	public int inc(int pValue) {
+	public int inc(final int pValue) {
 		mValue += pValue;
 		clamp();
 		triggerCallback();
 		return mValue;
 	}
 
-	public int dec(int pValue) {
+	public int dec(final int pValue) {
 		mValue -= pValue;
 		clamp();
 		triggerCallback();
@@ -51,7 +51,7 @@ public class Value {
 		return mCallback;
 	}
 
-	public void setCallbackOnChanged(Callback<Value> mCallback) {
+	public void setCallbackOnChanged(final Callback<Value> mCallback) {
 		this.mCallback = mCallback;
 	}
 

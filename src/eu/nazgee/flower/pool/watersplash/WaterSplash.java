@@ -16,15 +16,15 @@ public class WaterSplash extends AnimatedSprite {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private WaterSplashAnimationListener mWaterSplashAnimationListener = new WaterSplashAnimationListener();
+	private final WaterSplashAnimationListener mWaterSplashAnimationListener = new WaterSplashAnimationListener();
 	private final WaterSplashItem mWaterSplashItem;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public WaterSplash(float pX, float pY, ITiledTextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager, WaterSplashItem waterSplashItem) {
+	public WaterSplash(final float pX, final float pY, final ITiledTextureRegion pTextureRegion,
+			final VertexBufferObjectManager pVertexBufferObjectManager, final WaterSplashItem waterSplashItem) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		this.mWaterSplashItem = waterSplashItem;
 	}
@@ -41,10 +41,10 @@ public class WaterSplash extends AnimatedSprite {
 	// ===========================================================
 	/**
 	 * Starts a splash animation in a given location
-	 * 
+	 *
 	 * @note WaterSplashItem of this WaterSplash WILL be automagically recycled after
 	 * animation end. NO need to call scheduleDetachAndRecycle() manually on it
-	 * 
+	 *
 	 * @param pX
 	 * @param pY
 	 */
@@ -57,19 +57,19 @@ public class WaterSplash extends AnimatedSprite {
 	// ===========================================================
 	private class WaterSplashAnimationListener implements IAnimationListener {
 		@Override
-		public void onAnimationStarted(AnimatedSprite pAnimatedSprite,
-				int pInitialLoopCount) {
+		public void onAnimationStarted(final AnimatedSprite pAnimatedSprite,
+				final int pInitialLoopCount) {
 		}
 		@Override
-		public void onAnimationFrameChanged(AnimatedSprite pAnimatedSprite,
-				int pOldFrameIndex, int pNewFrameIndex) {
+		public void onAnimationFrameChanged(final AnimatedSprite pAnimatedSprite,
+				final int pOldFrameIndex, final int pNewFrameIndex) {
 		}
 		@Override
-		public void onAnimationLoopFinished(AnimatedSprite pAnimatedSprite,
-				int pRemainingLoopCount, int pInitialLoopCount) {
+		public void onAnimationLoopFinished(final AnimatedSprite pAnimatedSprite,
+				final int pRemainingLoopCount, final int pInitialLoopCount) {
 		}
 		@Override
-		public void onAnimationFinished(AnimatedSprite pAnimatedSprite) {
+		public void onAnimationFinished(final AnimatedSprite pAnimatedSprite) {
 			synchronized (WaterSplash.this) {
 				mWaterSplashItem.scheduleDetachAndRecycle();
 			}

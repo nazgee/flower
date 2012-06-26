@@ -21,7 +21,7 @@ public class Anchor {
 			return ratio * pSize;
 		}
 
-		private eRatio(float align) {
+		private eRatio(final float align) {
 			this.ratio = align;
 		}
 	}
@@ -42,7 +42,7 @@ public class Anchor {
 		public final eRatio y;
 		private final float[] mReuse = new float[2];
 
-		private eAnchorPointXY(eRatio pAnchorPointX, eRatio pAnchorPointY) {
+		private eAnchorPointXY(final eRatio pAnchorPointX, final eRatio pAnchorPointY) {
 			x = pAnchorPointX;
 			y = pAnchorPointY;
 		}
@@ -71,17 +71,17 @@ public class Anchor {
 			return eAnchorPointXY.DEFAULT.getObjectY(pEntity) - getObjectY(pEntity);
 		}
 
-		public synchronized float getSceneX(IEntity pShape) {
+		public synchronized float getSceneX(final IEntity pShape) {
 			pShape.convertLocalCoordinatesToSceneCoordinates(getObjectX(pShape), getObjectY(pShape), mReuse);
 			return mReuse[Constants.VERTEX_INDEX_X];
 		}
 
-		public synchronized float getSceneY(IEntity pShape) {
+		public synchronized float getSceneY(final IEntity pShape) {
 			pShape.convertLocalCoordinatesToSceneCoordinates(getObjectX(pShape), getObjectY(pShape), mReuse);
 			return mReuse[Constants.VERTEX_INDEX_Y];
 		}
 
-		public synchronized float[] getSceneXY(IEntity pShape, float[] pReuse) {
+		public synchronized float[] getSceneXY(final IEntity pShape, final float[] pReuse) {
 			pShape.convertLocalCoordinatesToSceneCoordinates(getObjectX(pShape), getObjectY(pShape), pReuse);
 			return pReuse;
 		}
@@ -100,7 +100,7 @@ public class Anchor {
 
 	/**
 	 * Sets a position of a given item taking into account given anchor point
-	 * 
+	 *
 	 * @param pItem item to be placed
 	 * @param x position in a TOP-LEFT coorfinates
 	 * @param y position in a TOP-LEFT coorfinates

@@ -12,11 +12,11 @@ public class FlowerStateSeed extends FlowerState {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public FlowerStateSeed(Flower pFlower) {
+	public FlowerStateSeed(final Flower pFlower) {
 		super(pFlower);
 	}
 
-	public FlowerStateSeed(FlowerState pOther) {
+	public FlowerStateSeed(final FlowerState pOther) {
 		super(pOther);
 	}
 	// ===========================================================

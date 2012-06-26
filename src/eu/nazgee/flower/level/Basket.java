@@ -19,7 +19,7 @@ public class Basket<T> {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public Basket<T> clear(T pItem) {
+	public Basket<T> clear(final T pItem) {
 		mItems.clear();
 		return this;
 	}
@@ -28,25 +28,25 @@ public class Basket<T> {
 		return mItems;
 	}
 
-	public Basket<T> add(T pItem) {
+	public Basket<T> add(final T pItem) {
 		return add(pItem, 1);
 	}
 
-	public Basket<T> add(T pItem, int pCount) {
+	public Basket<T> add(final T pItem, final int pCount) {
 		for (int i = 0; i < pCount; i++) {
 			getItems().add(pItem);
 		}
 		return this;
 	}
 
-	public Basket<T> add(T ... pItems) {
-		for (T item : pItems) {
+	public Basket<T> add(final T ... pItems) {
+		for (final T item : pItems) {
 			mItems.add(item);
 		}
 		return this;
 	}
 
-	public Basket<T> removeOne(T pItem) {
+	public Basket<T> removeOne(final T pItem) {
 		mItems.remove(pItem);
 		return this;
 	}
@@ -54,7 +54,7 @@ public class Basket<T> {
 	public Basket<T> removeAllEqual(final T pItem) {
 		mItems.removeAll(new IMatcher<T>() {
 			@Override
-			public boolean matches(T pObject) {
+			public boolean matches(final T pObject) {
 				return (pObject.equals(pItem));
 			}
 		});

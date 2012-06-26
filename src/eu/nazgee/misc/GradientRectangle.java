@@ -19,7 +19,7 @@ import eu.nazgee.misc.GradientVertexBufferObject.eGradientLayout;
 /**
  * (c) 2010 Nicolas Gramlich
  * (c) 2011 Zynga Inc.
- * 
+ *
  * @author Nicolas Gramlich
  * @since 12:18:49 - 13.03.2010
  */
@@ -84,16 +84,16 @@ public class GradientRectangle extends Shape {
 		mGradientVertexBufferObject.clearGradientVertices();
 	}
 
-	public void clearGradientBand(int pGradientBand) {
+	public void clearGradientBand(final int pGradientBand) {
 		mGradientVertexBufferObject.clearGradientBand(pGradientBand);
 	}
 
-	public void setGradientBand(int pGradientBand, Color pColor) {
+	public void setGradientBand(final int pGradientBand, final Color pColor) {
 		mGradientVertexBufferObject.setGradientBand(pGradientBand, pColor);
 		this.onUpdateColor();
 	}
 
-	public void setGradientBandAlpha(int pGradientBand, final float pAlpha) {
+	public void setGradientBandAlpha(final int pGradientBand, final float pAlpha) {
 		mGradientVertexBufferObject.setGradientBandAlpha(pGradientBand, pAlpha);
 		this.onUpdateColor();
 	}

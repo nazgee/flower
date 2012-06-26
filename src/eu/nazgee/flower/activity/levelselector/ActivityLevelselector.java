@@ -1,7 +1,5 @@
 package eu.nazgee.flower.activity.levelselector;
 
-import org.andengine.engine.camera.Camera;
-import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.content.Intent;
@@ -12,7 +10,6 @@ import eu.nazgee.flower.activity.levelselector.scene.SceneLevelselector;
 import eu.nazgee.flower.base.pagerscene.ScenePager;
 import eu.nazgee.flower.base.pagerscene.ScenePager.IItemClikedListener;
 import eu.nazgee.flower.bases.BaseActivityPager;
-import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.util.ModifiersFactory;
 
 public class ActivityLevelselector extends BaseActivityPager<GameLevelItem>{
@@ -39,15 +36,15 @@ public class ActivityLevelselector extends BaseActivityPager<GameLevelItem>{
 	// ===========================================================
 
 	@Override
-	protected ScenePager<GameLevelItem> populatePagerScene(float w, float h,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
-		ScenePager<GameLevelItem> scene = new SceneLevelselector(w, h, getStaticResources().FONT_DESC, pVertexBufferObjectManager, mTexturesLibrary);
+	protected ScenePager<GameLevelItem> populatePagerScene(final float w, final float h,
+			final VertexBufferObjectManager pVertexBufferObjectManager) {
+		final ScenePager<GameLevelItem> scene = new SceneLevelselector(w, h, getStaticResources().FONT_DESC, pVertexBufferObjectManager, mTexturesLibrary);
 		scene.setItemClikedListener(new IItemClikedListener<GameLevelItem>() {
 			@Override
-			public void onItemClicked(GameLevelItem pItem) {
+			public void onItemClicked(final GameLevelItem pItem) {
 				// launch game activity
 				if (!pItem.getLevel().resources.isLocked()) {
-					Intent i = new Intent(ActivityLevelselector.this, ActivityGame.class);
+					final Intent i = new Intent(ActivityLevelselector.this, ActivityGame.class);
 					i.putExtra(ActivityGame.BUNDLE_LEVEL_ID, pItem.getLevel().id);
 					startActivityForResult(i, 0);
 				} else {
@@ -94,7 +91,7 @@ public class ActivityLevelselector extends BaseActivityPager<GameLevelItem>{
 //		return super.onCreateScene();
 //	}
 
-	
+
 
 	// ===========================================================
 	// Methods

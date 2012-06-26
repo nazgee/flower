@@ -19,7 +19,6 @@ import org.andengine.util.math.MathUtils;
 
 import android.content.Context;
 import android.util.Log;
-import eu.nazgee.flower.Consts;
 import eu.nazgee.game.utils.scene.SceneLoadable;
 
 abstract public class ScenePager<T extends IEntity> extends SceneLoadable implements IOnSceneTouchListener, IScrollDetectorListener, IOnAreaTouchListener, IClickDetectorListener {
@@ -28,7 +27,7 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	// ===========================================================
 
 	private static final float SCROLL_MIN_SCREEN_WIDTH = 0.06f;
-	private static final int CLICK_TIME_MAX = 200; 
+	private static final int CLICK_TIME_MAX = 200;
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -46,8 +45,8 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public ScenePager(float W, float H,
-			VertexBufferObjectManager pVertexBufferObjectManager,
+	public ScenePager(final float W, final float H,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final int pTurnPageThreshold) {
 		super(W, H, pVertexBufferObjectManager);
 		mSurfaceScrollDetector = new SurfaceScrollDetector(pTurnPageThreshold * SCROLL_MIN_SCREEN_WIDTH, this);
@@ -61,14 +60,14 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 		return mPageMover;
 	}
 
-	public void setPageMover(IPageMover<T> mPageMover) {
+	public void setPageMover(final IPageMover<T> mPageMover) {
 		this.mPageMover = mPageMover;
 		callPageMoverOnCompleteSwipe(mCurrentPage);
 	}
 	public IItemClikedListener<T> getItemClikedListener() {
 		return mItemClikedListener;
 	}
-	public void setItemClikedListener(IItemClikedListener<T> mItemClikedListener) {
+	public void setItemClikedListener(final IItemClikedListener<T> mItemClikedListener) {
 		this.mItemClikedListener = mItemClikedListener;
 	}
 	// ===========================================================
@@ -109,12 +108,12 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	}
 
 	@Override
-	public void onLoadResources(Engine e, Context c) {
+	public void onLoadResources(final Engine e, final Context c) {
 
 	}
 
 	@Override
-	public void onLoad(Engine e, Context c) {
+	public void onLoad(final Engine e, final Context c) {
 		e.getCamera().reset();
 		e.getCamera().setCenter(getW()/2, getH()/2);
 
@@ -122,10 +121,10 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 		setOnSceneTouchListener(this);
 		setOnSceneTouchListenerBindingOnActionDownEnabled(true);
 		mPages = preparePages();
-		for (IPage<T> page : mPages) {
+		for (final IPage<T> page : mPages) {
 			page.setCullingEnabled(true);
-			for (T item : page.getItems()) {
-				registerTouchArea((ITouchArea) item);
+			for (final T item : page.getItems()) {
+				registerTouchArea(item);
 				item.setCullingEnabled(true);
 			}
 		}
@@ -136,11 +135,11 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 
 	@Override
 	public void onUnload() {
-		for (IPage<T> page : mPages) {
-			for (T item : page.getItems()) {
+		for (final IPage<T> page : mPages) {
+			for (final T item : page.getItems()) {
 				item.clearEntityModifiers();
 				item.clearUpdateHandlers();
-				unregisterTouchArea((ITouchArea) item);
+				unregisterTouchArea(item);
 				item.detachSelf();
 			}
 			page.clearEntityModifiers();
@@ -151,9 +150,9 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	}
 
 	@Override
-	public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-			ITouchArea pTouchArea, float pTouchAreaLocalX,
-			float pTouchAreaLocalY) {
+	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
+			final ITouchArea pTouchArea, final float pTouchAreaLocalX,
+			final float pTouchAreaLocalY) {
 
 		if (mPages.get(mCurrentPage).getItems().contains(pTouchArea)) {
 			boolean ret = false;
@@ -167,8 +166,8 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	}
 
 	@Override
-	public void onClick(ClickDetector pClickDetector, int pPointerID,
-			float pSceneX, float pSceneY) {
+	public void onClick(final ClickDetector pClickDetector, final int pPointerID,
+			final float pSceneX, final float pSceneY) {
 		mSurfaceScrollDetector.reset();
 		callPageMoverOnCompleteSwipe(mCurrentPage);
 		callClickListener(mCurrentlyTouchedItem);
@@ -176,20 +175,20 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 
 
 	@Override
-	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+	public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
 		return mSurfaceScrollDetector.onTouchEvent(pSceneTouchEvent);
 	}
 
 	@Override
-	public void onScrollStarted(ScrollDetector pScollDetector, int pPointerID,
-			float pDistanceX, float pDistanceY) {
+	public void onScrollStarted(final ScrollDetector pScollDetector, final int pPointerID,
+			final float pDistanceX, final float pDistanceY) {
 		Log.d(getClass().getSimpleName(), "started!");
 		mScrollDistanceX = 0;
 	}
 
 	@Override
-	public void onScroll(ScrollDetector pScollDetector, int pPointerID,
-			float pDistanceX, float pDistanceY) {
+	public void onScroll(final ScrollDetector pScollDetector, final int pPointerID,
+			final float pDistanceX, final float pDistanceY) {
 		mScrollDistanceX += pDistanceX;
 //		Log.d(getClass().getSimpleName(), "scrolling! " + pDistanceX + "/" + mScrollDistanceX);
 
@@ -203,11 +202,11 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	}
 
 	@Override
-	public void onScrollFinished(ScrollDetector pScollDetector, int pPointerID,
-			float pDistanceX, float pDistanceY) {
+	public void onScrollFinished(final ScrollDetector pScollDetector, final int pPointerID,
+			final float pDistanceX, final float pDistanceY) {
 		mScrollDistanceX += pDistanceX;
 		Log.d(getClass().getSimpleName(), "finished!" + mScrollDistanceX);
-		int oldPage = mCurrentPage;
+		final int oldPage = mCurrentPage;
 
 		if ((mScrollDistanceX > mTurnPageThreshold) && (mCurrentPage > 0)) {
 			mCurrentPage--;
@@ -224,33 +223,35 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	// Methods
 	// ===========================================================
 	public IPage<T> getPrev(final IPage<T> pPage) {
-		int idx = mPages.indexOf(pPage);
-		if (idx <= 0)
+		final int idx = mPages.indexOf(pPage);
+		if (idx <= 0) {
 			return null;
+		}
 		return mPages.get(idx - 1);
 	}
 
 	public IPage<T> getNext(final IPage<T> pPage) {
-		int idx = mPages.indexOf(pPage);
-		if (idx < 0 || idx+1 == mPages.size())
+		final int idx = mPages.indexOf(pPage);
+		if (idx < 0 || idx+1 == mPages.size()) {
 			return null;
+		}
 		return mPages.get(idx + 1);
 	}
 
-	private void callPageMoverOnCompleteSwipe(int oldPage) {
+	private void callPageMoverOnCompleteSwipe(final int oldPage) {
 		if (mPageMover != null) {
 			mPageMover.onCompletedSwipe(this, mPages.get(mCurrentPage), mCurrentPage, oldPage);
 		}
 	}
 
-	protected void callClickListener(T pItem) {
+	protected void callClickListener(final T pItem) {
 		if (getItemClikedListener() != null) {
 			getItemClikedListener().onItemClicked(pItem);
 		}
 	}
 
-	private LinkedList<IPage<T>> populatePages(int pMinCapacity) {
-		LinkedList<IPage<T>> pages = new LinkedList<IPage<T>>();
+	private LinkedList<IPage<T>> populatePages(final int pMinCapacity) {
+		final LinkedList<IPage<T>> pages = new LinkedList<IPage<T>>();
 
 		int pages_capacity = 0;
 		do {
@@ -262,18 +263,18 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	}
 
 	private LinkedList<IPage<T>> preparePages() {
-		LinkedList<IPage<T>> pages = populatePages(getItemsNumber());
+		final LinkedList<IPage<T>> pages = populatePages(getItemsNumber());
 
 		final int total_to_load = getItemsNumber();
 		int total_loaded = 0;
 		int current_page = 0;
 
-		for (IPage<T> page : pages) {
+		for (final IPage<T> page : pages) {
 			final int left_to_load = total_to_load - total_loaded;
-			int this_page_to_load = Math.min(page.getCapacity(), left_to_load);
+			final int this_page_to_load = Math.min(page.getCapacity(), left_to_load);
 
-			LinkedList<T> items = new LinkedList<T>();
-	
+			final LinkedList<T> items = new LinkedList<T>();
+
 			for (int i = 0; i < this_page_to_load; i++) {
 				items.add(populateItem(total_loaded, i, current_page));
 				total_loaded++;

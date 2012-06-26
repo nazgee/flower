@@ -21,11 +21,11 @@ import eu.nazgee.util.NineSliceSprite;
 public class MenuGameLost extends BaseMenu {
 	public static final int MENU_RESET = 0;
 	public static final int MENU_GO_MAIN = 1;
-	private Text mDescription;
+	private final Text mDescription;
 
-	public MenuGameLost(float W, float H, Camera pCamera, Font pFont,
-			Font pDescFont, VertexBufferObjectManager pVertexBufferObjectManager,
-			TexturesLibrary pTexturesLibrary) {
+	public MenuGameLost(final float W, final float H, final Camera pCamera, final Font pFont,
+			final Font pDescFont, final VertexBufferObjectManager pVertexBufferObjectManager,
+			final TexturesLibrary pTexturesLibrary) {
 		super(W, H, pCamera, pFont, pVertexBufferObjectManager);
 
 
@@ -35,17 +35,17 @@ public class MenuGameLost extends BaseMenu {
 		// Prepare background
 		final float bgw = pCamera.getWidth() * 0.8f;
 		final float bgh = pCamera.getHeight() * 1.0f;
-		NineSliceSprite bg = pTexturesLibrary.getFactory().populateFrameOverMenu(bgw, bgh, pVertexBufferObjectManager);
+		final NineSliceSprite bg = pTexturesLibrary.getFactory().populateFrameOverMenu(bgw, bgh, pVertexBufferObjectManager);
 		attachChild(bg);
 		Anchor.setPosCenterAtParent(bg, eAnchorPointXY.CENTERED);
 
 		// Prepare menu items
-		IMenuItem hometxt = addMenuEntry("main\nmenu", MENU_GO_MAIN, Consts.COLOR_MENU_TEXT_SELECTED, Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
-		IMenuItem homeico = addMenuEntry(pTexturesLibrary.getIconHome(), MENU_GO_MAIN, Color.RED, Color.WHITE, pVertexBufferObjectManager);
+		final IMenuItem hometxt = addMenuEntry("main\nmenu", MENU_GO_MAIN, Consts.COLOR_MENU_TEXT_SELECTED, Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
+		final IMenuItem homeico = addMenuEntry(pTexturesLibrary.getIconHome(), MENU_GO_MAIN, Color.RED, Color.WHITE, pVertexBufferObjectManager);
 
 		// Prepare menu items
-		IMenuItem resettxt = addMenuEntry("retry\nlevel", MENU_RESET, Consts.COLOR_MENU_TEXT_SELECTED, Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
-		IMenuItem resetico = addMenuEntry(pTexturesLibrary.getIconRefresh(), MENU_RESET, Color.RED, Color.WHITE, pVertexBufferObjectManager);
+		final IMenuItem resettxt = addMenuEntry("retry\nlevel", MENU_RESET, Consts.COLOR_MENU_TEXT_SELECTED, Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
+		final IMenuItem resetico = addMenuEntry(pTexturesLibrary.getIconRefresh(), MENU_RESET, Color.RED, Color.WHITE, pVertexBufferObjectManager);
 
 		/*
 		 *  We will be using layouts, which means we need to reattach menu items
@@ -77,7 +77,7 @@ public class MenuGameLost extends BaseMenu {
 		bg.attachChild(mDescription);
 	}
 
-	public void setDescription(String pDescription) {
+	public void setDescription(final String pDescription) {
 		mDescription.setText(pDescription);
 		Anchor.setPosTopMiddleAtParent(mDescription, eAnchorPointXY.TOP_MIDDLE);
 	}

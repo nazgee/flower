@@ -12,7 +12,6 @@ import org.andengine.util.modifier.IModifier;
 
 import android.content.Context;
 import android.util.Log;
-
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.bases.BaseHUD;
 import eu.nazgee.flower.flower.Flower;
@@ -33,8 +32,8 @@ public class HudGame extends BaseHUD {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public HudGame(float W, float H, final TexturesLibrary pTexturesLibrary,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+	public HudGame(final float W, final float H, final TexturesLibrary pTexturesLibrary,
+			final VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, 3, pVertexBufferObjectManager);
 		for (int i = 0; i < TexturesLibrary.BLOSSOMS_NUMBER; i++) {
 			final Sprite flower = new Sprite(0, 0, pTexturesLibrary.getFlower(i), pVertexBufferObjectManager);
@@ -54,32 +53,32 @@ public class HudGame extends BaseHUD {
 	// Getter & Setter
 	// ===========================================================
 	@Override
-	public void onLoad(Engine e, Context c) {
+	public void onLoad(final Engine e, final Context c) {
 		super.onLoad(e, c);
-		for (Sprite flower : mFlowers) {
+		for (final Sprite flower : mFlowers) {
 			attachChild(flower);
 		}
 	}
 
-	public void setTextScore(CharSequence pText) {
+	public void setTextScore(final CharSequence pText) {
 		setTextLine(0, pText);
 	}
 
-	public void setTextSeeds(CharSequence pText) {
+	public void setTextSeeds(final CharSequence pText) {
 		setTextLine(1, pText);
 	}
 
-	public void setTextFlowers(CharSequence pText) {
+	public void setTextFlowers(final CharSequence pText) {
 		setTextLine(2, pText);
 	}
 
 	public void hideActiveFlower() {
 		mFlowerAnimator.runModifier(new FadeOutModifier(FLOWER_TRANSITION_TIME, new IEntityModifierListener() {
 			@Override
-			public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+			public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {
 			}
 			@Override
-			public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+			public void onModifierFinished(final IModifier<IEntity> pModifier, final IEntity pItem) {
 				pItem.setVisible(false);
 			}
 		}));

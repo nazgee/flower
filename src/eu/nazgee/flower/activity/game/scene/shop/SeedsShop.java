@@ -20,11 +20,11 @@ public class SeedsShop {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public SeedsShop(GameLevel pGameLevel) {
+	public SeedsShop(final GameLevel pGameLevel) {
 		this(pGameLevel.getSeedsAccumulatedSoFar(), pGameLevel.cash);
 	}
 
-	public SeedsShop(SmartList<Seed> mSeeds, int mCustomerCash) {
+	public SeedsShop(final SmartList<Seed> mSeeds, final int mCustomerCash) {
 		super();
 		this.mSeedsInShop = mSeeds;
 		this.setCustomerCash(mCustomerCash);
@@ -35,7 +35,7 @@ public class SeedsShop {
 	public int getCustomerCash() {
 		return mCustomerCash;
 	}
-	public void setCustomerCash(int mCustomerCash) {
+	public void setCustomerCash(final int mCustomerCash) {
 		this.mCustomerCash = mCustomerCash;
 	}
 	public SmartList<Seed> getSeedsInShop() {
@@ -55,7 +55,7 @@ public class SeedsShop {
 	// Methods
 	// ===========================================================
 
-	public boolean addToBasket(Seed pSeed) {
+	public boolean addToBasket(final Seed pSeed) {
 		if (mCustomerCash >= (mBasketValue + pSeed.cost)) {
 			mSeedsInBasket.add(pSeed);
 			recalculateBasketValue();
@@ -65,7 +65,7 @@ public class SeedsShop {
 		}
 	}
 
-	public boolean removeFromBasket(Seed pSeed) {
+	public boolean removeFromBasket(final Seed pSeed) {
 		if (mSeedsInBasket.remove(pSeed)) {
 			recalculateBasketValue();
 			return true;
@@ -83,9 +83,9 @@ public class SeedsShop {
 		mBasketValue = calculateValue(mSeedsInBasket);
 	}
 
-	protected int calculateValue(SmartList<Seed> pSeeds) {
+	protected int calculateValue(final SmartList<Seed> pSeeds) {
 		int value = 0;
-		for (Seed seed : pSeeds) {
+		for (final Seed seed : pSeeds) {
 			value += seed.cost;
 		}
 		return value;

@@ -14,7 +14,7 @@ public class WaterSplashPool extends Pool<WaterSplashItem> {
 	private final VertexBufferObjectManager mVertexBufferObjectManager;
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 
-	public WaterSplashPool(ITiledTextureRegion pWaterSplashTextureRegions, EntityDetachRunnablePoolUpdateHandler pDetacher, VertexBufferObjectManager pVertexBufferObjectManager) {
+	public WaterSplashPool(final ITiledTextureRegion pWaterSplashTextureRegions, final EntityDetachRunnablePoolUpdateHandler pDetacher, final VertexBufferObjectManager pVertexBufferObjectManager) {
 		mWaterSplashTextureRegions = pWaterSplashTextureRegions;
 		mVertexBufferObjectManager = pVertexBufferObjectManager;
 		mDetacher = pDetacher;
@@ -26,7 +26,7 @@ public class WaterSplashPool extends Pool<WaterSplashItem> {
 	}
 
 	public static class WaterSplashItem extends PooledEntityItem<WaterSplash> {
-		public WaterSplashItem(ITiledTextureRegion pTextureWaterDrop, EntityDetachRunnablePoolUpdateHandler pDetacher, VertexBufferObjectManager pVertexBufferObjectManager) {
+		public WaterSplashItem(final ITiledTextureRegion pTextureWaterDrop, final EntityDetachRunnablePoolUpdateHandler pDetacher, final VertexBufferObjectManager pVertexBufferObjectManager) {
 			super(pDetacher);
 			mEntity = new WaterSplash(0, 0, pTextureWaterDrop, pVertexBufferObjectManager, this);
 		}

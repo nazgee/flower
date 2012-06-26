@@ -1,6 +1,5 @@
 package eu.nazgee.flower.flower;
 
-import android.util.Log;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.misc.State;
 
@@ -16,10 +15,10 @@ public class FlowerState extends State<Flower> implements IFlowerState {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	protected FlowerState(Flower pItem) {
+	protected FlowerState(final Flower pItem) {
 		super(pItem);
 	}
-	protected FlowerState(State<Flower> pOtherState) {
+	protected FlowerState(final State<Flower> pOtherState) {
 		super(pOtherState);
 	}
 	// ===========================================================
@@ -35,7 +34,7 @@ public class FlowerState extends State<Flower> implements IFlowerState {
 	}
 
 	@Override
-	protected void onStateStarted() {	
+	protected void onStateStarted() {
 		super.onStateStarted();
 	}
 
@@ -55,7 +54,7 @@ public class FlowerState extends State<Flower> implements IFlowerState {
 	}
 
 	@Override
-	public FlowerState drop(Sky pSky) {
+	public FlowerState drop(final Sky pSky) {
 		return this;
 	}
 
@@ -66,7 +65,7 @@ public class FlowerState extends State<Flower> implements IFlowerState {
 
 	}
 
-	protected FlowerState createFromInstance(FlowerState pOtherState) {
+	protected FlowerState createFromInstance(final FlowerState pOtherState) {
 		if (pOtherState instanceof FlowerStateSeed) {
 			return new FlowerStateSeed(this);
 		} else if (pOtherState instanceof FlowerStateDragged) {

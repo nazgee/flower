@@ -16,28 +16,28 @@ import org.andengine.util.modifier.ease.EaseQuadIn;
 
 import android.util.Log;
 import eu.nazgee.flower.pool.waterdrop.WaterDropPool.WaterDropItem;
-import eu.nazgee.util.Kinematics;
 import eu.nazgee.util.Anchor;
+import eu.nazgee.util.Kinematics;
 
 
 public class WaterDrop extends Sprite {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-	
+
 	// ===========================================================
 	// Fields
 	// ===========================================================
 	private IEntityModifier mDropModifier;
 	private IWaterDropListener mWaterDropListener;
-	private WaterDropModifierListener mWaterDropModifierListener = new WaterDropModifierListener();
+	private final WaterDropModifierListener mWaterDropModifierListener = new WaterDropModifierListener();
 	private final WaterDropItem mWaterDropItem;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public WaterDrop(float pX, float pY, ITextureRegion pTextureRegion,
-			VertexBufferObjectManager pVertexBufferObjectManager, WaterDropItem waterDropItem) {
+	public WaterDrop(final float pX, final float pY, final ITextureRegion pTextureRegion,
+			final VertexBufferObjectManager pVertexBufferObjectManager, final WaterDropItem waterDropItem) {
 		super(pX, pY, pTextureRegion, pVertexBufferObjectManager);
 		this.mWaterDropItem = waterDropItem;
 	}
@@ -58,16 +58,16 @@ public class WaterDrop extends Sprite {
 	// ===========================================================
 	/**
 	 * Starts a falling rain drop animation.
-	 * 
+	 *
 	 * @note WaterDropItem of this WaterDrop WILL be automagically recycled after
 	 * animation end. NO need to call scheduleDetachAndRecycle() manually on it
-	 * 
+	 *
 	 * @param pX
 	 * @param pY
 	 * @param H
 	 * @param pWaterDropListener
 	 */
-	public synchronized void fall(final float pX, final float pY, final float H, IWaterDropListener pWaterDropListener) {
+	public synchronized void fall(final float pX, final float pY, final float H, final IWaterDropListener pWaterDropListener) {
 		final float time = Kinematics.time(Kinematics.GRAVITY_WATER_ACCEL, H);
 		mWaterDropListener = pWaterDropListener;
 		Anchor.setPosCenter(this, pX, pY);
@@ -91,12 +91,12 @@ public class WaterDrop extends Sprite {
 	// ===========================================================
 	private class WaterDropModifierListener implements IModifierListener<IEntity> {
 		@Override
-		public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+		public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {
 			synchronized (WaterDrop.this) {
 			}
 		}
 		@Override
-		public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+		public void onModifierFinished(final IModifier<IEntity> pModifier, final IEntity pItem) {
 			synchronized (WaterDrop.this) {
 				if (mWaterDropListener != null) {
 					mWaterDropListener.onHitTheGround(WaterDrop.this);

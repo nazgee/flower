@@ -14,14 +14,14 @@ public class State<T> {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public State(State<T> pOtherState) {
+	public State(final State<T> pOtherState) {
 		mItem = pOtherState.mItem;
 		mStateChangeListener = pOtherState.mStateChangeListener;
 		pOtherState.onStateFinished();
 		onStateStarted();
 	}
 
-	public State(T pItem) {
+	public State(final T pItem) {
 		mItem = pItem;
 		onStateStarted();
 	}
@@ -47,7 +47,7 @@ public class State<T> {
 	 * Sets a listener listening for state transitions
 	 * @return
 	 */
-	public void setStateChangeListener(IStateChangesListener<T> mStateChangeListener) {
+	public void setStateChangeListener(final IStateChangesListener<T> mStateChangeListener) {
 		this.mStateChangeListener = mStateChangeListener;
 	}
 	// ===========================================================

@@ -82,9 +82,9 @@ public class SceneGame extends SceneLoadable{
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public SceneGame(float W, float H,
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			final EntityDetachRunnablePoolUpdateHandler pEntityDetachRunnablePoolUpdateHandler, TexturesLibrary pTexturesLibrary) {
+	public SceneGame(final float W, final float H,
+			final VertexBufferObjectManager pVertexBufferObjectManager,
+			final EntityDetachRunnablePoolUpdateHandler pEntityDetachRunnablePoolUpdateHandler, final TexturesLibrary pTexturesLibrary) {
 		super(W, H, pVertexBufferObjectManager);
 		this.mDetacher = pEntityDetachRunnablePoolUpdateHandler;
 		this.mTexturesLibrary = pTexturesLibrary;
@@ -100,21 +100,21 @@ public class SceneGame extends SceneLoadable{
 	public IGameListener getGameListerner() {
 		return mGameListerner;
 	}
-	public void setGameListerner(IGameListener mGameListerner) {
+	public void setGameListerner(final IGameListener mGameListerner) {
 		this.mGameListerner = mGameListerner;
 	}
 
 	public GameLevel getGameLevel() {
 		return mGameLevel;
 	}
-	public void setGameLevel(GameLevel mGameLevel) {
+	public void setGameLevel(final GameLevel mGameLevel) {
 		this.mGameLevel = mGameLevel;
 	}
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public void onLoadResources(Engine e, Context c) {
+	public void onLoadResources(final Engine e, final Context c) {
 		/*
 		 * Prepare fancy background. We also save a shortcut
 		 * to the sprite representing ground level
@@ -123,7 +123,7 @@ public class SceneGame extends SceneLoadable{
 	}
 
 	@Override
-	public void onLoad(Engine e, Context c) {
+	public void onLoad(final Engine e, final Context c) {
 		mContext = c;
 
 		// prepare some shortcuts
@@ -181,7 +181,7 @@ public class SceneGame extends SceneLoadable{
 		 */
 		mCloudLayer = new CloudLayer(0, getH() * 0.66f, levelW, getH() * 0.33f,
 				getW() * 0.1f, 10, 0.2f, 0.2f, 6, mSky,
-				mTexturesLibrary.getClouds(), mTexturesLibrary.getRainDrop(), 
+				mTexturesLibrary.getClouds(), mTexturesLibrary.getRainDrop(),
 				mTexturesLibrary.getRainSplash(),
 				mDetacher,
 				vbom);
@@ -189,7 +189,7 @@ public class SceneGame extends SceneLoadable{
 		mCloudLayer.setZIndex(ZINDEX_CLOUD);
 		mCloudLayer.setWaterDropListener(new IWaterDropListener() {
 			@Override
-			public void onHitTheGround(WaterDrop pWaterDrop) {
+			public void onHitTheGround(final WaterDrop pWaterDrop) {
 				handleFlowerRain(pWaterDrop);
 			}
 		});
@@ -198,7 +198,7 @@ public class SceneGame extends SceneLoadable{
 		 * Create some flowers
 		 */
 		for (int i = 0; i < getGameLevel().getSeedsAccumulatedSoFar().size(); i++) {
-			Seed seed = getGameLevel().getSeedsAccumulatedSoFar().get(i);
+			final Seed seed = getGameLevel().getSeedsAccumulatedSoFar().get(i);
 			if (!seed.resources.isLoaded()) {
 				seed.resources.onLoadResources(e, c);
 				seed.resources.onLoad(e, c);
@@ -207,7 +207,7 @@ public class SceneGame extends SceneLoadable{
 			/*
 			 *  Create a flower
 			 */
-			Flower flower = new Flower(0, 0, seed, getVertexBufferObjectManager(), mTexturesLibrary, mDetacher);
+			final Flower flower = new Flower(0, 0, seed, getVertexBufferObjectManager(), mTexturesLibrary, mDetacher);
 			flower.setZIndex(-1);
 			flower.setFlowerStateHandler(mFlowerListener);
 			flower.setBlossomListener(mBlossomListener);
@@ -238,9 +238,9 @@ public class SceneGame extends SceneLoadable{
 		 */
 		this.registerUpdateHandler(new IUpdateHandler() {
 			@Override
-			public void onUpdate(float pSecondsElapsed) {
-				float pos[] = mSun.getSceneCenterCoordinates();
-				Cloud cloud = mCloudLayer.getHighestCloudAtX(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
+			public void onUpdate(final float pSecondsElapsed) {
+				final float pos[] = mSun.getSceneCenterCoordinates();
+				final Cloud cloud = mCloudLayer.getHighestCloudAtX(pos[Constants.VERTEX_INDEX_X], pos[Constants.VERTEX_INDEX_Y]);
 				if (cloud != null) {
 					mSun.setRaysTargetCenter(cloud, mSky);
 				} else {
@@ -262,7 +262,7 @@ public class SceneGame extends SceneLoadable{
 		mContext = null;
 		/*
 		 *  We do not need anything of these anymore- kill all children and
-		 *  get rid of anything else that might want to run without any reason 
+		 *  get rid of anything else that might want to run without any reason
 		 */
 		detachChildren();
 		clearEntityModifiers();
@@ -288,7 +288,7 @@ public class SceneGame extends SceneLoadable{
 	// ===========================================================
 
 	private void handleFlowerSun() {
-		for (Flower flower : mFlowers) {
+		for (final Flower flower : mFlowers) {
 			/*
 			 * We are interested in flowers on the ground level, on which sun
 			 * is currently shining
@@ -299,9 +299,9 @@ public class SceneGame extends SceneLoadable{
 		}
 	}
 
-	private void handleFlowerRain(WaterDrop pWaterDrop) {
-		float pos[] = pWaterDrop.getSceneCenterCoordinates();
-		for (Flower flower : mFlowers) {
+	private void handleFlowerRain(final WaterDrop pWaterDrop) {
+		final float pos[] = pWaterDrop.getSceneCenterCoordinates();
+		for (final Flower flower : mFlowers) {
 			if (flower.contains(pos[0], pos[1])) {
 				flower.water();
 				break; // only one flower gets watered
@@ -322,12 +322,12 @@ public class SceneGame extends SceneLoadable{
 
 	private class BlossomListener implements IBlossomListener {
 		@Override
-		public void onBlooming(EntityBlossom pBlossom) {
+		public void onBlooming(final EntityBlossom pBlossom) {
 			mSFX.onBloom(pBlossom.getBlossomID());
 		}
 
 		@Override
-		public void onBloomed(EntityBlossom pBlossom) {
+		public void onBloomed(final EntityBlossom pBlossom) {
 			mScore.score.inc(100);
 			mScore.flowers.inc(1);
 			mScore.seeds.dec(1);
@@ -335,7 +335,7 @@ public class SceneGame extends SceneLoadable{
 			/*
 			 * Create a +100 text popup
 			 */
-			PopupItem item = mPopupPool.obtainPoolItem();
+			final PopupItem item = mPopupPool.obtainPoolItem();
 			item.getEntity().put(pBlossom, "+100$");
 			item.getEntity().fxPop(0.5f);
 			attachChild(item.getEntity());
@@ -344,7 +344,7 @@ public class SceneGame extends SceneLoadable{
 
 	private class FlowerListener implements IFlowerListener {
 		@Override
-		public void onBloomed(Flower pFlower) {
+		public void onBloomed(final Flower pFlower) {
 			SceneGame.this.postRunnable(new DeactivateFlowerTouchesRunnable(pFlower));
 			pFlower.setZIndex(ZINDEX_BLOSSOM);
 			sortChildren(false);
@@ -354,7 +354,7 @@ public class SceneGame extends SceneLoadable{
 				/*
 				 * Create a rainbow
 				 */
-				Rainbow item = mRainbowPool.obtainPoolItem().getEntity();
+				final Rainbow item = mRainbowPool.obtainPoolItem().getEntity();
 				attachChild(item);
 				item.setZIndex(ZINDEX_RAINBOW);
 				Anchor.setPosBottomMiddleAtSibling(item, pFlower, eAnchorPointXY.CENTERED);
@@ -365,7 +365,7 @@ public class SceneGame extends SceneLoadable{
 				 * Create butterflies
 				 */
 				for (int i=0; i<BUTTERFLIES_NUMBER; i++) {
-					Butterfly item = mButterflyPool.obtainPoolItem().getEntity();
+					final Butterfly item = mButterflyPool.obtainPoolItem().getEntity();
 					attachChild(item);
 					item.setZIndex(ZINDEX_BUTTERFLY);
 					item.setPosition(x, y);
@@ -376,7 +376,7 @@ public class SceneGame extends SceneLoadable{
 		}
 
 		@Override
-		public void onFried(Flower pFlower) {
+		public void onFried(final Flower pFlower) {
 			SceneGame.this.postRunnable(new DeactivateFlowerTouchesRunnable(pFlower));
 			mSFX.onFlowerFry();
 			mScore.seeds.dec(1);
@@ -384,19 +384,19 @@ public class SceneGame extends SceneLoadable{
 			/*
 			 * Create a "fried" text popup
 			 */
-			PopupItem item = mPopupPool.obtainPoolItem();
+			final PopupItem item = mPopupPool.obtainPoolItem();
 			item.getEntity().put(pFlower, "fried!");
 			item.getEntity().fxPop(1f);
 			attachChild(item.getEntity());
 		}
 
 		@Override
-		public void onDragged(Flower pFlower) {
+		public void onDragged(final Flower pFlower) {
 			mHud.setActiveFlower(pFlower);
 		}
-	
+
 		@Override
-		public void onDropped(Flower pFlower) {
+		public void onDropped(final Flower pFlower) {
 			mHud.hideActiveFlower();
 		}
 
@@ -407,7 +407,7 @@ public class SceneGame extends SceneLoadable{
 		class DeactivateFlowerTouchesRunnable implements Runnable {
 			private final Flower mFlower;
 
-			public DeactivateFlowerTouchesRunnable(Flower mFlower) {
+			public DeactivateFlowerTouchesRunnable(final Flower mFlower) {
 				this.mFlower = mFlower;
 			}
 
@@ -420,10 +420,10 @@ public class SceneGame extends SceneLoadable{
 
 	private class SunListener implements ISunListener {
 		@Override
-		public void onStarted(Sun pSun) {
+		public void onStarted(final Sun pSun) {
 		}
 		@Override
-		public void onFinished(Sun pSun) {
+		public void onFinished(final Sun pSun) {
 			if (null != getGameListerner()) {
 				getGameListerner().onGameFinished();
 			}
@@ -432,12 +432,12 @@ public class SceneGame extends SceneLoadable{
 
 	private class MyAreaTouchListener implements IOnAreaTouchListener {
 		@Override
-		public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-				ITouchArea pTouchArea, float pTouchAreaLocalX,
-				float pTouchAreaLocalY) {
+		public boolean onAreaTouched(final TouchEvent pSceneTouchEvent,
+				final ITouchArea pTouchArea, final float pTouchAreaLocalX,
+				final float pTouchAreaLocalY) {
 
 			if (mFlowers.contains(pTouchArea)) {
-				Flower flower = (Flower) pTouchArea;
+				final Flower flower = (Flower) pTouchArea;
 				flower.setPosition(pSceneTouchEvent.getX(), pSceneTouchEvent.getY() + Consts.TOUCH_OFFSET_Y);
 				flower.drag();
 				if (pSceneTouchEvent.isActionUp()) {

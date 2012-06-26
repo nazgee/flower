@@ -20,32 +20,32 @@ public class EntitiesFactory {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public EntitiesFactory(TexturesLibrary mTexturesLibrary) {
+	public EntitiesFactory(final TexturesLibrary mTexturesLibrary) {
 		super();
 		this.mTexturesLibrary = mTexturesLibrary;
 	}
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public NineSliceSprite populateFrameIngameMenu(final float pWidth, final float pHeight, VertexBufferObjectManager pVBO) {
+	public NineSliceSprite populateFrameIngameMenu(final float pWidth, final float pHeight, final VertexBufferObjectManager pVBO) {
 		return new NineSliceSprite(pWidth, pHeight, mTexturesLibrary.getFramePink(), FRAME_MARGIN, pVBO);
 	}
-	public NineSliceSprite populateFrameOverMenu(final float pWidth, final float pHeight, VertexBufferObjectManager pVBO) {
+	public NineSliceSprite populateFrameOverMenu(final float pWidth, final float pHeight, final VertexBufferObjectManager pVBO) {
 		return new NineSliceSprite(pWidth, pHeight, mTexturesLibrary.getFrameOrange(), FRAME_MARGIN, pVBO);
 	}
-	public NineSliceSprite populateFrameHudShop(final float pWidth, final float pHeight, VertexBufferObjectManager pVBO) {
+	public NineSliceSprite populateFrameHudShop(final float pWidth, final float pHeight, final VertexBufferObjectManager pVBO) {
 		return new NineSliceSprite(pWidth, pHeight, mTexturesLibrary.getFrameGreenDark(), FRAME_MARGIN, pVBO);
 	}
-	public NineSliceSprite populateFrameMessageBox(final float pWidth, final float pHeight, VertexBufferObjectManager pVBO) {
+	public NineSliceSprite populateFrameMessageBox(final float pWidth, final float pHeight, final VertexBufferObjectManager pVBO) {
 		return new NineSliceSprite(pWidth, pHeight, mTexturesLibrary.getFrameBlue(), FRAME_MARGIN, pVBO);
 	}
-	public NineSliceMenuItem populateFrameButton(final float pWidth, final float pHeight, VertexBufferObjectManager pVBO, final int pID) {
+	public NineSliceMenuItem populateFrameButton(final float pWidth, final float pHeight, final VertexBufferObjectManager pVBO, final int pID) {
 		return new NineSliceMenuItem(pID, 0, 0, pWidth, pHeight, mTexturesLibrary.getButton(), FRAME_MARGIN, FRAME_MARGIN, FRAME_MARGIN, FRAME_MARGIN, pVBO);
 	}
-	public NineSliceSprite populateFrameLevel(final float pWidth, final float pHeight, VertexBufferObjectManager pVBO, final boolean pLocked) {
+	public NineSliceSprite populateFrameLevel(final float pWidth, final float pHeight, final VertexBufferObjectManager pVBO, final boolean pLocked) {
 		return new NineSliceSprite(pWidth, pHeight, !pLocked ? mTexturesLibrary.getFrameTransparent() : mTexturesLibrary.getFrameTransparent(), FRAME_MARGIN, pVBO);
 	}
-	public NineSliceSprite populateFrameSeed(final float pWidth, final float pHeight, VertexBufferObjectManager pVBO, final boolean pLocked) {
+	public NineSliceSprite populateFrameSeed(final float pWidth, final float pHeight, final VertexBufferObjectManager pVBO, final boolean pLocked) {
 		return new NineSliceSprite(pWidth, pHeight, !pLocked ? mTexturesLibrary.getFrameGreenDark() : mTexturesLibrary.getFrameGreen(), FRAME_MARGIN, pVBO);
 	}
 	// ===========================================================

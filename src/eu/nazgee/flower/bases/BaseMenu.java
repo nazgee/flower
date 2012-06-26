@@ -17,17 +17,17 @@ import eu.nazgee.game.utils.scene.menu.SceneMenu;
 public class BaseMenu extends SceneMenu {
 	private HUD mPreviousHUD;
 
-	public BaseMenu(float W, float H, Camera pCamera, Font pFont, VertexBufferObjectManager pVertexBufferObjectManager) {
+	public BaseMenu(final float W, final float H, final Camera pCamera, final Font pFont, final VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, pCamera, pFont, pVertexBufferObjectManager);
 		setBackgroundEnabled(false);
 	}
 
 	@Override
-	public void onLoadResources(Engine e, Context c) {
+	public void onLoadResources(final Engine e, final Context c) {
 	}
 
 	@Override
-	public void onLoad(Engine e, Context c) {
+	public void onLoad(final Engine e, final Context c) {
 		super.onLoad(e, c);
 		mPreviousHUD = e.getCamera().getHUD();
 		e.getCamera().setHUD(null);

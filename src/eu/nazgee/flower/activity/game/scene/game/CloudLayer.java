@@ -28,7 +28,7 @@ public class CloudLayer extends Entity{
 	// ===========================================================
 	// Constants
 	// ===========================================================
-	
+
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -52,13 +52,13 @@ public class CloudLayer extends Entity{
 	// Constructors
 	// ===========================================================
 
-	public CloudLayer(float pX, float pY, final float W, final float H, 
-			float pAvgSpeed, float pAvgTime,
-			float pVariationSpeed, float pVariationTime, final int pCloudsNumber,
+	public CloudLayer(final float pX, final float pY, final float W, final float H,
+			final float pAvgSpeed, final float pAvgTime,
+			final float pVariationSpeed, final float pVariationTime, final int pCloudsNumber,
 			final Sky pSky,
-			ITiledTextureRegion pCloudTexture, ITextureRegion pWaterDropTexture, ITiledTextureRegion pWaterSplashTexture,
-			EntityDetachRunnablePoolUpdateHandler pDetacher,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+			final ITiledTextureRegion pCloudTexture, final ITextureRegion pWaterDropTexture, final ITiledTextureRegion pWaterSplashTexture,
+			final EntityDetachRunnablePoolUpdateHandler pDetacher,
+			final VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(pX, pY);
 		mW = W;
 		mH = H;
@@ -75,10 +75,10 @@ public class CloudLayer extends Entity{
 		/*
 		 * Smoothly ramp up number of clouds on layer
 		 */
-		TimerHandler starter = new TimerHandler(mAvgTime/pCloudsNumber, new ITimerCallback() {
+		final TimerHandler starter = new TimerHandler(mAvgTime/pCloudsNumber, new ITimerCallback() {
 			int started = 0;
 			@Override
-			public void onTimePassed(TimerHandler pTimerHandler) {
+			public void onTimePassed(final TimerHandler pTimerHandler) {
 
 				launchNewCloud();
 				started++;
@@ -97,7 +97,7 @@ public class CloudLayer extends Entity{
 		return mWaterDropListener;
 	}
 
-	public void setWaterDropListener(IWaterDropListener pWaterDropListener) {
+	public void setWaterDropListener(final IWaterDropListener pWaterDropListener) {
 		this.mWaterDropListener = pWaterDropListener;
 	}
 	// ===========================================================
@@ -111,7 +111,7 @@ public class CloudLayer extends Entity{
 	// ===========================================================
 	private final float randomize(final float avg, final float var) {
 		final float variation = var * avg;
-		return avg - variation + rand.nextFloat() * 2 * variation; 
+		return avg - variation + rand.nextFloat() * 2 * variation;
 	}
 
 	private void launchNewCloud() {
@@ -134,7 +134,7 @@ public class CloudLayer extends Entity{
 	}
 
 	public Cloud getHighestCloudAtX(final float pX, final float pHighestYToBeConsidered) {
-		for (Cloud cloud : mClouds) {
+		for (final Cloud cloud : mClouds) {
 			final float pos[] = cloud.getSceneCenterCoordinates();
 			if (pos[Constants.VERTEX_INDEX_Y] < pHighestYToBeConsidered &&
 					cloud.contains(pX, pos[Constants.VERTEX_INDEX_Y])) {
@@ -144,7 +144,7 @@ public class CloudLayer extends Entity{
 		return null;
 	}
 
-	private void registerCloudAndSortByHeights(Cloud cloud) {
+	private void registerCloudAndSortByHeights(final Cloud cloud) {
 		synchronized (mClouds) {
 			mClouds.add(cloud);
 			Collections.sort(mClouds, new ComparatorHeight());
@@ -154,7 +154,7 @@ public class CloudLayer extends Entity{
 		attachChild(cloud);
 	}
 
-	private void unregiterCloud(Cloud cloud) {
+	private void unregiterCloud(final Cloud cloud) {
 		synchronized (mClouds) {
 			mClouds.remove(cloud);
 		}
@@ -170,7 +170,7 @@ public class CloudLayer extends Entity{
 	 */
 	public static class ComparatorHeight implements Comparator<Cloud> {
 		@Override
-		public int compare(Cloud lhs, Cloud rhs) {
+		public int compare(final Cloud lhs, final Cloud rhs) {
 			final float posL[] = lhs.getSceneCenterCoordinates();
 			final float posR[] = rhs.getSceneCenterCoordinates();
 			return (int) (posL[Constants.VERTEX_INDEX_Y] - posR[Constants.VERTEX_INDEX_Y]);
@@ -187,19 +187,19 @@ public class CloudLayer extends Entity{
 	class RainMain implements ITimerCallback {
 		private final Cloud mCloud;
 		float mPos[];
-		public RainMain(Cloud mCloud) {
+		public RainMain(final Cloud mCloud) {
 			this.mCloud = mCloud;
 		}
 		@Override
-		public void onTimePassed(TimerHandler pTimerHandler) {
+		public void onTimePassed(final TimerHandler pTimerHandler) {
 			mCloud.unregisterUpdateHandler(pTimerHandler);
-			WaterDropItem dropitem = mDropPool.obtainPoolItem();
+			final WaterDropItem dropitem = mDropPool.obtainPoolItem();
 			mCloud.drop(dropitem.getEntity(), mSky, new WaterDropListener());
 		}
 
 		private class WaterDropListener implements IWaterDropListener {
 			@Override
-			public void onHitTheGround(WaterDrop pWaterDrop) {
+			public void onHitTheGround(final WaterDrop pWaterDrop) {
 				final WaterSplashItem splashitem = mSplashPool.obtainPoolItem();
 				mCloud.attachChild(splashitem.getEntity());
 				splashitem.getEntity().splat(pWaterDrop.getX(), pWaterDrop.getY());
@@ -218,7 +218,7 @@ public class CloudLayer extends Entity{
 	 */
 	class CloudListener implements Cloud.CloudListener {
 		@Override
-		public void onFinished(Cloud pCloud) {
+		public void onFinished(final Cloud pCloud) {
 			unregiterCloud(pCloud);
 			launchNewCloud();
 		}

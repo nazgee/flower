@@ -7,21 +7,20 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.bases.BaseMenu;
-import eu.nazgee.util.Anchor;
 import eu.nazgee.util.NineSliceSprite;
 
 public class MenuIngame extends BaseMenu {
 	public static final int MENU_RESET = 0;
 	public static final int MENU_GO_MAIN = 1;
 
-	public MenuIngame(final TexturesLibrary pTexturesLibrary, float W, float H, Camera pCamera, Font pFont,
-			VertexBufferObjectManager pVertexBufferObjectManager) {
+	public MenuIngame(final TexturesLibrary pTexturesLibrary, final float W, final float H, final Camera pCamera, final Font pFont,
+			final VertexBufferObjectManager pVertexBufferObjectManager) {
 		super(W, H, pCamera, pFont, pVertexBufferObjectManager);
 
 		// Prepare background
 		final float bgw = pCamera.getWidth() * 0.8f;
 		final float bgh = pCamera.getHeight() * 1.0f;
-		NineSliceSprite bg = pTexturesLibrary.getFactory().populateFrameIngameMenu(bgw, bgh, pVertexBufferObjectManager);
+		final NineSliceSprite bg = pTexturesLibrary.getFactory().populateFrameIngameMenu(bgw, bgh, pVertexBufferObjectManager);
 		attachChild(bg);
 		bg.setPosition(getW()/2, getH()/2);
 

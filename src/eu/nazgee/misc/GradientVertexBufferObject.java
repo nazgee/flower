@@ -19,7 +19,7 @@ public class GradientVertexBufferObject extends HighPerformanceVertexBufferObjec
 		VERTICAL_LEFT,
 		VERTICAL_RIGHT;
 
-		public int getVertexIndex(int pGradientBand) {
+		public int getVertexIndex(final int pGradientBand) {
 			switch (this) {
 			case VERTICAL_RIGHT:
 			case HORIZONTAL_TOP:
@@ -40,7 +40,7 @@ public class GradientVertexBufferObject extends HighPerformanceVertexBufferObjec
 		private final eGradientVerticesLayout mVertexLayout1;
 		private final eGradientVerticesLayout mVertexLayout2;
 
-		private eGradientLayout(eGradientVerticesLayout pVertexLayout1, eGradientVerticesLayout pVertexLayout2) {
+		private eGradientLayout(final eGradientVerticesLayout pVertexLayout1, final eGradientVerticesLayout pVertexLayout2) {
 			this.mVertexLayout1 = pVertexLayout1;
 			this.mVertexLayout2 = pVertexLayout2;
 		}
@@ -64,10 +64,10 @@ public class GradientVertexBufferObject extends HighPerformanceVertexBufferObjec
 	// Constructors
 	// ===========================================================
 	public GradientVertexBufferObject(
-			VertexBufferObjectManager pVertexBufferObjectManager,
-			int pGradientBands, DrawType pDrawType, boolean pAutoDispose,
-			VertexBufferObjectAttributes pVertexBufferObjectAttributes,
-			eGradientLayout pGradientLayout) {
+			final VertexBufferObjectManager pVertexBufferObjectManager,
+			final int pGradientBands, final DrawType pDrawType, final boolean pAutoDispose,
+			final VertexBufferObjectAttributes pVertexBufferObjectAttributes,
+			final eGradientLayout pGradientLayout) {
 		super(pVertexBufferObjectManager, pGradientBands * VERTICES_PER_GRADIENT_BAND * GradientRectangle.VERTEX_SIZE, pDrawType, pAutoDispose,
 				pVertexBufferObjectAttributes);
 		this.mBandsCount = pGradientBands;
@@ -77,7 +77,7 @@ public class GradientVertexBufferObject extends HighPerformanceVertexBufferObjec
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public void setGradientVertex(int pVertex, Color pColor) {
+	public void setGradientVertex(final int pVertex, final Color pColor) {
 		mVerticesColors.put(pVertex, pColor);
 	}
 
@@ -85,21 +85,21 @@ public class GradientVertexBufferObject extends HighPerformanceVertexBufferObjec
 		mVerticesColors.get(pVertex).setAlpha(pAlpha);
 	}
 
-	public void clearGradientVertex(int pVertex) {
+	public void clearGradientVertex(final int pVertex) {
 		mVerticesColors.delete(pVertex);
 	}
 
-	public void setGradientBand(int pGradientBand, Color pColor) {
+	public void setGradientBand(final int pGradientBand, final Color pColor) {
 		setGradientVertex(mGradientLayout.getLayout1().getVertexIndex(pGradientBand), pColor);
 		setGradientVertex(mGradientLayout.getLayout2().getVertexIndex(pGradientBand), pColor);
 	}
 
-	public void setGradientBandAlpha(int pGradientBand, final float pAlpha) {
+	public void setGradientBandAlpha(final int pGradientBand, final float pAlpha) {
 		setGradientVertexAlpha(mGradientLayout.getLayout1().getVertexIndex(pGradientBand), pAlpha);
 		setGradientVertexAlpha(mGradientLayout.getLayout2().getVertexIndex(pGradientBand), pAlpha);
 	}
 
-	public void clearGradientBand(int pGradientBand) {
+	public void clearGradientBand(final int pGradientBand) {
 		clearGradientVertex(mGradientLayout.getLayout1().getVertexIndex(pGradientBand));
 		clearGradientVertex(mGradientLayout.getLayout2().getVertexIndex(pGradientBand));
 	}

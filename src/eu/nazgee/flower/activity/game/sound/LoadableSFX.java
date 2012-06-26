@@ -32,12 +32,12 @@ public class LoadableSFX extends LoadableResourceSimple {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 	@Override
-	public void onLoadResources(Engine e, Context c) {
+	public void onLoadResources(final Engine e, final Context c) {
 		SoundFactory.setAssetBasePath("sfx/");
 	}
 
 	@Override
-	public void onLoad(Engine e, Context c) {
+	public void onLoad(final Engine e, final Context c) {
 		SND_CASH = SoundLoader.load(e.getSoundManager(), c, "cash.ogg");
 		SND_FRY = SoundLoader.load(e.getSoundManager(), c, "fry.ogg");
 		SND_BLOOM = SoundLoader.loadMultiple(e.getSoundManager(), c, "sfx/", "bloom");
