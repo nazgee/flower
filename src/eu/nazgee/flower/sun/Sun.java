@@ -39,7 +39,7 @@ public class Sun extends Entity {
 	// Fields
 	// ===========================================================
 	private IEntityModifier mTravelModifier;
-	private TravelListener mTravelListener;
+	private ISunListener mTravelListener;
 	private MyModifierListener mMyModifierListener = new MyModifierListener();
 	private final Sunshine mSunshine;
 	private final Sprite mSun;
@@ -134,14 +134,14 @@ public class Sun extends Entity {
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
-	public interface TravelListener {
+	public interface ISunListener {
 		void onStarted(Sun pSun);
 		void onFinished(Sun pSun);
 	}
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	synchronized public void travel(final float pX, final float pY, final float W, final float H, final float time, TravelListener pTravelListener) {
+	synchronized public void travel(final float pX, final float pY, final float W, final float H, final float time, ISunListener pTravelListener) {
 		mTravelListener = pTravelListener;
 		setPosition(pX, pY);
 		unregisterEntityModifier(mTravelModifier);

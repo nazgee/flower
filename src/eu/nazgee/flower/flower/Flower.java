@@ -42,7 +42,7 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	private final Seed mSeed;
 
 	private IEntityModifier mAnimationModifier;
-	private IFlowerStateHandler mFlowerStateHandler;
+	private IFlowerListener mFlowerStateHandler;
 	private final Color mColor;
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 	// ===========================================================
@@ -82,11 +82,11 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 		return mColor;
 	}
 
-	public IFlowerStateHandler getFlowerStateHandler() {
+	public IFlowerListener getFlowerStateHandler() {
 		return mFlowerStateHandler;
 	}
 
-	public void setFlowerStateHandler(IFlowerStateHandler pFlowerStateHandler) {
+	public void setFlowerStateHandler(IFlowerListener pFlowerStateHandler) {
 		mFlowerStateHandler = pFlowerStateHandler;
 	}
 
@@ -194,10 +194,10 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	public interface IFlowerStateHandler {
-		public void onBlooming(Flower pFlower);
-		public void onFrying(Flower pFlower);
-		public void onDragging(Flower pFlower);
+	public interface IFlowerListener {
+		public void onBloomed(Flower pFlower);
+		public void onFried(Flower pFlower);
+		public void onDragged(Flower pFlower);
 		public void onDropped(Flower pFlower);
 	}
 
@@ -209,11 +209,11 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 			}
 
 			if (pState instanceof FlowerStateBloomed) {
-				mFlowerStateHandler.onBlooming(Flower.this);
+				mFlowerStateHandler.onBloomed(Flower.this);
 			} else if (pState instanceof FlowerStateFried) {
-				mFlowerStateHandler.onFrying(Flower.this);
+				mFlowerStateHandler.onFried(Flower.this);
 			} else if (pState instanceof FlowerStateDragged) {
-				mFlowerStateHandler.onDragging(Flower.this);
+				mFlowerStateHandler.onDragged(Flower.this);
 			}
 		}
 		@Override

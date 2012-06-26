@@ -58,7 +58,7 @@ public class Butterfly extends AnimatedSprite {
 	// Methods
 	// ===========================================================
 
-	public void animate(final float pX, final float pY) {
+	public void fxFlyAround(final float pX, final float pY) {
 		// start wings flapping
 		animate(FRAME_TIME);
 

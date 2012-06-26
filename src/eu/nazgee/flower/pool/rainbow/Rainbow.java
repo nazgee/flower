@@ -54,7 +54,7 @@ public class Rainbow extends Sprite {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-	public void animate() {
+	public void fxPopOut() {
 		detachChildren();
 		setScale(0);
 		setAlpha(1);
@@ -67,8 +67,8 @@ public class Rainbow extends Sprite {
 		mAnimator.runModifier(mod);
 	}
 
-	public void animate(final Font pFont, final String pText, final Color pColor) {
-		animate();
+	public void fxPopOutWithText(final Font pFont, final String pText, final Color pColor) {
+		fxPopOut();
 		Text text = new Text(0, 0, pFont, pText, getVertexBufferObjectManager());
 		text.setColor(pColor);
 		attachChild(text);

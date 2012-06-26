@@ -24,7 +24,7 @@ import eu.nazgee.flower.activity.game.sound.LoadableSFX;
 import eu.nazgee.flower.flower.EntityBlossom;
 import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
 import eu.nazgee.flower.flower.Flower;
-import eu.nazgee.flower.flower.Flower.IFlowerStateHandler;
+import eu.nazgee.flower.flower.Flower.IFlowerListener;
 import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.pool.butterfly.ButterflyPool;
@@ -37,7 +37,7 @@ import eu.nazgee.flower.pool.rainbow.RainbowPool.RainbowItem;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
 import eu.nazgee.flower.sun.Sun;
-import eu.nazgee.flower.sun.Sun.TravelListener;
+import eu.nazgee.flower.sun.Sun.ISunListener;
 import eu.nazgee.game.utils.scene.SceneLoadable;
 import eu.nazgee.util.Anchor;
 import eu.nazgee.util.Anchor.eAnchorPointXY;
@@ -49,6 +49,8 @@ public class SceneGame extends SceneLoadable{
 
 	private static final int ZINDEX_SEED = 0;
 	private static final int ZINDEX_BLOSSOM = -1;
+
+	private static final int BUTTERFLIES_NUMBER = 3;
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -120,20 +122,21 @@ public class SceneGame extends SceneLoadable{
 	@Override
 	public void onLoad(Engine e, Context c) {
 		mContext = c;
+
+		// prepare some shortcuts
+		final VertexBufferObjectManager vbom = getVertexBufferObjectManager();
+		final float levelW = getGameLevel().level_width;
+		final Camera camera = e.getCamera();
+
 		setBackground(mBG);
 
-		final VertexBufferObjectManager vbom = this.getVertexBufferObjectManager();
-		final Random rand = MathUtils.RANDOM;
-		final float levelW = getGameLevel().level_width;
-		
-
-		Camera camera = e.getCamera();
 		camera.setHUD(mHud);
 		mScore.setHUD(mHud);
 		mScore.score.set(0);
 		mScore.flowers.set(0);
 		mScore.seeds.set(getGameLevel().getSeedsAccumulatedSoFar().size());
 
+		// prepare objects pools
 		mPopupPool = new PopupPool(mTexturesLibrary.getFontPopUp(), mDetacher, vbom);
 		mRainbowPool = new RainbowPool(mTexturesLibrary.getRainbow(), mDetacher, vbom);
 		mButterflyPool = new ButterflyPool(mTexturesLibrary.getButterfly(), mDetacher, vbom);
@@ -163,7 +166,7 @@ public class SceneGame extends SceneLoadable{
 		mSun = new Sun(0, 0, mTexturesLibrary.getSun(),
 				mTexturesLibrary.getSunRays(), vbom);
 		attachChild(mSun);
-		mSun.travel(0, getH()/2, levelW, getH()/2, getGameLevel().daylight_time, new SunTravelListener());
+		mSun.travel(0, getH()/2, levelW, getH()/2, getGameLevel().daylight_time, new SunListener());
 		mSunTrackingHandle = new Entity(camera.getWidth() * 0.2f, 0);
 		mSun.attachChild(mSunTrackingHandle);
 
@@ -205,10 +208,10 @@ public class SceneGame extends SceneLoadable{
 			flower.setBlossomListener(mBlossomListener);
 
 			/*
-			 * Make sure flower seed is put somewhere in the level width area
+			 * Make sure flower seed is placed somewhere in the level width area
 			 */
-			final float flowerX = flower.getWidth() + rand.nextFloat() * (levelW - 2*flower.getWidth());
-			flower.setPosition(flowerX, getH() * rand.nextFloat());
+			final float flowerX =MathUtils.random(flower.getWidth(), levelW - flower.getWidth());
+			flower.setPosition(flowerX, MathUtils.random(mSky.getGroundLevelOnScene(), getH()));
 
 			/*
 			 * Attach it to the scene, so it gets drawn and updated
@@ -216,7 +219,7 @@ public class SceneGame extends SceneLoadable{
 			attachChild(flower);
 			flower.setZIndex(ZINDEX_SEED);
 			/*
-			 * Attach it to the list of dragable items
+			 * Attach it to the list of draggable items
 			 */
 			mFlowers.add(flower);
 			registerTouchArea(flower);
@@ -304,6 +307,10 @@ public class SceneGame extends SceneLoadable{
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	/**
+	 * Interface to be used by activity for reloading scenes after SceneGame is finished
+	 * @author nazgee
+	 */
 	public interface IGameListener {
 		public void onGameFinished();
 	}
@@ -330,31 +337,37 @@ public class SceneGame extends SceneLoadable{
 		}
 	}
 
-	private class FlowerListener implements IFlowerStateHandler {
+	private class FlowerListener implements IFlowerListener {
 		@Override
-		public void onBlooming(Flower pFlower) {
+		public void onBloomed(Flower pFlower) {
 			SceneGame.this.postRunnable(new DeactivateFlowerTouchesRunnable(pFlower));
 			pFlower.setZIndex(ZINDEX_BLOSSOM);
 			sortChildren(false);
 			final float x = pFlower.getX();
 			final float y = pFlower.getY();
 			if (pFlower.getSeed().unlock(mContext)) {
+				/*
+				 * Create a rainbow
+				 */
 				RainbowItem item = mRainbowPool.obtainPoolItem();
 				attachChild(item.getEntity());
 				Anchor.setPosBottomMiddleAtSibling(item.getEntity(), pFlower, eAnchorPointXY.CENTERED);
-				item.getEntity().animate( mTexturesLibrary.getFontPopUp(), "new\nflower\nfound!", Color.PINK);
+				item.getEntity().fxPopOutWithText( mTexturesLibrary.getFontPopUp(), "new\nflower\nfound!", Color.PINK);
 			} else {
-				for (int i=0; i<3; i++) {
+				/*
+				 * Create butterflies
+				 */
+				for (int i=0; i<BUTTERFLIES_NUMBER; i++) {
 					ButterflyItem item = mButterflyPool.obtainPoolItem();
 					attachChild(item.getEntity());
 					item.getEntity().setPosition(x, y);
-					item.getEntity().animate(x, y);
+					item.getEntity().fxFlyAround(x, y);
 				}
 			}
 		}
 
 		@Override
-		public void onFrying(Flower pFlower) {
+		public void onFried(Flower pFlower) {
 			SceneGame.this.postRunnable(new DeactivateFlowerTouchesRunnable(pFlower));
 			mSFX.onFlowerFry();
 			mScore.seeds.dec(1);
@@ -369,7 +382,7 @@ public class SceneGame extends SceneLoadable{
 		}
 
 		@Override
-		public void onDragging(Flower pFlower) {
+		public void onDragged(Flower pFlower) {
 			mHud.setActiveFlower(pFlower);
 		}
 	
@@ -396,13 +409,12 @@ public class SceneGame extends SceneLoadable{
 		}
 	}
 
-	private class SunTravelListener implements TravelListener {
+	private class SunListener implements ISunListener {
 		@Override
 		public void onStarted(Sun pSun) {
 		}
 		@Override
 		public void onFinished(Sun pSun) {
-			//pSun.travel(0, getH()/2, getW() * 1.5f, getH()/2, 40, this);
 			if (null != getGameListerner()) {
 				getGameListerner().onGameFinished();
 			}

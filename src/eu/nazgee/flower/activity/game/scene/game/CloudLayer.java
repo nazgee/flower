@@ -133,10 +133,10 @@ public class CloudLayer extends Entity{
 		cloud.travel(x, y, speed*time, time, listener);
 	}
 
-	public Cloud getHighestCloudAtX(final float pX, final float pHighestY) {
+	public Cloud getHighestCloudAtX(final float pX, final float pHighestYToBeConsidered) {
 		for (Cloud cloud : mClouds) {
 			final float pos[] = cloud.getSceneCenterCoordinates();
-			if (pos[Constants.VERTEX_INDEX_Y] < pHighestY &&
+			if (pos[Constants.VERTEX_INDEX_Y] < pHighestYToBeConsidered &&
 					cloud.contains(pX, pos[Constants.VERTEX_INDEX_Y])) {
 				return cloud;
 			}
