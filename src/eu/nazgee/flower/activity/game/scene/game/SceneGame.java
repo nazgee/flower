@@ -10,12 +10,6 @@ import org.andengine.entity.Entity;
 import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.font.Font;
-import org.andengine.opengl.font.FontFactory;
-import org.andengine.opengl.font.FontManager;
-import org.andengine.opengl.texture.TextureManager;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.Constants;
 import org.andengine.util.adt.color.Color;
@@ -33,16 +27,20 @@ import eu.nazgee.flower.flower.Flower;
 import eu.nazgee.flower.flower.Flower.IFlowerStateHandler;
 import eu.nazgee.flower.flower.Seed;
 import eu.nazgee.flower.level.GameLevel;
+import eu.nazgee.flower.pool.butterfly.ButterflyPool;
+import eu.nazgee.flower.pool.butterfly.ButterflyPool.ButterflyItem;
 import eu.nazgee.flower.pool.cloud.Cloud;
 import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
+import eu.nazgee.flower.pool.rainbow.RainbowPool;
+import eu.nazgee.flower.pool.rainbow.RainbowPool.RainbowItem;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop;
 import eu.nazgee.flower.pool.waterdrop.WaterDrop.IWaterDropListener;
-import eu.nazgee.flower.rainbow.Butterfly;
 import eu.nazgee.flower.sun.Sun;
 import eu.nazgee.flower.sun.Sun.TravelListener;
-import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 import eu.nazgee.game.utils.scene.SceneLoadable;
+import eu.nazgee.util.Anchor;
+import eu.nazgee.util.Anchor.eAnchorPointXY;
 
 public class SceneGame extends SceneLoadable{
 	// ===========================================================
@@ -57,10 +55,11 @@ public class SceneGame extends SceneLoadable{
 	private Context mContext;
 	private final GameScore mScore = new GameScore(null);
 	private final LoadableSFX mSFX;
-	private final MyResources mResources = new MyResources();
 	private final HudGame mHud;
 
 	private PopupPool mPopupPool;
+	private RainbowPool mRainbowPool;
+	private ButterflyPool mButterflyPool;
 	private Sky mSky;
 	private CloudLayer mCloudLayer;
 	private Sun mSun;
@@ -87,7 +86,6 @@ public class SceneGame extends SceneLoadable{
 
 		mSFX = new LoadableSFX();
 		mHud = new HudGame(W, H, mTexturesLibrary, pVertexBufferObjectManager);
-		getLoader().install(mResources);
 		getLoader().install(mSFX);
 		getLoader().install(mHud);
 	}
@@ -136,7 +134,14 @@ public class SceneGame extends SceneLoadable{
 		mScore.flowers.set(0);
 		mScore.seeds.set(getGameLevel().getSeedsAccumulatedSoFar().size());
 
-		mPopupPool = new PopupPool(mResources.FONT_POPUP, mDetacher, vbom);
+		mPopupPool = new PopupPool(mTexturesLibrary.getFontPopUp(), mDetacher, vbom);
+		mRainbowPool = new RainbowPool(mTexturesLibrary.getRainbow(), mDetacher, vbom);
+		mButterflyPool = new ButterflyPool(mTexturesLibrary.getButterfly(), mDetacher, vbom);
+
+		// make sure we have something in pool ready to be utilized
+		mPopupPool.batchAllocatePoolItems(5);
+		mRainbowPool.batchAllocatePoolItems(2);
+		mButterflyPool.batchAllocatePoolItems(9);
 
 		/*
 		 * Create new virtual sky- this object is used to calculate how high
@@ -331,12 +336,20 @@ public class SceneGame extends SceneLoadable{
 			SceneGame.this.postRunnable(new DeactivateFlowerTouchesRunnable(pFlower));
 			pFlower.setZIndex(ZINDEX_BLOSSOM);
 			sortChildren(false);
+			final float x = pFlower.getX();
+			final float y = pFlower.getY();
 			if (pFlower.getSeed().unlock(mContext)) {
-				pFlower.rainbow(mTexturesLibrary.getRainbow(), mTexturesLibrary.getFontPopUp(), "new\nflower\nfound!", Color.PINK);
+				RainbowItem item = mRainbowPool.obtainPoolItem();
+				attachChild(item.getEntity());
+				Anchor.setPosBottomMiddleAtSibling(item.getEntity(), pFlower, eAnchorPointXY.CENTERED);
+				item.getEntity().animate( mTexturesLibrary.getFontPopUp(), "new\nflower\nfound!", Color.PINK);
 			} else {
-				Butterfly butt = new Butterfly(0, 0, mTexturesLibrary.getButterfly(), getVertexBufferObjectManager());
-				attachChild(butt);
-				butt.animate(pFlower.getX(), pFlower.getY());
+				for (int i=0; i<3; i++) {
+					ButterflyItem item = mButterflyPool.obtainPoolItem();
+					attachChild(item.getEntity());
+					item.getEntity().setPosition(x, y);
+					item.getEntity().animate(x, y);
+				}
 			}
 		}
 
@@ -412,32 +425,6 @@ public class SceneGame extends SceneLoadable{
 				return true;
 			}
 			return false;
-		}
-	}
-
-	private static class MyResources extends LoadableResourceSimple {
-		public Font FONT_POPUP;
-		private BitmapTextureAtlas mFontAtlas;
-
-		@Override
-		public void onLoadResources(Engine e, Context c) {
-		}
-
-		@Override
-		public void onLoad(Engine e, Context c) {
-			final TextureManager textureManager = e.getTextureManager();
-			final FontManager fontManager = e.getFontManager();
-
-			mFontAtlas = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
-			FONT_POPUP = FontFactory.createFromAsset(fontManager, mFontAtlas, c.getAssets(), Consts.HUD_FONT, Consts.CAMERA_HEIGHT*0.08f, true, Color.WHITE.getARGBPackedInt());
-			FONT_POPUP.load();
-		}
-
-		@Override
-		public void onUnload() {
-
-			FONT_POPUP.unload();
-			mFontAtlas.unload();
 		}
 	}
 }

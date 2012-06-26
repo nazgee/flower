@@ -1,16 +1,12 @@
 package eu.nazgee.flower.flower;
 
 import org.andengine.entity.Entity;
-import org.andengine.entity.IEntity;
-import org.andengine.entity.IEntityMatcher;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.font.Font;
-import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
@@ -21,7 +17,6 @@ import org.andengine.util.modifier.ease.EaseQuadIn;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
 import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
-import eu.nazgee.flower.rainbow.Rainbow;
 import eu.nazgee.misc.State;
 import eu.nazgee.misc.State.IStateChangesListener;
 import eu.nazgee.util.Anchor;
@@ -142,24 +137,6 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	public IFlowerState drop(Sky pSky) {
 		mState = mState.drop(pSky);
 		return mState;
-	}
-
-	public void rainbow(final ITextureRegion pRainbowTexture, final Font pFont, final String pText, final Color pColor) {
-		detachChildren(new IEntityMatcher() {
-			@Override
-			public boolean matches(IEntity pEntity) {
-				// remove all old rainbows attached to this flower
-				return "rainbow".equals(pEntity.getUserData());
-			}
-		});
-
-		Rainbow rainbow = new Rainbow(0, 0, pRainbowTexture, mEntityBlossom.getVertexBufferObjectManager());
-		attachChild(rainbow);
-		Anchor.setPosBottomMiddleAtParent(rainbow, eAnchorPointXY.CENTERED);
-		rainbow.animate(pFont, pText, pColor);
-		rainbow.setZIndex(ZINDEX_RAINBOW);
-		rainbow.setUserData(new String("rainbow"));
-		sortChildren(false);
 	}
 
 	/**
