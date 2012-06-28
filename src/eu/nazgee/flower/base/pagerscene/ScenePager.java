@@ -1,9 +1,11 @@
 package eu.nazgee.flower.base.pagerscene;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.andengine.engine.Engine;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.IEntityParameterCallable;
 import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.ITouchArea;
@@ -15,6 +17,7 @@ import org.andengine.input.touch.detector.ScrollDetector;
 import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener;
 import org.andengine.input.touch.detector.SurfaceScrollDetector;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
+import org.andengine.util.call.Callable;
 import org.andengine.util.math.MathUtils;
 
 import android.content.Context;
@@ -103,8 +106,12 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 	 */
 	abstract protected int getItemsNumber();
 
-	public interface IItemClikedListener<T> {
-		void onItemClicked(T pItem);
+	public void callOnEveryItem(IEntityParameterCallable pCallable) {
+		for (IPage<T> page : mPages) {
+			for (T item : page.getItems()) {
+				pCallable.call(item);
+			}
+		}
 	}
 
 	@Override
@@ -287,6 +294,13 @@ abstract public class ScenePager<T extends IEntity> extends SceneLoadable implem
 		}
 
 		return pages;
+	}
+
+	// ===========================================================
+	// Inner and Anonymous Classes
+	// ===========================================================
+	public interface IItemClikedListener<T> {
+		void onItemClicked(T pItem);
 	}
 
 }

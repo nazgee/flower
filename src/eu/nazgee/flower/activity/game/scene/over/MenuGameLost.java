@@ -13,6 +13,7 @@ import org.andengine.util.adt.color.Color;
 import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.bases.BaseMenu;
+import eu.nazgee.misc.StarRating;
 import eu.nazgee.util.Anchor;
 import eu.nazgee.util.Anchor.eAnchorPointXY;
 import eu.nazgee.util.EmptyMenuAnimator;
@@ -22,12 +23,12 @@ public class MenuGameLost extends BaseMenu {
 	public static final int MENU_RESET = 0;
 	public static final int MENU_GO_MAIN = 1;
 	private final Text mDescription;
+	private final StarRating mStarRating;
 
 	public MenuGameLost(final float W, final float H, final Camera pCamera, final Font pFont,
 			final Font pDescFont, final VertexBufferObjectManager pVertexBufferObjectManager,
 			final TexturesLibrary pTexturesLibrary) {
 		super(W, H, pCamera, pFont, pVertexBufferObjectManager);
-
 
 		// make sure that nobody is moving menu items around
 		setMenuSceneAnimator(new EmptyMenuAnimator());
@@ -56,9 +57,8 @@ public class MenuGameLost extends BaseMenu {
 		detachChild(resettxt);
 		detachChild(resetico);
 
-		final float margin = bg.getHeight() * 0.1f;
-
 		// Use layouts for positioning
+		final float margin = bg.getHeight() * 0.05f;
 		bg.attachChild(homeico);
 		bg.attachChild(hometxt);
 		Anchor.setPosBottomRight(hometxt, bg.getWidth() - margin, margin);
@@ -70,6 +70,11 @@ public class MenuGameLost extends BaseMenu {
 		Anchor.setPosBottomLeft(resettxt, margin, margin);
 		Anchor.setPosBottomLeftAtSibling(resetico, resettxt, eAnchorPointXY.BOTTOM_RIGHT);
 
+		mStarRating = new StarRating(3, 0, 0, pTexturesLibrary.getIconStar(), pVertexBufferObjectManager);
+		bg.attachChild(mStarRating);
+		Anchor.setPosAtParent(mStarRating, eAnchorPointXY.TOP_MIDDLE, eAnchorPointXY.TOP_MIDDLE);
+
+		// Prepare description
 		mDescription = new Text(0, 0, pDescFont, "", 1000,
 				new TextOptions(AutoWrap.WORDS, bg.getWidth() - margin, HorizontalAlign.CENTER),
 				getVertexBufferObjectManager());
@@ -79,6 +84,10 @@ public class MenuGameLost extends BaseMenu {
 
 	public void setDescription(final String pDescription) {
 		mDescription.setText(pDescription);
-		Anchor.setPosTopMiddleAtParent(mDescription, eAnchorPointXY.TOP_MIDDLE);
+		Anchor.setPosTopMiddleAtSibling(mDescription, mStarRating, eAnchorPointXY.BOTTOM_MIDDLE);
+	}
+
+	public void setStars(final int pScore) {
+		mStarRating.setStars(pScore);
 	}
 }

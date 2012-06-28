@@ -30,18 +30,15 @@ public class SceneLevelselector extends ScenePagerBasic<GameLevelItem>{
 	// Fields
 	// ===========================================================
 	private final GameLevelsLoader mLevelItemsLoader = new GameLevelsLoader();
-	private final Font mFontDesc;
 	private final HudLevelselector mHUD;
 	private final TexturesLibrary mTexturesLibrary;
 	private GameBackground mBG;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public SceneLevelselector(final float W, final float H,
-			final Font pFontDesc, final VertexBufferObjectManager pVertexBufferObjectManager,
+	public SceneLevelselector(final float W, final float H, final VertexBufferObjectManager pVertexBufferObjectManager,
 			final TexturesLibrary pTexturesLibrary) {
 		super(W, H, pVertexBufferObjectManager, 3, 3, 1, 0.33f);
-		mFontDesc = pFontDesc;
 		mTexturesLibrary = pTexturesLibrary;
 		getLoader().install(mLevelItemsLoader);
 		setBackgroundEnabled(true);
@@ -73,22 +70,6 @@ public class SceneLevelselector extends ScenePagerBasic<GameLevelItem>{
 		final SmoothCamera camera = (SmoothCamera) e.getCamera();
 		setPageMover(new PageMoverCameraZoom<GameLevelItem>(0.7f, camera, getEffectiveWidth()));
 		setBackground(mBG);
-
-//		ParallaxLayer paralaxLayer = new ParallaxLayer(camera.getWidth(), camera.getHeight(), camera, true);
-//		paralaxLayer.setAutoParallaxChangePerSecond(1);
-//		paralaxLayer.setScrollParallaxFactor(1f);
-//
-//		Sprite tree1 = new Sprite(0, camera.getHeight() - mTexturesLibrary.getTree(0).getHeight(), mTexturesLibrary.getTree(0), getVertexBufferObjectManager());
-//		paralaxLayer.attachParallaxEntity(new ParallaxLayerEntity(-0.5f, tree1, true, 4));
-//
-//		Sprite tree2 = new Sprite(0, camera.getHeight() - mTexturesLibrary.getTree(1).getHeight() - 150, mTexturesLibrary.getTree(1), getVertexBufferObjectManager());
-//		paralaxLayer.attachParallaxEntity(new ParallaxLayerEntity(0.5f, tree2, true, 4));
-//
-//		Sprite tree3 = new Sprite(0, camera.getHeight() - mTexturesLibrary.getTree(2).getHeight() - 300, mTexturesLibrary.getTree(2), getVertexBufferObjectManager());
-//		paralaxLayer.attachParallaxEntity(new ParallaxLayerEntity(0.0f, tree3, true, 4));
-//
-//		attachChild(paralaxLayer);
-//		paralaxLayer.setZIndex(-1);
 
 		camera.setHUD(mHUD);
 		attachChild(new Rectangle(getW()/2, getH()/2, 15, 15, getVertexBufferObjectManager()));
@@ -146,9 +127,7 @@ public class SceneLevelselector extends ScenePagerBasic<GameLevelItem>{
 	@Override
 	protected GameLevelItem populateItem(final int pItem, final int pItemOnPage, final int pPage) {
 		final GameLevel lvl = mLevelItemsLoader.levels.get(pItem);
-		final GameLevelItem item = new GameLevelItem(lvl, mFontDesc,
-				mTexturesLibrary.getFactory(),
-				getFrameW(), getFrameH(), getVertexBufferObjectManager());
+		final GameLevelItem item = new GameLevelItem(lvl, mTexturesLibrary, getFrameW(), getFrameH(), getVertexBufferObjectManager());
 		return item;
 	}
 

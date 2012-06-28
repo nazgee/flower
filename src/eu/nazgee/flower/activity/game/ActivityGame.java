@@ -49,6 +49,7 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	// Constants
 	// ===========================================================
 
+	public static final int REQUESTCODE_PLAY_GAME = 0;
 	public static final String BUNDLE_LEVEL_ID = "levelid";
 	// ===========================================================
 	// Fields
@@ -96,11 +97,12 @@ public class ActivityGame extends SimpleBaseGameActivity {
 	@Override
 	protected void onCreate(final Bundle pSavedInstanceState) {
 		super.onCreate(pSavedInstanceState);
-		if (pSavedInstanceState != null) {
-			super.onCreate(pSavedInstanceState);
-			mGameLevel = GameLevel.getLevelById(pSavedInstanceState.getInt(BUNDLE_LEVEL_ID));
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			mGameLevel = GameLevel.getLevelById(extras.getInt(BUNDLE_LEVEL_ID));
+			Log.d(getClass().getSimpleName(), "Starting level " + mGameLevel.id);
 		} else {
-			Log.w(getClass().getSimpleName(), "No bundle was given! Falling back to default game params");
+			Log.e(getClass().getSimpleName(), "No bundle was given! Falling back to default game params");
 			mGameLevel = GameLevel.LEVEL1;
 		}
 	}
@@ -128,7 +130,23 @@ public class ActivityGame extends SimpleBaseGameActivity {
 			@Override
 			public void onGameFinished() {
 				mLoader.setChildSceneModalDraw(false); // we do WANT to see the background scene for the sake of wow-factor :)
+
+				final int flowers = mSceneGame.getScore().flowers.get();
+				final int stars = 2;
+				// store the score
+				mGameLevel.resources.setScore(ActivityGame.this, stars);
+
+				// tell the user about the score
 				loadSubscene(mMenuGameOver);
+				mMenuGameOver.setStars(stars);
+				mMenuGameOver.setDescription("You've nursed " + flowers + " flowers!");
+
+				// unlock next level
+				if (mGameLevel.id < GameLevel.LEVELS_NUMBER) {
+					GameLevel.getLevelById(mGameLevel.id + 1).resources.setLocked(ActivityGame.this, false);
+				} else {
+					// TODO display "game over" scene
+				}
 			}
 		});
 
@@ -253,6 +271,12 @@ public class ActivityGame extends SimpleBaseGameActivity {
 		public void onUnload() {
 			FONT.unload();
 		}
+	}
+
+	@Override
+	public void finish() {
+		setResult(mGameLevel.id);
+		super.finish();
 	}
 
 	private class MenuItemClickListener implements IOnMenuItemClickListener {

@@ -206,11 +206,13 @@ public enum GameLevel {
 			return mScore;
 		}
 		public void setLocked(final Context c, final boolean pLocked) {
+			mLocked = pLocked;
 			final Editor editor = getEditor(c);
 			editor.putBoolean(getKeyLocked(), pLocked);
 			editor.commit();
 		}
 		public void setScore(final Context c, final int pScore) {
+			mScore = pScore;
 			final Editor editor = getEditor(c);
 			editor.putInt(getKeyScore(), pScore);
 			editor.commit();

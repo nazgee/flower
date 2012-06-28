@@ -12,8 +12,9 @@ import org.andengine.opengl.font.Font;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 
-import eu.nazgee.flower.EntitiesFactory;
+import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.level.GameLevel;
+import eu.nazgee.misc.StarRating;
 import eu.nazgee.util.Anchor;
 import eu.nazgee.util.Anchor.eAnchorPointXY;
 
@@ -26,18 +27,42 @@ public class GameLevelItem extends Entity implements ITouchArea{
 	// Fields
 	// ===========================================================
 	private final GameLevel mLevel;
-	private final NineSliceSprite mFrame;
+	private NineSliceSprite mFrame;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public GameLevelItem(final GameLevel pLevel, final Font pFont, final EntitiesFactory pFactory,
+	public GameLevelItem(final GameLevel pLevel, final TexturesLibrary pTexturesLibrary,
 			final float W, final float H, final VertexBufferObjectManager pVBOM) {
 		super(0, 0, W, H);
 		mLevel = pLevel;
+		reload(pTexturesLibrary, pVBOM);
+	}
+	// ===========================================================
+	// Getter & Setter
+	// ===========================================================
+	public GameLevel getLevel() {
+		return mLevel;
+	}
 
-		mFrame = pFactory.populateFrameLevel(W, H, pVBOM, mLevel.resources.isLocked());
+	// ===========================================================
+	// Methods for/from SuperClass/Interfaces
+	// ===========================================================
 
-		final Text text = new Text(0, 0, pFont, "level " + pLevel.id, pVBOM);
+	public void reload(final TexturesLibrary pTexturesLibrary, final VertexBufferObjectManager pVBOM) {
+		detachChildren();
+
+		final boolean locked = mLevel.resources.isLocked();
+		mFrame = pTexturesLibrary.getFactory().populateFrameLevel(getWidth(), getHeight(), pVBOM, locked);
+
+		if (!locked) {
+			final int score = mLevel.resources.getScore();
+			StarRating rating = new StarRating(3, 0, 0, mFrame.getWidth() * 0.9f, pTexturesLibrary.getIconStar(), pVBOM);
+			rating.setStars(score);
+			mFrame.attachChild(rating);
+			Anchor.setPosBottomMiddleAtParent(rating, eAnchorPointXY.BOTTOM_MIDDLE);
+		}
+
+		final Text text = new Text(0, 0, pTexturesLibrary.getFontPopUp(), "level " + mLevel.id, pVBOM);
 		text.setColor(Color.BLACK);
 		attachChild(mFrame);
 		attachChild(text);
@@ -45,13 +70,7 @@ public class GameLevelItem extends Entity implements ITouchArea{
 		text.setPosition(getWidth()/2, getHeight()/2);
 		setAlpha(1);
 	}
-	// ===========================================================
-	// Getter & Setter
-	// ===========================================================
 
-	// ===========================================================
-	// Methods for/from SuperClass/Interfaces
-	// ===========================================================
 	@Override
 	public boolean contains(final float pX, final float pY) {
 		return mFrame.contains(pX, pY);
@@ -85,7 +104,5 @@ public class GameLevelItem extends Entity implements ITouchArea{
 	// Inner and Anonymous Classes
 	// ===========================================================
 
-	public GameLevel getLevel() {
-		return mLevel;
-	}
+
 }

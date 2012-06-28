@@ -9,6 +9,7 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.entity.Entity;
+import org.andengine.entity.IEntityParameterCallable;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.extension.svg.opengl.texture.atlas.bitmap.SVGBitmapTextureAtlasTextureRegionFactory;
@@ -42,7 +43,6 @@ public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGame
 	// ===========================================================
 //	protected SceneButtons mSceneInfo;
 	private ScenePager<T> mScenePager;
-	private final MyResources mResources = new MyResources();
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -50,10 +50,6 @@ public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGame
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-
-	public MyResources getStaticResources() {
-		return mResources;
-	}
 
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
@@ -81,9 +77,6 @@ public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGame
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		SVGBitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		FontFactory.setAssetBasePath("fonts/");
-
-		mResources.loadResources(getEngine(), this);
-		mResources.load(getEngine(), this);
 	}
 
 	@Override
@@ -105,41 +98,15 @@ public abstract class BaseActivityPager<T extends Entity> extends SimpleBaseGame
 			mScenePager.unload();
 		}
 
-		mResources.unload();
 	}
 	// ===========================================================
 	// Methods
 	// ===========================================================
-
+	public void callOnEveryItem(IEntityParameterCallable pCallable) {
+		mScenePager.callOnEveryItem(pCallable);
+	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-	public class MyResources extends LoadableResourceSimple {
-		public EntityDetachRunnablePoolUpdateHandler ENTITY_DETACH_HANDLER;
-		public Font FONT_DESC;
 
-		@Override
-		public void onLoadResources(final Engine e, final Context c) {
-		}
-
-		@Override
-		public void onLoad(final Engine e, final Context c) {
-			e.unregisterUpdateHandler(ENTITY_DETACH_HANDLER);
-
-			ENTITY_DETACH_HANDLER = new EntityDetachRunnablePoolUpdateHandler();
-			e.registerUpdateHandler(ENTITY_DETACH_HANDLER);
-
-			final TextureManager textureManager = e.getTextureManager();
-			final FontManager fontManager = e.getFontManager();
-
-			final ITexture font_texture = new BitmapTextureAtlas(textureManager, 512, 256, TextureOptions.BILINEAR);
-			FONT_DESC = FontFactory.createFromAsset(fontManager, font_texture, c.getAssets(), Consts.MENU_FONT, Consts.CAMERA_HEIGHT*0.1f, true, Color.WHITE.getARGBPackedInt());
-			FONT_DESC.load();
-		}
-
-		@Override
-		public void onUnload() {
-			FONT_DESC.unload();
-		}
-	}
 }

@@ -134,10 +134,10 @@ public class SceneGame extends SceneLoadable{
 		setBackground(mBG);
 
 		camera.setHUD(mHud);
-		mScore.setHUD(mHud);
-		mScore.score.set(0);
-		mScore.flowers.set(0);
-		mScore.seeds.set(getGameLevel().getSeedsAccumulatedSoFar().size());
+		getScore().setHUD(mHud);
+		getScore().score.set(0);
+		getScore().flowers.set(0);
+		getScore().seeds.set(getGameLevel().getSeedsAccumulatedSoFar().size());
 
 		// prepare objects pools
 		mPopupPool = new PopupPool(mTexturesLibrary.getFontPopUp(), mDetacher, vbom);
@@ -170,7 +170,7 @@ public class SceneGame extends SceneLoadable{
 				mTexturesLibrary.getSunRays(), vbom);
 		attachChild(mSun);
 		mSun.setZIndex(ZINDEX_SUN);
-		mSun.travel(0, getH()/2, levelW, getH()/2, getGameLevel().daylight_time, new SunListener());
+		mSun.travel(0, getH()/2, levelW, getH()/2, getGameLevel().daylight_time/5, new SunListener());
 		mSunTrackingHandle = new Entity(camera.getWidth() * 0.2f, 0);
 		mSun.attachChild(mSunTrackingHandle);
 
@@ -309,6 +309,10 @@ public class SceneGame extends SceneLoadable{
 		}
 	}
 
+	public GameScore getScore() {
+		return mScore;
+	}
+
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
@@ -328,9 +332,9 @@ public class SceneGame extends SceneLoadable{
 
 		@Override
 		public void onBloomed(final EntityBlossom pBlossom) {
-			mScore.score.inc(100);
-			mScore.flowers.inc(1);
-			mScore.seeds.dec(1);
+			getScore().score.inc(100);
+			getScore().flowers.inc(1);
+			getScore().seeds.dec(1);
 
 			/*
 			 * Create a +100 text popup
@@ -379,7 +383,7 @@ public class SceneGame extends SceneLoadable{
 		public void onFried(final Flower pFlower) {
 			SceneGame.this.postRunnable(new DeactivateFlowerTouchesRunnable(pFlower));
 			mSFX.onFlowerFry();
-			mScore.seeds.dec(1);
+			getScore().seeds.dec(1);
 
 			/*
 			 * Create a "fried" text popup
