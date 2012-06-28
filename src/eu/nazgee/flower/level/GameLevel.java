@@ -18,13 +18,13 @@ public enum GameLevel {
 	 * When defined as Enum, levels are singletons
 	 */
 
-	LEVEL1(1, 1000, 60, false, new Basket<Seed>().add(Seed.SEED1, 3).add(Seed.SEED2, 3).add(Seed.SEED3, 3)),
-	LEVEL2(2, new Basket<Seed>().add(Seed.SEED4)),
-	LEVEL3(3, new Basket<Seed>().add(Seed.SEED5)),
-	LEVEL4(4, new Basket<Seed>().add(Seed.SEED6)),
-	LEVEL5(5, new Basket<Seed>().add(Seed.SEED7)),
-	LEVEL6(6, new Basket<Seed>().add(Seed.SEED8)),
-	LEVEL7(7, new Basket<Seed>().add(Seed.SEED9).add(Seed.SEED10)),
+	LEVEL1(1, 1000, 60, Consts.CAMERA_WIDTH * 1.5f, false, new Basket<Seed>().add(Seed.SEED1, 2).add(Seed.SEED2, 3)),
+	LEVEL2(2, new Basket<Seed>().add(Seed.SEED3, 2)),
+	LEVEL3(3, new Basket<Seed>().add(Seed.SEED4, 1).add(Seed.SEED5, 1)),
+	LEVEL4(4, new Basket<Seed>().add(Seed.SEED6, 2)),
+	LEVEL5(5, new Basket<Seed>().add(Seed.SEED7, 2)),
+	LEVEL6(6, new Basket<Seed>().add(Seed.SEED8, 2)),
+	LEVEL7(7, new Basket<Seed>().add(Seed.SEED9, 2).add(Seed.SEED10, 2)),
 	LEVEL8(8),
 	LEVEL9(9),
 	LEVEL10(10),
@@ -47,13 +47,13 @@ public enum GameLevel {
 
 	protected static final int CASH_DEFAULT = 1000;
 	protected static final int DAYLIGHT_TIME_DEFAULT = 60;
-	protected static final float LEVEL_WIDTH_DEFAULT = Consts.CAMERA_WIDTH;
+	protected static final float LEVEL_WIDTH_DEFAULT = Consts.CAMERA_WIDTH * 1.5f;
 
 	// ===========================================================
 	// Fields
 	// ===========================================================
 	public final int daylight_time;
-	public final float level_width = LEVEL_WIDTH_DEFAULT;
+	public final float level_width;
 	public final int id;
 	public final int cash;
 	public final boolean lockedByDefault;
@@ -65,7 +65,7 @@ public enum GameLevel {
 	// Constructors
 	// ===========================================================
 	private GameLevel(final int pID, final int pCash) {
-		this(pID, pCash, DAYLIGHT_TIME_DEFAULT, true, new Basket<Seed>());
+		this(pID, pCash, DAYLIGHT_TIME_DEFAULT, LEVEL_WIDTH_DEFAULT, true, new Basket<Seed>());
 	}
 
 	private GameLevel(final int pID) {
@@ -73,20 +73,25 @@ public enum GameLevel {
 	}
 
 	private GameLevel(final int pID, final Basket<Seed> pSeeds) {
-		this(pID, CASH_DEFAULT, DAYLIGHT_TIME_DEFAULT, true, pSeeds);
+		this(pID, CASH_DEFAULT, DAYLIGHT_TIME_DEFAULT, LEVEL_WIDTH_DEFAULT, true, pSeeds);
+	}
+
+	private GameLevel(final int pID, final int pDalightTime, final Basket<Seed> pSeeds) {
+		this(pID, CASH_DEFAULT, pDalightTime, LEVEL_WIDTH_DEFAULT, true, pSeeds);
 	}
 
 	private GameLevel(final int pID, final int pCash, final int pDalightTime, final Basket<Seed> pSeeds) {
-		this(pID, pCash, pDalightTime, true, pSeeds);
+		this(pID, pCash, pDalightTime, LEVEL_WIDTH_DEFAULT, true, pSeeds);
 	}
 
-	private GameLevel(final int pID, final int pCash, final int pDalightTime, final boolean pLocked, final Basket<Seed> pSeeds) {
+	private GameLevel(final int pID, final int pCash, final int pDalightTime, final float pLevelWidth, final boolean pLocked, final Basket<Seed> pSeeds) {
 		id = pID;
 		cash = pCash;
 		daylight_time = pDalightTime;
 		lockedByDefault = pLocked;
 		resources = new LevelResourcesBasic();
 		seeds = pSeeds;
+		level_width = pLevelWidth;
 	}
 
 	// ===========================================================

@@ -170,7 +170,7 @@ public class SceneGame extends SceneLoadable{
 				mTexturesLibrary.getSunRays(), vbom);
 		attachChild(mSun);
 		mSun.setZIndex(ZINDEX_SUN);
-		mSun.travel(0, getH()/2, levelW, getH()/2, getGameLevel().daylight_time/5, new SunListener());
+		mSun.travel(0, getH()/2, levelW, getH()/2, getGameLevel().daylight_time, new SunListener());
 		mSunTrackingHandle = new Entity(camera.getWidth() * 0.2f, 0);
 		mSun.attachChild(mSunTrackingHandle);
 
