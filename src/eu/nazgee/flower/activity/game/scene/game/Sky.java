@@ -1,6 +1,10 @@
 package eu.nazgee.flower.activity.game.scene.game;
 
+import java.util.Comparator;
+
+import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
+import org.andengine.util.Constants;
 
 import eu.nazgee.util.Anchor.eAnchorPointXY;
 
@@ -91,5 +95,27 @@ public class Sky {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	/**
+	 * Used to sort items by theirs height
+	 * @author nazgee
+	 *
+	 */
+	public static class SkyHeightComparator<T extends Entity> implements Comparator<T> {
+		private final Sky mSky;
+		private final eAnchorPointXY mAnchor;
+
+		public SkyHeightComparator(final Sky pSky, final eAnchorPointXY pAnchor) {
+			this.mSky = pSky;
+			this.mAnchor = pAnchor;
+		}
+
+		@Override
+		public int compare(final T lhs, final T rhs) {
+			final float hL = mSky.getHeightOnSky(lhs, mAnchor);
+			final float hR = mSky.getHeightOnSky(lhs, mAnchor);
+
+			return (int) (hL - hR);
+		}
+	}
 
 }
