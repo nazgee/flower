@@ -59,33 +59,34 @@ public class Sun extends Entity {
 	 * Creates a SunSprite, and attach it to the Sun
 	 */
 	private static Sprite initSun(final Sun pSun, final float w, final float h, final ITextureRegion pSunTexture, final VertexBufferObjectManager pVertexBufferObjectManager) {
-		final ShaderProgram shdr = FisheyeShaderProgram.getInstance();
-		final float cw = (pSunTexture.getU2() - pSunTexture.getU());
-		final float ch = (pSunTexture.getV2() - pSunTexture.getV());
-		final float cx = pSunTexture.getU() + cw/2;
-		final float cy = pSunTexture.getV() + ch/2;
-		Log.e("aaa", "w=" + cw + "; ch=" + ch);
+//		final ShaderProgram shdr = FisheyeShaderProgram.getInstance();
+//		final float cw = (pSunTexture.getU2() - pSunTexture.getU());
+//		final float ch = (pSunTexture.getV2() - pSunTexture.getV());
+//		final float cx = pSunTexture.getU() + cw/2;
+//		final float cy = pSunTexture.getV() + ch/2;
+//		Log.e("aaa", "w=" + cw + "; ch=" + ch);
 
 
-		final Sprite sun = new Sprite(0, 0, w, h, pSunTexture, pVertexBufferObjectManager, shdr) {
-			private float step = 0;
-			private float seed = 666;
-			private float valfx = 0;
-			@Override
-			protected void preDraw(final GLState pGLState, final Camera pCamera) {
-				super.preDraw(pGLState, pCamera);
-				if (seed > Math.PI * 2) {
-					step = MathUtils.random(0.05f, 0.2f);
-					seed = 0;
-				}
-				seed += step;
-
-				valfx = (float) (Math.sin(seed) * 0.5f + 0.5f);
-				GLES20.glUniform1f(FisheyeShaderProgram.sUniformFXStrength, valfx);
-				GLES20.glUniform2f(FisheyeShaderProgram.sUniformFXCenterLocation, cx,  cy);
-				GLES20.glUniform2f(FisheyeShaderProgram.sUniformRegionSizeLocation, cw, ch);
-			}
-		};
+		final Sprite sun = new Sprite(0, 0, w, h, pSunTexture, pVertexBufferObjectManager);
+//		final Sprite sun = new Sprite(0, 0, w, h, pSunTexture, pVertexBufferObjectManager, shdr) {
+//			private float step = 0;
+//			private float seed = 666;
+//			private float valfx = 0;
+//			@Override
+//			protected void preDraw(final GLState pGLState, final Camera pCamera) {
+//				super.preDraw(pGLState, pCamera);
+//				if (seed > Math.PI * 2) {
+//					step = MathUtils.random(0.05f, 0.2f);
+//					seed = 0;
+//				}
+//				seed += step;
+//
+//				valfx = (float) (Math.sin(seed) * 0.5f + 0.5f);
+//				GLES20.glUniform1f(FisheyeShaderProgram.sUniformFXStrength, valfx);
+//				GLES20.glUniform2f(FisheyeShaderProgram.sUniformFXCenterLocation, cx,  cy);
+//				GLES20.glUniform2f(FisheyeShaderProgram.sUniformRegionSizeLocation, cw, ch);
+//			}
+//		};
 
 		pSun.attachChild(sun);
 		Anchor.setPosCenterAtParent(sun, eAnchorPointXY.CENTERED);
