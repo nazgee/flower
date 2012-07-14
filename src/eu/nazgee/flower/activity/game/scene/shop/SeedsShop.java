@@ -2,7 +2,7 @@ package eu.nazgee.flower.activity.game.scene.shop;
 
 import org.andengine.util.adt.list.SmartList;
 
-import eu.nazgee.flower.flower.Seed;
+import eu.nazgee.flower.flower.LoadableSeed;
 import eu.nazgee.flower.level.GameLevel;
 
 public class SeedsShop {
@@ -13,8 +13,8 @@ public class SeedsShop {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private final SmartList<Seed> mSeedsInShop;
-	private final SmartList<Seed> mSeedsInBasket = new SmartList<Seed>();
+	private final SmartList<LoadableSeed> mSeedsInShop;
+	private final SmartList<LoadableSeed> mSeedsInBasket = new SmartList<LoadableSeed>();
 	private int mCustomerCash;
 	private int mBasketValue;
 	// ===========================================================
@@ -24,7 +24,7 @@ public class SeedsShop {
 		this(pGameLevel.getSeedsAccumulatedSoFar(), pGameLevel.cash);
 	}
 
-	public SeedsShop(final SmartList<Seed> mSeeds, final int mCustomerCash) {
+	public SeedsShop(final SmartList<LoadableSeed> mSeeds, final int mCustomerCash) {
 		super();
 		this.mSeedsInShop = mSeeds;
 		this.setCustomerCash(mCustomerCash);
@@ -38,10 +38,10 @@ public class SeedsShop {
 	public void setCustomerCash(final int mCustomerCash) {
 		this.mCustomerCash = mCustomerCash;
 	}
-	public SmartList<Seed> getSeedsInShop() {
+	public SmartList<LoadableSeed> getSeedsInShop() {
 		return mSeedsInShop;
 	}
-	public SmartList<Seed> getSeedsInBasket() {
+	public SmartList<LoadableSeed> getSeedsInBasket() {
 		return mSeedsInBasket;
 	}
 	public int getBasketValue() {
@@ -55,7 +55,7 @@ public class SeedsShop {
 	// Methods
 	// ===========================================================
 
-	public boolean addToBasket(final Seed pSeed) {
+	public boolean addToBasket(final LoadableSeed pSeed) {
 		if (mCustomerCash >= (mBasketValue + pSeed.cost)) {
 			mSeedsInBasket.add(pSeed);
 			recalculateBasketValue();
@@ -65,7 +65,7 @@ public class SeedsShop {
 		}
 	}
 
-	public boolean removeFromBasket(final Seed pSeed) {
+	public boolean removeFromBasket(final LoadableSeed pSeed) {
 		if (mSeedsInBasket.remove(pSeed)) {
 			recalculateBasketValue();
 			return true;
@@ -83,9 +83,9 @@ public class SeedsShop {
 		mBasketValue = calculateValue(mSeedsInBasket);
 	}
 
-	protected int calculateValue(final SmartList<Seed> pSeeds) {
+	protected int calculateValue(final SmartList<LoadableSeed> pSeeds) {
 		int value = 0;
-		for (final Seed seed : pSeeds) {
+		for (final LoadableSeed seed : pSeeds) {
 			value += seed.cost;
 		}
 		return value;

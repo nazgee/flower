@@ -15,7 +15,7 @@ import org.andengine.util.adt.color.Color;
 
 import eu.nazgee.flower.EntitiesFactory;
 import eu.nazgee.flower.TexturesLibrary;
-import eu.nazgee.flower.flower.Seed;
+import eu.nazgee.flower.flower.LoadableSeed;
 import eu.nazgee.util.Anchor;
 import eu.nazgee.util.Anchor.eAnchorPointXY;
 import eu.nazgee.util.LinearLayout;
@@ -31,14 +31,14 @@ public class SeedItem extends Entity implements ITouchArea{
 	// ===========================================================
 	// Fields
 	// ===========================================================
-	private final Seed mSeed;
+	private final LoadableSeed mSeed;
 	private final NineSliceSprite mSpriteFrame;
 	private Sprite mSpriteBlossoms[];
 	private IEntityModifier mModifier;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public SeedItem(final Seed pSeed, final float W, final float H, final Font pFont, final EntitiesFactory pFactory, final VertexBufferObjectManager pVBOM, final TexturesLibrary pTexturesLibrary) {
+	public SeedItem(final LoadableSeed pSeed, final float W, final float H, final Font pFont, final EntitiesFactory pFactory, final VertexBufferObjectManager pVBOM, final TexturesLibrary pTexturesLibrary) {
 		super(0, 0, W, H);
 		this.mSeed = pSeed;
 
@@ -140,7 +140,7 @@ public class SeedItem extends Entity implements ITouchArea{
 	// Inner and Anonymous Classes
 	// ===========================================================
 
-	public Seed getSeed() {
+	public LoadableSeed getSeed() {
 		return mSeed;
 	}
 }

@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import eu.nazgee.flower.Consts;
-import eu.nazgee.flower.flower.Seed;
+import eu.nazgee.flower.flower.LoadableSeed;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
 public enum GameLevel {
@@ -18,13 +18,13 @@ public enum GameLevel {
 	 * When defined as Enum, levels are singletons
 	 */
 
-	LEVEL1(1, 1000, 60, Consts.CAMERA_WIDTH * 1.5f, false, new Basket<Seed>().add(Seed.SEED1, 2).add(Seed.SEED2, 3)),
-	LEVEL2(2, new Basket<Seed>().add(Seed.SEED3, 2)),
-	LEVEL3(3, new Basket<Seed>().add(Seed.SEED4, 1).add(Seed.SEED5, 1)),
-	LEVEL4(4, new Basket<Seed>().add(Seed.SEED6, 2)),
-	LEVEL5(5, new Basket<Seed>().add(Seed.SEED7, 2)),
-	LEVEL6(6, new Basket<Seed>().add(Seed.SEED8, 2)),
-	LEVEL7(7, new Basket<Seed>().add(Seed.SEED9, 2).add(Seed.SEED10, 2)),
+	LEVEL1(1, 1000, 60, Consts.CAMERA_WIDTH * 1.5f, false, new Basket<LoadableSeed>().add(LoadableSeed.SEED1, 2).add(LoadableSeed.SEED2, 3)),
+	LEVEL2(2, new Basket<LoadableSeed>().add(LoadableSeed.SEED3, 2)),
+	LEVEL3(3, new Basket<LoadableSeed>().add(LoadableSeed.SEED4, 1).add(LoadableSeed.SEED5, 1)),
+	LEVEL4(4, new Basket<LoadableSeed>().add(LoadableSeed.SEED6, 2)),
+	LEVEL5(5, new Basket<LoadableSeed>().add(LoadableSeed.SEED7, 2)),
+	LEVEL6(6, new Basket<LoadableSeed>().add(LoadableSeed.SEED8, 2)),
+	LEVEL7(7, new Basket<LoadableSeed>().add(LoadableSeed.SEED9, 2).add(LoadableSeed.SEED10, 2)),
 	LEVEL8(8),
 	LEVEL9(9),
 	LEVEL10(10),
@@ -58,33 +58,33 @@ public enum GameLevel {
 	public final int cash;
 	public final boolean lockedByDefault;
 	public final LevelResourcesBasic resources;
-	public final Basket<Seed> seeds;
+	public final Basket<LoadableSeed> seeds;
 
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 	private GameLevel(final int pID, final int pCash) {
-		this(pID, pCash, DAYLIGHT_TIME_DEFAULT, LEVEL_WIDTH_DEFAULT, true, new Basket<Seed>());
+		this(pID, pCash, DAYLIGHT_TIME_DEFAULT, LEVEL_WIDTH_DEFAULT, true, new Basket<LoadableSeed>());
 	}
 
 	private GameLevel(final int pID) {
-		this(pID, new Basket<Seed>());
+		this(pID, new Basket<LoadableSeed>());
 	}
 
-	private GameLevel(final int pID, final Basket<Seed> pSeeds) {
+	private GameLevel(final int pID, final Basket<LoadableSeed> pSeeds) {
 		this(pID, CASH_DEFAULT, DAYLIGHT_TIME_DEFAULT, LEVEL_WIDTH_DEFAULT, true, pSeeds);
 	}
 
-	private GameLevel(final int pID, final int pDalightTime, final Basket<Seed> pSeeds) {
+	private GameLevel(final int pID, final int pDalightTime, final Basket<LoadableSeed> pSeeds) {
 		this(pID, CASH_DEFAULT, pDalightTime, LEVEL_WIDTH_DEFAULT, true, pSeeds);
 	}
 
-	private GameLevel(final int pID, final int pCash, final int pDalightTime, final Basket<Seed> pSeeds) {
+	private GameLevel(final int pID, final int pCash, final int pDalightTime, final Basket<LoadableSeed> pSeeds) {
 		this(pID, pCash, pDalightTime, LEVEL_WIDTH_DEFAULT, true, pSeeds);
 	}
 
-	private GameLevel(final int pID, final int pCash, final int pDalightTime, final float pLevelWidth, final boolean pLocked, final Basket<Seed> pSeeds) {
+	private GameLevel(final int pID, final int pCash, final int pDalightTime, final float pLevelWidth, final boolean pLocked, final Basket<LoadableSeed> pSeeds) {
 		id = pID;
 		cash = pCash;
 		daylight_time = pDalightTime;
@@ -97,14 +97,14 @@ public enum GameLevel {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public SmartList<Seed> getSeedsAccumulatedSoFar() {
-		final SmartList<Seed> ret = new SmartList<Seed>(id);
+	public SmartList<LoadableSeed> getSeedsAccumulatedSoFar() {
+		final SmartList<LoadableSeed> ret = new SmartList<LoadableSeed>(id);
 
 		// Current level has it's own collection of seeds, plus seeds from all
 		// previous levels- this builds up a collection that is returned here
 		for (int i = 1; i <= id; i++) {
-			final SmartList<Seed> new_seeds = getLevelById(i).seeds.getItems();
-			for (final Seed seed : new_seeds) {
+			final SmartList<LoadableSeed> new_seeds = getLevelById(i).seeds.getItems();
+			for (final LoadableSeed seed : new_seeds) {
 				ret.add(seed);
 			}
 		}

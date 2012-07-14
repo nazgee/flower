@@ -101,7 +101,7 @@ public class HudGame extends BaseHUD {
 
 		currentFlower.setVisible(true);
 		currentFlower.setAlpha(0);
-		currentFlower.setColor(pFlower.getBlossomColor());
+		currentFlower.setColor(pFlower.getBlossom().getColor());
 		mFlowerAnimator.setEntity(currentFlower);
 		mFlowerAnimator.runModifier(new FadeInModifier(FLOWER_TRANSITION_TIME));
 	}

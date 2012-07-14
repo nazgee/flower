@@ -20,11 +20,11 @@ import eu.nazgee.flower.Consts;
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.GameScore;
 import eu.nazgee.flower.activity.game.sound.LoadableSFX;
-import eu.nazgee.flower.flower.EntityBlossom;
-import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
+import eu.nazgee.flower.flower.Blossom;
+import eu.nazgee.flower.flower.Blossom.IBlossomListener;
 import eu.nazgee.flower.flower.Flower;
 import eu.nazgee.flower.flower.Flower.IFlowerListener;
-import eu.nazgee.flower.flower.Seed;
+import eu.nazgee.flower.flower.LoadableSeed;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.pool.butterfly.Butterfly;
 import eu.nazgee.flower.pool.butterfly.ButterflyPool;
@@ -198,7 +198,7 @@ public class SceneGame extends SceneLoadable{
 		 * Create some flowers
 		 */
 		for (int i = 0; i < getGameLevel().getSeedsAccumulatedSoFar().size(); i++) {
-			final Seed seed = getGameLevel().getSeedsAccumulatedSoFar().get(i);
+			final LoadableSeed seed = getGameLevel().getSeedsAccumulatedSoFar().get(i);
 			if (!seed.resources.isLoaded()) {
 				seed.resources.onLoadResources(e, c);
 				seed.resources.onLoad(e, c);
@@ -209,8 +209,8 @@ public class SceneGame extends SceneLoadable{
 			 */
 			final Flower flower = new Flower(0, 0, seed, getVertexBufferObjectManager(), mTexturesLibrary, mDetacher);
 			flower.setZIndex(-1);
-			flower.setFlowerStateHandler(mFlowerListener);
-			flower.setBlossomListener(mBlossomListener);
+			flower.setStateHandler(mFlowerListener);
+			flower.getBlossom().setBlossomListener(mBlossomListener);
 
 			/*
 			 * Make sure flower seed is placed somewhere in the level width area
@@ -326,12 +326,12 @@ public class SceneGame extends SceneLoadable{
 
 	private class BlossomListener implements IBlossomListener {
 		@Override
-		public void onBlooming(final EntityBlossom pBlossom) {
+		public void onBlooming(final Blossom pBlossom) {
 			mSFX.onBloom(pBlossom.getBlossomID());
 		}
 
 		@Override
-		public void onBloomed(final EntityBlossom pBlossom) {
+		public void onBloomed(final Blossom pBlossom) {
 			getScore().score.inc(100);
 			getScore().flowers.inc(1);
 			getScore().seeds.dec(1);

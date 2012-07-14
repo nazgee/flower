@@ -8,15 +8,12 @@ import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
-import org.andengine.util.math.MathUtils;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.EaseQuadIn;
 
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
-import eu.nazgee.flower.flower.EntityBlossom.IBlossomListener;
 import eu.nazgee.misc.State;
 import eu.nazgee.misc.State.IStateChangesListener;
 import eu.nazgee.util.Anchor;
@@ -35,21 +32,19 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	// Fields
 	// ===========================================================
 	private FlowerState mState = new FlowerStateSeed(this);
-	private final EntityBlossomParent mEntityBlossom;
-	private final EntitySeed mEntitySeed;
-	private final Seed mSeed;
+	private final BlossomParent mEntityBlossom;
+	private final Seed mEntitySeed;
+	private final LoadableSeed mSeed;
 
 	private IEntityModifier mAnimationModifier;
-	private IFlowerListener mFlowerStateHandler;
-	private final Color mColor;
-	public Flower(final float pX, final float pY, final Seed pSeed,
+	private IFlowerListener mStateHandler;
+	public Flower(final float pX, final float pY, final LoadableSeed pSeed,
 			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final TexturesLibrary pTexturesLibrary, final EntityDetachRunnablePoolUpdateHandler pDetacher) {
 		mSeed = pSeed;
-		this.mColor = pSeed.getRandomColor(MathUtils.RANDOM);
-		this.mEntityBlossom = new EntityBlossomParent(0, 0, pTexturesLibrary.getFlower(pSeed.blossomID), pVertexBufferObjectManager, getBlossomColor());
-		this.mEntitySeed = new EntitySeed(0, 0, pTexturesLibrary.getSeed(pSeed.seedID), pTexturesLibrary.getWateredMarker(),
-				pVertexBufferObjectManager, getBlossomColor(), pDetacher);
+		this.mEntityBlossom = new BlossomParent(0, 0, pTexturesLibrary.getFlower(pSeed.blossomID), pVertexBufferObjectManager, pSeed.getRandomColor());
+		this.mEntitySeed = new Seed(0, 0, pTexturesLibrary.getSeed(pSeed.seedID), pTexturesLibrary.getWateredMarker(),
+				pVertexBufferObjectManager, pDetacher);
 
 		attachChild(mEntitySeed);
 		setSize(mEntitySeed.getWidth(), mEntitySeed.getHeight());
@@ -65,28 +60,24 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	public Seed getSeed() {
+	public LoadableSeed getSeed() {
 		return mSeed;
 	}
 
-	public Color getBlossomColor() {
-		return mColor;
+//	public Color getBlossomColor() {
+//		return mColor;
+//	}
+
+	public IFlowerListener getStateListener() {
+		return mStateHandler;
 	}
 
-	public IFlowerListener getFlowerStateHandler() {
-		return mFlowerStateHandler;
+	public void setStateHandler(final IFlowerListener pFlowerStateHandler) {
+		mStateHandler = pFlowerStateHandler;
 	}
 
-	public void setFlowerStateHandler(final IFlowerListener pFlowerStateHandler) {
-		mFlowerStateHandler = pFlowerStateHandler;
-	}
-
-	public void setBlossomListener(final IBlossomListener pBlossomListener) {
-		mEntityBlossom.setBlossomListener(pBlossomListener);
-	}
-
-	public IBlossomListener getBlossomListener(final IBlossomListener pBlossomListener) {
-		return mEntityBlossom.getBlossomListener();
+	public Blossom getBlossom() {
+		return mEntityBlossom;
 	}
 
 	// ===========================================================
@@ -195,22 +186,22 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	private class StateChangeListener implements IStateChangesListener<Flower> {
 		@Override
 		public void onStateStarted(final State<Flower> pState) {
-			if (mFlowerStateHandler == null) {
+			if (mStateHandler == null) {
 				return;
 			}
 
 			if (pState instanceof FlowerStateBloomed) {
-				mFlowerStateHandler.onBloomed(Flower.this);
+				mStateHandler.onBloomed(Flower.this);
 			} else if (pState instanceof FlowerStateFried) {
-				mFlowerStateHandler.onFried(Flower.this);
+				mStateHandler.onFried(Flower.this);
 			} else if (pState instanceof FlowerStateDragged) {
-				mFlowerStateHandler.onDragged(Flower.this);
+				mStateHandler.onDragged(Flower.this);
 			}
 		}
 		@Override
 		public void onStateFinished(final State<Flower> pState) {
 			if (pState instanceof FlowerStateDragged) {
-				mFlowerStateHandler.onDropped(Flower.this);
+				mStateHandler.onDropped(Flower.this);
 			}
 		}
 	}

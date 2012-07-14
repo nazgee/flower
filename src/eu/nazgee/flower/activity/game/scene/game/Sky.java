@@ -4,7 +4,6 @@ import java.util.Comparator;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
-import org.andengine.util.Constants;
 
 import eu.nazgee.util.Anchor.eAnchorPointXY;
 

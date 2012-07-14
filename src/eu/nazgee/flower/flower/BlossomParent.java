@@ -10,7 +10,7 @@ import org.andengine.util.math.MathUtils;
 
 import eu.nazgee.util.Anchor;
 
-public class EntityBlossomParent extends EntityBlossom {
+public class BlossomParent extends Blossom {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -27,13 +27,13 @@ public class EntityBlossomParent extends EntityBlossom {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public EntityBlossomParent(final float pX, final float pY, final ITextureRegion pTextureRegion,
+	public BlossomParent(final float pX, final float pY, final ITextureRegion pTextureRegion,
 			final VertexBufferObjectManager pVertexBufferObjectManager, final Color pColor) {
 		this(pX, pY, pTextureRegion.getWidth() * TEMPORARY_SIZE_RESCALE, pTextureRegion.getHeight() * TEMPORARY_SIZE_RESCALE, pTextureRegion, pVertexBufferObjectManager, pColor);
 
 	}
 
-	public EntityBlossomParent(final float pX, final float pY, final float pWidth,
+	public BlossomParent(final float pX, final float pY, final float pWidth,
 			final float pHeight, final ITextureRegion pTextureRegion,
 			final VertexBufferObjectManager pVertexBufferObjectManager, final Color pColor) {
 		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager, 	pColor);
@@ -44,7 +44,7 @@ public class EntityBlossomParent extends EntityBlossom {
 			final float x = MathUtils.random(1f, 3f) * getWidth();
 			final float y = MathUtils.random(0.1f, 0.9f) * getHeight();
 
-			final EntityBlossom child = new EntityBlossom(0, 0, pWidth * scale, pHeight * scale,
+			final Blossom child = new Blossom(0, 0, pWidth * scale, pHeight * scale,
 					pTextureRegion, pVertexBufferObjectManager, pColor, i+1);
 			Anchor.setPosCenter(child, x, y);
 			attachChild(child);
@@ -62,13 +62,13 @@ public class EntityBlossomParent extends EntityBlossom {
 			@Override
 			public void call(final IEntity pEntity) {
 				mChildAnimDelay += MathUtils.random(CHILDREN_DELAY_MIN, CHILDREN_DELAY_MAX);
-				final EntityBlossom child = (EntityBlossom) pEntity;
+				final Blossom child = (Blossom) pEntity;
 				child.animateBloom(mChildAnimDelay);
 			}
 		}, new IEntityMatcher() {
 			@Override
 			public boolean matches(final IEntity pEntity) {
-				return (pEntity instanceof EntityBlossom);
+				return (pEntity instanceof Blossom);
 			}
 		});
 	}
@@ -80,17 +80,16 @@ public class EntityBlossomParent extends EntityBlossom {
 		this.callOnChildren(new IEntityParameterCallable() {
 			@Override
 			public void call(final IEntity pEntity) {
-				final EntityBlossom child = (EntityBlossom) pEntity;
+				final Blossom child = (Blossom) pEntity;
 				child.setBlossomListener(pBlossomListener);
 			}
 		}, new IEntityMatcher() {
 			@Override
 			public boolean matches(final IEntity pEntity) {
-				return (pEntity instanceof EntityBlossom);
+				return (pEntity instanceof Blossom);
 			}
 		});
 	}
-
 
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
@@ -103,7 +102,5 @@ public class EntityBlossomParent extends EntityBlossom {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
-
-
 
 }

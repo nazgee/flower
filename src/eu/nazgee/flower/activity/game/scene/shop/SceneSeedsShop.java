@@ -20,7 +20,7 @@ import eu.nazgee.flower.base.pagerscene.IPage;
 import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
 import eu.nazgee.flower.base.pagerscene.PageRectangleTransparent;
 import eu.nazgee.flower.base.pagerscene.ScenePagerBasic;
-import eu.nazgee.flower.flower.Seed;
+import eu.nazgee.flower.flower.LoadableSeed;
 import eu.nazgee.flower.level.GameLevel;
 import eu.nazgee.flower.pool.popup.PopupPool;
 import eu.nazgee.flower.pool.popup.PopupPool.PopupItem;
@@ -72,7 +72,7 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 
 		// Install all the seeds resources (this is needed, as long as seeds will
 		// be considered as needing resources)
-		for (final Seed seed : this.mShop.getSeedsInShop()) {
+		for (final LoadableSeed seed : this.mShop.getSeedsInShop()) {
 			getLoader().install(seed.resources);
 		}
 
@@ -158,7 +158,7 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 
 	@Override
 	protected SeedItem populateItem(final int pItem, final int pItemOnPage, final int pPage) {
-		final Seed seed = this.mShop.getSeedsInShop().get(pItem);
+		final LoadableSeed seed = this.mShop.getSeedsInShop().get(pItem);
 		final SeedItem item = new SeedItem(seed, getFrameW(), getFrameH(), mDescFont, mTexturesLibrary.getFactory(), getVertexBufferObjectManager(), mTexturesLibrary);
 		return item;
 	}
@@ -194,6 +194,6 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 	// Inner and Anonymous Classes
 	// ===========================================================
 	public interface IShoppingListener {
-		public void onShoppingFinished(List<Seed> pBoughtItems);
+		public void onShoppingFinished(List<LoadableSeed> pBoughtItems);
 	}
 }

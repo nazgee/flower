@@ -17,7 +17,7 @@ import org.andengine.util.modifier.ease.EaseElasticOut;
 
 import android.util.Log;
 
-public class EntityBlossom extends Sprite {
+public class Blossom extends Sprite {
 
 	// ===========================================================
 	// Constants
@@ -27,39 +27,38 @@ public class EntityBlossom extends Sprite {
 	// Fields
 	// ===========================================================
 	private IEntityModifier mBloomAnimator;
-	private final Color mColor;
 	private IBlossomListener mBlossomListener;
 	private final int mBlossomID;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public EntityBlossom(final float pX, final float pY,
+	public Blossom(final float pX, final float pY,
 			final ITextureRegion pTextureRegion,
 			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final Color pColor) {
 		this(pX, pY, pTextureRegion.getWidth(), pTextureRegion.getHeight(), pTextureRegion, pVertexBufferObjectManager, pColor, 0);
 	}
 
-	public EntityBlossom(final float pX, final float pY,
+	public Blossom(final float pX, final float pY,
 			final ITextureRegion pTextureRegion,
 			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final Color pColor, final int pBlossomID) {
 		this(pX, pY, pTextureRegion.getWidth(), pTextureRegion.getHeight(), pTextureRegion, pVertexBufferObjectManager, pColor, pBlossomID);
 	}
 
-	public EntityBlossom(final float pX, final float pY, final float pWidth, final float pHeight,
+	public Blossom(final float pX, final float pY, final float pWidth, final float pHeight,
 			final ITextureRegion pTextureRegion,
 			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final Color pColor) {
 		this(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager, pColor, 0);
 	}
 
-	public EntityBlossom(final float pX, final float pY, final float pWidth, final float pHeight,
+	public Blossom(final float pX, final float pY, final float pWidth, final float pHeight,
 			final ITextureRegion pTextureRegion,
 			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final Color pColor, final int pBlossomID) {
 		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager);
-		this.mColor = pColor;
+		setColor(pColor);
 		this.mBlossomID = pBlossomID;
 	}
 
@@ -113,13 +112,13 @@ public class EntityBlossom extends Sprite {
 			@Override
 			public void onModifierStarted(final IModifier<IEntity> pModifier, final IEntity pItem) {
 				if (getBlossomListener() != null) {
-					getBlossomListener().onBlooming(EntityBlossom.this);
+					getBlossomListener().onBlooming(Blossom.this);
 				}
 			}
 			@Override
 			public void onModifierFinished(final IModifier<IEntity> pModifier, final IEntity pItem) {
 				if (getBlossomListener() != null) {
-					getBlossomListener().onBloomed(EntityBlossom.this);
+					getBlossomListener().onBloomed(Blossom.this);
 				}
 			}
 		});
@@ -130,7 +129,7 @@ public class EntityBlossom extends Sprite {
 	// Inner and Anonymous Classes
 	// ===========================================================
 	public interface IBlossomListener {
-		void onBlooming(EntityBlossom pBlossom);
-		void onBloomed(EntityBlossom pBlossom);
+		void onBlooming(Blossom pBlossom);
+		void onBloomed(Blossom pBlossom);
 	}
 }
