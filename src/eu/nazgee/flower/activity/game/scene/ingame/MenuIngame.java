@@ -29,6 +29,5 @@ public class MenuIngame extends BaseMenu {
 				Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
 		addMenuEntry("Main Menu", MENU_GO_MAIN, Consts.COLOR_MENU_TEXT_SELECTED,
 				Consts.COLOR_MENU_TEXT_UNSELECTED, getVertexBufferObjectManager());
-//		prepareAnimations();
 	}
 }

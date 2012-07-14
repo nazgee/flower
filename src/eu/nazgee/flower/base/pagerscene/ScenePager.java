@@ -1,6 +1,5 @@
 package eu.nazgee.flower.base.pagerscene;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.andengine.engine.Engine;
@@ -17,7 +16,6 @@ import org.andengine.input.touch.detector.ScrollDetector;
 import org.andengine.input.touch.detector.ScrollDetector.IScrollDetectorListener;
 import org.andengine.input.touch.detector.SurfaceScrollDetector;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.call.Callable;
 import org.andengine.util.math.MathUtils;
 
 import android.content.Context;

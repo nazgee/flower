@@ -10,7 +10,7 @@ import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.util.Anchor;
 import eu.nazgee.util.Anchor.eAnchorPointXY;
 
-public class GameBackground extends CameraParallaxBackground {
+public class CameraParallaxGameBackground extends CameraParallaxBackground {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -24,7 +24,7 @@ public class GameBackground extends CameraParallaxBackground {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public GameBackground(final Camera pCamera, final TexturesLibrary pTexturesLibrary, final VertexBufferObjectManager pVBOM) {
+	public CameraParallaxGameBackground(final Camera pCamera, final TexturesLibrary pTexturesLibrary, final VertexBufferObjectManager pVBOM) {
 		super(0, 0, 0, pCamera);
 
 		final float y_bottom =	0;

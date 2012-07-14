@@ -8,7 +8,6 @@ import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.NineSliceSprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.opengl.font.Font;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 

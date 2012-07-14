@@ -76,7 +76,7 @@ public class SceneGame extends SceneLoadable{
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 	private IGameListener mGameListerner;
 	private final TexturesLibrary mTexturesLibrary;
-	private GameBackground mBG;
+	private CameraParallaxGameBackground mBG;
 	private GameLevel mGameLevel;
 
 	// ===========================================================
@@ -119,7 +119,7 @@ public class SceneGame extends SceneLoadable{
 		 * Prepare fancy background. We also save a shortcut
 		 * to the sprite representing ground level
 		 */
-		mBG = new GameBackground(e.getCamera(), mTexturesLibrary, getVertexBufferObjectManager());
+		mBG = new CameraParallaxGameBackground(e.getCamera(), mTexturesLibrary, getVertexBufferObjectManager());
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class SceneGame extends SceneLoadable{
 		 * Create new virtual sky- this object is used to calculate how high
 		 * above ground level entities are placed
 		 */
-		mSky = new Sky(GameBackground.SOLID_GND_HEIGHT);
+		mSky = new Sky(CameraParallaxGameBackground.SOLID_GND_HEIGHT);
 
 		/*
 		 * Register touch area listener, which will listen for the touches of
@@ -244,7 +244,7 @@ public class SceneGame extends SceneLoadable{
 				if (cloud != null) {
 					mSun.setRaysTargetCenter(cloud, mSky);
 				} else {
-					mSun.setRaysTarget(GameBackground.SOLID_GND_HEIGHT, mSky);
+					mSun.setRaysTarget(CameraParallaxGameBackground.SOLID_GND_HEIGHT, mSky);
 				}
 
 				handleFlowerSun();

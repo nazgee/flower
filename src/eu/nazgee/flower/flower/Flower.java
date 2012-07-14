@@ -210,7 +210,7 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 		@Override
 		public void onStateFinished(final State<Flower> pState) {
 			if (pState instanceof FlowerStateDragged) {
-					mFlowerStateHandler.onDropped(Flower.this);
+				mFlowerStateHandler.onDropped(Flower.this);
 			}
 		}
 	}

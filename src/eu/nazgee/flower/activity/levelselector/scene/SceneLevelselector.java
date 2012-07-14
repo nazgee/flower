@@ -4,13 +4,12 @@ import org.andengine.engine.Engine;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.background.Background;
-import org.andengine.opengl.font.Font;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 
 import android.content.Context;
 import eu.nazgee.flower.TexturesLibrary;
-import eu.nazgee.flower.activity.game.scene.game.GameBackground;
+import eu.nazgee.flower.activity.game.scene.game.CameraParallaxGameBackground;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.IPage;
 import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
@@ -32,7 +31,7 @@ public class SceneLevelselector extends ScenePagerBasic<GameLevelItem>{
 	private final GameLevelsLoader mLevelItemsLoader = new GameLevelsLoader();
 	private final HudLevelselector mHUD;
 	private final TexturesLibrary mTexturesLibrary;
-	private GameBackground mBG;
+	private CameraParallaxGameBackground mBG;
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -61,7 +60,7 @@ public class SceneLevelselector extends ScenePagerBasic<GameLevelItem>{
 	@Override
 	public void onLoadResources(final Engine e, final Context c) {
 		super.onLoadResources(e, c);
-		mBG = new GameBackground(e.getCamera(), mTexturesLibrary, getVertexBufferObjectManager());
+		mBG = new CameraParallaxGameBackground(e.getCamera(), mTexturesLibrary, getVertexBufferObjectManager());
 	}
 
 	@Override

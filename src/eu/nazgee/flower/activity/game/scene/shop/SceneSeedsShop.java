@@ -14,7 +14,7 @@ import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
 
 import android.content.Context;
 import eu.nazgee.flower.TexturesLibrary;
-import eu.nazgee.flower.activity.game.scene.game.GameBackground;
+import eu.nazgee.flower.activity.game.scene.game.CameraParallaxGameBackground;
 import eu.nazgee.flower.base.pagerscene.ArrayLayout;
 import eu.nazgee.flower.base.pagerscene.IPage;
 import eu.nazgee.flower.base.pagerscene.PageMoverCameraZoom;
@@ -39,7 +39,7 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 	private final EntityDetachRunnablePoolUpdateHandler mDetacher;
 	private final PopupPool mPopupPool;
 
-	private GameBackground mBG;
+	private CameraParallaxGameBackground mBG;
 	private IShoppingListener mShoppingListener;
 	private final SeedsShop mShop;
 	private final TexturesLibrary mTexturesLibrary;
@@ -124,7 +124,7 @@ public class SceneSeedsShop extends ScenePagerBasic<SeedItem> {
 	@Override
 	public void onLoadResources(final Engine e, final Context c) {
 		super.onLoadResources(e, c);
-		mBG = new GameBackground(e.getCamera(), mTexturesLibrary, getVertexBufferObjectManager());
+		mBG = new CameraParallaxGameBackground(e.getCamera(), mTexturesLibrary, getVertexBufferObjectManager());
 	}
 
 	@Override

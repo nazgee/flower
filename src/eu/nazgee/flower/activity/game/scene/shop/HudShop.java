@@ -56,7 +56,6 @@ public class HudShop extends BaseHUD {
 		 * Prepare background
 		 */
 		final NineSliceSprite bg = mTexturesLibrary.getFactory().populateFrameHudShop( 0.33f * getW(), getH(), getVertexBufferObjectManager());
-//		bg.setPosition(0.66f * getW(), 0);
 		Anchor.setPosBottomLeft(bg, 0.66f * getW(), 0);
 		bg.setZIndex(ZINDEX_BG_FRAME);
 		attachChild(bg);
@@ -91,26 +90,6 @@ public class HudShop extends BaseHUD {
 		Anchor.setPosTopMiddleAtSibling(basket, cash, eAnchorPointXY.BOTTOM_MIDDLE);
 		Anchor.setPosCenterRightAtSibling(getTextBasket(), basket, eAnchorPointXY.CENTERED_LEFT);
 
-
-
-//		final float gradW = camera.getWidth() * (1 - SceneLevelselector.PAGE_WIDTH_EFFECTIVE);
-//		GradientRectangle grad = new GradientRectangle(camera.getWidth() - gradW, 0, gradW, camera.getHeight(), 5, getVertexBufferObjectManager());
-//		attachChild(grad);
-//		grad.setColor(new Color(Color.BLACK));
-//		grad.setAlpha(0.9f);
-//		grad.setGradientBand(0, new Color(0.5f, 0.8f, 0.5f));
-//		grad.setGradientBand(1, new Color(0.1f, 0.2f, 0.1f));
-//		grad.setGradientBand(2, new Color(0.1f, 0.3f, 0.1f));
-//		grad.setGradientBand(3, new Color(0.0f, 0.2f, 0.0f));
-//		grad.setGradientBand(4, new Color(0.0f, 0.2f, 0.0f));
-//		grad.setGradientBandAlpha(0, 0.9f);
-//		grad.setGradientBandAlpha(1, 1.0f);
-//		grad.setGradientBandAlpha(2, 1.0f);
-//		grad.setGradientBandAlpha(3, 1.0f);
-//		grad.setGradientBandAlpha(4, 1.0f);
-//
-//		grad.setZIndex(ZINDEX_GRADIENT);
-//
 		sortChildren();
 	}
 
