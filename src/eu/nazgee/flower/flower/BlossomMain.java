@@ -1,16 +1,22 @@
 package eu.nazgee.flower.flower;
 
+import java.io.IOException;
+
 import org.andengine.entity.IEntity;
 import org.andengine.entity.IEntityMatcher;
 import org.andengine.entity.IEntityParameterCallable;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
+import org.andengine.util.level.ILevelEntity;
+import org.andengine.util.level.LevelLoaderUtils;
 import org.andengine.util.math.MathUtils;
+import org.xmlpull.v1.XmlSerializer;
 
+import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.util.Anchor;
 
-public class BlossomParent extends Blossom {
+public class BlossomMain extends Blossom implements ILevelEntity {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -27,13 +33,13 @@ public class BlossomParent extends Blossom {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	public BlossomParent(final float pX, final float pY, final ITextureRegion pTextureRegion,
+	public BlossomMain(final float pX, final float pY, final ITextureRegion pTextureRegion,
 			final VertexBufferObjectManager pVertexBufferObjectManager, final Color pColor) {
 		this(pX, pY, pTextureRegion.getWidth() * TEMPORARY_SIZE_RESCALE, pTextureRegion.getHeight() * TEMPORARY_SIZE_RESCALE, pTextureRegion, pVertexBufferObjectManager, pColor);
 
 	}
 
-	public BlossomParent(final float pX, final float pY, final float pWidth,
+	public BlossomMain(final float pX, final float pY, final float pWidth,
 			final float pHeight, final ITextureRegion pTextureRegion,
 			final VertexBufferObjectManager pVertexBufferObjectManager, final Color pColor) {
 		super(pX, pY, pWidth, pHeight, pTextureRegion, pVertexBufferObjectManager, 	pColor);
@@ -89,6 +95,17 @@ public class BlossomParent extends Blossom {
 				return (pEntity instanceof Blossom);
 			}
 		});
+	}
+
+	@Override
+	public void fillLevelTag(XmlSerializer pSerializer) throws IOException {
+		TexturesLibrary.dumpAttributeTextureFlower(pSerializer, this);
+		LevelLoaderUtils.dumpAttributeColor(this, pSerializer);
+	}
+
+	@Override
+	public String getLevelTagName() {
+		return "blossom";
 	}
 
 	// ===========================================================

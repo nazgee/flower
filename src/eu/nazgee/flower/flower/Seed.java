@@ -1,5 +1,7 @@
 package eu.nazgee.flower.flower;
 
+import java.io.IOException;
+
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.ColorModifier;
 import org.andengine.entity.modifier.FadeOutModifier;
@@ -14,6 +16,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
+import org.andengine.util.level.ILevelEntity;
 import org.andengine.util.modifier.IModifier;
 import org.andengine.util.modifier.IModifier.IModifierListener;
 import org.andengine.util.modifier.ease.EaseBounceOut;
@@ -21,12 +24,14 @@ import org.andengine.util.modifier.ease.EaseElasticOut;
 import org.andengine.util.modifier.ease.EaseQuadOut;
 import org.andengine.util.modifier.ease.EaseQuartInOut;
 import org.andengine.util.modifier.ease.EaseSineOut;
+import org.xmlpull.v1.XmlSerializer;
 
 import android.util.Log;
+import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.util.Anchor;
 import eu.nazgee.util.Anchor.eAnchorPointXY;
 
-public class Seed extends Sprite {
+public class Seed extends Sprite implements ILevelEntity {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -147,4 +152,14 @@ public class Seed extends Sprite {
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+
+	@Override
+	public void fillLevelTag(XmlSerializer pSerializer) throws IOException {
+		TexturesLibrary.dumpAttributeTextureSeed(pSerializer, this);
+	}
+
+	@Override
+	public String getLevelTagName() {
+		return "seed";
+	}
 }

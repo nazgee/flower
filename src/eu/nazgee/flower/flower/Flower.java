@@ -1,5 +1,7 @@
 package eu.nazgee.flower.flower;
 
+import java.io.IOException;
+
 import org.andengine.entity.Entity;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveXModifier;
@@ -9,8 +11,11 @@ import org.andengine.entity.scene.ITouchArea;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.pool.EntityDetachRunnablePoolUpdateHandler;
+import org.andengine.util.level.ILevelEntity;
+import org.andengine.util.level.LevelLoaderUtils;
 import org.andengine.util.modifier.ease.EaseLinear;
 import org.andengine.util.modifier.ease.EaseQuadIn;
+import org.xmlpull.v1.XmlSerializer;
 
 import eu.nazgee.flower.TexturesLibrary;
 import eu.nazgee.flower.activity.game.scene.game.Sky;
@@ -21,7 +26,7 @@ import eu.nazgee.util.Anchor.eAnchorPointXY;
 import eu.nazgee.util.Kinematics;
 
 
-public class Flower extends Entity implements ITouchArea, IFlowerState{
+public class Flower extends Entity implements ITouchArea, IFlowerState, ILevelEntity {
 	public static final int GROUND_LEVEL_OFFSET = -20;
 	// ===========================================================
 	// Constants
@@ -32,7 +37,7 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	// Fields
 	// ===========================================================
 	private FlowerState mState = new FlowerStateSeed(this);
-	private final BlossomParent mEntityBlossom;
+	private final BlossomMain mEntityBlossom;
 	private final Seed mEntitySeed;
 	private final LoadableSeed mSeed;
 
@@ -42,10 +47,11 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 			final VertexBufferObjectManager pVertexBufferObjectManager,
 			final TexturesLibrary pTexturesLibrary, final EntityDetachRunnablePoolUpdateHandler pDetacher) {
 		mSeed = pSeed;
-		this.mEntityBlossom = new BlossomParent(0, 0, pTexturesLibrary.getFlower(pSeed.blossomID), pVertexBufferObjectManager, pSeed.getRandomColor());
+		this.mEntityBlossom = new BlossomMain(0, 0, pTexturesLibrary.getFlower(pSeed.blossomID), pVertexBufferObjectManager, pSeed.getRandomColor());
 		this.mEntitySeed = new Seed(0, 0, pTexturesLibrary.getSeed(pSeed.seedID), pTexturesLibrary.getWateredMarker(),
 				pVertexBufferObjectManager, pDetacher);
 
+		attachChild(mEntityBlossom);
 		attachChild(mEntitySeed);
 		setSize(mEntitySeed.getWidth(), mEntitySeed.getHeight());
 
@@ -63,10 +69,6 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	public LoadableSeed getSeed() {
 		return mSeed;
 	}
-
-//	public Color getBlossomColor() {
-//		return mColor;
-//	}
 
 	public IFlowerListener getStateListener() {
 		return mStateHandler;
@@ -140,7 +142,6 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 	}
 
 	public void animateBloom() {
-		attachChild(mEntityBlossom);	// blossom was not attached yet, for performance reasons
 		Anchor.setPosCenterAtParent(mEntityBlossom, eAnchorPointXY.CENTERED);
 
 		mEntityBlossom.animateBloom();
@@ -204,5 +205,15 @@ public class Flower extends Entity implements ITouchArea, IFlowerState{
 				mStateHandler.onDropped(Flower.this);
 			}
 		}
+	}
+
+	@Override
+	public void fillLevelTag(XmlSerializer pSerializer) throws IOException {
+		LevelLoaderUtils.dumpChildren(this, pSerializer);
+	}
+
+	@Override
+	public String getLevelTagName() {
+		return "flower";
 	}
 }

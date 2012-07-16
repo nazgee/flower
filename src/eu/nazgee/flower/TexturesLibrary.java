@@ -1,8 +1,12 @@
 package eu.nazgee.flower;
 
+import java.io.IOException;
+
 import org.andengine.engine.Engine;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePack;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackLoader;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackerTextureRegion;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -15,8 +19,11 @@ import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.debug.Debug;
+import org.andengine.util.level.constants.LevelConstants;
+import org.xmlpull.v1.XmlSerializer;
 
 import android.content.Context;
+import android.util.Log;
 import eu.nazgee.game.utils.loadable.LoadableResourceSimple;
 
 public class TexturesLibrary extends LoadableResourceSimple{
@@ -24,7 +31,15 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	// Constants
 	// ===========================================================
 
+	public static String TAG_ATTRIBUTE_REGION_ID = "region_id";
+	public static String TAG_ATTRIBUTE_TEXTURE_ID = "texture_id";
+
 	public static final int BLOSSOMS_NUMBER = 15;
+
+	private static int TEXTURES_FIRST_FLOWER = TexturesMisc.FLOWERS_FLOWER0001_ID;
+	private static int TEXTURES_COUNT_FLOWER = 16;
+	private static int TEXTURES_FIRST_SEED = TexturesMisc.SEEDS_001_ID;
+	private static int TEXTURES_COUNT_SEED = 1;
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -32,8 +47,9 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	private BitmapTextureAtlas mFontAtlas;
 
 	private TexturePack mSpritesheetParalax;
-	public TexturePack mSpritesheetMisc;
+	private TexturePack mSpritesheetMisc;
 	private TexturePack mSpritesheetUi;
+
 	private final EntitiesFactory mEntitiesFactory = new EntitiesFactory(this);
 	// ===========================================================
 	// Constructors
@@ -178,6 +194,7 @@ public class TexturesLibrary extends LoadableResourceSimple{
 				mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.AMBIENT_RAINSPLASH_SPLASH2_ID),
 				mSpritesheetMisc.getTexturePackTextureRegionLibrary().get(TexturesMisc.AMBIENT_RAINSPLASH_SPLASH3_ID));
 	}
+
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
@@ -231,6 +248,37 @@ public class TexturesLibrary extends LoadableResourceSimple{
 	// Methods
 	// ===========================================================
 
+	static public void dumpAttributeTextureFlower(final XmlSerializer pSerializer, final Sprite pSprite) throws IOException {
+		dumpAttributeTexture(pSerializer, pSprite, TEXTURES_FIRST_FLOWER, TEXTURES_COUNT_FLOWER);
+	}
+
+	static public void dumpAttributeTextureSeed(final XmlSerializer pSerializer, final Sprite pSprite) throws IOException {
+		dumpAttributeTexture(pSerializer, pSprite, TEXTURES_FIRST_SEED, TEXTURES_COUNT_SEED);
+	}
+
+	static private void dumpAttributeTexture(final XmlSerializer pSerializer, final Sprite pSprite, final int pFirst, final int pCount) throws IOException {
+		pSerializer.attribute("", TAG_ATTRIBUTE_REGION_ID, "" + getIdentityOfRegion(pSprite.getTextureRegion(), pFirst, pCount));
+//		pSerializer.attribute("", TAG_ATTRIBUTE_TEXTURE_ID, "" + pEntity.getY());
+	}
+
+	static private int getIdentityOfRegion(final ITextureRegion pTexture) {
+		if (pTexture instanceof TexturePackerTextureRegion) {
+			final TexturePackerTextureRegion tpreg = (TexturePackerTextureRegion) pTexture;
+			return tpreg.getID();
+		}
+		Log.e("TexturesLibrary", "given TextrureRegion does not come from TexturePacker, so it does not have an ID!");
+		Thread.dumpStack();
+		return -666;
+	}
+
+	static private int getIdentityOfRegion(final ITextureRegion pTexture, final int pFirst, final int pCount) {
+		final int ret = getIdentityOfRegion(pTexture);
+		if ((ret<pFirst) || ret>=(pFirst + pCount)) {
+			Log.e("TexturesLibrary", "given TextrureRegion is probably of a different type than the requested one! first=" + pFirst + "; count=" + pCount + "; id=" + ret);
+			Thread.dumpStack();
+		}
+		return ret - pFirst;
+	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
